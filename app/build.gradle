@@ -16,6 +16,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 ext {
@@ -24,8 +28,7 @@ ext {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
     // Support libraries
     implementation "com.android.support:appcompat-v7:$supportLibsVersion"
     implementation "com.android.support:support-v4:$supportLibsVersion"
@@ -33,6 +36,15 @@ dependencies {
     implementation "com.android.support:design:$supportLibsVersion"
     implementation "com.android.support:recyclerview-v7:$supportLibsVersion"
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+
+    // Architecture components
+    // ViewModel and LiveData
+    implementation 'android.arch.lifecycle:extensions:1.0.0'
+    // Java8 support for Lifecycles
+    implementation 'android.arch.lifecycle:common-java8:1.0.0'
+    // Room
+    implementation 'android.arch.persistence.room:runtime:1.0.0'
+    annotationProcessor "android.arch.persistence.room:compiler:1.0.0"
 
     // Retrofit
     implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
@@ -45,6 +57,8 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.mockito:mockito-core:2.8.9'
     testImplementation 'com.squareup.okhttp3:mockwebserver:3.9.1'
+    testImplementation 'android.arch.core:core-testing:1.0.0'
+    testImplementation "android.arch.persistence.room:testing:1.0.0"
 
     androidTestImplementation "com.android.support:support-annotations:$supportLibsVersion"
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
