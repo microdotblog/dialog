@@ -1,5 +1,7 @@
 package com.dialogapp.dialog.api;
 
+import android.arch.lifecycle.LiveData;
+
 import com.dialogapp.dialog.model.AccountResponse;
 import com.dialogapp.dialog.model.MediaEndPoint;
 import com.dialogapp.dialog.model.MicroBlogResponse;
@@ -23,7 +25,7 @@ public interface MicroblogService {
     // GET
 
     @GET("account/info")
-    Call<AccountResponse> getAccountData(@Header("Authorization") String token);
+    LiveData<ApiResponse<AccountResponse>> getAccountData(@Header("Authorization") String token);
 
     @GET("posts/all")
     Call<MicroBlogResponse> getTimeLine(@Header("Authorization") String token);
