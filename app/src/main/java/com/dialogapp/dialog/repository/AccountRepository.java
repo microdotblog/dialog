@@ -10,21 +10,19 @@ import com.dialogapp.dialog.model.AccountResponse;
 import com.dialogapp.dialog.util.AbsentLiveData;
 import com.dialogapp.dialog.util.Resource;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+@Singleton
 public class AccountRepository {
 
     private final AppExecutors appExecutors;
     private final MicroblogService microblogService;
 
+    @Inject
     public AccountRepository(AppExecutors appExecutors, MicroblogService microblogService) {
         this.appExecutors = appExecutors;
         this.microblogService = microblogService;
-    }
-
-    public static boolean isValid(String token) {
-        if (token.length() < 20)
-            return false;
-        else
-            return true;
     }
 
     public LiveData<Resource<AccountResponse>> loadAccountData(String token) {

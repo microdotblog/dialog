@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
-    tools:context="com.dialogapp.dialog.ui.LoginActivity">
+    tools:context="com.dialogapp.dialog.ui.loginscreen.LoginActivity">
 
     <ImageView
         android:id="@+id/image_login_logo"
@@ -102,8 +102,8 @@
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:layout_marginTop="8dp"
-        android:gravity="center_vertical"
         android:background="@color/colorPrimaryDark"
+        android:gravity="center_vertical"
         android:text="@string/login_about"
         android:textAlignment="center"
         android:textColor="@android:color/white"

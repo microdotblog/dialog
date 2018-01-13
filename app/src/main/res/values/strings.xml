@@ -2,9 +2,10 @@
     <string name="app_name">Dialog</string>
 
     <!-- Login Screen -->
-    <string name="login_message">Enter the Micro.blog app token on your Accounts page</string>
+    <string name="login_message">Enter the Micro.blog app token on your Account page</string>
     <string name="login_field">app token</string>
     <string name="login_button">Continue</string>
     <string name="login_about">This app requires a Micro.blog account.\n<a href="https://micro.blog/">Learn More</a></string>
     <string name="login_invalid_token">Invalid Token</string>
+    <string name="login_msg_verification">Verifying Token</string>
 </resources>

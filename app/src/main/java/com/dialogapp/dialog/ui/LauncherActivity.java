@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
+import com.dialogapp.dialog.ui.loginscreen.LoginActivity;
+
 public class LauncherActivity extends AppCompatActivity {
 
     @Override
