@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.dialogapp.dialog">
 
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
         android:name=".MicroblogApp"
         android:allowBackup="true"
