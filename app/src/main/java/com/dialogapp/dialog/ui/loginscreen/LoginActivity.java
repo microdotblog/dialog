@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.dialogapp.dialog.R;
 import com.dialogapp.dialog.model.AccountResponse;
 import com.dialogapp.dialog.ui.mainscreen.MainActivity;
+import com.dialogapp.dialog.util.PreferencesHelper;
 import com.dialogapp.dialog.util.Resource;
 import com.dialogapp.dialog.util.Status;
 
@@ -37,6 +38,9 @@ public class LoginActivity extends AppCompatActivity implements HasActivityInjec
     @Inject
     ViewModelProvider.Factory viewModelFactory;
 
+    @Inject
+    PreferencesHelper preferencesHelper;
+
     @BindView(R.id.text_login_about)
     TextView about;
 
@@ -55,7 +59,7 @@ public class LoginActivity extends AppCompatActivity implements HasActivityInjec
             loginViewModel.getAccount()
                     .observe(this, accountResponseResource -> {
                         if (accountResponseResource != null) {
-                            check(accountResponseResource);
+                            check(accountResponseResource, token);
                         }
                     });
         }
@@ -77,7 +81,7 @@ public class LoginActivity extends AppCompatActivity implements HasActivityInjec
         return dispatchingAndroidInjector;
     }
 
-    private void check(Resource<AccountResponse> accountResponseResource) {
+    private void check(Resource<AccountResponse> accountResponseResource, String token) {
         if (accountResponseResource.status == Status.ERROR) {
             progressBar.setVisibility(View.INVISIBLE);
             Toast.makeText(this, R.string.login_invalid_token, Toast.LENGTH_SHORT).show();
@@ -85,6 +89,7 @@ public class LoginActivity extends AppCompatActivity implements HasActivityInjec
             Toast.makeText(this, R.string.login_msg_verification, Toast.LENGTH_SHORT).show();
         } else if (accountResponseResource.status == Status.SUCCESS) {
             progressBar.setVisibility(View.INVISIBLE);
+            preferencesHelper.putToken(token);
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
             finish();
