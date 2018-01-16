@@ -5,6 +5,7 @@ import android.arch.lifecycle.LiveData;
 import com.dialogapp.dialog.model.AccountResponse;
 import com.dialogapp.dialog.model.MediaEndPoint;
 import com.dialogapp.dialog.model.MicroBlogResponse;
+import com.dialogapp.dialog.model.VerifiedAccount;
 
 import retrofit2.Call;
 import retrofit2.Response;
@@ -52,6 +53,10 @@ public interface MicroblogService {
                                              @Query("since_id") long since_id);
 
     // POST
+
+    @FormUrlEncoded
+    @POST("account/verify")
+    LiveData<ApiResponse<VerifiedAccount>> verifyToken(@Field("token") String token);
 
     @FormUrlEncoded
     @POST("posts/favorites")

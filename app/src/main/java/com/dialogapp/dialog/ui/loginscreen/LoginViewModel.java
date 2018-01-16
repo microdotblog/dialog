@@ -6,7 +6,7 @@ import android.arch.lifecycle.Transformations;
 import android.arch.lifecycle.ViewModel;
 import android.support.annotation.VisibleForTesting;
 
-import com.dialogapp.dialog.model.AccountResponse;
+import com.dialogapp.dialog.model.VerifiedAccount;
 import com.dialogapp.dialog.repository.AccountRepository;
 import com.dialogapp.dialog.util.Resource;
 
@@ -19,11 +19,11 @@ public class LoginViewModel extends ViewModel {
     @VisibleForTesting
     final MutableLiveData<String> token = new MutableLiveData<>();
 
-    private final LiveData<Resource<AccountResponse>> account;
+    private final LiveData<Resource<VerifiedAccount>> account;
 
     @Inject
     public LoginViewModel(AccountRepository accountRepository) {
-        account = Transformations.switchMap(token, accountRepository::loadAccountData);
+        account = Transformations.switchMap(token, accountRepository::verifyToken);
     }
 
     public void setToken(String token) {
@@ -31,7 +31,7 @@ public class LoginViewModel extends ViewModel {
             this.token.setValue(token);
     }
 
-    public LiveData<Resource<AccountResponse>> getAccount() {
+    public LiveData<Resource<VerifiedAccount>> verifyToken() {
         return account;
     }
 }

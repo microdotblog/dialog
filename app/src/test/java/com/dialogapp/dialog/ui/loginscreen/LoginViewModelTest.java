@@ -5,7 +5,7 @@ import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Observer;
 
 import com.dialogapp.dialog.TestUtil;
-import com.dialogapp.dialog.model.AccountResponse;
+import com.dialogapp.dialog.model.VerifiedAccount;
 import com.dialogapp.dialog.repository.AccountRepository;
 import com.dialogapp.dialog.util.Resource;
 
@@ -44,16 +44,16 @@ public class LoginViewModelTest {
     @Test
     public void testLoginCall() throws Exception {
         ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
-        loginViewModel.getAccount().observeForever(mock(Observer.class));
+        loginViewModel.verifyToken().observeForever(mock(Observer.class));
 
         loginViewModel.setToken("VALIDTOKEN");
-        verify(accountRepository).loadAccountData(captor.capture());
+        verify(accountRepository).verifyToken(captor.capture());
         assertThat(captor.getValue(), is("VALIDTOKEN"));
 
         reset(accountRepository);
 
         loginViewModel.setToken("INVALIDTOKEN");
-        verify(accountRepository).loadAccountData(captor.capture());
+        verify(accountRepository).verifyToken(captor.capture());
         assertThat(captor.getValue(), is("INVALIDTOKEN"));
     }
 
@@ -77,20 +77,20 @@ public class LoginViewModelTest {
 
     @Test
     public void sendResultToUI() {
-        MutableLiveData<Resource<AccountResponse>> foo = new MutableLiveData<>();
-        MutableLiveData<Resource<AccountResponse>> bar = new MutableLiveData<>();
+        MutableLiveData<Resource<VerifiedAccount>> foo = new MutableLiveData<>();
+        MutableLiveData<Resource<VerifiedAccount>> bar = new MutableLiveData<>();
 
-        when(accountRepository.loadAccountData("foo")).thenReturn(foo);
-        when(accountRepository.loadAccountData("bar")).thenReturn(bar);
+        when(accountRepository.verifyToken("foo")).thenReturn(foo);
+        when(accountRepository.verifyToken("bar")).thenReturn(bar);
 
-        Observer<Resource<AccountResponse>> observer = mock(Observer.class);
-        loginViewModel.getAccount().observeForever(observer);
+        Observer<Resource<VerifiedAccount>> observer = mock(Observer.class);
+        loginViewModel.verifyToken().observeForever(observer);
 
         loginViewModel.setToken("foo");
         verify(observer, never()).onChanged(any(Resource.class));
 
-        AccountResponse fooAccount = TestUtil.createAccount("foo");
-        Resource<AccountResponse> fooResource = Resource.success(fooAccount);
+        VerifiedAccount fooAccount = TestUtil.createUnverifiedAccount(true);
+        Resource<VerifiedAccount> fooResource = Resource.success(fooAccount);
 
         foo.setValue(fooResource);
         verify(observer).onChanged(fooResource);
@@ -100,8 +100,8 @@ public class LoginViewModelTest {
         loginViewModel.setToken("bar");
         verify(observer, never()).onChanged(any(Resource.class));
 
-        AccountResponse barAccount = TestUtil.createAccount("bar");
-        Resource<AccountResponse> barResource = Resource.success(barAccount);
+        VerifiedAccount barAccount = TestUtil.createUnverifiedAccount(false);
+        Resource<VerifiedAccount> barResource = Resource.success(barAccount);
 
         bar.setValue(barResource);
         verify(observer).onChanged(barResource);

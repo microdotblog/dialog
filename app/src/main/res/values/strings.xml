@@ -8,4 +8,5 @@
     <string name="login_about">This app requires a Micro.blog account.\n<a href="https://micro.blog/">Learn More</a></string>
     <string name="login_invalid_token">Invalid Token</string>
     <string name="login_msg_verification">Verifying Token</string>
+    <string name="login_verification_failed">Could not verify token</string>
 </resources>

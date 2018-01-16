@@ -8,13 +8,14 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.method.LinkMovementMethod;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dialogapp.dialog.R;
-import com.dialogapp.dialog.model.AccountResponse;
+import com.dialogapp.dialog.model.VerifiedAccount;
 import com.dialogapp.dialog.ui.mainscreen.MainActivity;
 import com.dialogapp.dialog.util.PreferencesHelper;
 import com.dialogapp.dialog.util.Resource;
@@ -50,16 +51,20 @@ public class LoginActivity extends AppCompatActivity implements HasActivityInjec
     @BindView(R.id.progressBar_login)
     ProgressBar progressBar;
 
+    @BindView(R.id.button_login)
+    Button loginButton;
+
     @OnClick(R.id.button_login)
     public void login() {
+        loginButton.setEnabled(false);
         String token = input.getText().toString().trim();
         if (!token.isEmpty()) {
             progressBar.setVisibility(View.VISIBLE);
             loginViewModel.setToken(token);
-            loginViewModel.getAccount()
-                    .observe(this, accountResponseResource -> {
-                        if (accountResponseResource != null) {
-                            check(accountResponseResource, token);
+            loginViewModel.verifyToken()
+                    .observe(this, verifiedAccountResource -> {
+                        if (verifiedAccountResource != null) {
+                            check(verifiedAccountResource, token);
                         }
                     });
         }
@@ -81,18 +86,35 @@ public class LoginActivity extends AppCompatActivity implements HasActivityInjec
         return dispatchingAndroidInjector;
     }
 
-    private void check(Resource<AccountResponse> accountResponseResource, String token) {
-        if (accountResponseResource.status == Status.ERROR) {
+    private void check(Resource<VerifiedAccount> verifiedAccountResource, String token) {
+        if (verifiedAccountResource.status == Status.ERROR) {
             progressBar.setVisibility(View.INVISIBLE);
-            Toast.makeText(this, R.string.login_invalid_token, Toast.LENGTH_SHORT).show();
-        } else if (accountResponseResource.status == Status.LOADING) {
+            loginButton.setEnabled(true);
+
+            Toast.makeText(this, R.string.login_verification_failed, Toast.LENGTH_SHORT).show();
+        } else if (verifiedAccountResource.status == Status.LOADING) {
             Toast.makeText(this, R.string.login_msg_verification, Toast.LENGTH_SHORT).show();
-        } else if (accountResponseResource.status == Status.SUCCESS) {
-            progressBar.setVisibility(View.INVISIBLE);
-            preferencesHelper.putToken(token);
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
-            finish();
+        } else if (verifiedAccountResource.status == Status.SUCCESS) {
+            if (verifiedAccountResource.data != null) {
+                if (verifiedAccountResource.data.error == null) {
+                    progressBar.setVisibility(View.INVISIBLE);
+                    preferencesHelper.putToken(token);
+                    Intent intent = new Intent(this, MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                } else {
+                    progressBar.setVisibility(View.INVISIBLE);
+                    loginButton.setEnabled(true);
+
+                    Toast.makeText(this, R.string.login_invalid_token, Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                // resource data is somehow null
+                progressBar.setVisibility(View.INVISIBLE);
+                loginButton.setEnabled(true);
+
+                Toast.makeText(this, R.string.login_verification_failed, Toast.LENGTH_SHORT).show();
+            }
         }
     }
 }
