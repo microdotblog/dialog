@@ -1,8 +1,11 @@
 package com.dialogapp.dialog.api;
 
+import android.arch.lifecycle.LiveData;
+
 import com.dialogapp.dialog.model.AccountResponse;
 import com.dialogapp.dialog.model.MediaEndPoint;
 import com.dialogapp.dialog.model.MicroBlogResponse;
+import com.dialogapp.dialog.model.VerifiedAccount;
 
 import retrofit2.Call;
 import retrofit2.Response;
@@ -23,7 +26,7 @@ public interface MicroblogService {
     // GET
 
     @GET("account/info")
-    Call<AccountResponse> getAccountData(@Header("Authorization") String token);
+    LiveData<ApiResponse<AccountResponse>> getAccountData(@Header("Authorization") String token);
 
     @GET("posts/all")
     Call<MicroBlogResponse> getTimeLine(@Header("Authorization") String token);
@@ -50,6 +53,10 @@ public interface MicroblogService {
                                              @Query("since_id") long since_id);
 
     // POST
+
+    @FormUrlEncoded
+    @POST("account/verify")
+    LiveData<ApiResponse<VerifiedAccount>> verifyToken(@Field("token") String token);
 
     @FormUrlEncoded
     @POST("posts/favorites")

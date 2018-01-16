@@ -20,6 +20,10 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    sourceSets {
+        test.java.srcDirs += "$projectDir/src/testShared/java"
+        androidTest.java.srcDirs += "$projectDir/src/testShared/java"
+    }
 }
 
 ext {
@@ -32,6 +36,7 @@ dependencies {
     // Support libraries
     implementation "com.android.support:appcompat-v7:$supportLibsVersion"
     implementation "com.android.support:support-v4:$supportLibsVersion"
+    implementation "com.android.support:cardview-v7:$supportLibsVersion"
     implementation "com.android.support:design:$supportLibsVersion"
     implementation "com.android.support:recyclerview-v7:$supportLibsVersion"
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
@@ -49,10 +54,28 @@ dependencies {
     implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
     implementation "com.squareup.retrofit2:converter-moshi:$retrofitVersion"
 
+    // ButterKnife
+    implementation 'com.jakewharton:butterknife:8.8.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+
+    // Dagger
+    implementation 'com.google.dagger:dagger:2.14.1'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.14.1'
+    implementation 'com.google.dagger:dagger-android:2.14.1'
+    implementation 'com.google.dagger:dagger-android-support:2.14.1'
+    annotationProcessor 'com.google.dagger:dagger-android-processor:2.14.1'
+
     testImplementation 'junit:junit:4.12'
+    testImplementation 'org.mockito:mockito-core:2.8.9'
+    testImplementation 'com.squareup.okhttp3:mockwebserver:3.9.1'
     testImplementation 'android.arch.core:core-testing:1.0.0'
     testImplementation "android.arch.persistence.room:testing:1.0.0"
 
+    androidTestImplementation "com.android.support:support-annotations:$supportLibsVersion"
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
+    androidTestImplementation 'com.android.support.test:rules:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-intents:3.0.1'
+    androidTestImplementation 'org.hamcrest:hamcrest-library:1.3'
+    androidTestImplementation 'org.mockito:mockito-android:2.8.9'
 }
