@@ -2,13 +2,16 @@ package com.dialogapp.dialog.model;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
+import android.arch.persistence.room.TypeConverters;
 import android.support.annotation.NonNull;
 
+import com.dialogapp.dialog.db.ListTypeConverters;
 import com.squareup.moshi.Json;
 
 import java.util.List;
 
 @Entity(tableName = "account")
+@TypeConverters(ListTypeConverters.class)
 public class AccountResponse {
 
     @Json(name = "full_name")
