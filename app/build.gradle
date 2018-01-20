@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 26
+    compileSdkVersion 27
     defaultConfig {
         applicationId "com.dialogapp.dialog"
         minSdkVersion 21
@@ -27,7 +27,7 @@ android {
 }
 
 ext {
-    supportLibsVersion = '26.1.0'
+    supportLibsVersion = '27.0.2'
     retrofitVersion = '2.3.0'
 }
 
