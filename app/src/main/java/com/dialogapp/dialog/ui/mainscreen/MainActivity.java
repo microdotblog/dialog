@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
@@ -42,6 +43,9 @@ public class MainActivity extends AppCompatActivity implements HasActivityInject
     @Inject
     PreferencesHelper preferencesHelper;
 
+    @BindView(R.id.nav_view)
+    NavigationView navigationView;
+
     @BindView(R.id.drawer_layout)
     DrawerLayout drawerLayout;
 
@@ -52,9 +56,9 @@ public class MainActivity extends AppCompatActivity implements HasActivityInject
 
         ButterKnife.bind(this);
 
-        imageView = findViewById(R.id.image_profile);
-        username = findViewById(R.id.text_username);
-        fullname = findViewById(R.id.text_fullname);
+        imageView = navigationView.getHeaderView(0).findViewById(R.id.image_profile);
+        username = navigationView.getHeaderView(0).findViewById(R.id.text_username);
+        fullname = navigationView.getHeaderView(0).findViewById(R.id.text_fullname);
 
         String username = preferencesHelper.fetchUsername(getString(R.string.pref_username));
         String token = preferencesHelper.fetchUsername(getString(R.string.pref_token));
