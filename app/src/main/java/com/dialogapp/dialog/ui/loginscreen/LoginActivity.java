@@ -99,6 +99,9 @@ public class LoginActivity extends AppCompatActivity implements HasActivityInjec
                 if (verifiedAccountResource.data.error == null) {
                     progressBar.setVisibility(View.INVISIBLE);
                     preferencesHelper.putToken(token);
+                    preferencesHelper.putUsername(verifiedAccountResource.data.username);
+                    preferencesHelper.putAvatarUrl(verifiedAccountResource.data.gravatarUrl);
+
                     Intent intent = new Intent(this, MainActivity.class);
                     startActivity(intent);
                     finish();
