@@ -3,6 +3,7 @@ package com.dialogapp.dialog.repository;
 import android.arch.lifecycle.LiveData;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.VisibleForTesting;
 
 import com.dialogapp.dialog.AppExecutors;
 import com.dialogapp.dialog.api.ApiResponse;
@@ -23,7 +24,8 @@ public class AccountRepository {
     private final MicroblogService microblogService;
     private final AccountDao accountDao;
 
-    private VerifiedAccount verifiedAccountData;
+    @VisibleForTesting
+    VerifiedAccount verifiedAccountData;
 
     @Inject
     public AccountRepository(AppExecutors appExecutors, AccountDao accountDao, MicroblogService microblogService) {
@@ -63,7 +65,7 @@ public class AccountRepository {
     public LiveData<Resource<AccountResponse>> loadAccountData(String token, String username) {
         return new NetworkBoundResource<AccountResponse, AccountResponse>(appExecutors) {
             @Override
-            protected boolean shouldFetch(AccountResponse dbData) {
+            protected boolean shouldFetch(@Nullable AccountResponse dbData) {
                 return dbData == null;
             }
 
