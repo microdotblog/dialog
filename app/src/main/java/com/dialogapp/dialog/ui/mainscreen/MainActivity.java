@@ -17,6 +17,7 @@ import butterknife.ButterKnife;
 
 import static com.dialogapp.dialog.ui.LauncherActivity.EXTRA_AVATARURL;
 import static com.dialogapp.dialog.ui.LauncherActivity.EXTRA_FULLNAME;
+import static com.dialogapp.dialog.ui.LauncherActivity.EXTRA_TOKEN;
 import static com.dialogapp.dialog.ui.LauncherActivity.EXTRA_USERNAME;
 
 public class MainActivity extends AppCompatActivity {
@@ -32,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         Intent intent = getIntent();
+        String saved_token = intent.getStringExtra(EXTRA_TOKEN);
         String saved_username = intent.getStringExtra(EXTRA_USERNAME);
         String saved_fullname = intent.getStringExtra(EXTRA_FULLNAME);
         String saved_avatarUrl = intent.getStringExtra(EXTRA_AVATARURL);

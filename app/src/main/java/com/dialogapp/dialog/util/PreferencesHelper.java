@@ -35,6 +35,14 @@ public class PreferencesHelper {
         writeToSharedPref(context.getString(R.string.pref_username), value);
     }
 
+    public String fetchFullname(String key) {
+        return getSharedPref(key, "");
+    }
+
+    public void putFullname(String value) {
+        writeToSharedPref(context.getString(R.string.pref_fullname), value);
+    }
+
     public String fetchAvatarUrl(String key) {
         return getSharedPref(key, "");
     }
