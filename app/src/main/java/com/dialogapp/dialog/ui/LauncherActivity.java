@@ -17,6 +17,10 @@ import dagger.android.HasActivityInjector;
 
 public class LauncherActivity extends AppCompatActivity implements HasActivityInjector {
 
+    public static final String EXTRA_USERNAME = "com.dialogapp.dialog.USERNAME";
+    public static final String EXTRA_FULLNAME = "com.dialogapp.dialog.FULLNAME";
+    public static final String EXTRA_AVATARURL = "com.dialogapp.dialog.AVATAR";
+
     @Inject
     DispatchingAndroidInjector<Activity> dispatchingAndroidInjector;
 

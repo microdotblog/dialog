@@ -1,11 +1,8 @@
 package com.dialogapp.dialog.ui.mainscreen;
 
-import android.app.Activity;
-import android.arch.lifecycle.ViewModelProvider;
-import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -14,40 +11,18 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestOptions;
 import com.dialogapp.dialog.R;
-import com.dialogapp.dialog.model.AccountResponse;
-import com.dialogapp.dialog.util.PreferencesHelper;
-import com.dialogapp.dialog.util.Resource;
-import com.dialogapp.dialog.util.Status;
-
-import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import dagger.android.AndroidInjector;
-import dagger.android.DispatchingAndroidInjector;
-import dagger.android.HasActivityInjector;
 
-public class MainActivity extends AppCompatActivity implements HasActivityInjector {
+import static com.dialogapp.dialog.ui.LauncherActivity.EXTRA_AVATARURL;
+import static com.dialogapp.dialog.ui.LauncherActivity.EXTRA_FULLNAME;
+import static com.dialogapp.dialog.ui.LauncherActivity.EXTRA_USERNAME;
 
-    private MainViewModel mainViewModel;
-    private ImageView imageView;
-    private TextView username;
-    private TextView fullname;
-
-    @Inject
-    DispatchingAndroidInjector<Activity> dispatchingAndroidInjector;
-
-    @Inject
-    ViewModelProvider.Factory viewModelFactory;
-
-    @Inject
-    PreferencesHelper preferencesHelper;
+public class MainActivity extends AppCompatActivity {
 
     @BindView(R.id.nav_view)
     NavigationView navigationView;
-
-    @BindView(R.id.drawer_layout)
-    DrawerLayout drawerLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,48 +31,21 @@ public class MainActivity extends AppCompatActivity implements HasActivityInject
 
         ButterKnife.bind(this);
 
-        imageView = navigationView.getHeaderView(0).findViewById(R.id.image_profile);
-        username = navigationView.getHeaderView(0).findViewById(R.id.text_username);
-        fullname = navigationView.getHeaderView(0).findViewById(R.id.text_fullname);
+        Intent intent = getIntent();
+        String saved_username = intent.getStringExtra(EXTRA_USERNAME);
+        String saved_fullname = intent.getStringExtra(EXTRA_FULLNAME);
+        String saved_avatarUrl = intent.getStringExtra(EXTRA_AVATARURL);
 
-        String username = preferencesHelper.fetchUsername(getString(R.string.pref_username));
-        String token = preferencesHelper.fetchUsername(getString(R.string.pref_token));
+        ImageView imageView = navigationView.getHeaderView(0).findViewById(R.id.image_profile);
+        TextView username = navigationView.getHeaderView(0).findViewById(R.id.text_username);
+        TextView fullname = navigationView.getHeaderView(0).findViewById(R.id.text_fullname);
 
-        // close drawer until account data has been loaded
-        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-        mainViewModel = ViewModelProviders.of(this, viewModelFactory).get(MainViewModel.class);
-        mainViewModel.setAccountInfo(token, username);
-        mainViewModel.getAccountData()
-                .observe(this, accountResponseResource -> {
-                    if (accountResponseResource != null) {
-                        check(accountResponseResource);
-                    }
-                });
-    }
-
-    @Override
-    public AndroidInjector<Activity> activityInjector() {
-        return dispatchingAndroidInjector;
-    }
-
-    private void check(Resource<AccountResponse> accountResponseResource) {
-        if (accountResponseResource.status == Status.SUCCESS) {
-            if (accountResponseResource.data != null) {
-                Glide.with(this)
-                        .load(preferencesHelper.fetchAvatarUrl(getString(R.string.pref_avatar_url)))
-                        .apply(RequestOptions.circleCropTransform())
-                        .transition(DrawableTransitionOptions.withCrossFade())
-                        .into(imageView);
-                username.setText(accountResponseResource.data.getUsername());
-                fullname.setText(accountResponseResource.data.getFullName());
-
-                drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-            } else {
-                // account data is somehow null
-                mainViewModel.retry();
-            }
-        } else if (accountResponseResource.status == Status.ERROR) {
-            mainViewModel.retry();
-        }
+        Glide.with(this)
+                .load(saved_avatarUrl)
+                .apply(RequestOptions.circleCropTransform())
+                .transition(DrawableTransitionOptions.withCrossFade())
+                .into(imageView);
+        username.setText(saved_username);
+        fullname.setText(saved_fullname);
     }
 }

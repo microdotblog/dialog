@@ -4,7 +4,6 @@ import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
 
 import com.dialogapp.dialog.ui.loginscreen.LoginViewModel;
-import com.dialogapp.dialog.ui.mainscreen.MainViewModel;
 import com.dialogapp.dialog.util.MicroblogViewModelFactory;
 
 import dagger.Binds;
@@ -20,9 +19,4 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(LoginViewModel.class)
     abstract ViewModel bindLoginViewModel(LoginViewModel loginViewModel);
-
-    @Binds
-    @IntoMap
-    @ViewModelKey(MainViewModel.class)
-    abstract ViewModel bindMainViewModel(MainViewModel mainViewModel);
 }
