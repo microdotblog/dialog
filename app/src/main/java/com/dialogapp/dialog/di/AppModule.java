@@ -4,6 +4,7 @@ import android.app.Application;
 import android.arch.persistence.room.Room;
 
 import com.dialogapp.dialog.api.MicroblogService;
+import com.dialogapp.dialog.api.ServiceInterceptor;
 import com.dialogapp.dialog.db.AccountDao;
 import com.dialogapp.dialog.db.MicroBlogDb;
 import com.dialogapp.dialog.util.LiveDataCallAdapterFactory;
@@ -12,6 +13,7 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.moshi.MoshiConverterFactory;
 
@@ -19,13 +21,28 @@ import retrofit2.converter.moshi.MoshiConverterFactory;
 class AppModule {
     @Singleton
     @Provides
-    MicroblogService provideMicroblogService() {
+    MicroblogService provideMicroblogService(OkHttpClient okHttpClient) {
         return new Retrofit.Builder()
                 .baseUrl("https://micro.blog/")
                 .addConverterFactory(MoshiConverterFactory.create())
                 .addCallAdapterFactory(new LiveDataCallAdapterFactory())
+                .client(okHttpClient)
                 .build()
                 .create(MicroblogService.class);
+    }
+
+    @Singleton
+    @Provides
+    OkHttpClient provideOkHttpClient(ServiceInterceptor interceptor) {
+        return new OkHttpClient.Builder()
+                .addInterceptor(interceptor)
+                .build();
+    }
+
+    @Singleton
+    @Provides
+    ServiceInterceptor provideServiceInterceptor() {
+        return new ServiceInterceptor();
     }
 
     @Singleton

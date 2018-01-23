@@ -1,0 +1,42 @@
+package com.dialogapp.dialog.api;
+
+import android.support.annotation.NonNull;
+
+import java.io.IOException;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+import okhttp3.Interceptor;
+import okhttp3.Request;
+import okhttp3.Response;
+
+/*
+* Custom okhttp interceptor to add the auth header for all requests except those containing
+* the dummy header "NO-AUTH".
+*
+* Exposes method to set auth token during runtime.
+* */
+@Singleton
+public class ServiceInterceptor implements Interceptor {
+    private String authToken;
+
+    @Inject
+    public ServiceInterceptor() {
+    }
+
+    public void setAuthToken(String authToken) {
+        this.authToken = authToken;
+    }
+
+    @Override
+    public Response intercept(@NonNull Chain chain) throws IOException {
+        Request request = chain.request();
+
+        Request.Builder builder = request.newBuilder();
+        if (request.header("NO-AUTH") == null) {
+            request = builder.addHeader("Authorization", authToken).build();
+        }
+        return chain.proceed(request);
+    }
+}
