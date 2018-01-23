@@ -7,68 +7,32 @@ import java.util.List;
 public class MicroBlogResponse {
 
     @Json(name = "title")
-    private String title;
+    public final String title;
     @Json(name = "home_page_url")
-    private String homePageUrl;
+    public final String homePageUrl;
     @Json(name = "feed_url")
-    private String feedUrl;
+    public final String feedUrl;
     @Json(name = "_microblog")
-    private Microblog microblog;
+    public final Microblog microblog;
     @Json(name = "items")
-    private List<Item> items = null;
+    public final List<Item> items;
 
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
+    public MicroBlogResponse(String title, String homePageUrl, String feedUrl, Microblog microblog,
+                             List<Item> items) {
         this.title = title;
-    }
-
-    public String getHomePageUrl() {
-        return homePageUrl;
-    }
-
-    public void setHomePageUrl(String homePageUrl) {
         this.homePageUrl = homePageUrl;
-    }
-
-    public String getFeedUrl() {
-        return feedUrl;
-    }
-
-    public void setFeedUrl(String feedUrl) {
         this.feedUrl = feedUrl;
-    }
-
-    public Microblog getMicroblog() {
-        return microblog;
-    }
-
-    public void setMicroblog(Microblog microblog) {
         this.microblog = microblog;
-    }
-
-    public List<Item> getItems() {
-        return items;
-    }
-
-    public void setItems(List<Item> items) {
         this.items = items;
     }
 
     public static class Microblog {
 
         @Json(name = "about")
-        private String about;
+        public final String about;
 
-        public String getAbout() {
-            return about;
-        }
-
-        public void setAbout(String about) {
+        public Microblog(String about) {
             this.about = about;
         }
-
     }
 }
