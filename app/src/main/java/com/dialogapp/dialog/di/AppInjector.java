@@ -3,11 +3,16 @@ package com.dialogapp.dialog.di;
 import android.app.Activity;
 import android.app.Application;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 
 import com.dialogapp.dialog.MicroblogApp;
 
 import dagger.android.AndroidInjection;
 import dagger.android.HasActivityInjector;
+import dagger.android.support.AndroidSupportInjection;
+import dagger.android.support.HasSupportFragmentInjector;
 
 public class AppInjector {
     private AppInjector() {}
@@ -54,7 +59,20 @@ public class AppInjector {
     }
 
     private static void handleActivity(Activity activity) {
-        if (activity instanceof HasActivityInjector)
+        if (activity instanceof HasActivityInjector || activity instanceof HasSupportFragmentInjector)
             AndroidInjection.inject(activity);
+        if (activity instanceof FragmentActivity) {
+            ((FragmentActivity) activity).getSupportFragmentManager()
+                    .registerFragmentLifecycleCallbacks(
+                            new FragmentManager.FragmentLifecycleCallbacks() {
+                                @Override
+                                public void onFragmentCreated(FragmentManager fm, Fragment f,
+                                                              Bundle savedInstanceState) {
+                                    if (f instanceof Injectable)
+                                        AndroidSupportInjection.inject(f);
+                                }
+                            }, true
+                    );
+        }
     }
 }
