@@ -3,6 +3,7 @@ package com.dialogapp.dialog.ui.mainscreen;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -11,16 +12,27 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestOptions;
 import com.dialogapp.dialog.R;
+import com.dialogapp.dialog.api.ServiceInterceptor;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import dagger.android.DispatchingAndroidInjector;
+import dagger.android.support.HasSupportFragmentInjector;
 
 import static com.dialogapp.dialog.ui.LauncherActivity.EXTRA_AVATARURL;
 import static com.dialogapp.dialog.ui.LauncherActivity.EXTRA_FULLNAME;
 import static com.dialogapp.dialog.ui.LauncherActivity.EXTRA_TOKEN;
 import static com.dialogapp.dialog.ui.LauncherActivity.EXTRA_USERNAME;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements HasSupportFragmentInjector {
+
+    @Inject
+    DispatchingAndroidInjector<Fragment> dispatchingAndroidInjector;
+
+    @Inject
+    ServiceInterceptor serviceInterceptor;
 
     @BindView(R.id.nav_view)
     NavigationView navigationView;
@@ -38,6 +50,8 @@ public class MainActivity extends AppCompatActivity {
         String saved_fullname = intent.getStringExtra(EXTRA_FULLNAME);
         String saved_avatarUrl = intent.getStringExtra(EXTRA_AVATARURL);
 
+        serviceInterceptor.setAuthToken(saved_token);
+
         ImageView imageView = navigationView.getHeaderView(0).findViewById(R.id.image_profile);
         TextView username = navigationView.getHeaderView(0).findViewById(R.id.text_username);
         TextView fullname = navigationView.getHeaderView(0).findViewById(R.id.text_fullname);
@@ -49,5 +63,10 @@ public class MainActivity extends AppCompatActivity {
                 .into(imageView);
         username.setText(saved_username);
         fullname.setText(saved_fullname);
+    }
+
+    @Override
+    public DispatchingAndroidInjector<Fragment> supportFragmentInjector() {
+        return dispatchingAndroidInjector;
     }
 }
