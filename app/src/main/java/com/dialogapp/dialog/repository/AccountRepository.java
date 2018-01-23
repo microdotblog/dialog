@@ -62,7 +62,7 @@ public class AccountRepository {
         }.asLiveData();
     }
 
-    public LiveData<Resource<AccountResponse>> loadAccountData(String token, String username) {
+    public LiveData<Resource<AccountResponse>> loadAccountData(String username) {
         return new NetworkBoundResource<AccountResponse, AccountResponse>(appExecutors) {
             @Override
             protected boolean shouldFetch(@Nullable AccountResponse dbData) {
@@ -72,7 +72,7 @@ public class AccountRepository {
             @NonNull
             @Override
             protected LiveData<ApiResponse<AccountResponse>> createCall() {
-                return microblogService.getAccountData(token);
+                return microblogService.getAccountData();
             }
 
             @Override

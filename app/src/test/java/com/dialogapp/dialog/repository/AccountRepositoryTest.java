@@ -44,7 +44,7 @@ public class AccountRepositoryTest {
 
     @Test
     public void loadAccountData() {
-        accountRepository.loadAccountData("123", "abc");
+        accountRepository.loadAccountData("abc");
         verify(accountDao).fetchAccountInfo("abc");
     }
 
@@ -67,16 +67,16 @@ public class AccountRepositoryTest {
         when(accountDao.fetchAccountInfo("abc123")).thenReturn(dbData);
         AccountResponse accountResponse = TestUtil.createAccount("abc123");
         LiveData<ApiResponse<AccountResponse>> call = ApiUtil.successCall(accountResponse);
-        when(microblogService.getAccountData("token123")).thenReturn(call);
+        when(microblogService.getAccountData()).thenReturn(call);
 
         Observer<Resource<AccountResponse>> observer = mock(Observer.class);
 
-        accountRepository.loadAccountData("token123", "abc123").observeForever(observer);
-        verify(microblogService, never()).getAccountData("token123");
+        accountRepository.loadAccountData("abc123").observeForever(observer);
+        verify(microblogService, never()).getAccountData();
         MutableLiveData<AccountResponse> updatedDbData = new MutableLiveData<>();
         when(accountDao.fetchAccountInfo("abc123")).thenReturn(updatedDbData);
         dbData.setValue(null); // so that it calls the network
-        verify(microblogService).getAccountData("token123");
+        verify(microblogService).getAccountData();
     }
 
     @Test
@@ -88,8 +88,8 @@ public class AccountRepositoryTest {
 
         Observer<Resource<AccountResponse>> observer = mock(Observer.class);
 
-        accountRepository.loadAccountData("token123", "abc123").observeForever(observer);
-        verify(microblogService, never()).getAccountData("token123");
+        accountRepository.loadAccountData("abc123").observeForever(observer);
+        verify(microblogService, never()).getAccountData();
         verify(observer).onChanged(Resource.success(account));
     }
 }
