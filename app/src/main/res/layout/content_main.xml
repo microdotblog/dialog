@@ -13,11 +13,12 @@
         style="@style/CustomTabLayout"
         android:layout_width="match_parent"
         android:layout_height="72dp"
-        android:paddingTop="10dp"
-        android:elevation="@dimen/cardview_default_elevation"
+        android:elevation="@dimen/bottom_nav_bar"
+        android:background="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:tabGravity="fill"
         app:tabMode="fixed" />
 
     <android.support.v4.view.ViewPager
