@@ -1,12 +1,24 @@
 package com.dialogapp.dialog.model;
 
+import android.arch.persistence.room.Embedded;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
+import android.support.annotation.NonNull;
+
 import com.squareup.moshi.Json;
 
+@Entity(tableName = "posts")
 public class Item {
 
+    // Custom field
+    @NonNull
+    private String endpoint = "";
+
+    @PrimaryKey
     @Json(name = "id")
     private Long id;
     @Json(name = "author")
+    @Embedded(prefix = "author_")
     private Author author;
     @Json(name = "url")
     private String url;
@@ -15,6 +27,7 @@ public class Item {
     @Json(name = "date_published")
     private String datePublished;
     @Json(name = "_microblog")
+    @Embedded(prefix = "item_property_")
     private Microblog__ microblog;
 
     public Long getId() {
@@ -65,6 +78,14 @@ public class Item {
         this.microblog = microblog;
     }
 
+    public String getEndpoint() {
+        return endpoint;
+    }
+
+    public void setEndpoint(String endpoint) {
+        this.endpoint = endpoint;
+    }
+
     public static class Microblog__ {
 
         @Json(name = "is_deletable")
@@ -73,6 +94,12 @@ public class Item {
         private Boolean isFavorite;
         @Json(name = "date_relative")
         private String dateRelative;
+
+        public Microblog__(Boolean isDeletable, Boolean isFavorite, String dateRelative) {
+            this.isDeletable = isDeletable;
+            this.isFavorite = isFavorite;
+            this.dateRelative = dateRelative;
+        }
 
         public Boolean getIsDeletable() {
             return isDeletable;

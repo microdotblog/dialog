@@ -1,5 +1,7 @@
 package com.dialogapp.dialog.model;
 
+import android.arch.persistence.room.Embedded;
+
 import com.squareup.moshi.Json;
 
 public class Author {
@@ -11,6 +13,7 @@ public class Author {
     @Json(name = "avatar")
     private String avatar;
     @Json(name = "_microblog")
+    @Embedded(prefix = "author_info_")
     private Microblog_ microblog;
 
     public String getName() {
@@ -49,8 +52,10 @@ public class Author {
 
         @Json(name = "username")
         private String username;
-        @Json(name = "is_following")
-        private Boolean isFollowing;
+
+        public Microblog_(String username) {
+            this.username = username;
+        }
 
         public String getUsername() {
             return username;
@@ -59,14 +64,5 @@ public class Author {
         public void setUsername(String username) {
             this.username = username;
         }
-
-        public Boolean getIsFollowing() {
-            return isFollowing;
-        }
-
-        public void setIsFollowing(Boolean isFollowing) {
-            this.isFollowing = isFollowing;
-        }
-
     }
 }
