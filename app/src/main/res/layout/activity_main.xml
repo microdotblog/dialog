@@ -9,7 +9,7 @@
     tools:openDrawer="start">
 
     <include
-        layout="@layout/app_bar_main"
+        layout="@layout/content_main"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
@@ -23,7 +23,6 @@
         app:menu="@menu/activity_main_drawer">
 
         <TextView
-            android:id="@+id/footer_item_2"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:layout_gravity="bottom"
