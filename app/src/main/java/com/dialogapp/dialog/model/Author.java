@@ -1,67 +1,54 @@
 package com.dialogapp.dialog.model;
 
+import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Embedded;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Index;
+import android.arch.persistence.room.PrimaryKey;
 
 import com.squareup.moshi.Json;
 
+@Entity(tableName = "authors", indices = {@Index(value = "author_info_username", unique = true)})
 public class Author {
 
+    // internal database column
+    @PrimaryKey(autoGenerate = true)
+    private long author_id;
+
     @Json(name = "name")
-    private String name;
+    @ColumnInfo(name = "author_name")
+    public final String name;
     @Json(name = "url")
-    private String url;
+    @ColumnInfo(name = "author_url")
+    public final String url;
     @Json(name = "avatar")
-    private String avatar;
+    @ColumnInfo(name = "author_avatar_url")
+    public final String avatar;
     @Json(name = "_microblog")
     @Embedded(prefix = "author_info_")
-    private Microblog_ microblog;
+    public final AuthorInfo microblog;
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
+    public Author(String name, String url, String avatar, AuthorInfo microblog) {
         this.name = name;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
         this.url = url;
-    }
-
-    public String getAvatar() {
-        return avatar;
-    }
-
-    public void setAvatar(String avatar) {
         this.avatar = avatar;
-    }
-
-    public Microblog_ getMicroblog() {
-        return microblog;
-    }
-
-    public void setMicroblog(Microblog_ microblog) {
         this.microblog = microblog;
     }
 
-    public static class Microblog_ {
+    public long getAuthor_id() {
+        return author_id;
+    }
+
+    public void setAuthor_id(long author_id) {
+        this.author_id = author_id;
+    }
+
+    public static class AuthorInfo {
 
         @Json(name = "username")
-        private String username;
+        public final String username;
 
-        public Microblog_(String username) {
-            this.username = username;
-        }
-
-        public String getUsername() {
-            return username;
-        }
-
-        public void setUsername(String username) {
+        public AuthorInfo(String username) {
             this.username = username;
         }
     }
