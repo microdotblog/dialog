@@ -1,0 +1,366 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "b231009cc07251f8e2fde377f13c5eca",
+    "entities": [
+      {
+        "tableName": "account",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`fullName` TEXT, `email` TEXT, `username` TEXT NOT NULL, `webSite` TEXT, `aboutMe` TEXT, `rssFeeds` TEXT, `paidSites` TEXT, `hasSite` INTEGER, `hasBot` INTEGER, PRIMARY KEY(`username`))",
+        "fields": [
+          {
+            "fieldPath": "fullName",
+            "columnName": "fullName",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "email",
+            "columnName": "email",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "username",
+            "columnName": "username",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "webSite",
+            "columnName": "webSite",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "aboutMe",
+            "columnName": "aboutMe",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "rssFeeds",
+            "columnName": "rssFeeds",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "paidSites",
+            "columnName": "paidSites",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "hasSite",
+            "columnName": "hasSite",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "hasBot",
+            "columnName": "hasBot",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "username"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "posts",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`post_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `post_author_id` INTEGER NOT NULL, `url` TEXT, `contentHtml` TEXT, `datePublished` TEXT, `post_property_isDeletable` INTEGER, `post_property_isFavorite` INTEGER, `post_property_dateRelative` TEXT, FOREIGN KEY(`post_author_id`) REFERENCES `authors`(`author_id`) ON UPDATE CASCADE ON DELETE NO ACTION DEFERRABLE INITIALLY DEFERRED)",
+        "fields": [
+          {
+            "fieldPath": "post_id",
+            "columnName": "post_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "post_author_id",
+            "columnName": "post_author_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "url",
+            "columnName": "url",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "contentHtml",
+            "columnName": "contentHtml",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "datePublished",
+            "columnName": "datePublished",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "microblog.isDeletable",
+            "columnName": "post_property_isDeletable",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "microblog.isFavorite",
+            "columnName": "post_property_isFavorite",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "microblog.dateRelative",
+            "columnName": "post_property_dateRelative",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "post_id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [
+          {
+            "name": "index_posts_url",
+            "unique": true,
+            "columnNames": [
+              "url"
+            ],
+            "createSql": "CREATE UNIQUE INDEX `index_posts_url` ON `${TABLE_NAME}` (`url`)"
+          },
+          {
+            "name": "index_posts_post_author_id",
+            "unique": false,
+            "columnNames": [
+              "post_author_id"
+            ],
+            "createSql": "CREATE  INDEX `index_posts_post_author_id` ON `${TABLE_NAME}` (`post_author_id`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "authors",
+            "onDelete": "NO ACTION",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "post_author_id"
+            ],
+            "referencedColumns": [
+              "author_id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "authors",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`author_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `author_name` TEXT, `author_url` TEXT, `author_avatar_url` TEXT, `author_info_username` TEXT)",
+        "fields": [
+          {
+            "fieldPath": "author_id",
+            "columnName": "author_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "author_name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "url",
+            "columnName": "author_url",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "avatar",
+            "columnName": "author_avatar_url",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "microblog.username",
+            "columnName": "author_info_username",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "author_id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [
+          {
+            "name": "index_authors_author_info_username",
+            "unique": true,
+            "columnNames": [
+              "author_info_username"
+            ],
+            "createSql": "CREATE UNIQUE INDEX `index_authors_author_info_username` ON `${TABLE_NAME}` (`author_info_username`)"
+          }
+        ],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "timeline",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `timeline_post_id` INTEGER NOT NULL, PRIMARY KEY(`id`), FOREIGN KEY(`timeline_post_id`) REFERENCES `posts`(`post_id`) ON UPDATE CASCADE ON DELETE NO ACTION DEFERRABLE INITIALLY DEFERRED)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "timeline_post_id",
+            "columnName": "timeline_post_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [
+          {
+            "name": "index_timeline_timeline_post_id",
+            "unique": false,
+            "columnNames": [
+              "timeline_post_id"
+            ],
+            "createSql": "CREATE  INDEX `index_timeline_timeline_post_id` ON `${TABLE_NAME}` (`timeline_post_id`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "posts",
+            "onDelete": "NO ACTION",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "timeline_post_id"
+            ],
+            "referencedColumns": [
+              "post_id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "mentions",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `mentions_post_id` INTEGER NOT NULL, PRIMARY KEY(`id`), FOREIGN KEY(`mentions_post_id`) REFERENCES `posts`(`post_id`) ON UPDATE CASCADE ON DELETE NO ACTION DEFERRABLE INITIALLY DEFERRED)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mentions_post_id",
+            "columnName": "mentions_post_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [
+          {
+            "name": "index_mentions_mentions_post_id",
+            "unique": false,
+            "columnNames": [
+              "mentions_post_id"
+            ],
+            "createSql": "CREATE  INDEX `index_mentions_mentions_post_id` ON `${TABLE_NAME}` (`mentions_post_id`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "posts",
+            "onDelete": "NO ACTION",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "mentions_post_id"
+            ],
+            "referencedColumns": [
+              "post_id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "favorites",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `favorites_post_id` INTEGER NOT NULL, PRIMARY KEY(`id`), FOREIGN KEY(`favorites_post_id`) REFERENCES `posts`(`post_id`) ON UPDATE CASCADE ON DELETE NO ACTION DEFERRABLE INITIALLY DEFERRED)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "favorites_post_id",
+            "columnName": "favorites_post_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [
+          {
+            "name": "index_favorites_favorites_post_id",
+            "unique": false,
+            "columnNames": [
+              "favorites_post_id"
+            ],
+            "createSql": "CREATE  INDEX `index_favorites_favorites_post_id` ON `${TABLE_NAME}` (`favorites_post_id`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "posts",
+            "onDelete": "NO ACTION",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "favorites_post_id"
+            ],
+            "referencedColumns": [
+              "post_id"
+            ]
+          }
+        ]
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"b231009cc07251f8e2fde377f13c5eca\")"
+    ]
+  }
+}
