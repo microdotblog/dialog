@@ -1,8 +1,6 @@
 package com.dialogapp.dialog;
 
 import com.dialogapp.dialog.model.AccountResponse;
-import com.dialogapp.dialog.model.Author;
-import com.dialogapp.dialog.model.Item;
 import com.dialogapp.dialog.model.VerifiedAccount;
 
 import java.util.ArrayList;
@@ -42,45 +40,5 @@ public class TestUtil {
         else
             return new VerifiedAccount("foo", "foobar", "foo.bar",
                     true, true, "foo.bar", null);
-    }
-
-    public static List<Item> createListOfEndpoint(String endpoint) {
-        List<Item> items = new ArrayList<>();
-        for (int i = 0; i < 30; ++i) {
-            Item item = new Item();
-            item.setEndpoint(endpoint);
-            item.setId((long) i);
-            item.setUrl("url" + i);
-            item.setDatePublished("2018-1-" + i);
-            item.setContentHtml("blahblahblah" + i);
-            item.setAuthor(createAuthor(i));
-            item.setMicroblog(createItemProperty(i));
-
-            items.add(item);
-        }
-
-        return items;
-    }
-
-    private static Author createAuthor(int i) {
-        Author author = new Author();
-        author.setName("foobar" + i);
-        author.setUrl("www.foo" + i + ".com");
-        author.setAvatar("avatar.jpg");
-        author.setMicroblog(createAuthorInfo(i));
-        return author;
-    }
-
-    private static Author.Microblog_ createAuthorInfo(int i) {
-        return new Author.Microblog_("foo" + i);
-    }
-
-    private static Item.Microblog__ createItemProperty(int i) {
-        Item.Microblog__ property;
-        if (i % 2 == 0)
-            property = new Item.Microblog__(true, true, "2018-1-" + i);
-        else
-            property = new Item.Microblog__(false, false, "2018-2-" + i);
-        return property;
     }
 }
