@@ -1,10 +1,21 @@
 package com.dialogapp.dialog;
 
 import com.dialogapp.dialog.model.AccountResponse;
+import com.dialogapp.dialog.model.Item;
 import com.dialogapp.dialog.model.VerifiedAccount;
+import com.squareup.moshi.JsonAdapter;
+import com.squareup.moshi.Moshi;
+import com.squareup.moshi.Types;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.Type;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+
+import okio.BufferedSource;
+import okio.Okio;
 
 public class TestUtil {
 
@@ -40,5 +51,15 @@ public class TestUtil {
         else
             return new VerifiedAccount("foo", "foobar", "foo.bar",
                     true, true, "foo.bar", null);
+    }
+
+    public static List<Item> readFromJson(ClassLoader classLoader, String fileName) throws IOException {
+        Moshi moshi = new Moshi.Builder().build();
+        Type listMyData = Types.newParameterizedType(List.class, Item.class);
+        JsonAdapter<List<Item>> jsonAdapter = moshi.adapter(listMyData);
+
+        InputStream inputStream = classLoader.getResourceAsStream("api-response/" + fileName);
+        BufferedSource source = Okio.buffer(Okio.source(inputStream));
+        return jsonAdapter.fromJson(source.readString(StandardCharsets.UTF_8));
     }
 }
