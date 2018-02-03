@@ -13,7 +13,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.dialogapp.dialog.R;
-import com.dialogapp.dialog.model.Item;
+import com.dialogapp.dialog.model.Post;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +24,7 @@ import butterknife.ButterKnife;
 public class MentionsAdapter extends RecyclerView.Adapter<MentionsAdapter.PostViewHolder> {
 
     private Context context;
-    private List<Item> posts;
+    private List<Post> posts;
 
     public MentionsAdapter(Context context) {
         this.context = context;
@@ -40,17 +40,17 @@ public class MentionsAdapter extends RecyclerView.Adapter<MentionsAdapter.PostVi
 
     @Override
     public void onBindViewHolder(PostViewHolder holder, int position) {
-        Item item = posts.get(position);
+        Post item = posts.get(position);
 
         Glide.with(context)
-                .load(item.getAuthor().getAvatar())
+                .load(item.author_avatar_url)
                 .apply(RequestOptions.circleCropTransform())
                 .into(holder.thumbnail);
 
-        holder.username.setText(item.getAuthor().getName());
+        holder.username.setText(item.author_info_username);
         holder.content.setMovementMethod(LinkMovementMethod.getInstance());
-        holder.content.setText(Html.fromHtml(item.getContentHtml()));
-        holder.time.setText(item.getMicroblog().getDateRelative());
+        holder.content.setText(Html.fromHtml(item.contentHtml));
+        holder.time.setText(item.post_property_dateRelative);
     }
 
     @Override
@@ -58,7 +58,8 @@ public class MentionsAdapter extends RecyclerView.Adapter<MentionsAdapter.PostVi
         return posts.size();
     }
 
-    public void setPosts(List<Item> posts) {
+    public void setPosts(List<Post> posts) {
+        this.posts.clear();
         this.posts.addAll(posts);
         notifyDataSetChanged();
     }
