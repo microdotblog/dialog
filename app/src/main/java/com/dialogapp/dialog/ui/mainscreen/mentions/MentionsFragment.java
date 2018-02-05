@@ -63,7 +63,7 @@ public class MentionsFragment extends Fragment implements Injectable {
         mentionsViewModel.getMentionsPosts().observe(this, listResource -> {
             if (listResource != null) {
                 if (listResource.status == Status.SUCCESS)
-                    adapter.setPosts(listResource.data);
+                    adapter.setItems(listResource.data);
             }
         });
     }

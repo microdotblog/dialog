@@ -64,7 +64,7 @@ public class TimelineFragment extends Fragment implements Injectable {
         timelineViewModel.getTimelinePosts().observe(this, listResource -> {
             if (listResource != null) {
                 if (listResource.status == Status.SUCCESS)
-                    adapter.setPosts(listResource.data);
+                    adapter.setItems(listResource.data);
             }
         });
     }
