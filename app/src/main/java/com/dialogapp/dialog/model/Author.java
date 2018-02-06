@@ -2,19 +2,10 @@ package com.dialogapp.dialog.model;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Embedded;
-import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.Index;
-import android.arch.persistence.room.PrimaryKey;
 
 import com.squareup.moshi.Json;
 
-@Entity(tableName = "authors", indices = {@Index(value = "author_info_username", unique = true)})
 public class Author {
-
-    // internal database column
-    @PrimaryKey(autoGenerate = true)
-    private long author_id;
-
     @Json(name = "name")
     @ColumnInfo(name = "author_name")
     public final String name;
@@ -33,14 +24,6 @@ public class Author {
         this.url = url;
         this.avatar = avatar;
         this.microblog = microblog;
-    }
-
-    public long getAuthor_id() {
-        return author_id;
-    }
-
-    public void setAuthor_id(long author_id) {
-        this.author_id = author_id;
     }
 
     public static class AuthorInfo {
