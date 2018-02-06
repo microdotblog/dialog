@@ -11,7 +11,6 @@ import com.dialogapp.dialog.api.MicroblogService;
 import com.dialogapp.dialog.db.MicroBlogDb;
 import com.dialogapp.dialog.db.PostsDao;
 import com.dialogapp.dialog.model.Item;
-import com.dialogapp.dialog.model.Post;
 import com.dialogapp.dialog.util.InstantAppExecutors;
 import com.dialogapp.dialog.util.Resource;
 
@@ -23,7 +22,6 @@ import org.junit.runners.JUnit4;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.dialogapp.dialog.util.ApiUtil.successCall;
 import static org.mockito.ArgumentMatchers.anyList;
@@ -48,20 +46,20 @@ public class PostsRepositoryTest {
         microblogService = mock(MicroblogService.class);
         MicroBlogDb db = mock(MicroBlogDb.class);
         when(db.postsDao()).thenReturn(postsDao);
-        repository = new PostsRepository(new InstantAppExecutors(), db, postsDao, microblogService);
+        repository = new PostsRepository(new InstantAppExecutors(), postsDao, microblogService);
     }
 
     @Test
     public void loadTimelineDataFromNetwork() throws IOException {
-        MutableLiveData<List<Post>> timelineDbData = new MutableLiveData<>();
-        when(postsDao.loadTimeline()).thenReturn(timelineDbData);
+        MutableLiveData<List<Item>> timelineDbData = new MutableLiveData<>();
+        when(postsDao.loadEndpoint(Endpoints.TIMELINE)).thenReturn(timelineDbData);
 
         List<Item> testTimelineData = TestUtil.readFromJson(getClass().getClassLoader(), "timeline.json");
         LiveData<ApiResponse<List<Item>>> callTimeline = successCall(testTimelineData);
         when(microblogService.getTimeLine()).thenReturn(callTimeline);
 
-        LiveData<Resource<List<Post>>> repoData = repository.loadTimeline();
-        verify(postsDao).loadTimeline();
+        LiveData<Resource<List<Item>>> repoData = repository.loadTimeline();
+        verify(postsDao).loadEndpoint(Endpoints.TIMELINE);
         verifyNoMoreInteractions(microblogService);
 
         Observer observer = mock(Observer.class);
@@ -69,32 +67,27 @@ public class PostsRepositoryTest {
         verifyNoMoreInteractions(microblogService);
         verify(observer).onChanged(Resource.loading(null));
 
-        MutableLiveData<List<Post>> updatedTimelineData = new MutableLiveData<>();
-        when(postsDao.loadTimeline()).thenReturn(updatedTimelineData);
+        MutableLiveData<List<Item>> updatedTimelineData = new MutableLiveData<>();
+        when(postsDao.loadEndpoint(Endpoints.TIMELINE)).thenReturn(updatedTimelineData);
         timelineDbData.postValue(null);
         verify(microblogService).getTimeLine();
-        verify(postsDao).insertTimeline(anyList());
+        verify(postsDao).insertPosts(anyList());
 
-        List<Post> timelineData = testTimelineData.stream().map(x -> new Post(x.getId(), x.getUrl(), x.getContentHtml(),
-                x.getDatePublished(), x.getMicroblog().dateRelative, x.getMicroblog().isDeletable,
-                x.getMicroblog().isFavorite, x.getAuthor().name, x.getAuthor().url, x.getAuthor().avatar,
-                x.getAuthor().microblog.username)).collect(Collectors.toList());
-
-        updatedTimelineData.postValue(timelineData);
-        verify(observer).onChanged(Resource.success(timelineData));
+        updatedTimelineData.postValue(testTimelineData);
+        verify(observer).onChanged(Resource.success(testTimelineData));
     }
 
     @Test
     public void loadMentionsDataFromNetwork() throws IOException {
-        MutableLiveData<List<Post>> mentionsDbData = new MutableLiveData<>();
-        when(postsDao.loadMentions()).thenReturn(mentionsDbData);
+        MutableLiveData<List<Item>> mentionsDbData = new MutableLiveData<>();
+        when(postsDao.loadEndpoint(Endpoints.MENTIONS)).thenReturn(mentionsDbData);
 
         List<Item> testMentionsData = TestUtil.readFromJson(getClass().getClassLoader(), "mentions.json");
         LiveData<ApiResponse<List<Item>>> callMentions = successCall(testMentionsData);
         when(microblogService.getMentions()).thenReturn(callMentions);
 
-        LiveData<Resource<List<Post>>> repoData = repository.loadMentions();
-        verify(postsDao).loadMentions();
+        LiveData<Resource<List<Item>>> repoData = repository.loadMentions();
+        verify(postsDao).loadEndpoint(Endpoints.MENTIONS);
         verifyNoMoreInteractions(microblogService);
 
         Observer observer = mock(Observer.class);
@@ -102,18 +95,13 @@ public class PostsRepositoryTest {
         verifyNoMoreInteractions(microblogService);
         verify(observer).onChanged(Resource.loading(null));
 
-        MutableLiveData<List<Post>> updatedMentionsData = new MutableLiveData<>();
-        when(postsDao.loadMentions()).thenReturn(updatedMentionsData);
+        MutableLiveData<List<Item>> updatedMentionsData = new MutableLiveData<>();
+        when(postsDao.loadEndpoint(Endpoints.MENTIONS)).thenReturn(updatedMentionsData);
         mentionsDbData.postValue(null);
         verify(microblogService).getMentions();
-        verify(postsDao).insertMentions(anyList());
+        verify(postsDao).insertPosts(anyList());
 
-        List<Post> mentionsData = testMentionsData.stream().map(x -> new Post(x.getId(), x.getUrl(), x.getContentHtml(),
-                x.getDatePublished(), x.getMicroblog().dateRelative, x.getMicroblog().isDeletable,
-                x.getMicroblog().isFavorite, x.getAuthor().name, x.getAuthor().url, x.getAuthor().avatar,
-                x.getAuthor().microblog.username)).collect(Collectors.toList());
-
-        updatedMentionsData.postValue(mentionsData);
-        verify(observer).onChanged(Resource.success(mentionsData));
+        updatedMentionsData.postValue(testMentionsData);
+        verify(observer).onChanged(Resource.success(testMentionsData));
     }
 }

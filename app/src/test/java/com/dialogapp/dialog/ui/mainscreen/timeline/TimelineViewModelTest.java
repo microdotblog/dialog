@@ -6,7 +6,6 @@ import android.arch.lifecycle.Observer;
 
 import com.dialogapp.dialog.TestUtil;
 import com.dialogapp.dialog.model.Item;
-import com.dialogapp.dialog.model.Post;
 import com.dialogapp.dialog.repository.PostsRepository;
 import com.dialogapp.dialog.util.Resource;
 
@@ -18,7 +17,6 @@ import org.junit.runners.JUnit4;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -41,13 +39,9 @@ public class TimelineViewModelTest {
     public void setUp() throws IOException {
         postsRepository = mock(PostsRepository.class);
 
-        MutableLiveData<Resource<List<Post>>> data = new MutableLiveData<>();
+        MutableLiveData<Resource<List<Item>>> data = new MutableLiveData<>();
         List<Item> timelineItems = TestUtil.readFromJson(getClass().getClassLoader(), "timeline.json");
-        List<Post> timelineData = timelineItems.stream().map(x -> new Post(x.getId(), x.getUrl(), x.getContentHtml(),
-                x.getDatePublished(), x.getMicroblog().dateRelative, x.getMicroblog().isDeletable,
-                x.getMicroblog().isFavorite, x.getAuthor().name, x.getAuthor().url, x.getAuthor().avatar,
-                x.getAuthor().microblog.username)).collect(Collectors.toList());
-        Resource<List<Post>> timelineResource = Resource.success(timelineData);
+        Resource<List<Item>> timelineResource = Resource.success(timelineItems);
         data.setValue(timelineResource);
         when(postsRepository.loadTimeline()).thenReturn(data);
 

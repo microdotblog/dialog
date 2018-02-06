@@ -9,12 +9,12 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.dialogapp.dialog.R;
-import com.dialogapp.dialog.model.Post;
+import com.dialogapp.dialog.model.Item;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class PostViewHolder extends BaseViewHolder<Post> {
+public class PostViewHolder extends BaseViewHolder<Item> {
     @BindView(R.id.image_thumbnail)
     ImageView thumbnail;
 
@@ -36,15 +36,15 @@ public class PostViewHolder extends BaseViewHolder<Post> {
     }
 
     @Override
-    public void onBind(Post item, int position) {
+    public void onBind(Item item, int position) {
         Glide.with(this.itemView)
-                .load(item.author_avatar_url)
+                .load(item.author.avatar)
                 .apply(RequestOptions.circleCropTransform())
                 .into(thumbnail);
 
-        username.setText(item.author_info_username);
+        username.setText(item.author.microblog.username);
         content.setMovementMethod(LinkMovementMethod.getInstance());
         content.setText(Html.fromHtml(item.contentHtml));
-        time.setText(item.post_property_dateRelative);
+        time.setText(item.microblog.dateRelative);
     }
 }

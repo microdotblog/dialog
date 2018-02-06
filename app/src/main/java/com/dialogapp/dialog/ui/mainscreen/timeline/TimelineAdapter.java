@@ -4,11 +4,11 @@ import android.content.Context;
 import android.view.ViewGroup;
 
 import com.dialogapp.dialog.R;
-import com.dialogapp.dialog.model.Post;
+import com.dialogapp.dialog.model.Item;
 import com.dialogapp.dialog.ui.mainscreen.common.BaseRecyclerAdapter;
 import com.dialogapp.dialog.ui.mainscreen.common.PostViewHolder;
 
-public class TimelineAdapter extends BaseRecyclerAdapter<Post, PostViewHolder> {
+public class TimelineAdapter extends BaseRecyclerAdapter<Item, PostViewHolder> {
 
     public TimelineAdapter(Context context) {
         super(context);

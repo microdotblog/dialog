@@ -6,7 +6,7 @@ import android.arch.lifecycle.Transformations;
 import android.arch.lifecycle.ViewModel;
 import android.support.annotation.VisibleForTesting;
 
-import com.dialogapp.dialog.model.Post;
+import com.dialogapp.dialog.model.Item;
 import com.dialogapp.dialog.repository.PostsRepository;
 import com.dialogapp.dialog.util.AbsentLiveData;
 import com.dialogapp.dialog.util.Resource;
@@ -20,7 +20,7 @@ public class TimelineViewModel extends ViewModel {
     @VisibleForTesting
     final MutableLiveData<Boolean> refresh;
 
-    private final LiveData<Resource<List<Post>>> timelinePosts;
+    private final LiveData<Resource<List<Item>>> timelinePosts;
 
     @Inject
     public TimelineViewModel(PostsRepository postsRepository) {
@@ -33,7 +33,7 @@ public class TimelineViewModel extends ViewModel {
         });
     }
 
-    public LiveData<Resource<List<Post>>> getTimelinePosts() {
+    public LiveData<Resource<List<Item>>> getTimelinePosts() {
         return timelinePosts;
     }
 
