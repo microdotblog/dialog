@@ -17,4 +17,7 @@ public interface PostsDao {
 
     @Query("SELECT * FROM posts WHERE endpoint = :endpoint")
     LiveData<List<Item>> loadEndpoint(String endpoint);
+
+    @Query("DELETE FROM posts WHERE endpoint = :endpoint")
+    void deletePosts(String endpoint);
 }

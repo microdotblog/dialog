@@ -38,15 +38,15 @@ public class TimelineFragment extends Fragment implements Injectable {
     SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.common_list_layout, container, false);
         unbinder = ButterKnife.bind(this, view);
+
+        swipeRefreshLayout.setOnRefreshListener(() -> {
+            timelineViewModel.refresh();
+            load();
+        });
 
         adapter = new TimelineAdapter(this.getContext());
         recyclerView.setAdapter(adapter);
@@ -60,11 +60,19 @@ public class TimelineFragment extends Fragment implements Injectable {
         super.onActivityCreated(savedInstanceState);
 
         timelineViewModel = ViewModelProviders.of(this, viewModelFactory).get(TimelineViewModel.class);
+        swipeRefreshLayout.setRefreshing(true);
         timelineViewModel.refresh();
+        load();
+    }
+
+    private void load() {
+        adapter.clear();
         timelineViewModel.getTimelinePosts().observe(this, listResource -> {
             if (listResource != null) {
-                if (listResource.status == Status.SUCCESS)
+                if (listResource.status == Status.SUCCESS) {
                     adapter.setItems(listResource.data);
+                    swipeRefreshLayout.setRefreshing(false);
+                }
             }
         });
     }

@@ -43,31 +43,22 @@ public class TimelineViewModelTest {
         List<Item> timelineItems = TestUtil.readFromJson(getClass().getClassLoader(), "timeline.json");
         Resource<List<Item>> timelineResource = Resource.success(timelineItems);
         data.setValue(timelineResource);
-        when(postsRepository.loadTimeline()).thenReturn(data);
+        when(postsRepository.loadTimeline(true)).thenReturn(data);
 
         viewModel = new TimelineViewModel(postsRepository);
     }
 
     @Test
-    public void loadTimeline() throws Exception {
+    public void initialLoadIsNull() throws Exception {
         assertThat(viewModel.getTimelinePosts().getValue(), nullValue());
     }
 
     @Test
     public void refreshTimeline() {
         viewModel.getTimelinePosts().observeForever(mock(Observer.class));
-        verify(postsRepository, never()).loadTimeline();
+        verify(postsRepository, never()).loadTimeline(true);
         viewModel.refresh();
-        verify(postsRepository).loadTimeline();
+        verify(postsRepository).loadTimeline(true);
         assertThat(viewModel.getTimelinePosts().getValue(), notNullValue());
-    }
-
-    @Test
-    public void shouldNotRefreshTimeline() {
-        viewModel.getTimelinePosts().observeForever(mock(Observer.class));
-        verify(postsRepository, never()).loadTimeline();
-        viewModel.refresh.setValue(false);
-        verify(postsRepository, never()).loadTimeline();
-        assertThat(viewModel.getTimelinePosts().getValue(), nullValue());
     }
 }

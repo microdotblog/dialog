@@ -38,15 +38,15 @@ public class MentionsFragment extends Fragment implements Injectable {
     SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.common_list_layout, container, false);
         unbinder = ButterKnife.bind(this, view);
+
+        swipeRefreshLayout.setOnRefreshListener(() -> {
+            mentionsViewModel.refresh();
+            load();
+        });
 
         adapter = new MentionsAdapter(this.getContext());
         recyclerView.setAdapter(adapter);
@@ -60,10 +60,19 @@ public class MentionsFragment extends Fragment implements Injectable {
         super.onActivityCreated(savedInstanceState);
 
         mentionsViewModel = ViewModelProviders.of(this, viewModelFactory).get(MentionsViewModel.class);
+        swipeRefreshLayout.setRefreshing(true);
+        mentionsViewModel.refresh();
+        load();
+    }
+
+    private void load() {
+        adapter.clear();
         mentionsViewModel.getMentionsPosts().observe(this, listResource -> {
             if (listResource != null) {
-                if (listResource.status == Status.SUCCESS)
+                if (listResource.status == Status.SUCCESS) {
                     adapter.setItems(listResource.data);
+                    swipeRefreshLayout.setRefreshing(false);
+                }
             }
         });
     }

@@ -12,6 +12,7 @@ import com.dialogapp.dialog.model.Item;
 import com.dialogapp.dialog.util.Resource;
 
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -19,9 +20,13 @@ import javax.inject.Singleton;
 @Singleton
 public class PostsRepository {
 
+    private final long THRESHOLDMILLIS = 120000;
+
     private final AppExecutors appExecutors;
     private final MicroblogService microblogService;
     private final PostsDao postsDao;
+
+    private ConcurrentHashMap<String, Long> requestTimings = new ConcurrentHashMap<>();
 
     @Inject
     public PostsRepository(AppExecutors appExecutors, PostsDao postsDao, MicroblogService microblogService) {
@@ -30,11 +35,11 @@ public class PostsRepository {
         this.microblogService = microblogService;
     }
 
-    public LiveData<Resource<List<Item>>> loadTimeline() {
+    public LiveData<Resource<List<Item>>> loadTimeline(boolean refresh) {
         return new NetworkBoundResource<List<Item>, List<Item>>(appExecutors) {
             @Override
             protected boolean shouldFetch(@Nullable List<Item> dbData) {
-                return dbData == null || dbData.isEmpty();
+                return shouldRefresh(dbData, refresh, Endpoints.TIMELINE);
             }
 
             @NonNull
@@ -45,10 +50,13 @@ public class PostsRepository {
 
             @Override
             protected void saveCallResult(@NonNull List<Item> items) {
+                requestTimings.put(Endpoints.TIMELINE, System.currentTimeMillis());
                 for (Item item : items) {
                     item.setEndpoint(Endpoints.TIMELINE);
                 }
 
+                if (refresh)
+                    postsDao.deletePosts(Endpoints.TIMELINE);
                 postsDao.insertPosts(items);
             }
 
@@ -60,11 +68,11 @@ public class PostsRepository {
         }.asLiveData();
     }
 
-    public LiveData<Resource<List<Item>>> loadMentions() {
+    public LiveData<Resource<List<Item>>> loadMentions(boolean refresh) {
         return new NetworkBoundResource<List<Item>, List<Item>>(appExecutors) {
             @Override
             protected boolean shouldFetch(@Nullable List<Item> dbData) {
-                return dbData == null || dbData.isEmpty();
+                return shouldRefresh(dbData, refresh, Endpoints.MENTIONS);
             }
 
             @NonNull
@@ -75,10 +83,13 @@ public class PostsRepository {
 
             @Override
             protected void saveCallResult(@NonNull List<Item> items) {
+                requestTimings.put(Endpoints.MENTIONS, System.currentTimeMillis());
                 for (Item item : items) {
                     item.setEndpoint(Endpoints.MENTIONS);
                 }
 
+                if (refresh)
+                    postsDao.deletePosts(Endpoints.MENTIONS);
                 postsDao.insertPosts(items);
             }
 
@@ -88,5 +99,21 @@ public class PostsRepository {
                 return postsDao.loadEndpoint(Endpoints.MENTIONS);
             }
         }.asLiveData();
+    }
+
+    private boolean shouldRefresh(List<Item> dbData, boolean refresh, String endpoint) {
+        if (refresh) {
+            return hasWaitTimeExpired(endpoint);
+        } else {
+            return dbData == null || dbData.isEmpty();
+        }
+    }
+
+    private boolean hasWaitTimeExpired(String endpoint) {
+        if (!requestTimings.containsKey(endpoint)) {
+            return true;
+        } else {
+            return (System.currentTimeMillis() - requestTimings.get(endpoint)) >= THRESHOLDMILLIS;
+        }
     }
 }

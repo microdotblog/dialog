@@ -19,8 +19,11 @@ import java.io.IOException;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(JUnit4.class)
@@ -39,14 +42,22 @@ public class MentionsViewModelTest {
         List<Item> mentionsItems = TestUtil.readFromJson(getClass().getClassLoader(), "mentions.json");
         Resource<List<Item>> mentionsResource = Resource.success(mentionsItems);
         data.setValue(mentionsResource);
-        when(postsRepository.loadMentions()).thenReturn(data);
+        when(postsRepository.loadMentions(true)).thenReturn(data);
 
         viewModel = new MentionsViewModel(postsRepository);
     }
 
     @Test
-    public void loadMentions() throws Exception {
+    public void initialLoadIsNull() throws Exception {
+        assertThat(viewModel.getMentionsPosts().getValue(), nullValue());
+    }
+
+    @Test
+    public void refreshMentions() {
         viewModel.getMentionsPosts().observeForever(mock(Observer.class));
+        verify(postsRepository, never()).loadMentions(true);
+        viewModel.refresh();
+        verify(postsRepository).loadMentions(true);
         assertThat(viewModel.getMentionsPosts().getValue(), notNullValue());
     }
 }

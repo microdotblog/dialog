@@ -58,7 +58,7 @@ public class PostsRepositoryTest {
         LiveData<ApiResponse<List<Item>>> callTimeline = successCall(testTimelineData);
         when(microblogService.getTimeLine()).thenReturn(callTimeline);
 
-        LiveData<Resource<List<Item>>> repoData = repository.loadTimeline();
+        LiveData<Resource<List<Item>>> repoData = repository.loadTimeline(true);
         verify(postsDao).loadEndpoint(Endpoints.TIMELINE);
         verifyNoMoreInteractions(microblogService);
 
@@ -86,7 +86,7 @@ public class PostsRepositoryTest {
         LiveData<ApiResponse<List<Item>>> callMentions = successCall(testMentionsData);
         when(microblogService.getMentions()).thenReturn(callMentions);
 
-        LiveData<Resource<List<Item>>> repoData = repository.loadMentions();
+        LiveData<Resource<List<Item>>> repoData = repository.loadMentions(true);
         verify(postsDao).loadEndpoint(Endpoints.MENTIONS);
         verifyNoMoreInteractions(microblogService);
 
