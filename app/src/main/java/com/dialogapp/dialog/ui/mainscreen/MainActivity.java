@@ -2,7 +2,9 @@ package com.dialogapp.dialog.ui.mainscreen;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -16,6 +18,7 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestOptions;
 import com.dialogapp.dialog.R;
 import com.dialogapp.dialog.api.ServiceInterceptor;
+import com.dialogapp.dialog.ui.mainscreen.common.BaseListFragment;
 import com.dialogapp.dialog.ui.mainscreen.common.MainFragmentPagerAdapter;
 
 import javax.inject.Inject;
@@ -30,7 +33,10 @@ import static com.dialogapp.dialog.ui.LauncherActivity.EXTRA_FULLNAME;
 import static com.dialogapp.dialog.ui.LauncherActivity.EXTRA_TOKEN;
 import static com.dialogapp.dialog.ui.LauncherActivity.EXTRA_USERNAME;
 
-public class MainActivity extends AppCompatActivity implements HasSupportFragmentInjector {
+public class MainActivity extends AppCompatActivity implements BaseListFragment.FragmentEventListener,
+        HasSupportFragmentInjector {
+
+    private Snackbar errorBar;
 
     @Inject
     DispatchingAndroidInjector<Fragment> dispatchingAndroidInjector;
@@ -44,6 +50,9 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
     @BindView(R.id.toolbar)
     Toolbar toolbar;
 
+    @BindView(R.id.coord_layout_main)
+    CoordinatorLayout coordinatorLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +61,8 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
         ButterKnife.bind(this);
 
         setSupportActionBar(toolbar);
+
+        errorBar = Snackbar.make(coordinatorLayout, R.string.connection_error, Snackbar.LENGTH_LONG);
 
         Intent intent = getIntent();
         String saved_token = intent.getStringExtra(EXTRA_TOKEN);
@@ -79,6 +90,11 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
     @Override
     public DispatchingAndroidInjector<Fragment> supportFragmentInjector() {
         return dispatchingAndroidInjector;
+    }
+
+    @Override
+    public void onLoadError(String message) {
+        errorBar.show();
     }
 
     private void setupViewpager() {

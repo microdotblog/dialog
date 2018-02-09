@@ -5,6 +5,7 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="bottom_nav_bar">8dp</dimen>
     <dimen name="bottom_nav_tabs">72dp</dimen>
+    <dimen name="padding">8dp</dimen>
 
     <!-- Navigation drawer -->
     <dimen name="nav_header_vertical_spacing">8dp</dimen>

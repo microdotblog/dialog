@@ -17,12 +17,11 @@
 
         <TextView
             android:id="@+id/empty_list"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
+            android:layout_gravity="center_vertical"
             android:text="@string/empty_list"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:visibility="gone" />
+            android:drawableTop="@drawable/ic_chat_black_24dp"
+            android:visibility="gone"
+            style="@style/textEmptyStyle" />
     </FrameLayout>
 
 </android.support.v4.widget.SwipeRefreshLayout>
