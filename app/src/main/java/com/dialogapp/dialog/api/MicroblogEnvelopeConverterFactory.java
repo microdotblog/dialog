@@ -2,11 +2,13 @@ package com.dialogapp.dialog.api;
 
 import android.support.annotation.Nullable;
 
+import com.dialogapp.dialog.model.Item;
 import com.dialogapp.dialog.model.MicroBlogResponse;
 import com.squareup.moshi.Types;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
+import java.util.List;
 
 import okhttp3.ResponseBody;
 import retrofit2.Converter;
@@ -20,10 +22,11 @@ public class MicroblogEnvelopeConverterFactory extends Converter.Factory {
     @Override
     public Converter<ResponseBody, ?> responseBodyConverter(Type type, Annotation[] annotations,
                                                             Retrofit retrofit) {
-        Type envelopeType = Types.newParameterizedType(MicroBlogResponse.class, type);
+        if (!type.equals(Types.newParameterizedType(List.class, Item.class)))
+            return null;
 
         final Converter<ResponseBody, MicroBlogResponse> delegate =
-                retrofit.nextResponseBodyConverter(this, envelopeType, annotations);
+                retrofit.nextResponseBodyConverter(this, MicroBlogResponse.class, annotations);
         return value -> {
             MicroBlogResponse envelope = delegate.convert(value);
             return envelope.items;

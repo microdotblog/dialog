@@ -1,102 +1,66 @@
 package com.dialogapp.dialog.model;
 
+import android.arch.persistence.room.Embedded;
+import android.arch.persistence.room.Entity;
+import android.support.annotation.NonNull;
+
 import com.squareup.moshi.Json;
 
+@Entity(tableName = "posts", primaryKeys = {"id", "endpoint"})
 public class Item {
+    // Custom field
+    @NonNull
+    private String endpoint;
 
+    @NonNull
     @Json(name = "id")
-    private Long id;
+    public final Long id;
     @Json(name = "author")
-    private Author author;
+    @Embedded(prefix = "author_")
+    public final Author author;
     @Json(name = "url")
-    private String url;
+    public final String url;
     @Json(name = "content_html")
-    private String contentHtml;
+    public final String contentHtml;
     @Json(name = "date_published")
-    private String datePublished;
+    public final String datePublished;
     @Json(name = "_microblog")
-    private Microblog__ microblog;
+    @Embedded(prefix = "post_property_")
+    public final PostProperties microblog;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
+    public Item(@NonNull String endpoint, @NonNull Long id, Author author, String url, String contentHtml,
+                String datePublished, PostProperties microblog) {
+        this.endpoint = endpoint;
         this.id = id;
-    }
-
-    public Author getAuthor() {
-        return author;
-    }
-
-    public void setAuthor(Author author) {
         this.author = author;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
         this.url = url;
-    }
-
-    public String getContentHtml() {
-        return contentHtml;
-    }
-
-    public void setContentHtml(String contentHtml) {
         this.contentHtml = contentHtml;
-    }
-
-    public String getDatePublished() {
-        return datePublished;
-    }
-
-    public void setDatePublished(String datePublished) {
         this.datePublished = datePublished;
-    }
-
-    public Microblog__ getMicroblog() {
-        return microblog;
-    }
-
-    public void setMicroblog(Microblog__ microblog) {
         this.microblog = microblog;
     }
 
-    public static class Microblog__ {
+    @NonNull
+    public String getEndpoint() {
+        return endpoint;
+    }
+
+    public void setEndpoint(@NonNull String endpoint) {
+        this.endpoint = endpoint;
+    }
+
+    public static class PostProperties {
 
         @Json(name = "is_deletable")
-        private Boolean isDeletable;
+        public final Boolean isDeletable;
         @Json(name = "is_favorite")
-        private Boolean isFavorite;
+        public final Boolean isFavorite;
         @Json(name = "date_relative")
-        private String dateRelative;
+        public final String dateRelative;
 
-        public Boolean getIsDeletable() {
-            return isDeletable;
-        }
-
-        public void setIsDeletable(Boolean isDeletable) {
+        public PostProperties(Boolean isDeletable, Boolean isFavorite, String dateRelative) {
             this.isDeletable = isDeletable;
-        }
-
-        public Boolean getIsFavorite() {
-            return isFavorite;
-        }
-
-        public void setIsFavorite(Boolean isFavorite) {
             this.isFavorite = isFavorite;
-        }
-
-        public String getDateRelative() {
-            return dateRelative;
-        }
-
-        public void setDateRelative(String dateRelative) {
             this.dateRelative = dateRelative;
         }
-
     }
 }

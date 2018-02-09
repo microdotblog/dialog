@@ -29,6 +29,11 @@ import butterknife.OnClick;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.HasActivityInjector;
 
+import static com.dialogapp.dialog.ui.LauncherActivity.EXTRA_AVATARURL;
+import static com.dialogapp.dialog.ui.LauncherActivity.EXTRA_FULLNAME;
+import static com.dialogapp.dialog.ui.LauncherActivity.EXTRA_TOKEN;
+import static com.dialogapp.dialog.ui.LauncherActivity.EXTRA_USERNAME;
+
 public class LoginActivity extends AppCompatActivity implements HasActivityInjector {
 
     private LoginViewModel loginViewModel;
@@ -99,7 +104,15 @@ public class LoginActivity extends AppCompatActivity implements HasActivityInjec
                 if (verifiedAccountResource.data.error == null) {
                     progressBar.setVisibility(View.INVISIBLE);
                     preferencesHelper.putToken(token);
+                    preferencesHelper.putUsername(verifiedAccountResource.data.username);
+                    preferencesHelper.putFullname(verifiedAccountResource.data.fullName);
+                    preferencesHelper.putAvatarUrl(verifiedAccountResource.data.gravatarUrl);
+
                     Intent intent = new Intent(this, MainActivity.class);
+                    intent.putExtra(EXTRA_TOKEN, token);
+                    intent.putExtra(EXTRA_USERNAME, verifiedAccountResource.data.username);
+                    intent.putExtra(EXTRA_FULLNAME, verifiedAccountResource.data.fullName);
+                    intent.putExtra(EXTRA_AVATARURL, verifiedAccountResource.data.gravatarUrl);
                     startActivity(intent);
                     finish();
                 } else {

@@ -25,7 +25,8 @@
             android:name=".ui.loginscreen.LoginActivity"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
-        <activity android:name=".ui.mainscreen.MainActivity">
+        <activity android:name=".ui.mainscreen.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
         </activity>
     </application>
 

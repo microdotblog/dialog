@@ -3,9 +3,12 @@ package com.dialogapp.dialog.api;
 import android.arch.lifecycle.LiveData;
 
 import com.dialogapp.dialog.model.AccountResponse;
+import com.dialogapp.dialog.model.Item;
 import com.dialogapp.dialog.model.MediaEndPoint;
 import com.dialogapp.dialog.model.MicroBlogResponse;
 import com.dialogapp.dialog.model.VerifiedAccount;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Response;
@@ -29,10 +32,10 @@ public interface MicroblogService {
     LiveData<ApiResponse<AccountResponse>> getAccountData();
 
     @GET("posts/all")
-    Call<MicroBlogResponse> getTimeLine();
+    LiveData<ApiResponse<List<Item>>> getTimeLine();
 
     @GET("posts/mentions")
-    Call<MicroBlogResponse> getMentions();
+    LiveData<ApiResponse<List<Item>>> getMentions();
 
     @GET("posts/favorites")
     Call<MicroBlogResponse> getFavorites();
