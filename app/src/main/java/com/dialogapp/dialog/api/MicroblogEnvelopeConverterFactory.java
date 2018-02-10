@@ -14,9 +14,9 @@ import okhttp3.ResponseBody;
 import retrofit2.Converter;
 import retrofit2.Retrofit;
 
-/*
-* Retrofit converter factory to unwrap MicroblogResponse into List<Item>
-* */
+/**
+ * Retrofit converter factory to unwrap MicroblogResponse into List<Item>
+ */
 public class MicroblogEnvelopeConverterFactory extends Converter.Factory {
     @Nullable
     @Override

@@ -18,6 +18,7 @@ package com.dialogapp.dialog.repository;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MediatorLiveData;
+import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.WorkerThread;
@@ -65,6 +66,7 @@ public abstract class NetworkBoundResource<ResultType, RequestType> {
             // remove existing sources after response becomes available
             result.removeSource(apiResponse);
             result.removeSource(dbSource);
+            // noinspection ConstantConditions
             if (response.isSuccessful()) {
                 // write to db on a separate thread and send back the data
                 appExecutors.diskIO().execute(() -> {
@@ -98,15 +100,17 @@ public abstract class NetworkBoundResource<ResultType, RequestType> {
         return response.body;
     }
 
-    @WorkerThread
+    @MainThread
     protected abstract boolean shouldFetch(@Nullable ResultType dbData);
 
     @NonNull
+    @MainThread
     protected abstract LiveData<ApiResponse<RequestType>> createCall();
 
     @WorkerThread
     protected abstract void saveCallResult(@NonNull RequestType item);
 
     @NonNull
+    @MainThread
     protected abstract LiveData<ResultType> loadFromDb();
 }

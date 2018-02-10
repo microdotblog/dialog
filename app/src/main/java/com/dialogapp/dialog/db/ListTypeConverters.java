@@ -12,6 +12,9 @@ import java.lang.reflect.Type;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Room Type Converter for lists
+ */
 public class ListTypeConverters {
     @TypeConverter
     public List<AccountResponse.PaidSite> stringToPaidSiteList(String data) {

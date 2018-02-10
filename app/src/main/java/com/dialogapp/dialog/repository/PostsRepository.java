@@ -17,6 +17,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import timber.log.Timber;
+
 @Singleton
 public class PostsRepository {
 
@@ -111,8 +113,11 @@ public class PostsRepository {
 
     private boolean hasWaitTimeExpired(String endpoint) {
         if (!requestTimings.containsKey(endpoint)) {
+            // put the key in the hashmap only after the data has been fetched in saveCallResult()
+            Timber.i("Endpoint " + endpoint + " does not exist yet.");
             return true;
         } else {
+            Timber.i("Endpoint: " + endpoint + " Last refresh time: " + requestTimings.get(endpoint));
             return (System.currentTimeMillis() - requestTimings.get(endpoint)) >= THRESHOLDMILLIS;
         }
     }

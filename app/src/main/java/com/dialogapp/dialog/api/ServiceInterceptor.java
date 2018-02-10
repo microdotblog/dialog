@@ -11,12 +11,12 @@ import okhttp3.Interceptor;
 import okhttp3.Request;
 import okhttp3.Response;
 
-/*
-* Custom okhttp interceptor to add the auth header for all requests except those containing
-* the dummy header "NO-AUTH".
-*
-* Exposes method to set auth token during runtime.
-* */
+/**
+ * Custom okhttp interceptor to add the auth header to all requests except those containing
+ * the dummy header "NO-AUTH".
+ * <p>
+ * Exposes method to set auth token during runtime.
+ */
 @Singleton
 public class ServiceInterceptor implements Interceptor {
     private String authToken;
