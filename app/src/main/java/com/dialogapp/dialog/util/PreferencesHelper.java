@@ -27,6 +27,30 @@ public class PreferencesHelper {
         writeToSharedPref(context.getString(R.string.pref_token), value);
     }
 
+    public String fetchUsername(String key) {
+        return getSharedPref(key, "");
+    }
+
+    public void putUsername(String value) {
+        writeToSharedPref(context.getString(R.string.pref_username), value);
+    }
+
+    public String fetchFullname(String key) {
+        return getSharedPref(key, "");
+    }
+
+    public void putFullname(String value) {
+        writeToSharedPref(context.getString(R.string.pref_fullname), value);
+    }
+
+    public String fetchAvatarUrl(String key) {
+        return getSharedPref(key, "");
+    }
+
+    public void putAvatarUrl(String value) {
+        writeToSharedPref(context.getString(R.string.pref_avatar_url), value);
+    }
+
     private void writeToSharedPref(String key, String value) {
         PreferenceManager.getDefaultSharedPreferences(context)
                 .edit()

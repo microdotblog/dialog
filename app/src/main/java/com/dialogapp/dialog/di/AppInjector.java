@@ -59,8 +59,11 @@ public class AppInjector {
     }
 
     private static void handleActivity(Activity activity) {
+        // Inject plain activities and fragment activities
         if (activity instanceof HasActivityInjector || activity instanceof HasSupportFragmentInjector)
             AndroidInjection.inject(activity);
+
+        // Inject individual fragments
         if (activity instanceof FragmentActivity) {
             ((FragmentActivity) activity).getSupportFragmentManager()
                     .registerFragmentLifecycleCallbacks(

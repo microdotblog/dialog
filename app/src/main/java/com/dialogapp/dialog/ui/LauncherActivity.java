@@ -17,6 +17,11 @@ import dagger.android.HasActivityInjector;
 
 public class LauncherActivity extends AppCompatActivity implements HasActivityInjector {
 
+    public static final String EXTRA_USERNAME = LauncherActivity.class.getName() + ".EXTRA_USERNAME";
+    public static final String EXTRA_FULLNAME = LauncherActivity.class.getName() + ".EXTRA_FULLNAME";
+    public static final String EXTRA_AVATARURL = LauncherActivity.class.getName() + ".EXTRA_AVATARURL";
+    public static final String EXTRA_TOKEN = LauncherActivity.class.getName() + ".EXTRA_TOKEN";
+
     @Inject
     DispatchingAndroidInjector<Activity> dispatchingAndroidInjector;
 
@@ -32,8 +37,13 @@ public class LauncherActivity extends AppCompatActivity implements HasActivityIn
         Intent intent;
         if (token.isEmpty())
             intent = new Intent(this, LoginActivity.class);
-        else
+        else {
             intent = new Intent(this, MainActivity.class);
+            intent.putExtra(EXTRA_TOKEN, token);
+            intent.putExtra(EXTRA_USERNAME, preferencesHelper.fetchUsername(getString(R.string.pref_username)));
+            intent.putExtra(EXTRA_FULLNAME, preferencesHelper.fetchUsername(getString(R.string.pref_fullname)));
+            intent.putExtra(EXTRA_AVATARURL, preferencesHelper.fetchUsername(getString(R.string.pref_avatar_url)));
+        }
 
         startActivity(intent);
         finish();

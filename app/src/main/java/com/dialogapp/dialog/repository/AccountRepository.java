@@ -3,13 +3,14 @@ package com.dialogapp.dialog.repository;
 import android.arch.lifecycle.LiveData;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.VisibleForTesting;
 
 import com.dialogapp.dialog.AppExecutors;
 import com.dialogapp.dialog.api.ApiResponse;
 import com.dialogapp.dialog.api.MicroblogService;
+import com.dialogapp.dialog.db.AccountDao;
 import com.dialogapp.dialog.model.AccountResponse;
 import com.dialogapp.dialog.model.VerifiedAccount;
-import com.dialogapp.dialog.util.AbsentLiveData;
 import com.dialogapp.dialog.util.CacheLiveData;
 import com.dialogapp.dialog.util.Resource;
 
@@ -21,12 +22,15 @@ public class AccountRepository {
 
     private final AppExecutors appExecutors;
     private final MicroblogService microblogService;
+    private final AccountDao accountDao;
 
-    private VerifiedAccount verifiedAccountData;
+    @VisibleForTesting
+    VerifiedAccount verifiedAccountData;
 
     @Inject
-    public AccountRepository(AppExecutors appExecutors, MicroblogService microblogService) {
+    public AccountRepository(AppExecutors appExecutors, AccountDao accountDao, MicroblogService microblogService) {
         this.appExecutors = appExecutors;
+        this.accountDao = accountDao;
         this.microblogService = microblogService;
     }
 
@@ -58,28 +62,28 @@ public class AccountRepository {
         }.asLiveData();
     }
 
-    public LiveData<Resource<AccountResponse>> loadAccountData(String token) {
+    public LiveData<Resource<AccountResponse>> loadAccountData(String username) {
         return new NetworkBoundResource<AccountResponse, AccountResponse>(appExecutors) {
             @Override
-            protected boolean shouldFetch(AccountResponse dbData) {
-                return true;
+            protected boolean shouldFetch(@Nullable AccountResponse dbData) {
+                return dbData == null;
             }
 
             @NonNull
             @Override
             protected LiveData<ApiResponse<AccountResponse>> createCall() {
-                return microblogService.getAccountData(token);
+                return microblogService.getAccountData();
             }
 
             @Override
             protected void saveCallResult(@NonNull AccountResponse item) {
-
+                accountDao.insert(item);
             }
 
             @NonNull
             @Override
             protected LiveData<AccountResponse> loadFromDb() {
-                return AbsentLiveData.create();
+                return accountDao.fetchAccountInfo(username);
             }
         }.asLiveData();
     }

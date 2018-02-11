@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string translatable="false" name="pref_token">TOKEN</string>
+    <string translatable="false" name="pref_username">USERNAME</string>
+    <string translatable="false" name="pref_avatar_url">AVATAR_URL</string>
+    <string translatable="false" name="pref_fullname">FULLNAME</string>
 </resources>

@@ -8,6 +8,7 @@ import com.dialogapp.dialog.api.MicroblogService;
 import com.dialogapp.dialog.api.ServiceInterceptor;
 import com.dialogapp.dialog.db.AccountDao;
 import com.dialogapp.dialog.db.MicroBlogDb;
+import com.dialogapp.dialog.db.PostsDao;
 import com.dialogapp.dialog.util.LiveDataCallAdapterFactory;
 
 import javax.inject.Singleton;
@@ -57,5 +58,11 @@ class AppModule {
     @Provides
     AccountDao provideAccountDao(MicroBlogDb db) {
         return db.accountDao();
+    }
+
+    @Singleton
+    @Provides
+    PostsDao providePostsDao(MicroBlogDb db) {
+        return db.postsDao();
     }
 }
