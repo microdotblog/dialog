@@ -44,16 +44,17 @@ public class TimelineFragment extends BaseListFragment implements Injectable {
         super.onActivityCreated(savedInstanceState);
 
         timelineViewModel = ViewModelProviders.of(this, viewModelFactory).get(TimelineViewModel.class);
+        timelineViewModel.getTimelinePosts().observe(this, listResource -> {
+            if (listResource != null) {
+                setData(listResource.status, listResource.data, listResource.message);
+            }
+        });
         load();
     }
 
     private void load() {
-        timelineViewModel.refresh();
+        swipeRefreshLayout.setRefreshing(true);
         adapter.clear();
-        timelineViewModel.getTimelinePosts().observe(this, listResource -> {
-            if (listResource != null && listResource.data != null) {
-                setData(listResource.status, listResource.data, listResource.message);
-            }
-        });
+        timelineViewModel.refresh();
     }
 }

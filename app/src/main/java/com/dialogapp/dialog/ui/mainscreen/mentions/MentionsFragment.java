@@ -44,16 +44,17 @@ public class MentionsFragment extends BaseListFragment implements Injectable {
         super.onActivityCreated(savedInstanceState);
 
         mentionsViewModel = ViewModelProviders.of(this, viewModelFactory).get(MentionsViewModel.class);
+        mentionsViewModel.getMentionsPosts().observe(this, listResource -> {
+            if (listResource != null) {
+                setData(listResource.status, listResource.data, listResource.message);
+            }
+        });
         load();
     }
 
     private void load() {
-        mentionsViewModel.refresh();
+        swipeRefreshLayout.setRefreshing(true);
         adapter.clear();
-        mentionsViewModel.getMentionsPosts().observe(this, listResource -> {
-            if (listResource != null && listResource.data != null) {
-                setData(listResource.status, listResource.data, listResource.message);
-            }
-        });
+        mentionsViewModel.refresh();
     }
 }

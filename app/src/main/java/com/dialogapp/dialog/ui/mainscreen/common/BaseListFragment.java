@@ -55,24 +55,24 @@ public abstract class BaseListFragment extends Fragment {
     }
 
     protected void setData(Status status, List<Item> data, String message) {
-        if (status == Status.LOADING) {
-            swipeRefreshLayout.setRefreshing(true);
-            return;
-        }
+        // Set data ignoring the status
+        if (data != null) {
+            if (data.isEmpty()) {
+                recyclerView.setVisibility(View.GONE);
+                emptyPlaceholder.setVisibility(View.VISIBLE);
+            } else {
+                emptyPlaceholder.setVisibility(View.GONE);
+                recyclerView.setVisibility(View.VISIBLE);
 
-        if (data.isEmpty()) {
-            recyclerView.setVisibility(View.GONE);
-            emptyPlaceholder.setVisibility(View.VISIBLE);
-        } else {
-            emptyPlaceholder.setVisibility(View.GONE);
-            recyclerView.setVisibility(View.VISIBLE);
-
-            adapter.setItems(data);
+                adapter.setItems(data);
+            }
         }
-        swipeRefreshLayout.setRefreshing(false);
 
         if (status == Status.ERROR)
             listener.onLoadError(message);
+
+        if (status != Status.LOADING)
+            swipeRefreshLayout.setRefreshing(false);
     }
 
     public interface FragmentEventListener {
