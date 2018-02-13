@@ -23,7 +23,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 @SuppressWarnings("unchecked")
@@ -55,24 +54,6 @@ public class LoginViewModelTest {
         loginViewModel.setToken("INVALIDTOKEN");
         verify(accountRepository).verifyToken(captor.capture());
         assertThat(captor.getValue(), is("INVALIDTOKEN"));
-    }
-
-    @Test
-    public void sameToken_shouldNotRefresh() {
-        Observer<String> observer = mock(Observer.class);
-        loginViewModel.token.observeForever(observer);
-        verifyNoMoreInteractions(observer);
-
-        loginViewModel.setToken("VALIDTOKEN1");
-        verify(observer).onChanged("VALIDTOKEN1");
-
-        reset(observer);
-
-        loginViewModel.setToken("VALIDTOKEN1");
-        verifyNoMoreInteractions(observer);
-
-        loginViewModel.setToken("VALIDTOKEN2");
-        verify(observer).onChanged("VALIDTOKEN2");
     }
 
     @Test
