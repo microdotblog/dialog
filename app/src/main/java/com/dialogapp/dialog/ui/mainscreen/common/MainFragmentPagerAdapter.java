@@ -11,7 +11,7 @@ import com.dialogapp.dialog.ui.mainscreen.timeline.TimelineFragment;
 public class MainFragmentPagerAdapter extends FragmentPagerAdapter {
 
     private final int PAGE_COUNT = 2;
-    private final String[] TAB_TITLES = new String[]{"TIMELINE", "MENTIONS"};
+    private final String[] TAB_TITLES = new String[]{"MENTIONS", "TIMELINE"};
 
     public MainFragmentPagerAdapter(FragmentManager fm) {
         super(fm);
@@ -21,9 +21,9 @@ public class MainFragmentPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return new TimelineFragment();
-            case 1:
                 return new MentionsFragment();
+            case 1:
+                return new TimelineFragment();
             default:
                 return null;
         }

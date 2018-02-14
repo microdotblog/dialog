@@ -49,15 +49,15 @@ public class MentionsViewModelTest {
 
     @Test
     public void initialLoadIsNull() throws Exception {
-        assertThat(viewModel.getMentionsPosts().getValue(), nullValue());
+        assertThat(viewModel.getPosts().getValue(), nullValue());
     }
 
     @Test
     public void refreshMentions() {
-        viewModel.getMentionsPosts().observeForever(mock(Observer.class));
+        viewModel.getPosts().observeForever(mock(Observer.class));
         verify(postsRepository, never()).loadMentions(true);
         viewModel.refresh();
         verify(postsRepository).loadMentions(true);
-        assertThat(viewModel.getMentionsPosts().getValue(), notNullValue());
+        assertThat(viewModel.getPosts().getValue(), notNullValue());
     }
 }

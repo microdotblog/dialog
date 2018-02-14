@@ -4,6 +4,7 @@ import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,8 +20,6 @@ import butterknife.ButterKnife;
 
 public class MentionsFragment extends BaseListFragment implements Injectable {
 
-    private MentionsViewModel mentionsViewModel;
-
     @Inject
     ViewModelProvider.Factory viewModelFactory;
 
@@ -32,9 +31,12 @@ public class MentionsFragment extends BaseListFragment implements Injectable {
 
         swipeRefreshLayout.setOnRefreshListener(this::load);
 
-        adapter = new MentionsAdapter(this.getContext());
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
+        if (this.getContext() != null) {
+            adapter = new MentionsAdapter(this.getContext());
+            recyclerView.setAdapter(adapter);
+            recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
+            recyclerView.addItemDecoration(new DividerItemDecoration(this.getContext(), DividerItemDecoration.VERTICAL));
+        }
 
         return view;
     }
@@ -43,17 +45,12 @@ public class MentionsFragment extends BaseListFragment implements Injectable {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mentionsViewModel = ViewModelProviders.of(this, viewModelFactory).get(MentionsViewModel.class);
-        load();
-    }
-
-    private void load() {
-        mentionsViewModel.refresh();
-        adapter.clear();
-        mentionsViewModel.getMentionsPosts().observe(this, listResource -> {
-            if (listResource != null && listResource.data != null) {
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(MentionsViewModel.class);
+        viewModel.getPosts().observe(this, listResource -> {
+            if (listResource != null) {
                 setData(listResource.status, listResource.data, listResource.message);
             }
         });
+        load();
     }
 }

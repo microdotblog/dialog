@@ -50,15 +50,15 @@ public class TimelineViewModelTest {
 
     @Test
     public void initialLoadIsNull() throws Exception {
-        assertThat(viewModel.getTimelinePosts().getValue(), nullValue());
+        assertThat(viewModel.getPosts().getValue(), nullValue());
     }
 
     @Test
     public void refreshTimeline() {
-        viewModel.getTimelinePosts().observeForever(mock(Observer.class));
+        viewModel.getPosts().observeForever(mock(Observer.class));
         verify(postsRepository, never()).loadTimeline(true);
         viewModel.refresh();
         verify(postsRepository).loadTimeline(true);
-        assertThat(viewModel.getTimelinePosts().getValue(), notNullValue());
+        assertThat(viewModel.getPosts().getValue(), notNullValue());
     }
 }
