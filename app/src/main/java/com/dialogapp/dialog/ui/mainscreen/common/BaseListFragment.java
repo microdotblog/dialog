@@ -23,6 +23,7 @@ import butterknife.Unbinder;
 public abstract class BaseListFragment extends Fragment {
     protected Unbinder unbinder;
     protected BaseRecyclerAdapter adapter;
+    protected BaseListViewModel viewModel;
     protected FragmentEventListener listener;
 
     @BindView(R.id.recycler_list)
@@ -73,6 +74,12 @@ public abstract class BaseListFragment extends Fragment {
 
         if (status != Status.LOADING)
             swipeRefreshLayout.setRefreshing(false);
+    }
+
+    protected void load() {
+        swipeRefreshLayout.setRefreshing(true);
+        adapter.clear();
+        viewModel.refresh();
     }
 
     public interface FragmentEventListener {

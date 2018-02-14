@@ -19,8 +19,6 @@ import butterknife.ButterKnife;
 
 public class MentionsFragment extends BaseListFragment implements Injectable {
 
-    private MentionsViewModel mentionsViewModel;
-
     @Inject
     ViewModelProvider.Factory viewModelFactory;
 
@@ -43,18 +41,12 @@ public class MentionsFragment extends BaseListFragment implements Injectable {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mentionsViewModel = ViewModelProviders.of(this, viewModelFactory).get(MentionsViewModel.class);
-        mentionsViewModel.getMentionsPosts().observe(this, listResource -> {
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(MentionsViewModel.class);
+        viewModel.getPosts().observe(this, listResource -> {
             if (listResource != null) {
                 setData(listResource.status, listResource.data, listResource.message);
             }
         });
         load();
-    }
-
-    private void load() {
-        swipeRefreshLayout.setRefreshing(true);
-        adapter.clear();
-        mentionsViewModel.refresh();
     }
 }
