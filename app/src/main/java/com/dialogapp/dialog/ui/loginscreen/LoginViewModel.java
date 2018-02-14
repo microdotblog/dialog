@@ -10,8 +10,6 @@ import com.dialogapp.dialog.model.VerifiedAccount;
 import com.dialogapp.dialog.repository.AccountRepository;
 import com.dialogapp.dialog.util.Resource;
 
-import java.util.Objects;
-
 import javax.inject.Inject;
 
 public class LoginViewModel extends ViewModel {
@@ -27,8 +25,7 @@ public class LoginViewModel extends ViewModel {
     }
 
     public void setToken(String token) {
-        if (!Objects.equals(this.token.getValue(), token))
-            this.token.setValue(token);
+        this.token.setValue(token);
     }
 
     public LiveData<Resource<VerifiedAccount>> verifyToken() {
