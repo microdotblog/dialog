@@ -1,4 +1,4 @@
-package com.dialogapp.dialog.ui.mainscreen.common;
+package com.dialogapp.dialog.ui.common;
 
 import android.content.Context;
 import android.support.v4.app.Fragment;

@@ -1,4 +1,4 @@
-package com.dialogapp.dialog.ui.mainscreen.common;
+package com.dialogapp.dialog.ui.common;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;

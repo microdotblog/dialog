@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 
 import com.dialogapp.dialog.R;
 import com.dialogapp.dialog.di.Injectable;
-import com.dialogapp.dialog.ui.mainscreen.common.BaseListFragment;
+import com.dialogapp.dialog.ui.common.BaseListFragment;
 
 import javax.inject.Inject;
 

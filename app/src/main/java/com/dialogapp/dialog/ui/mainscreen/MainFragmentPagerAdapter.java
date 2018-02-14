@@ -1,4 +1,4 @@
-package com.dialogapp.dialog.ui.mainscreen.common;
+package com.dialogapp.dialog.ui.mainscreen;
 
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;

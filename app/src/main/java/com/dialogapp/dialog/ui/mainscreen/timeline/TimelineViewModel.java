@@ -3,7 +3,7 @@ package com.dialogapp.dialog.ui.mainscreen.timeline;
 import android.arch.lifecycle.Transformations;
 
 import com.dialogapp.dialog.repository.PostsRepository;
-import com.dialogapp.dialog.ui.mainscreen.common.BaseListViewModel;
+import com.dialogapp.dialog.ui.common.BaseListViewModel;
 import com.dialogapp.dialog.util.AbsentLiveData;
 
 import javax.inject.Inject;

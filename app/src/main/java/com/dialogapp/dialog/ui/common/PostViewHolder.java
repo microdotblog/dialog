@@ -1,4 +1,4 @@
-package com.dialogapp.dialog.ui.mainscreen.common;
+package com.dialogapp.dialog.ui.common;
 
 import android.text.Html;
 import android.text.method.LinkMovementMethod;

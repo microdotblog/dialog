@@ -18,8 +18,7 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestOptions;
 import com.dialogapp.dialog.R;
 import com.dialogapp.dialog.api.ServiceInterceptor;
-import com.dialogapp.dialog.ui.mainscreen.common.BaseListFragment;
-import com.dialogapp.dialog.ui.mainscreen.common.MainFragmentPagerAdapter;
+import com.dialogapp.dialog.ui.common.BaseListFragment;
 
 import javax.inject.Inject;
 

@@ -1,4 +1,4 @@
-package com.dialogapp.dialog.ui.mainscreen.common;
+package com.dialogapp.dialog.ui.common;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;

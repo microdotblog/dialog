@@ -5,8 +5,8 @@ import android.view.ViewGroup;
 
 import com.dialogapp.dialog.R;
 import com.dialogapp.dialog.model.Item;
-import com.dialogapp.dialog.ui.mainscreen.common.BaseRecyclerAdapter;
-import com.dialogapp.dialog.ui.mainscreen.common.PostViewHolder;
+import com.dialogapp.dialog.ui.common.BaseRecyclerAdapter;
+import com.dialogapp.dialog.ui.common.PostViewHolder;
 
 public class MentionsAdapter extends BaseRecyclerAdapter<Item, PostViewHolder> {
 
