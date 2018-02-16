@@ -103,6 +103,39 @@ public class PostsRepository {
         }.asLiveData();
     }
 
+    public LiveData<Resource<List<Item>>> loadFavorites(boolean refresh) {
+        return new NetworkBoundResource<List<Item>, List<Item>>(appExecutors) {
+            @Override
+            protected boolean shouldFetch(@Nullable List<Item> dbData) {
+                return shouldRefresh(dbData, refresh, Endpoints.FAVORITES);
+            }
+
+            @NonNull
+            @Override
+            protected LiveData<ApiResponse<List<Item>>> createCall() {
+                return microblogService.getFavorites();
+            }
+
+            @Override
+            protected void saveCallResult(@NonNull List<Item> items) {
+                requestTimings.put(Endpoints.FAVORITES, System.currentTimeMillis());
+                for (Item item : items) {
+                    item.setEndpoint(Endpoints.FAVORITES);
+                }
+
+                if (refresh)
+                    postsDao.deletePosts(Endpoints.FAVORITES);
+                postsDao.insertPosts(items);
+            }
+
+            @NonNull
+            @Override
+            protected LiveData<List<Item>> loadFromDb() {
+                return postsDao.loadEndpoint(Endpoints.FAVORITES);
+            }
+        }.asLiveData();
+    }
+
     private boolean shouldRefresh(List<Item> dbData, boolean refresh, String endpoint) {
         if (refresh) {
             return hasWaitTimeExpired(endpoint);

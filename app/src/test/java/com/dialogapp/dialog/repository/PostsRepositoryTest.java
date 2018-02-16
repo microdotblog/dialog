@@ -104,4 +104,32 @@ public class PostsRepositoryTest {
         updatedMentionsData.postValue(testMentionsData);
         verify(observer).onChanged(Resource.success(testMentionsData));
     }
+
+    @Test
+    public void loadFavoritesDataFromNetwork() throws IOException {
+        MutableLiveData<List<Item>> favoritesDbData = new MutableLiveData<>();
+        when(postsDao.loadEndpoint(Endpoints.FAVORITES)).thenReturn(favoritesDbData);
+
+        List<Item> testFavoritesData = TestUtil.readFromJson(getClass().getClassLoader(), "favorites.json");
+        LiveData<ApiResponse<List<Item>>> callFavorites = successCall(testFavoritesData);
+        when(microblogService.getFavorites()).thenReturn(callFavorites);
+
+        LiveData<Resource<List<Item>>> repoData = repository.loadFavorites(true);
+        verify(postsDao).loadEndpoint(Endpoints.FAVORITES);
+        verifyNoMoreInteractions(microblogService);
+
+        Observer observer = mock(Observer.class);
+        repoData.observeForever(observer);
+        verifyNoMoreInteractions(microblogService);
+        verify(observer).onChanged(Resource.loading(null));
+
+        MutableLiveData<List<Item>> updatedFavoritesData = new MutableLiveData<>();
+        when(postsDao.loadEndpoint(Endpoints.FAVORITES)).thenReturn(updatedFavoritesData);
+        favoritesDbData.postValue(null);
+        verify(microblogService).getFavorites();
+        verify(postsDao).insertPosts(anyList());
+
+        updatedFavoritesData.postValue(testFavoritesData);
+        verify(observer).onChanged(Resource.success(testFavoritesData));
+    }
 }

@@ -3,6 +3,7 @@ package com.dialogapp.dialog.di;
 import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
 
+import com.dialogapp.dialog.ui.favorites.FavoritesViewModel;
 import com.dialogapp.dialog.ui.loginscreen.LoginViewModel;
 import com.dialogapp.dialog.ui.mainscreen.mentions.MentionsViewModel;
 import com.dialogapp.dialog.ui.mainscreen.timeline.TimelineViewModel;
@@ -35,4 +36,9 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(MentionsViewModel.class)
     abstract ViewModel bindMentionsViewModel(MentionsViewModel mentionsViewModel);
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(FavoritesViewModel.class)
+    abstract ViewModel bindFavoritesViewModel(FavoritesViewModel favoritesViewModel);
 }

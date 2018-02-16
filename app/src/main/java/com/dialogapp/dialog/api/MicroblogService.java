@@ -38,7 +38,7 @@ public interface MicroblogService {
     LiveData<ApiResponse<List<Item>>> getMentions();
 
     @GET("posts/favorites")
-    Call<MicroBlogResponse> getFavorites();
+    LiveData<ApiResponse<List<Item>>> getFavorites();
 
     @GET("posts/discover")
     Call<MicroBlogResponse> getFeaturedPosts();

@@ -7,4 +7,5 @@ package com.dialogapp.dialog.repository;
 public final class Endpoints {
     public static final String TIMELINE = "timeline";
     public static final String MENTIONS = "mentions";
+    public static final String FAVORITES = "favorites";
 }

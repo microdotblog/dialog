@@ -1,34 +1,49 @@
 package com.dialogapp.dialog.ui.favorites;
 
-import android.app.Activity;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
 import com.dialogapp.dialog.R;
+import com.dialogapp.dialog.ui.common.BaseListFragment;
 
 import javax.inject.Inject;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
-import dagger.android.AndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
-import dagger.android.HasActivityInjector;
+import dagger.android.support.HasSupportFragmentInjector;
 
-public class FavoritesActivity extends AppCompatActivity implements HasActivityInjector {
+public class FavoritesActivity extends AppCompatActivity implements BaseListFragment.FragmentEventListener,
+        HasSupportFragmentInjector {
+    private Snackbar errorBar;
+
     @Inject
-    DispatchingAndroidInjector<Activity> dispatchingAndroidInjector;
+    DispatchingAndroidInjector<Fragment> dispatchingAndroidInjector;
+
+    @BindView(R.id.coord_layout_fav)
+    CoordinatorLayout coordinatorLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.swipe_refresh_list_layout);
+        setContentView(R.layout.activity_favorites);
         ButterKnife.bind(this);
 
+        errorBar = Snackbar.make(coordinatorLayout, R.string.connection_error, Snackbar.LENGTH_LONG);
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.container_favorites, new FavoritesFragment())
+                .commit();
     }
 
     @Override
-    public AndroidInjector<Activity> activityInjector() {
+    public DispatchingAndroidInjector<Fragment> supportFragmentInjector() {
         return dispatchingAndroidInjector;
     }
 
@@ -42,5 +57,10 @@ public class FavoritesActivity extends AppCompatActivity implements HasActivityI
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public void onLoadError(String message) {
+        errorBar.show();
     }
 }
