@@ -1,4 +1,4 @@
-package com.dialogapp.dialog.di;
+package com.dialogapp.dialog.di.viewmodule;
 
 import com.dialogapp.dialog.ui.LauncherActivity;
 

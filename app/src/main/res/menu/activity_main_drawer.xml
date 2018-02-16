@@ -3,8 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
-    <group android:id="@+id/menu_group_1"
-        android:checkableBehavior="single">
+    <group android:checkableBehavior="single">
         <item
             android:id="@+id/menu_item_profile"
             android:icon="@drawable/menu_ic_person_black_24dp"
@@ -14,19 +13,12 @@
             android:icon="@drawable/menu_ic_favorite_black_24dp"
             android:title="@string/drawer_item_favorites" />
         <item
-            android:id="@+id/menu_item_pins"
-            android:icon="@drawable/menu_ic_pin_black_24dp"
-            android:title="@string/drawer_item_pins" />
-    </group>
-
-    <group android:id="@+id/menu_group_2">
+            android:id="@+id/menu_item_discover"
+            android:icon="@drawable/menu_ic_discover_black_24dp"
+            android:title="@string/drawer_item_discover" />
         <item
             android:id="@+id/menu_item_settings"
             android:icon="@drawable/menu_ic_settings_black_24dp"
             android:title="@string/drawer_item_settings" />
-        <item
-            android:id="@+id/menu_item_about"
-            android:icon="@drawable/menu_ic_info_black_24dp"
-            android:title="@string/drawer_item_about" />
     </group>
 </menu>

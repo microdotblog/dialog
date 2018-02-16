@@ -109,9 +109,15 @@ public class MainActivity extends AppCompatActivity implements BaseListFragment.
 
         Intent intent = null;
         switch (id) {
+            case R.id.menu_item_profile:
+                return false;
             case R.id.menu_item_fav:
                 intent = new Intent(this, FavoritesActivity.class);
                 break;
+            case R.id.menu_item_discover:
+                return false;
+            case R.id.menu_item_settings:
+                return false;
         }
 
         startActivity(intent);

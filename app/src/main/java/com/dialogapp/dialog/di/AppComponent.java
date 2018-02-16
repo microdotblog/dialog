@@ -3,6 +3,10 @@ package com.dialogapp.dialog.di;
 import android.app.Application;
 
 import com.dialogapp.dialog.MicroblogApp;
+import com.dialogapp.dialog.di.viewmodule.FavoritesActivityModule;
+import com.dialogapp.dialog.di.viewmodule.LauncherActivityModule;
+import com.dialogapp.dialog.di.viewmodule.LoginActivityModule;
+import com.dialogapp.dialog.di.viewmodule.MainActivityModule;
 
 import javax.inject.Singleton;
 
