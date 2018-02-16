@@ -35,7 +35,7 @@ public class ServiceInterceptor implements Interceptor {
 
         Request.Builder builder = request.newBuilder();
         if (request.header("NO-AUTH") == null) {
-            request = builder.addHeader("Authorization", authToken).build();
+            request = builder.addHeader("Authorization", "Token " + authToken).build();
         }
         return chain.proceed(request);
     }
