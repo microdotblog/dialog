@@ -2,14 +2,18 @@ package com.dialogapp.dialog.ui.mainscreen;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -19,6 +23,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.dialogapp.dialog.R;
 import com.dialogapp.dialog.api.ServiceInterceptor;
 import com.dialogapp.dialog.ui.common.BaseListFragment;
+import com.dialogapp.dialog.ui.favorites.FavoritesActivity;
 
 import javax.inject.Inject;
 
@@ -33,7 +38,7 @@ import static com.dialogapp.dialog.ui.LauncherActivity.EXTRA_TOKEN;
 import static com.dialogapp.dialog.ui.LauncherActivity.EXTRA_USERNAME;
 
 public class MainActivity extends AppCompatActivity implements BaseListFragment.FragmentEventListener,
-        HasSupportFragmentInjector {
+        NavigationView.OnNavigationItemSelectedListener, HasSupportFragmentInjector {
 
     private Snackbar errorBar;
 
@@ -71,6 +76,8 @@ public class MainActivity extends AppCompatActivity implements BaseListFragment.
 
         serviceInterceptor.setAuthToken(saved_token);
 
+        navigationView.setNavigationItemSelectedListener(this);
+
         ImageView imageView = navigationView.getHeaderView(0).findViewById(R.id.image_profile);
         TextView username = navigationView.getHeaderView(0).findViewById(R.id.text_username);
         TextView fullname = navigationView.getHeaderView(0).findViewById(R.id.text_fullname);
@@ -94,6 +101,24 @@ public class MainActivity extends AppCompatActivity implements BaseListFragment.
     @Override
     public void onLoadError(String message) {
         errorBar.show();
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+
+        Intent intent = null;
+        switch (id) {
+            case R.id.menu_item_fav:
+                intent = new Intent(this, FavoritesActivity.class);
+                break;
+        }
+
+        startActivity(intent);
+
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return false;
     }
 
     private void setupViewpager() {

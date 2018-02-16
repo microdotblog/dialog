@@ -16,6 +16,7 @@ import dagger.android.support.AndroidSupportInjectionModule;
         AppModule.class,
         LoginActivityModule.class,
         LauncherActivityModule.class,
+        FavoritesActivityModule.class,
         MainActivityModule.class
 })
 public interface AppComponent {

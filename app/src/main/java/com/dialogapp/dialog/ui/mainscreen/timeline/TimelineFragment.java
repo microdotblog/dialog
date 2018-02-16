@@ -26,7 +26,7 @@ public class TimelineFragment extends BaseListFragment implements Injectable {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.common_list_layout, container, false);
+        View view = inflater.inflate(R.layout.swipe_refresh_list_layout, container, false);
         unbinder = ButterKnife.bind(this, view);
 
         swipeRefreshLayout.setOnRefreshListener(this::load);

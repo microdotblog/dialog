@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.dialogapp.dialog">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:name=".MicroblogApp"
@@ -11,7 +11,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme.NoActionBar">
         <activity
             android:name=".ui.LauncherActivity"
             android:theme="@android:style/Theme.NoDisplay">
@@ -21,13 +21,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".ui.loginscreen.LoginActivity" />
+        <activity android:name=".ui.mainscreen.MainActivity" />
         <activity
-            android:name=".ui.loginscreen.LoginActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
-        <activity android:name=".ui.mainscreen.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+            android:name=".ui.favorites.FavoritesActivity"
+            android:label="@string/activity_favorites"
+            android:theme="@style/AppTheme" />
     </application>
 
 </manifest>

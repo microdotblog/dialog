@@ -2,6 +2,8 @@
     <string name="app_name">Dialog</string>
     <string name="app_version">Version 1.0</string>
 
+    <string name="activity_favorites">Favorites</string>
+
     <!-- Login Screen -->
     <string name="login_message">Enter the Micro.blog app token on your Account page</string>
     <string name="login_field">app token</string>
