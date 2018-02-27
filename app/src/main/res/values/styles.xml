@@ -18,12 +18,14 @@
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <!-- Custom TabLayout style -->
-    <style name="CustomTabLayout" parent="Widget.Design.TabLayout">
-        <item name="tabTextAppearance">@style/CustomTextAppearance</item>
+    <style name="TabLayoutStyle" parent="Widget.Design.TabLayout">
+        <item name="tabTextAppearance">@style/TabTextAppearance</item>
     </style>
 
-    <style name="CustomTextAppearance" parent="TextAppearance.Design.Tab">
+    <style name="TabTextAppearance" parent="TextAppearance.Design.Tab">
         <item name="textAllCaps">false</item>
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:paddingBottom">16dp</item>
     </style>
 
     <!-- Empty Text style -->

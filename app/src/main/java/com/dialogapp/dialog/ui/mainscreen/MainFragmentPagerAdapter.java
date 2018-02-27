@@ -1,10 +1,16 @@
 package com.dialogapp.dialog.ui.mainscreen;
 
+import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ImageSpan;
 
+import com.dialogapp.dialog.R;
 import com.dialogapp.dialog.ui.mainscreen.mentions.MentionsFragment;
 import com.dialogapp.dialog.ui.mainscreen.timeline.TimelineFragment;
 
@@ -12,9 +18,15 @@ public class MainFragmentPagerAdapter extends FragmentPagerAdapter {
 
     private final int PAGE_COUNT = 2;
     private final String[] TAB_TITLES = new String[]{"MENTIONS", "TIMELINE"};
+    private final int[] ICONS = new int[]{
+            R.drawable.tab_ic_mentions_white_24px,
+            R.drawable.tab_ic_timeline_white_24px
+    };
+    private Context context;
 
-    public MainFragmentPagerAdapter(FragmentManager fm) {
+    public MainFragmentPagerAdapter(FragmentManager fm, Context context) {
         super(fm);
+        this.context = context;
     }
 
     @Override
@@ -37,6 +49,11 @@ public class MainFragmentPagerAdapter extends FragmentPagerAdapter {
     @Nullable
     @Override
     public CharSequence getPageTitle(int position) {
-        return TAB_TITLES[position];
+        Drawable image = context.getDrawable(ICONS[position]);
+        image.setBounds(0, 0, image.getIntrinsicWidth(), image.getIntrinsicHeight());
+        SpannableString sb = new SpannableString(" \n" + TAB_TITLES[position]);
+        ImageSpan imageSpan = new ImageSpan(image, ImageSpan.ALIGN_BOTTOM);
+        sb.setSpan(imageSpan, 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        return sb;
     }
 }

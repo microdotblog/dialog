@@ -4,7 +4,6 @@ import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +14,7 @@ import com.dialogapp.dialog.R;
 import com.dialogapp.dialog.di.Injectable;
 import com.dialogapp.dialog.ui.common.BaseListFragment;
 import com.dialogapp.dialog.ui.common.PostViewHolder;
+import com.dialogapp.dialog.util.InsetDividerDecoration;
 
 import javax.inject.Inject;
 
@@ -40,7 +40,7 @@ public class TimelineFragment extends BaseListFragment implements Injectable {
                 ((PostViewHolder) holder).clearView();
             });
             recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
-            recyclerView.addItemDecoration(new DividerItemDecoration(this.getContext(), DividerItemDecoration.VERTICAL));
+            recyclerView.addItemDecoration(new InsetDividerDecoration(this.getContext()));
         }
 
         return view;

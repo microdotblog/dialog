@@ -129,7 +129,7 @@ public class MainActivity extends AppCompatActivity implements BaseListFragment.
 
     private void setupViewpager() {
         ViewPager viewPager = findViewById(R.id.viewpager_main);
-        viewPager.setAdapter(new MainFragmentPagerAdapter(getSupportFragmentManager()));
+        viewPager.setAdapter(new MainFragmentPagerAdapter(getSupportFragmentManager(), this.getApplicationContext()));
 
         TabLayout tabLayout = findViewById(R.id.tabLayout);
         tabLayout.setupWithViewPager(viewPager);

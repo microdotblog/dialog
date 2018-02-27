@@ -10,6 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"
         android:paddingEnd="16dp"
         android:paddingStart="16dp">
 
@@ -19,51 +21,39 @@
             android:layout_height="@dimen/post_image_profile"
             android:layout_gravity="top"
             android:layout_marginEnd="16dp"
-            android:layout_marginTop="8dp"
+
             tools:src="@tools:sample/avatars" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="8dp"
-            android:layout_marginTop="8dp"
+        <TextView
+            android:id="@+id/text_username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/image_thumbnail"
             android:layout_toEndOf="@id/image_thumbnail"
-            android:orientation="vertical">
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            tools:text="@tools:sample/full_names" />
 
-            <TextView
-                android:id="@+id/text_username"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                tools:text="@tools:sample/full_names" />
+        <TextView
+            android:id="@+id/text_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_alignStart="@id/text_username"
+            android:layout_below="@id/text_username"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            tools:text="@tools:sample/lorem/random" />
 
-            <TextView
-                android:id="@+id/text_content"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                tools:text="@tools:sample/lorem" />
-
-            <ImageView
-                android:id="@+id/image_content_pic"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:adjustViewBounds="true"
-                android:scaleType="fitXY"
-                android:visibility="visible"
-                tools:src="@tools:sample/backgrounds/scenic" />
-
-            <TextView
-                android:id="@+id/text_time"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:textAlignment="textStart"
-                android:textSize="12sp"
-                tools:src="@tools:sample/date/ddmmyy" />
-        </LinearLayout>
+        <TextView
+            android:id="@+id/text_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/text_username"
+            android:layout_marginStart="16dp"
+            android:layout_alignBaseline="@id/text_username"
+            android:layout_alignEnd="@id/text_content"
+            android:textAlignment="textEnd"
+            android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+            tools:text="@tools:sample/date/ddmmyy" />
 
     </RelativeLayout>
 </LinearLayout>
