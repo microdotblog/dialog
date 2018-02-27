@@ -3,6 +3,7 @@ package com.dialogapp.dialog.ui.favorites;
 import android.content.Context;
 import android.view.ViewGroup;
 
+import com.bumptech.glide.RequestManager;
 import com.dialogapp.dialog.R;
 import com.dialogapp.dialog.ui.common.BaseRecyclerAdapter;
 import com.dialogapp.dialog.ui.common.BaseViewHolder;
@@ -14,12 +15,15 @@ import com.dialogapp.dialog.ui.common.PostViewHolder;
 
 public class FavoritesAdapter extends BaseRecyclerAdapter {
 
-    public FavoritesAdapter(Context context) {
+    private RequestManager glide;
+
+    public FavoritesAdapter(Context context, RequestManager glide) {
         super(context);
+        this.glide = glide;
     }
 
     @Override
     public BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new PostViewHolder(inflate(R.layout.post_item, parent, false));
+        return new PostViewHolder(inflate(R.layout.post_item, parent, false), glide);
     }
 }

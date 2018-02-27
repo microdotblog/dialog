@@ -10,9 +10,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.bumptech.glide.Glide;
 import com.dialogapp.dialog.R;
 import com.dialogapp.dialog.di.Injectable;
 import com.dialogapp.dialog.ui.common.BaseListFragment;
+import com.dialogapp.dialog.ui.common.PostViewHolder;
 
 import javax.inject.Inject;
 
@@ -32,8 +34,11 @@ public class TimelineFragment extends BaseListFragment implements Injectable {
         swipeRefreshLayout.setOnRefreshListener(this::load);
 
         if (this.getContext() != null) {
-            adapter = new TimelineAdapter(this.getContext());
+            adapter = new TimelineAdapter(this.getContext(), Glide.with(this));
             recyclerView.setAdapter(adapter);
+            recyclerView.setRecyclerListener(holder -> {
+                ((PostViewHolder) holder).clearView();
+            });
             recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
             recyclerView.addItemDecoration(new DividerItemDecoration(this.getContext(), DividerItemDecoration.VERTICAL));
         }
