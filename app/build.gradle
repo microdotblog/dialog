@@ -49,9 +49,9 @@ dependencies {
 
     // Architecture components
     // ViewModel and LiveData
-    implementation 'android.arch.lifecycle:extensions:1.0.0'
+    implementation 'android.arch.lifecycle:extensions:1.1.0'
     // Java8 support for Lifecycles
-    implementation 'android.arch.lifecycle:common-java8:1.0.0'
+    implementation 'android.arch.lifecycle:common-java8:1.1.0'
     // Room
     implementation 'android.arch.persistence.room:runtime:1.0.0'
     annotationProcessor "android.arch.persistence.room:compiler:1.0.0"
@@ -72,8 +72,8 @@ dependencies {
     releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
 
     // Glide
-    implementation 'com.github.bumptech.glide:glide:4.5.0'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.5.0'
+    implementation 'com.github.bumptech.glide:glide:4.6.1'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.6.1'
 
     // Dagger
     implementation 'com.google.dagger:dagger:2.14.1'
@@ -85,7 +85,7 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.mockito:mockito-core:2.8.9'
     testImplementation 'com.squareup.okhttp3:mockwebserver:3.9.1'
-    testImplementation 'android.arch.core:core-testing:1.0.0'
+    testImplementation 'android.arch.core:core-testing:1.1.0'
     testImplementation "android.arch.persistence.room:testing:1.0.0"
 
     androidTestImplementation "com.android.support:support-annotations:$supportLibsVersion"
