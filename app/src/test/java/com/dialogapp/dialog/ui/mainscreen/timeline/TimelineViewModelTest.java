@@ -22,7 +22,7 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -49,16 +49,16 @@ public class TimelineViewModelTest {
     }
 
     @Test
-    public void initialLoadIsNull() throws Exception {
-        assertThat(viewModel.getPosts().getValue(), nullValue());
-    }
-
-    @Test
     public void refreshTimeline() {
+        assertThat(viewModel.getPosts().getValue(), nullValue());
         viewModel.getPosts().observeForever(mock(Observer.class));
-        verify(postsRepository, never()).loadTimeline(true);
+
+        // initial load
+        assertThat(viewModel.getPosts().getValue(), notNullValue());
+
+        // on refresh
         viewModel.refresh();
-        verify(postsRepository).loadTimeline(true);
+        verify(postsRepository, times(2)).loadTimeline(true);
         assertThat(viewModel.getPosts().getValue(), notNullValue());
     }
 }

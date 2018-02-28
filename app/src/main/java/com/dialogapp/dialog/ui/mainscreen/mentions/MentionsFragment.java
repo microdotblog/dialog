@@ -31,7 +31,7 @@ public class MentionsFragment extends BaseListFragment implements Injectable {
         View view = inflater.inflate(R.layout.swipe_refresh_list_layout, container, false);
         unbinder = ButterKnife.bind(this, view);
 
-        swipeRefreshLayout.setOnRefreshListener(this::load);
+        swipeRefreshLayout.setOnRefreshListener(this::refresh);
 
         if (this.getContext() != null) {
             adapter = new MentionsAdapter(this.getContext(), Glide.with(this));
@@ -50,12 +50,12 @@ public class MentionsFragment extends BaseListFragment implements Injectable {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        showLoadingProgress();
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(MentionsViewModel.class);
         viewModel.getPosts().observe(this, listResource -> {
             if (listResource != null) {
                 setData(listResource.status, listResource.data, listResource.message);
             }
         });
-        load();
     }
 }

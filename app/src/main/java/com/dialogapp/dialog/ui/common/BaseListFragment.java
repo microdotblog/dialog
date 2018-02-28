@@ -76,9 +76,13 @@ public abstract class BaseListFragment extends Fragment {
             swipeRefreshLayout.setRefreshing(false);
     }
 
-    protected void load() {
+    protected void showLoadingProgress() {
         swipeRefreshLayout.setRefreshing(true);
         adapter.clear();
+    }
+
+    protected void refresh() {
+        showLoadingProgress();
         viewModel.refresh();
     }
 

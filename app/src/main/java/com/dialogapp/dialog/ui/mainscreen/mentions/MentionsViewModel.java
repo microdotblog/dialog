@@ -18,5 +18,6 @@ public class MentionsViewModel extends BaseListViewModel {
             else
                 return AbsentLiveData.create();
         });
+        refresh();
     }
 }

@@ -18,5 +18,6 @@ public class FavoritesViewModel extends BaseListViewModel {
                 return AbsentLiveData.create();
             }
         });
+        refresh();
     }
 }

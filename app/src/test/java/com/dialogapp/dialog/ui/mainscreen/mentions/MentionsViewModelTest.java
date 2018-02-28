@@ -22,10 +22,11 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+@SuppressWarnings("unchecked")
 @RunWith(JUnit4.class)
 public class MentionsViewModelTest {
     @Rule
@@ -48,16 +49,16 @@ public class MentionsViewModelTest {
     }
 
     @Test
-    public void initialLoadIsNull() throws Exception {
-        assertThat(viewModel.getPosts().getValue(), nullValue());
-    }
-
-    @Test
     public void refreshMentions() {
+        assertThat(viewModel.getPosts().getValue(), nullValue());
         viewModel.getPosts().observeForever(mock(Observer.class));
-        verify(postsRepository, never()).loadMentions(true);
+
+        // initial load
+        assertThat(viewModel.getPosts().getValue(), notNullValue());
+
+        // on refresh
         viewModel.refresh();
-        verify(postsRepository).loadMentions(true);
+        verify(postsRepository, times(2)).loadMentions(true);
         assertThat(viewModel.getPosts().getValue(), notNullValue());
     }
 }
