@@ -3,7 +3,7 @@ package com.dialogapp.dialog.ui.common;
 import android.content.Context;
 import android.os.Build;
 import android.text.Html;
-import android.text.Spanned;
+import android.text.Spannable;
 import android.text.method.LinkMovementMethod;
 import android.view.View;
 import android.widget.ImageView;
@@ -57,23 +57,26 @@ public class PostViewHolder extends BaseViewHolder<Item> {
         username.setText(item.author.microblog.username);
         time.setText(item.microblog.dateRelative);
 
-        bindHtmlContent(item);
+        bindHtmlContent(item.contentHtml);
     }
 
-    private void bindHtmlContent(Item item) {
-        Spanned spannedText;
-        if (pattern.matcher(item.contentHtml).find()) {
+    private void bindHtmlContent(String contentHtml) {
+        CharSequence spannedText;
+        if (pattern.matcher(contentHtml).find()) {
             float size = applyDimension(COMPLEX_UNIT_DIP, 100, context.getResources().getDisplayMetrics());
             GlideImageGetter imageGetter = new GlideImageGetter(glide, content, (int) size);
-            spannedText = getSpanned(item.contentHtml, imageGetter);
+            spannedText = getSpanned(contentHtml, imageGetter);
         } else {
-            spannedText = getSpanned(item.contentHtml, null);
+            spannedText = getSpanned(contentHtml, null);
         }
-        content.setMovementMethod(LinkMovementMethod.getInstance());
+
+        Spannable htmlString = (Spannable) spannedText;
+        LinkClickHandler.makeLinksClickable(context, htmlString);
         content.setText(trimTrailingWhitespace(spannedText));
+        content.setMovementMethod(LinkMovementMethod.getInstance());
     }
 
-    private Spanned getSpanned(String contentHtml, GlideImageGetter imageGetter) {
+    private CharSequence getSpanned(String contentHtml, GlideImageGetter imageGetter) {
         if (Build.VERSION.SDK_INT >= 24) {
             return Html.fromHtml(contentHtml, FROM_HTML_MODE_LEGACY, imageGetter, null);
         } else {
