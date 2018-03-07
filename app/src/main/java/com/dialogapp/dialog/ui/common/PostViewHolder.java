@@ -63,7 +63,7 @@ public class PostViewHolder extends BaseViewHolder<Item> {
     private void bindHtmlContent(String contentHtml) {
         CharSequence spannedText;
         if (pattern.matcher(contentHtml).find()) {
-            float size = applyDimension(COMPLEX_UNIT_DIP, 100, context.getResources().getDisplayMetrics());
+            float size = applyDimension(COMPLEX_UNIT_DIP, 64, context.getResources().getDisplayMetrics());
             GlideImageGetter imageGetter = new GlideImageGetter(glide, content, (int) size);
             spannedText = getSpanned(contentHtml, imageGetter);
         } else {

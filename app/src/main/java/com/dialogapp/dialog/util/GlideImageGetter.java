@@ -1,11 +1,14 @@
 package com.dialogapp.dialog.util;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.CircularProgressDrawable;
 import android.text.Html;
 import android.view.Gravity;
 import android.widget.TextView;
@@ -20,6 +23,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.target.Target;
 import com.bumptech.glide.request.transition.Transition;
+import com.dialogapp.dialog.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,12 +41,14 @@ public class GlideImageGetter implements Html.ImageGetter, Drawable.Callback {
     private final RequestOptions requestOptions;
     private RequestBuilder<Drawable> glide;
     private TextView targetView;
+    private Context context;
     private int size;
     private List<Target> imageTargets = new ArrayList<>();
 
     public GlideImageGetter(RequestManager glide, TextView targetView, int size) {
         this.manager = glide;
         this.targetView = targetView;
+        this.context = targetView.getContext().getApplicationContext();
         this.size = size;
 
         this.requestOptions = new RequestOptions()
@@ -121,6 +127,7 @@ public class GlideImageGetter implements Html.ImageGetter, Drawable.Callback {
          * Workaround because the AppCompat DrawableWrapper doesn't support null drawable as the API23 version does
          */
         private final Drawable nullObject = new ColorDrawable(Color.TRANSPARENT);
+        private final CircularProgressDrawable progressDrawable = new CircularProgressDrawable(context);
         private final DrawableWrapper wrapper = new DrawableWrapper(null/* temporarily null until a setDrawable call*/);
 
         public WrapperTarget(int size) {
@@ -128,6 +135,8 @@ public class GlideImageGetter implements Html.ImageGetter, Drawable.Callback {
             setDrawable(null);
             // set wrapper bounds to fix the size of the view, TextViews don't like ImageSpans changing dimensions
             wrapper.setBounds(0, 0, size, size);
+
+            progressDrawable.setStyle(CircularProgressDrawable.DEFAULT);
         }
 
         public Drawable getLazyDrawable() {
@@ -136,16 +145,21 @@ public class GlideImageGetter implements Html.ImageGetter, Drawable.Callback {
 
         @Override
         public void onLoadStarted(Drawable placeholder) {
+            placeholder = progressDrawable;
+            progressDrawable.start();
             setDrawable(placeholder);
         }
 
         @Override
         public void onLoadFailed(@Nullable Drawable errorDrawable) {
+            progressDrawable.stop();
+            errorDrawable = ContextCompat.getDrawable(context, R.drawable.ic_broken_image_black_24dp);
             setDrawable(errorDrawable);
         }
 
         @Override
         public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
+            progressDrawable.stop();
             setDrawable(resource);
         }
 
@@ -158,7 +172,7 @@ public class GlideImageGetter implements Html.ImageGetter, Drawable.Callback {
             if (drawable == null) {
                 drawable = nullObject;
             }
-            drawable.setBounds(calcBounds(drawable, Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM));
+            drawable.setBounds(calcBounds(drawable, Gravity.CENTER_HORIZONTAL));
             wrapper.setWrappedDrawable(drawable);
             // invalidate wrapper drawable so it re-draws itself and displays the new wrapped drawable
             wrapper.invalidateSelf();

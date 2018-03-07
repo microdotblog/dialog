@@ -1,8 +1,12 @@
 package com.dialogapp.dialog.ui.common;
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
+import android.net.Uri;
 import android.text.Spannable;
 import android.text.style.ClickableSpan;
+import android.text.style.ForegroundColorSpan;
 import android.text.style.ImageSpan;
 import android.text.style.URLSpan;
 import android.view.View;
@@ -18,11 +22,22 @@ public class LinkClickHandler {
             int end = htmlString.getSpanEnd(span);
             int flags = htmlString.getSpanFlags(span);
             ClickableSpan clickable = new ClickableSpan() {
+                @Override
                 public void onClick(View view) {
+                    if (htmlString.charAt(start) == '@') {
 
+                    } else {
+                        Uri webpage = Uri.parse(span.getURL());
+                        Intent intent = new Intent(Intent.ACTION_VIEW, webpage);
+                        if (intent.resolveActivity(context.getPackageManager()) != null) {
+                            context.startActivity(intent);
+                        }
+                    }
                 }
             };
             htmlString.setSpan(clickable, start, end, flags);
+            if (htmlString.charAt(start) == '@')
+                htmlString.setSpan(new ForegroundColorSpan(Color.GREEN), start, end, 0);
             htmlString.removeSpan(span);
         }
 
