@@ -7,6 +7,8 @@ import com.dialogapp.dialog.ui.favorites.FavoritesViewModel;
 import com.dialogapp.dialog.ui.loginscreen.LoginViewModel;
 import com.dialogapp.dialog.ui.mainscreen.mentions.MentionsViewModel;
 import com.dialogapp.dialog.ui.mainscreen.timeline.TimelineViewModel;
+import com.dialogapp.dialog.ui.profilescreen.AccountViewModel;
+import com.dialogapp.dialog.ui.profilescreen.ProfileViewModel;
 import com.dialogapp.dialog.util.MicroblogViewModelFactory;
 
 import dagger.Binds;
@@ -41,4 +43,14 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(FavoritesViewModel.class)
     abstract ViewModel bindFavoritesViewModel(FavoritesViewModel favoritesViewModel);
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(AccountViewModel.class)
+    abstract ViewModel bindAccountViewModel(AccountViewModel accountViewModel);
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(ProfileViewModel.class)
+    abstract ViewModel bindProfileViewModel(ProfileViewModel profileViewModel);
 }

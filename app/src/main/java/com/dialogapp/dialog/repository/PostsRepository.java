@@ -136,6 +136,38 @@ public class PostsRepository {
         }.asLiveData();
     }
 
+    public LiveData<Resource<List<Item>>> loadPostsByUsername(String username) {
+        return new NetworkBoundResource<List<Item>, List<Item>>(appExecutors) {
+            @Override
+            protected boolean shouldFetch(@Nullable List<Item> dbData) {
+                return shouldRefresh(dbData, true, username);
+            }
+
+            @NonNull
+            @Override
+            protected LiveData<ApiResponse<List<Item>>> createCall() {
+                return microblogService.getPostsByUsername(username);
+            }
+
+            @Override
+            protected void saveCallResult(@NonNull List<Item> items) {
+                requestTimings.put(username, System.currentTimeMillis());
+                for (Item item : items) {
+                    item.setEndpoint(username);
+                }
+
+                postsDao.deletePosts(username);
+                postsDao.insertPosts(items);
+            }
+
+            @NonNull
+            @Override
+            protected LiveData<List<Item>> loadFromDb() {
+                return postsDao.loadEndpoint(username);
+            }
+        }.asLiveData();
+    }
+
     private boolean shouldRefresh(List<Item> dbData, boolean refresh, String endpoint) {
         if (refresh) {
             return hasWaitTimeExpired(endpoint);

@@ -1,6 +1,8 @@
 package com.dialogapp.dialog.ui.profilescreen;
 
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -18,11 +20,16 @@ import dagger.android.support.HasSupportFragmentInjector;
 
 public class ProfileActivity extends AppCompatActivity implements BaseListFragment.FragmentEventListener,
         HasSupportFragmentInjector {
+    private Snackbar errorBar;
+
     @Inject
     DispatchingAndroidInjector<Fragment> dispatchingAndroidInjector;
 
     @BindView(R.id.toolbar_profile)
     Toolbar toolbar;
+
+    @BindView(R.id.coord_layout_profile)
+    CoordinatorLayout coordinatorLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,13 +37,16 @@ public class ProfileActivity extends AppCompatActivity implements BaseListFragme
         setContentView(R.layout.activity_profile);
         ButterKnife.bind(this);
 
+        errorBar = Snackbar.make(coordinatorLayout, R.string.connection_error, Snackbar.LENGTH_LONG);
+
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         toolbar.setTitle(getIntent().getStringExtra("USERNAME"));
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.container_profile, new ProfileFragment()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.container_profile,
+                ProfileFragment.newInstance(getIntent().getStringExtra("USERNAME"))).commit();
     }
 
     @Override
@@ -58,6 +68,6 @@ public class ProfileActivity extends AppCompatActivity implements BaseListFragme
 
     @Override
     public void onLoadError(String message) {
-
+        errorBar.show();
     }
 }
