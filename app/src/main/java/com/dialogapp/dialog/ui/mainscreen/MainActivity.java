@@ -24,6 +24,7 @@ import com.dialogapp.dialog.R;
 import com.dialogapp.dialog.api.ServiceInterceptor;
 import com.dialogapp.dialog.ui.common.BaseListFragment;
 import com.dialogapp.dialog.ui.favorites.FavoritesActivity;
+import com.dialogapp.dialog.ui.profilescreen.ProfileActivity;
 
 import javax.inject.Inject;
 
@@ -110,7 +111,9 @@ public class MainActivity extends AppCompatActivity implements BaseListFragment.
         Intent intent = null;
         switch (id) {
             case R.id.menu_item_profile:
-                return false;
+                intent = new Intent(this, ProfileActivity.class);
+                intent.putExtra("USERNAME", getIntent().getStringExtra(EXTRA_USERNAME));
+                break;
             case R.id.menu_item_fav:
                 intent = new Intent(this, FavoritesActivity.class);
                 break;

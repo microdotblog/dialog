@@ -31,7 +31,7 @@ public class FavoritesFragment extends BaseListFragment implements Injectable {
         View view = inflater.inflate(R.layout.swipe_refresh_list_layout, container, false);
         unbinder = ButterKnife.bind(this, view);
 
-        swipeRefreshLayout.setOnRefreshListener(this::refresh);
+        setSwipeListener();
 
         if (this.getContext() != null) {
             adapter = new FavoritesAdapter(this.getContext(), Glide.with(this));

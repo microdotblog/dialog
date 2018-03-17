@@ -27,6 +27,7 @@
             android:name=".ui.favorites.FavoritesActivity"
             android:label="@string/activity_favorites"
             android:theme="@style/AppTheme" />
+        <activity android:name=".ui.profilescreen.ProfileActivity" />
     </application>
 
 </manifest>

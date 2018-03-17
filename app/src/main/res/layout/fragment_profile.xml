@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="16dp">
+
+    <ImageView
+        android:id="@+id/image_profile"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_centerHorizontal="true"
+        android:elevation="8dp"
+        tools:src="@tools:sample/avatars" />
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/card_profile_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
+        app:contentPaddingTop="40dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="16dp"
+            android:paddingEnd="16dp"
+            android:paddingStart="16dp">
+
+            <TextView
+                android:id="@+id/text_profile_fullname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
+                tools:text="@tools:sample/full_names" />
+
+            <TextView
+                android:id="@+id/text_profile_email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/text_profile_fullname"
+                android:layout_centerHorizontal="true"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                tools:text="@tools:sample/lorem" />
+
+            <TextView
+                android:id="@+id/text_profile_website"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/text_profile_email"
+                android:layout_centerHorizontal="true"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                tools:text="@tools:sample/lorem" />
+
+            <TextView
+                android:id="@+id/text_profile_about"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_below="@id/text_profile_website"
+                android:layout_centerHorizontal="true"
+                android:textAlignment="center"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
+                tools:text="@tools:sample/lorem" />
+
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+
+    <include
+        layout="@layout/partial_list_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_below="@id/card_profile_info" />
+
+</RelativeLayout>

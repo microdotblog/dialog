@@ -1,6 +1,7 @@
 package com.dialogapp.dialog.ui.common;
 
 import android.content.Context;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
@@ -29,6 +30,7 @@ public abstract class BaseListFragment extends Fragment {
     @BindView(R.id.recycler_list)
     protected RecyclerView recyclerView;
 
+    @Nullable
     @BindView(R.id.swipeContainer)
     protected SwipeRefreshLayout swipeRefreshLayout;
 
@@ -73,17 +75,29 @@ public abstract class BaseListFragment extends Fragment {
             listener.onLoadError(message);
 
         if (status != Status.LOADING)
-            swipeRefreshLayout.setRefreshing(false);
+            swipeSetRefresh(false);
     }
 
     protected void showLoadingProgress() {
-        swipeRefreshLayout.setRefreshing(true);
+        swipeSetRefresh(true);
         adapter.clear();
     }
 
     protected void refresh() {
         showLoadingProgress();
         viewModel.refresh();
+    }
+
+    protected void setSwipeListener() {
+        if (swipeRefreshLayout != null) {
+            swipeRefreshLayout.setOnRefreshListener(this::refresh);
+        }
+    }
+
+    private void swipeSetRefresh(boolean value) {
+        if (swipeRefreshLayout != null) {
+            swipeRefreshLayout.setRefreshing(value);
+        }
     }
 
     public interface FragmentEventListener {

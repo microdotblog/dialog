@@ -44,7 +44,7 @@ public interface MicroblogService {
     Call<MicroBlogResponse> getFeaturedPosts();
 
     @GET("posts/{username}")
-    Call<MicroBlogResponse> getPostsByUsername(@Path("username") String username);
+    LiveData<ApiResponse<List<Item>>> getPostsByUsername(@Path("username") String username);
 
     @GET("posts/conversation")
     Call<MicroBlogResponse> getConversation(@Query("id") long id);

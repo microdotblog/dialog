@@ -7,6 +7,7 @@ import com.dialogapp.dialog.di.viewmodule.FavoritesActivityModule;
 import com.dialogapp.dialog.di.viewmodule.LauncherActivityModule;
 import com.dialogapp.dialog.di.viewmodule.LoginActivityModule;
 import com.dialogapp.dialog.di.viewmodule.MainActivityModule;
+import com.dialogapp.dialog.di.viewmodule.ProfileActivityModule;
 
 import javax.inject.Singleton;
 
@@ -21,6 +22,7 @@ import dagger.android.support.AndroidSupportInjectionModule;
         LoginActivityModule.class,
         LauncherActivityModule.class,
         FavoritesActivityModule.class,
+        ProfileActivityModule.class,
         MainActivityModule.class
 })
 public interface AppComponent {
