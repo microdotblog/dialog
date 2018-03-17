@@ -12,7 +12,6 @@ import com.dialogapp.dialog.model.Item;
 import com.dialogapp.dialog.util.Resource;
 
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -22,13 +21,17 @@ import timber.log.Timber;
 @Singleton
 public class PostsRepository {
 
-    private final long THRESHOLDMILLIS = 120000;
+    private final long THRESHOLDMILLIS = 900000; // 15 mins
 
     private final AppExecutors appExecutors;
     private final MicroblogService microblogService;
     private final PostsDao postsDao;
 
-    private ConcurrentHashMap<String, Long> requestTimings = new ConcurrentHashMap<>();
+    private String timelineTopPostId;
+    private String mentionsTopPostId;
+
+    private long lastTimelineRequestTimestamp;
+    private long lastMentionsRequestTimestamp;
 
     @Inject
     public PostsRepository(AppExecutors appExecutors, PostsDao postsDao, MicroblogService microblogService) {
@@ -41,24 +44,27 @@ public class PostsRepository {
         return new NetworkBoundResource<List<Item>, List<Item>>(appExecutors) {
             @Override
             protected boolean shouldFetch(@Nullable List<Item> dbData) {
-                return shouldRefresh(dbData, refresh, Endpoints.TIMELINE);
+                if (dbData != null && !dbData.isEmpty()) {
+                    timelineTopPostId = Long.toString(dbData.get(0).id);
+                }
+
+                return refresh || shouldRefresh(lastTimelineRequestTimestamp) || dbData == null || dbData.isEmpty();
             }
 
             @NonNull
             @Override
             protected LiveData<ApiResponse<List<Item>>> createCall() {
-                return microblogService.getTimeLine();
+                Timber.i("Timeline top ID: %s", timelineTopPostId);
+                return microblogService.getTimeLine(timelineTopPostId);
             }
 
             @Override
             protected void saveCallResult(@NonNull List<Item> items) {
-                requestTimings.put(Endpoints.TIMELINE, System.currentTimeMillis());
+                lastTimelineRequestTimestamp = System.currentTimeMillis();
                 for (Item item : items) {
                     item.setEndpoint(Endpoints.TIMELINE);
                 }
 
-                if (refresh)
-                    postsDao.deletePosts(Endpoints.TIMELINE);
                 postsDao.insertPosts(items);
             }
 
@@ -74,24 +80,27 @@ public class PostsRepository {
         return new NetworkBoundResource<List<Item>, List<Item>>(appExecutors) {
             @Override
             protected boolean shouldFetch(@Nullable List<Item> dbData) {
-                return shouldRefresh(dbData, refresh, Endpoints.MENTIONS);
+                if (dbData != null && !dbData.isEmpty()) {
+                    mentionsTopPostId = Long.toString(dbData.get(0).id);
+                }
+
+                return refresh || shouldRefresh(lastMentionsRequestTimestamp) || dbData == null || dbData.isEmpty();
             }
 
             @NonNull
             @Override
             protected LiveData<ApiResponse<List<Item>>> createCall() {
-                return microblogService.getMentions();
+                Timber.i("Mentions top ID: %s", mentionsTopPostId);
+                return microblogService.getMentions(mentionsTopPostId);
             }
 
             @Override
             protected void saveCallResult(@NonNull List<Item> items) {
-                requestTimings.put(Endpoints.MENTIONS, System.currentTimeMillis());
+                lastMentionsRequestTimestamp = System.currentTimeMillis();
                 for (Item item : items) {
                     item.setEndpoint(Endpoints.MENTIONS);
                 }
 
-                if (refresh)
-                    postsDao.deletePosts(Endpoints.MENTIONS);
                 postsDao.insertPosts(items);
             }
 
@@ -107,7 +116,7 @@ public class PostsRepository {
         return new NetworkBoundResource<List<Item>, List<Item>>(appExecutors) {
             @Override
             protected boolean shouldFetch(@Nullable List<Item> dbData) {
-                return shouldRefresh(dbData, refresh, Endpoints.FAVORITES);
+                return dbData == null || dbData.isEmpty();
             }
 
             @NonNull
@@ -118,7 +127,6 @@ public class PostsRepository {
 
             @Override
             protected void saveCallResult(@NonNull List<Item> items) {
-                requestTimings.put(Endpoints.FAVORITES, System.currentTimeMillis());
                 for (Item item : items) {
                     item.setEndpoint(Endpoints.FAVORITES);
                 }
@@ -140,7 +148,7 @@ public class PostsRepository {
         return new NetworkBoundResource<List<Item>, List<Item>>(appExecutors) {
             @Override
             protected boolean shouldFetch(@Nullable List<Item> dbData) {
-                return shouldRefresh(dbData, true, username);
+                return dbData == null || dbData.isEmpty();
             }
 
             @NonNull
@@ -151,7 +159,6 @@ public class PostsRepository {
 
             @Override
             protected void saveCallResult(@NonNull List<Item> items) {
-                requestTimings.put(username, System.currentTimeMillis());
                 for (Item item : items) {
                     item.setEndpoint(username);
                 }
@@ -168,22 +175,7 @@ public class PostsRepository {
         }.asLiveData();
     }
 
-    private boolean shouldRefresh(List<Item> dbData, boolean refresh, String endpoint) {
-        if (refresh) {
-            return hasWaitTimeExpired(endpoint);
-        } else {
-            return dbData == null || dbData.isEmpty();
-        }
-    }
-
-    private boolean hasWaitTimeExpired(String endpoint) {
-        if (!requestTimings.containsKey(endpoint)) {
-            // put the key in the hashmap only after the data has been fetched in saveCallResult()
-            Timber.i("Endpoint " + endpoint + " does not exist yet.");
-            return true;
-        } else {
-            Timber.i("Endpoint: " + endpoint + " Last refresh time: " + requestTimings.get(endpoint));
-            return (System.currentTimeMillis() - requestTimings.get(endpoint)) >= THRESHOLDMILLIS;
-        }
+    private boolean shouldRefresh(long lastRequestTimestamp) {
+        return (System.currentTimeMillis() - lastRequestTimestamp) >= THRESHOLDMILLIS;
     }
 }

@@ -51,7 +51,7 @@ class AppModule {
     @Singleton
     @Provides
     MicroBlogDb provideDb(Application app) {
-        return Room.databaseBuilder(app, MicroBlogDb.class, "microblog.db").build();
+        return Room.inMemoryDatabaseBuilder(app, MicroBlogDb.class).build();
     }
 
     @Singleton

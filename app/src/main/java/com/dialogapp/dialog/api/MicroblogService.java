@@ -32,10 +32,10 @@ public interface MicroblogService {
     LiveData<ApiResponse<AccountResponse>> getAccountData();
 
     @GET("posts/all")
-    LiveData<ApiResponse<List<Item>>> getTimeLine();
+    LiveData<ApiResponse<List<Item>>> getTimeLine(@Query("since_id") String id);
 
     @GET("posts/mentions")
-    LiveData<ApiResponse<List<Item>>> getMentions();
+    LiveData<ApiResponse<List<Item>>> getMentions(@Query("since_id") String id);
 
     @GET("posts/favorites")
     LiveData<ApiResponse<List<Item>>> getFavorites();

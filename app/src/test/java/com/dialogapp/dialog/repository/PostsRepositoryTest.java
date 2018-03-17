@@ -56,7 +56,7 @@ public class PostsRepositoryTest {
 
         List<Item> testTimelineData = TestUtil.readFromJson(getClass().getClassLoader(), "timeline.json");
         LiveData<ApiResponse<List<Item>>> callTimeline = successCall(testTimelineData);
-        when(microblogService.getTimeLine()).thenReturn(callTimeline);
+        when(microblogService.getTimeLine(null)).thenReturn(callTimeline);
 
         LiveData<Resource<List<Item>>> repoData = repository.loadTimeline(true);
         verify(postsDao).loadEndpoint(Endpoints.TIMELINE);
@@ -70,7 +70,7 @@ public class PostsRepositoryTest {
         MutableLiveData<List<Item>> updatedTimelineData = new MutableLiveData<>();
         when(postsDao.loadEndpoint(Endpoints.TIMELINE)).thenReturn(updatedTimelineData);
         timelineDbData.postValue(null);
-        verify(microblogService).getTimeLine();
+        verify(microblogService).getTimeLine(null);
         verify(postsDao).insertPosts(anyList());
 
         updatedTimelineData.postValue(testTimelineData);
@@ -84,7 +84,7 @@ public class PostsRepositoryTest {
 
         List<Item> testMentionsData = TestUtil.readFromJson(getClass().getClassLoader(), "mentions.json");
         LiveData<ApiResponse<List<Item>>> callMentions = successCall(testMentionsData);
-        when(microblogService.getMentions()).thenReturn(callMentions);
+        when(microblogService.getMentions(null)).thenReturn(callMentions);
 
         LiveData<Resource<List<Item>>> repoData = repository.loadMentions(true);
         verify(postsDao).loadEndpoint(Endpoints.MENTIONS);
@@ -98,7 +98,7 @@ public class PostsRepositoryTest {
         MutableLiveData<List<Item>> updatedMentionsData = new MutableLiveData<>();
         when(postsDao.loadEndpoint(Endpoints.MENTIONS)).thenReturn(updatedMentionsData);
         mentionsDbData.postValue(null);
-        verify(microblogService).getMentions();
+        verify(microblogService).getMentions(null);
         verify(postsDao).insertPosts(anyList());
 
         updatedMentionsData.postValue(testMentionsData);

@@ -15,7 +15,7 @@ public interface PostsDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insertPosts(List<Item> posts);
 
-    @Query("SELECT * FROM posts WHERE endpoint = :endpoint")
+    @Query("SELECT * FROM posts WHERE endpoint = :endpoint ORDER BY datePublished DESC")
     LiveData<List<Item>> loadEndpoint(String endpoint);
 
     @Query("DELETE FROM posts WHERE endpoint = :endpoint")
