@@ -11,6 +11,8 @@ import android.text.style.ImageSpan;
 import android.text.style.URLSpan;
 import android.view.View;
 
+import com.dialogapp.dialog.ui.imageviewer.ImageViewerActivity;
+
 public class LinkClickHandler {
 
     public static void makeLinksClickable(Context context, Spannable htmlString) {
@@ -47,7 +49,9 @@ public class LinkClickHandler {
             int flags = htmlString.getSpanFlags(span);
             ClickableSpan clickable = new ClickableSpan() {
                 public void onClick(View view) {
-
+                    Intent intent = new Intent(context, ImageViewerActivity.class);
+                    intent.putExtra(ImageViewerActivity.EXTRA_IMAGE_URL, span.getSource());
+                    context.startActivity(intent);
                 }
             };
             htmlString.setSpan(clickable, start, end, flags);
