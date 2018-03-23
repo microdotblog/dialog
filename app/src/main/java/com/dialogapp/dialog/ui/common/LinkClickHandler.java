@@ -39,7 +39,7 @@ public class LinkClickHandler {
             };
             htmlString.setSpan(clickable, start, end, flags);
             if (htmlString.charAt(start) == '@')
-                htmlString.setSpan(new ForegroundColorSpan(Color.GREEN), start, end, 0);
+                htmlString.setSpan(new ForegroundColorSpan(Color.BLUE), start, end, 0);
             htmlString.removeSpan(span);
         }
 

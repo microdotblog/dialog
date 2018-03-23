@@ -20,12 +20,12 @@ public class ImageViewerActivity extends AppCompatActivity implements HasSupport
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_image_viewer);
+        setContentView(R.layout.activity_container);
 
         String url = getIntent().getStringExtra(EXTRA_IMAGE_URL);
 
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.container_image_viewer, ImageViewerFragment.newInstance(url))
+                .replace(R.id.container_common, ImageViewerFragment.newInstance(url))
                 .commit();
     }
 

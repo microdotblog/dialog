@@ -24,13 +24,13 @@ public class FavoritesActivity extends AppCompatActivity implements BaseListFrag
     @Inject
     DispatchingAndroidInjector<Fragment> dispatchingAndroidInjector;
 
-    @BindView(R.id.coord_layout_fav)
+    @BindView(R.id.coord_layout_common)
     CoordinatorLayout coordinatorLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_favorites);
+        setContentView(R.layout.activity_container);
         ButterKnife.bind(this);
 
         errorBar = Snackbar.make(coordinatorLayout, R.string.connection_error, Snackbar.LENGTH_LONG);
@@ -38,7 +38,7 @@ public class FavoritesActivity extends AppCompatActivity implements BaseListFrag
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.container_favorites, new FavoritesFragment())
+                .replace(R.id.container_common, new FavoritesFragment())
                 .commit();
     }
 

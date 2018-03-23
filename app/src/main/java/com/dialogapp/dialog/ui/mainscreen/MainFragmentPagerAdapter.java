@@ -17,10 +17,10 @@ import com.dialogapp.dialog.ui.mainscreen.timeline.TimelineFragment;
 public class MainFragmentPagerAdapter extends FragmentPagerAdapter {
 
     private final int PAGE_COUNT = 2;
-    private final String[] TAB_TITLES = new String[]{"MENTIONS", "TIMELINE"};
+    private final String[] TAB_TITLES = new String[]{"TIMELINE", "MENTIONS"};
     private final int[] ICONS = new int[]{
-            R.drawable.tab_ic_mentions_white_24px,
-            R.drawable.tab_ic_timeline_white_24px
+            R.drawable.tab_ic_timeline_white_24px,
+            R.drawable.tab_ic_mentions_white_24px
     };
     private Context context;
 
@@ -33,9 +33,9 @@ public class MainFragmentPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return new MentionsFragment();
-            case 1:
                 return new TimelineFragment();
+            case 1:
+                return new MentionsFragment();
             default:
                 return null;
         }

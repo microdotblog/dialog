@@ -20,6 +20,8 @@ import dagger.android.support.HasSupportFragmentInjector;
 
 public class ProfileActivity extends AppCompatActivity implements BaseListFragment.FragmentEventListener,
         HasSupportFragmentInjector {
+    public static final String EXTRA_USERNAME = ProfileActivity.class.getName() + ".EXTRA_USERNAME";
+
     private Snackbar errorBar;
 
     @Inject
@@ -43,10 +45,10 @@ public class ProfileActivity extends AppCompatActivity implements BaseListFragme
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        toolbar.setTitle(getIntent().getStringExtra("USERNAME"));
+        toolbar.setTitle(getIntent().getStringExtra(EXTRA_USERNAME));
 
         getSupportFragmentManager().beginTransaction().replace(R.id.container_profile,
-                ProfileFragment.newInstance(getIntent().getStringExtra("USERNAME"))).commit();
+                ProfileFragment.newInstance(getIntent().getStringExtra(EXTRA_USERNAME))).commit();
     }
 
     @Override

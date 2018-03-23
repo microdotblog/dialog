@@ -58,6 +58,9 @@ public class MainActivity extends AppCompatActivity implements BaseListFragment.
     @BindView(R.id.coord_layout_main)
     CoordinatorLayout coordinatorLayout;
 
+    @BindView(R.id.drawer_layout)
+    DrawerLayout drawerLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,6 +69,8 @@ public class MainActivity extends AppCompatActivity implements BaseListFragment.
         ButterKnife.bind(this);
 
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu_white_24px);
 
         errorBar = Snackbar.make(coordinatorLayout, R.string.connection_error, Snackbar.LENGTH_LONG);
 
@@ -105,6 +110,16 @@ public class MainActivity extends AppCompatActivity implements BaseListFragment.
     }
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                drawerLayout.openDrawer(GravityCompat.START);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
 
@@ -112,7 +127,7 @@ public class MainActivity extends AppCompatActivity implements BaseListFragment.
         switch (id) {
             case R.id.menu_item_profile:
                 intent = new Intent(this, ProfileActivity.class);
-                intent.putExtra("USERNAME", getIntent().getStringExtra(EXTRA_USERNAME));
+                intent.putExtra(ProfileActivity.EXTRA_USERNAME, getIntent().getStringExtra(EXTRA_USERNAME));
                 break;
             case R.id.menu_item_fav:
                 intent = new Intent(this, FavoritesActivity.class);
@@ -125,8 +140,7 @@ public class MainActivity extends AppCompatActivity implements BaseListFragment.
 
         startActivity(intent);
 
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
+        drawerLayout.closeDrawer(GravityCompat.START);
         return false;
     }
 

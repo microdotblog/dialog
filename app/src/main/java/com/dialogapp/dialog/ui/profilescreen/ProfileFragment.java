@@ -27,7 +27,11 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.dialogapp.dialog.ui.profilescreen.ProfileActivity.EXTRA_USERNAME;
+
 public class ProfileFragment extends BaseListFragment implements Injectable {
+    private String username;
+
     @Inject
     ViewModelProvider.Factory viewModelFactory;
 
@@ -49,9 +53,17 @@ public class ProfileFragment extends BaseListFragment implements Injectable {
     public static ProfileFragment newInstance(String username) {
         ProfileFragment fragment = new ProfileFragment();
         Bundle bundle = new Bundle();
-        bundle.putString("USERNAME", username);
+        bundle.putString(EXTRA_USERNAME, username);
         fragment.setArguments(bundle);
         return fragment;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            username = getArguments().getString(EXTRA_USERNAME);
+        }
     }
 
     @Override
@@ -80,7 +92,7 @@ public class ProfileFragment extends BaseListFragment implements Injectable {
                 setData(listResource.status, listResource.data, listResource.message);
             }
         });
-        ((ProfileViewModel) viewModel).setUsername(getArguments().getString("USERNAME"));
+        ((ProfileViewModel) viewModel).setUsername(username);
 
         AccountViewModel accountViewModel = ViewModelProviders.of(this, viewModelFactory).get(AccountViewModel.class);
         accountViewModel.getAccountData().observe(this, accountResponseResource -> {
@@ -93,7 +105,7 @@ public class ProfileFragment extends BaseListFragment implements Injectable {
                     listener.onLoadError(accountResponseResource.message);
             }
         });
-        accountViewModel.setUsername(getArguments().getString("USERNAME"));
+        accountViewModel.setUsername(username);
     }
 
     private void setAccountData(Resource<AccountResponse> accountResponseResource) {
