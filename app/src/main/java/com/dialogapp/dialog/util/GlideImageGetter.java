@@ -145,6 +145,7 @@ public class GlideImageGetter implements Html.ImageGetter, Drawable.Callback {
 
         @Override
         public void onLoadStarted(Drawable placeholder) {
+            Timber.i("Load started : %s", this);
             placeholder = progressDrawable;
             progressDrawable.start();
             setDrawable(placeholder);
@@ -152,6 +153,7 @@ public class GlideImageGetter implements Html.ImageGetter, Drawable.Callback {
 
         @Override
         public void onLoadFailed(@Nullable Drawable errorDrawable) {
+            Timber.i("Load Failed : %s", this);
             progressDrawable.stop();
             errorDrawable = ContextCompat.getDrawable(context, R.drawable.ic_broken_image_black_24dp);
             setDrawable(errorDrawable);
@@ -159,12 +161,15 @@ public class GlideImageGetter implements Html.ImageGetter, Drawable.Callback {
 
         @Override
         public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
+            Timber.i("Resource Ready : %s", this);
             progressDrawable.stop();
             setDrawable(resource);
         }
 
         @Override
         public void onLoadCleared(Drawable placeholder) {
+            Timber.i("Load cleared : %s", this);
+            progressDrawable.stop();
             setDrawable(placeholder);
         }
 

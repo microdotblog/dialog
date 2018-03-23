@@ -1,13 +1,17 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@android:color/black"
+    android:orientation="vertical"
     tools:context="com.dialogapp.dialog.ui.imageviewer.ImageViewerFragment">
 
-    <ImageView
+    <com.github.piasy.biv.view.BigImageView
         android:id="@+id/image_post"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        app:failureImage="@drawable/ic_broken_image_white_36px"
+        app:failureImageInitScaleType="center"
+        app:optimizeDisplay="true" />
 </LinearLayout>

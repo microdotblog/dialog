@@ -1,16 +1,19 @@
 package com.dialogapp.dialog.ui.imageviewer;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
 import com.dialogapp.dialog.R;
 import com.dialogapp.dialog.di.Injectable;
+import com.github.piasy.biv.BigImageViewer;
+import com.github.piasy.biv.indicator.progresspie.ProgressPieIndicator;
+import com.github.piasy.biv.loader.glide.GlideImageLoader;
+import com.github.piasy.biv.view.BigImageView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -23,7 +26,7 @@ public class ImageViewerFragment extends Fragment implements Injectable {
     private Unbinder unbinder;
 
     @BindView(R.id.image_post)
-    ImageView imageView;
+    BigImageView imagePost;
 
     public static ImageViewerFragment newInstance(String url) {
         ImageViewerFragment fragment = new ImageViewerFragment();
@@ -39,6 +42,8 @@ public class ImageViewerFragment extends Fragment implements Injectable {
         if (getArguments() != null) {
             imageUrl = getArguments().getString(ARG_IMAGE_URL);
         }
+
+        BigImageViewer.initialize(GlideImageLoader.with(this.getContext().getApplicationContext()));
     }
 
     @Override
@@ -47,6 +52,8 @@ public class ImageViewerFragment extends Fragment implements Injectable {
         View view = inflater.inflate(R.layout.fragment_image_viewer, container, false);
         unbinder = ButterKnife.bind(this, view);
 
+        imagePost.setProgressIndicator(new ProgressPieIndicator());
+
         return view;
     }
 
@@ -54,9 +61,7 @@ public class ImageViewerFragment extends Fragment implements Injectable {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        Glide.with(this)
-                .load(imageUrl)
-                .into(imageView);
+        imagePost.showImage(Uri.parse(imageUrl));
     }
 
     @Override
