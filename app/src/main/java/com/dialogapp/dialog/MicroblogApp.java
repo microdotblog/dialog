@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Application;
 
 import com.dialogapp.dialog.di.AppInjector;
+import com.orhanobut.hawk.Hawk;
 import com.squareup.leakcanary.LeakCanary;
 
 import javax.inject.Inject;
@@ -27,6 +28,8 @@ public class MicroblogApp extends Application implements HasActivityInjector {
             return;
         }
         LeakCanary.install(this);
+
+        Hawk.init(this).build();
 
         Timber.plant(new TimberImplementation());
         AppInjector.init(this);

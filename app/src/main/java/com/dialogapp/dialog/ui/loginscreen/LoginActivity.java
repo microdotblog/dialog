@@ -19,8 +19,8 @@ import android.widget.Toast;
 import com.dialogapp.dialog.R;
 import com.dialogapp.dialog.model.VerifiedAccount;
 import com.dialogapp.dialog.ui.mainscreen.MainActivity;
-import com.dialogapp.dialog.util.PreferencesHelper;
 import com.dialogapp.dialog.util.Status;
+import com.orhanobut.hawk.Hawk;
 
 import javax.inject.Inject;
 
@@ -45,9 +45,6 @@ public class LoginActivity extends AppCompatActivity implements HasActivityInjec
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
-
-    @Inject
-    PreferencesHelper preferencesHelper;
 
     @BindView(R.id.text_login_about)
     TextView about;
@@ -109,10 +106,10 @@ public class LoginActivity extends AppCompatActivity implements HasActivityInjec
         if (data.error == null) {
             progressBar.setVisibility(View.INVISIBLE);
 
-            preferencesHelper.putToken(token);
-            preferencesHelper.putUsername(data.username);
-            preferencesHelper.putFullname(data.fullName);
-            preferencesHelper.putAvatarUrl(data.gravatarUrl);
+            Hawk.put(getString(R.string.pref_token), token);
+            Hawk.put(getString(R.string.pref_username), data.username);
+            Hawk.put(getString(R.string.pref_fullname), data.fullName);
+            Hawk.put(getString(R.string.pref_avatar_url), data.gravatarUrl);
 
             Intent intent = new Intent(this, MainActivity.class);
             intent.putExtra(EXTRA_TOKEN, token);
