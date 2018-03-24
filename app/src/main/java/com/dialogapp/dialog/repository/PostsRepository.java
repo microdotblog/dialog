@@ -9,6 +9,7 @@ import com.dialogapp.dialog.api.ApiResponse;
 import com.dialogapp.dialog.api.MicroblogService;
 import com.dialogapp.dialog.db.PostsDao;
 import com.dialogapp.dialog.model.Item;
+import com.dialogapp.dialog.model.MicroBlogResponse;
 import com.dialogapp.dialog.util.Resource;
 
 import java.util.List;
@@ -41,7 +42,7 @@ public class PostsRepository {
     }
 
     public LiveData<Resource<List<Item>>> loadTimeline(boolean refresh) {
-        return new NetworkBoundResource<List<Item>, List<Item>>(appExecutors) {
+        return new NetworkBoundResource<List<Item>, MicroBlogResponse>(appExecutors) {
             @Override
             protected boolean shouldFetch(@Nullable List<Item> dbData) {
                 if (dbData != null && !dbData.isEmpty()) {
@@ -53,19 +54,23 @@ public class PostsRepository {
 
             @NonNull
             @Override
-            protected LiveData<ApiResponse<List<Item>>> createCall() {
+            protected LiveData<ApiResponse<MicroBlogResponse>> createCall() {
                 Timber.i("Timeline top ID: %s", timelineTopPostId);
                 return microblogService.getTimeLine(timelineTopPostId);
             }
 
             @Override
-            protected void saveCallResult(@NonNull List<Item> items) {
+            protected MicroBlogResponse processResponse(ApiResponse<MicroBlogResponse> response) {
                 lastTimelineRequestTimestamp = System.currentTimeMillis();
-                for (Item item : items) {
+                for (Item item : response.body.items) {
                     item.setEndpoint(Endpoints.TIMELINE);
                 }
+                return response.body;
+            }
 
-                postsDao.insertPosts(items);
+            @Override
+            protected void saveCallResult(@NonNull MicroBlogResponse response) {
+                postsDao.insertPosts(response.items);
             }
 
             @NonNull
@@ -77,7 +82,7 @@ public class PostsRepository {
     }
 
     public LiveData<Resource<List<Item>>> loadMentions(boolean refresh) {
-        return new NetworkBoundResource<List<Item>, List<Item>>(appExecutors) {
+        return new NetworkBoundResource<List<Item>, MicroBlogResponse>(appExecutors) {
             @Override
             protected boolean shouldFetch(@Nullable List<Item> dbData) {
                 if (dbData != null && !dbData.isEmpty()) {
@@ -89,19 +94,23 @@ public class PostsRepository {
 
             @NonNull
             @Override
-            protected LiveData<ApiResponse<List<Item>>> createCall() {
+            protected LiveData<ApiResponse<MicroBlogResponse>> createCall() {
                 Timber.i("Mentions top ID: %s", mentionsTopPostId);
                 return microblogService.getMentions(mentionsTopPostId);
             }
 
             @Override
-            protected void saveCallResult(@NonNull List<Item> items) {
+            protected MicroBlogResponse processResponse(ApiResponse<MicroBlogResponse> response) {
                 lastMentionsRequestTimestamp = System.currentTimeMillis();
-                for (Item item : items) {
+                for (Item item : response.body.items) {
                     item.setEndpoint(Endpoints.MENTIONS);
                 }
+                return response.body;
+            }
 
-                postsDao.insertPosts(items);
+            @Override
+            protected void saveCallResult(@NonNull MicroBlogResponse response) {
+                postsDao.insertPosts(response.items);
             }
 
             @NonNull
@@ -113,7 +122,7 @@ public class PostsRepository {
     }
 
     public LiveData<Resource<List<Item>>> loadFavorites(boolean refresh) {
-        return new NetworkBoundResource<List<Item>, List<Item>>(appExecutors) {
+        return new NetworkBoundResource<List<Item>, MicroBlogResponse>(appExecutors) {
             @Override
             protected boolean shouldFetch(@Nullable List<Item> dbData) {
                 return dbData == null || dbData.isEmpty();
@@ -121,19 +130,23 @@ public class PostsRepository {
 
             @NonNull
             @Override
-            protected LiveData<ApiResponse<List<Item>>> createCall() {
+            protected LiveData<ApiResponse<MicroBlogResponse>> createCall() {
                 return microblogService.getFavorites();
             }
 
             @Override
-            protected void saveCallResult(@NonNull List<Item> items) {
-                for (Item item : items) {
+            protected MicroBlogResponse processResponse(ApiResponse<MicroBlogResponse> response) {
+                for (Item item : response.body.items) {
                     item.setEndpoint(Endpoints.FAVORITES);
                 }
+                return response.body;
+            }
 
+            @Override
+            protected void saveCallResult(@NonNull MicroBlogResponse response) {
                 if (refresh)
                     postsDao.deletePosts(Endpoints.FAVORITES);
-                postsDao.insertPosts(items);
+                postsDao.insertPosts(response.items);
             }
 
             @NonNull
@@ -145,7 +158,7 @@ public class PostsRepository {
     }
 
     public LiveData<Resource<List<Item>>> loadPostsByUsername(String username) {
-        return new NetworkBoundResource<List<Item>, List<Item>>(appExecutors) {
+        return new NetworkBoundResource<List<Item>, MicroBlogResponse>(appExecutors) {
             @Override
             protected boolean shouldFetch(@Nullable List<Item> dbData) {
                 return dbData == null || dbData.isEmpty();
@@ -153,18 +166,22 @@ public class PostsRepository {
 
             @NonNull
             @Override
-            protected LiveData<ApiResponse<List<Item>>> createCall() {
+            protected LiveData<ApiResponse<MicroBlogResponse>> createCall() {
                 return microblogService.getPostsByUsername(username);
             }
 
             @Override
-            protected void saveCallResult(@NonNull List<Item> items) {
-                for (Item item : items) {
+            protected MicroBlogResponse processResponse(ApiResponse<MicroBlogResponse> response) {
+                for (Item item : response.body.items) {
                     item.setEndpoint(username);
                 }
+                return response.body;
+            }
 
+            @Override
+            protected void saveCallResult(@NonNull MicroBlogResponse response) {
                 postsDao.deletePosts(username);
-                postsDao.insertPosts(items);
+                postsDao.insertPosts(response.items);
             }
 
             @NonNull

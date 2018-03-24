@@ -6,6 +6,7 @@ import android.arch.lifecycle.Observer;
 
 import com.dialogapp.dialog.TestUtil;
 import com.dialogapp.dialog.model.Item;
+import com.dialogapp.dialog.model.MicroBlogResponse;
 import com.dialogapp.dialog.repository.PostsRepository;
 import com.dialogapp.dialog.util.Resource;
 
@@ -40,8 +41,8 @@ public class FavoritesViewModelTest {
         postsRepository = mock(PostsRepository.class);
 
         MutableLiveData<Resource<List<Item>>> data = new MutableLiveData<>();
-        List<Item> favoritesItems = TestUtil.readFromJson(getClass().getClassLoader(), "favorites.json");
-        Resource<List<Item>> favoritesResource = Resource.success(favoritesItems);
+        MicroBlogResponse response = TestUtil.readFromJson(getClass().getClassLoader(), "response.json");
+        Resource<List<Item>> favoritesResource = Resource.success(response.items);
         data.setValue(favoritesResource);
         when(postsRepository.loadFavorites(true)).thenReturn(data);
 
