@@ -15,27 +15,27 @@ public class Item {
     @NonNull
     @Json(name = "id")
     public final Long id;
+    @Json(name = "content_html")
+    public final String contentHtml;
+    @Json(name = "url")
+    public final String url;
+    @Json(name = "date_published")
+    public final String datePublished;
     @Json(name = "author")
     @Embedded(prefix = "author_")
     public final Author author;
-    @Json(name = "url")
-    public final String url;
-    @Json(name = "content_html")
-    public final String contentHtml;
-    @Json(name = "date_published")
-    public final String datePublished;
     @Json(name = "_microblog")
     @Embedded(prefix = "post_property_")
     public final PostProperties microblog;
 
-    public Item(@NonNull String endpoint, @NonNull Long id, Author author, String url, String contentHtml,
-                String datePublished, PostProperties microblog) {
+    public Item(@NonNull String endpoint, @NonNull Long id, String contentHtml, String url,
+                String datePublished, Author author, PostProperties microblog) {
         this.endpoint = endpoint;
         this.id = id;
-        this.author = author;
-        this.url = url;
         this.contentHtml = contentHtml;
+        this.url = url;
         this.datePublished = datePublished;
+        this.author = author;
         this.microblog = microblog;
     }
 
@@ -50,17 +50,20 @@ public class Item {
 
     public static class PostProperties {
 
+        @Json(name = "date_relative")
+        public final String dateRelative;
         @Json(name = "is_deletable")
         public final Boolean isDeletable;
         @Json(name = "is_favorite")
         public final Boolean isFavorite;
-        @Json(name = "date_relative")
-        public final String dateRelative;
+        @Json(name = "is_conversation")
+        public final Boolean isConversation;
 
-        public PostProperties(Boolean isDeletable, Boolean isFavorite, String dateRelative) {
+        public PostProperties(String dateRelative, Boolean isDeletable, Boolean isFavorite, Boolean isConversation) {
+            this.dateRelative = dateRelative;
             this.isDeletable = isDeletable;
             this.isFavorite = isFavorite;
-            this.dateRelative = dateRelative;
+            this.isConversation = isConversation;
         }
     }
 }
