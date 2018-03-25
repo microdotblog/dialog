@@ -11,6 +11,7 @@ import com.dialogapp.dialog.api.MicroblogService;
 import com.dialogapp.dialog.db.MicroBlogDb;
 import com.dialogapp.dialog.db.PostsDao;
 import com.dialogapp.dialog.model.Item;
+import com.dialogapp.dialog.model.MicroBlogResponse;
 import com.dialogapp.dialog.util.InstantAppExecutors;
 import com.dialogapp.dialog.util.Resource;
 
@@ -54,8 +55,8 @@ public class PostsRepositoryTest {
         MutableLiveData<List<Item>> timelineDbData = new MutableLiveData<>();
         when(postsDao.loadEndpoint(Endpoints.TIMELINE)).thenReturn(timelineDbData);
 
-        List<Item> testTimelineData = TestUtil.readFromJson(getClass().getClassLoader(), "timeline.json");
-        LiveData<ApiResponse<List<Item>>> callTimeline = successCall(testTimelineData);
+        MicroBlogResponse response = TestUtil.readFromJson(getClass().getClassLoader(), "response.json");
+        LiveData<ApiResponse<MicroBlogResponse>> callTimeline = successCall(response);
         when(microblogService.getTimeLine(null)).thenReturn(callTimeline);
 
         LiveData<Resource<List<Item>>> repoData = repository.loadTimeline(true);
@@ -71,7 +72,8 @@ public class PostsRepositoryTest {
         when(postsDao.loadEndpoint(Endpoints.TIMELINE)).thenReturn(updatedTimelineData);
         timelineDbData.postValue(null);
         verify(microblogService).getTimeLine(null);
-        verify(postsDao).insertPosts(anyList());
+        List<Item> testTimelineData = response.items;
+        verify(postsDao).insertPosts(testTimelineData);
 
         updatedTimelineData.postValue(testTimelineData);
         verify(observer).onChanged(Resource.success(testTimelineData));
@@ -82,8 +84,8 @@ public class PostsRepositoryTest {
         MutableLiveData<List<Item>> mentionsDbData = new MutableLiveData<>();
         when(postsDao.loadEndpoint(Endpoints.MENTIONS)).thenReturn(mentionsDbData);
 
-        List<Item> testMentionsData = TestUtil.readFromJson(getClass().getClassLoader(), "mentions.json");
-        LiveData<ApiResponse<List<Item>>> callMentions = successCall(testMentionsData);
+        MicroBlogResponse response = TestUtil.readFromJson(getClass().getClassLoader(), "response.json");
+        LiveData<ApiResponse<MicroBlogResponse>> callMentions = successCall(response);
         when(microblogService.getMentions(null)).thenReturn(callMentions);
 
         LiveData<Resource<List<Item>>> repoData = repository.loadMentions(true);
@@ -99,6 +101,7 @@ public class PostsRepositoryTest {
         when(postsDao.loadEndpoint(Endpoints.MENTIONS)).thenReturn(updatedMentionsData);
         mentionsDbData.postValue(null);
         verify(microblogService).getMentions(null);
+        List<Item> testMentionsData = response.items;
         verify(postsDao).insertPosts(anyList());
 
         updatedMentionsData.postValue(testMentionsData);
@@ -110,8 +113,8 @@ public class PostsRepositoryTest {
         MutableLiveData<List<Item>> favoritesDbData = new MutableLiveData<>();
         when(postsDao.loadEndpoint(Endpoints.FAVORITES)).thenReturn(favoritesDbData);
 
-        List<Item> testFavoritesData = TestUtil.readFromJson(getClass().getClassLoader(), "favorites.json");
-        LiveData<ApiResponse<List<Item>>> callFavorites = successCall(testFavoritesData);
+        MicroBlogResponse response = TestUtil.readFromJson(getClass().getClassLoader(), "response.json");
+        LiveData<ApiResponse<MicroBlogResponse>> callFavorites = successCall(response);
         when(microblogService.getFavorites()).thenReturn(callFavorites);
 
         LiveData<Resource<List<Item>>> repoData = repository.loadFavorites(true);
@@ -127,6 +130,7 @@ public class PostsRepositoryTest {
         when(postsDao.loadEndpoint(Endpoints.FAVORITES)).thenReturn(updatedFavoritesData);
         favoritesDbData.postValue(null);
         verify(microblogService).getFavorites();
+        List<Item> testFavoritesData = response.items;
         verify(postsDao).insertPosts(anyList());
 
         updatedFavoritesData.postValue(testFavoritesData);

@@ -3,12 +3,9 @@ package com.dialogapp.dialog.api;
 import android.arch.lifecycle.LiveData;
 
 import com.dialogapp.dialog.model.AccountResponse;
-import com.dialogapp.dialog.model.Item;
 import com.dialogapp.dialog.model.MediaEndPoint;
 import com.dialogapp.dialog.model.MicroBlogResponse;
 import com.dialogapp.dialog.model.VerifiedAccount;
-
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Response;
@@ -32,19 +29,19 @@ public interface MicroblogService {
     LiveData<ApiResponse<AccountResponse>> getAccountData();
 
     @GET("posts/all")
-    LiveData<ApiResponse<List<Item>>> getTimeLine(@Query("since_id") String id);
+    LiveData<ApiResponse<MicroBlogResponse>> getTimeLine(@Query("since_id") String id);
 
     @GET("posts/mentions")
-    LiveData<ApiResponse<List<Item>>> getMentions(@Query("since_id") String id);
+    LiveData<ApiResponse<MicroBlogResponse>> getMentions(@Query("since_id") String id);
 
     @GET("posts/favorites")
-    LiveData<ApiResponse<List<Item>>> getFavorites();
+    LiveData<ApiResponse<MicroBlogResponse>> getFavorites();
 
     @GET("posts/discover")
     Call<MicroBlogResponse> getFeaturedPosts();
 
     @GET("posts/{username}")
-    LiveData<ApiResponse<List<Item>>> getPostsByUsername(@Path("username") String username);
+    LiveData<ApiResponse<MicroBlogResponse>> getPostsByUsername(@Path("username") String username);
 
     @GET("posts/conversation")
     Call<MicroBlogResponse> getConversation(@Query("id") long id);

@@ -3,7 +3,6 @@ package com.dialogapp.dialog.di;
 import android.app.Application;
 import android.arch.persistence.room.Room;
 
-import com.dialogapp.dialog.api.MicroblogEnvelopeConverterFactory;
 import com.dialogapp.dialog.api.MicroblogService;
 import com.dialogapp.dialog.api.ServiceInterceptor;
 import com.dialogapp.dialog.db.AccountDao;
@@ -26,7 +25,6 @@ class AppModule {
     MicroblogService provideMicroblogService(OkHttpClient okHttpClient) {
         return new Retrofit.Builder()
                 .baseUrl("https://micro.blog/")
-                .addConverterFactory(new MicroblogEnvelopeConverterFactory())
                 .addConverterFactory(MoshiConverterFactory.create())
                 .addCallAdapterFactory(new LiveDataCallAdapterFactory())
                 .client(okHttpClient)
