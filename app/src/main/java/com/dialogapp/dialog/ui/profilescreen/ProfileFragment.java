@@ -5,7 +5,9 @@ import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,33 +18,42 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.dialogapp.dialog.R;
 import com.dialogapp.dialog.di.Injectable;
-import com.dialogapp.dialog.model.AccountResponse;
-import com.dialogapp.dialog.ui.common.BaseListFragment;
+import com.dialogapp.dialog.model.Item;
+import com.dialogapp.dialog.model.MicroBlogResponse;
+import com.dialogapp.dialog.ui.common.BaseRecyclerAdapter;
 import com.dialogapp.dialog.util.InsetDividerDecoration;
-import com.dialogapp.dialog.util.Resource;
 import com.dialogapp.dialog.util.Status;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 import static com.dialogapp.dialog.ui.profilescreen.ProfileActivity.EXTRA_USERNAME;
 
-public class ProfileFragment extends BaseListFragment implements Injectable {
+public class ProfileFragment extends Fragment implements Injectable {
+    private Unbinder unbinder;
+    private BaseRecyclerAdapter adapter;
+    private ProfileViewModel viewModel;
     private String username;
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
+
+    @BindView(R.id.recycler_list)
+    protected RecyclerView recyclerView;
+
+    @BindView(R.id.empty_list)
+    protected TextView emptyPlaceholder;
 
     @BindView(R.id.image_profile)
     ImageView avatar;
 
     @BindView(R.id.text_profile_fullname)
     TextView fullname;
-
-    @BindView(R.id.text_profile_email)
-    TextView email;
 
     @BindView(R.id.text_profile_website)
     TextView website;
@@ -87,35 +98,49 @@ public class ProfileFragment extends BaseListFragment implements Injectable {
         super.onActivityCreated(savedInstanceState);
 
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(ProfileViewModel.class);
-        viewModel.getPosts().observe(this, listResource -> {
-            if (listResource != null) {
-                setData(listResource.status, listResource.data, listResource.message);
+        viewModel.getUserData().observe(this, microBlogResponseResource -> {
+            if (microBlogResponseResource != null && microBlogResponseResource.data != null) {
+                setAccountData(microBlogResponseResource.data);
+                setData(microBlogResponseResource.status, microBlogResponseResource.data.items, microBlogResponseResource.message);
             }
         });
-        ((ProfileViewModel) viewModel).setUsername(username);
-
-        AccountViewModel accountViewModel = ViewModelProviders.of(this, viewModelFactory).get(AccountViewModel.class);
-        accountViewModel.getAccountData().observe(this, accountResponseResource -> {
-            if (accountResponseResource != null) {
-                if (accountResponseResource.data != null) {
-                    setAccountData(accountResponseResource);
-                }
-
-                if (accountResponseResource.status == Status.ERROR)
-                    listener.onLoadError(accountResponseResource.message);
-            }
-        });
-        accountViewModel.setUsername(username);
+        viewModel.setUsername(username);
     }
 
-    private void setAccountData(Resource<AccountResponse> accountResponseResource) {
-        Glide.with(this).load("https://micro.blog/" +
-                accountResponseResource.data.getUsername() + "/avatar.jpg")
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
+    }
+
+    private void setData(Status status, List<Item> data, String message) {
+        // Set data ignoring the status
+        if (data != null) {
+            if (data.isEmpty()) {
+                recyclerView.setVisibility(View.GONE);
+                emptyPlaceholder.setVisibility(View.VISIBLE);
+            } else {
+                emptyPlaceholder.setVisibility(View.GONE);
+                recyclerView.setVisibility(View.VISIBLE);
+
+                adapter.setItems(data);
+            }
+        }
+    }
+
+    private void setAccountData(MicroBlogResponse accountResponseResource) {
+        Glide.with(this).load(accountResponseResource.author.avatar)
                 .apply(new RequestOptions().circleCrop())
                 .into(avatar);
-        fullname.setText(accountResponseResource.data.getFullName());
-        email.setText(accountResponseResource.data.getEmail());
-        website.setText(accountResponseResource.data.getWebSite());
-        about.setText(accountResponseResource.data.getAboutMe());
+        fullname.setText(accountResponseResource.author.name);
+        if (!accountResponseResource.author.url.isEmpty()) {
+            website.setVisibility(View.VISIBLE);
+            website.setText(accountResponseResource.author.url);
+        }
+        if (!accountResponseResource.microblog.bio.isEmpty()) {
+            about.setVisibility(View.VISIBLE);
+            about.setText(accountResponseResource.microblog.bio);
+
+        }
     }
 }

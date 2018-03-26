@@ -114,6 +114,23 @@ public class MicroblogServiceTest {
         assertThat(favoritesData.get(2).author.microblog.username, is("kanes"));
     }
 
+    @Test
+    public void getUserPosts() throws IOException, InterruptedException {
+        enqueueResponse("userpostsresponse.json");
+        MicroBlogResponse response = getValue(microblogService.getPostsByUsername("dialog")).body;
+
+        RecordedRequest request = mockWebServer.takeRequest();
+        assertThat(request.getPath(), is("/posts/dialog"));
+
+        List<Item> favoritesData = response.items;
+        assertThat(favoritesData, notNullValue());
+        assertThat(response.microblog, notNullValue());
+        assertThat(response.author, notNullValue());
+        assertThat(response.microblog.following_count, is(190));
+        assertThat(response.author.name, is("Dialog"));
+        assertThat(favoritesData.get(0).author.name, is("Dialog2"));
+    }
+
     private void enqueueResponse(String fileName) throws IOException {
         enqueueResponse(fileName, Collections.<String, String>emptyMap());
     }

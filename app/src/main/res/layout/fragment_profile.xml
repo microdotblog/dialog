@@ -39,21 +39,13 @@
                 tools:text="@tools:sample/full_names" />
 
             <TextView
-                android:id="@+id/text_profile_email"
+                android:id="@+id/text_profile_website"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/text_profile_fullname"
                 android:layout_centerHorizontal="true"
-                android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                tools:text="@tools:sample/lorem" />
-
-            <TextView
-                android:id="@+id/text_profile_website"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/text_profile_email"
-                android:layout_centerHorizontal="true"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                android:visibility="gone"
                 tools:text="@tools:sample/lorem" />
 
             <TextView
@@ -65,6 +57,7 @@
                 android:layout_centerHorizontal="true"
                 android:textAlignment="center"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
+                android:visibility="gone"
                 tools:text="@tools:sample/lorem" />
 
         </RelativeLayout>
