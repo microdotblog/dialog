@@ -33,7 +33,7 @@ android {
 }
 
 ext {
-    supportLibsVersion = '27.0.2'
+    supportLibsVersion = '27.1.0'
     retrofitVersion = '2.3.0'
 }
 
@@ -49,9 +49,9 @@ dependencies {
 
     // Architecture components
     // ViewModel and LiveData
-    implementation 'android.arch.lifecycle:extensions:1.1.0'
+    implementation 'android.arch.lifecycle:extensions:1.1.1'
     // Java8 support for Lifecycles
-    implementation 'android.arch.lifecycle:common-java8:1.1.0'
+    implementation 'android.arch.lifecycle:common-java8:1.1.1'
     // Room
     implementation 'android.arch.persistence.room:runtime:1.0.0'
     annotationProcessor "android.arch.persistence.room:compiler:1.0.0"
@@ -79,6 +79,8 @@ dependencies {
     implementation 'com.github.piasy:BigImageViewer:1.4.6'
     implementation 'com.github.piasy:GlideImageLoader:1.4.6'
     implementation 'com.github.piasy:ProgressPieIndicator:1.4.6'
+    // Temporary workaround for version conflict
+    implementation "com.android.support:exifinterface:$supportLibsVersion"
 
     // Dagger
     implementation 'com.google.dagger:dagger:2.14.1'
@@ -93,7 +95,7 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.mockito:mockito-core:2.8.9'
     testImplementation 'com.squareup.okhttp3:mockwebserver:3.9.1'
-    testImplementation 'android.arch.core:core-testing:1.1.0'
+    testImplementation 'android.arch.core:core-testing:1.1.1'
     testImplementation "android.arch.persistence.room:testing:1.0.0"
 
     androidTestImplementation "com.android.support:support-annotations:$supportLibsVersion"
