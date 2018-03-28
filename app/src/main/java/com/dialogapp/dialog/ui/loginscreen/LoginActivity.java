@@ -63,9 +63,9 @@ public class LoginActivity extends AppCompatActivity implements HasActivityInjec
 
     @OnClick(R.id.button_login)
     public void login() {
-        loginButton.setEnabled(false);
         token = input.getText().toString().trim();
         if (!token.isEmpty()) {
+            loginButton.setEnabled(false);
             Toast.makeText(this, R.string.login_msg_verification, Toast.LENGTH_SHORT).show();
             progressBar.setVisibility(View.VISIBLE);
 

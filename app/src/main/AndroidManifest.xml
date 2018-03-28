@@ -21,7 +21,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.loginscreen.LoginActivity" />
+        <activity
+            android:name=".ui.loginscreen.LoginActivity"
+            android:screenOrientation="portrait" />
         <activity android:name=".ui.mainscreen.MainActivity" />
         <activity
             android:name=".ui.favorites.FavoritesActivity"
