@@ -1,6 +1,7 @@
 package com.dialogapp.dialog.ui.common;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.text.Html;
 import android.text.Spannable;
@@ -13,6 +14,7 @@ import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
 import com.dialogapp.dialog.R;
 import com.dialogapp.dialog.model.Item;
+import com.dialogapp.dialog.ui.profilescreen.ProfileActivity;
 import com.dialogapp.dialog.util.GlideImageGetter;
 
 import java.util.regex.Pattern;
@@ -50,6 +52,12 @@ public class PostViewHolder extends BaseViewHolder<Item> {
 
     @Override
     public void onBind(Item item, int position) {
+        thumbnail.setOnClickListener(view -> {
+            Intent intent = new Intent(context, ProfileActivity.class);
+            intent.putExtra(ProfileActivity.EXTRA_USERNAME, item.author.microblog.username);
+            context.startActivity(intent);
+        });
+
         glide.load(item.author.avatar)
                 .apply(RequestOptions.circleCropTransform())
                 .into(thumbnail);

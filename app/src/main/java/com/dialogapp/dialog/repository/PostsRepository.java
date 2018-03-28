@@ -10,6 +10,7 @@ import com.dialogapp.dialog.api.MicroblogService;
 import com.dialogapp.dialog.db.PostsDao;
 import com.dialogapp.dialog.model.Item;
 import com.dialogapp.dialog.model.MicroBlogResponse;
+import com.dialogapp.dialog.util.CacheLiveData;
 import com.dialogapp.dialog.util.Resource;
 
 import java.util.List;
@@ -157,11 +158,13 @@ public class PostsRepository {
         }.asLiveData();
     }
 
-    public LiveData<Resource<List<Item>>> loadPostsByUsername(String username) {
-        return new NetworkBoundResource<List<Item>, MicroBlogResponse>(appExecutors) {
+    public LiveData<Resource<MicroBlogResponse>> loadPostsByUsername(String username) {
+        return new NetworkBoundResource<MicroBlogResponse, MicroBlogResponse>(appExecutors) {
+            MicroBlogResponse responseData;
+
             @Override
-            protected boolean shouldFetch(@Nullable List<Item> dbData) {
-                return dbData == null || dbData.isEmpty();
+            protected boolean shouldFetch(@Nullable MicroBlogResponse dbData) {
+                return true;
             }
 
             @NonNull
@@ -171,23 +174,14 @@ public class PostsRepository {
             }
 
             @Override
-            protected MicroBlogResponse processResponse(ApiResponse<MicroBlogResponse> response) {
-                for (Item item : response.body.items) {
-                    item.setEndpoint(username);
-                }
-                return response.body;
-            }
-
-            @Override
             protected void saveCallResult(@NonNull MicroBlogResponse response) {
-                postsDao.deletePosts(username);
-                postsDao.insertPosts(response.items);
+                responseData = response;
             }
 
             @NonNull
             @Override
-            protected LiveData<List<Item>> loadFromDb() {
-                return postsDao.loadEndpoint(username);
+            protected LiveData<MicroBlogResponse> loadFromDb() {
+                return CacheLiveData.getAsLiveData(responseData);
             }
         }.asLiveData();
     }

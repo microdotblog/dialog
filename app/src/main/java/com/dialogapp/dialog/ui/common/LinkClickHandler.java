@@ -12,6 +12,7 @@ import android.text.style.URLSpan;
 import android.view.View;
 
 import com.dialogapp.dialog.ui.imageviewer.ImageViewerActivity;
+import com.dialogapp.dialog.ui.profilescreen.ProfileActivity;
 
 public class LinkClickHandler {
 
@@ -27,7 +28,9 @@ public class LinkClickHandler {
                 @Override
                 public void onClick(View view) {
                     if (htmlString.charAt(start) == '@') {
-
+                        Intent intent = new Intent(context, ProfileActivity.class);
+                        intent.putExtra(ProfileActivity.EXTRA_USERNAME, htmlString.subSequence(start + 1, end).toString());
+                        context.startActivity(intent);
                     } else {
                         Uri webpage = Uri.parse(span.getURL());
                         Intent intent = new Intent(Intent.ACTION_VIEW, webpage);

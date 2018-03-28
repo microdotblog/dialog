@@ -1,29 +1,37 @@
 package com.dialogapp.dialog.ui.profilescreen;
 
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Transformations;
+import android.arch.lifecycle.ViewModel;
 
+import com.dialogapp.dialog.model.MicroBlogResponse;
 import com.dialogapp.dialog.repository.PostsRepository;
-import com.dialogapp.dialog.ui.common.BaseListViewModel;
 import com.dialogapp.dialog.util.AbsentLiveData;
+import com.dialogapp.dialog.util.Resource;
 
 import javax.inject.Inject;
 
-public class ProfileViewModel extends BaseListViewModel {
-    private String username;
+public class ProfileViewModel extends ViewModel {
+    private final MutableLiveData<String> username = new MutableLiveData<>();
+    private LiveData<Resource<MicroBlogResponse>> userData;
 
     @Inject
     public ProfileViewModel(PostsRepository postsRepository) {
-        posts = Transformations.switchMap(refresh, input -> {
-            if (input) {
-                return postsRepository.loadPostsByUsername(username);
+        userData = Transformations.switchMap(username, input -> {
+            if (!input.isEmpty()) {
+                return postsRepository.loadPostsByUsername(input);
             } else {
                 return AbsentLiveData.create();
             }
         });
-        refresh();
+    }
+
+    public LiveData<Resource<MicroBlogResponse>> getUserData() {
+        return userData;
     }
 
     public void setUsername(String username) {
-        this.username = username;
+        this.username.setValue(username);
     }
 }
