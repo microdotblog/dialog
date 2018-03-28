@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
     <android.support.v7.widget.RecyclerView
@@ -12,9 +10,9 @@
 
     <TextView
         android:id="@+id/empty_list"
+        style="@style/textEmptyStyle"
         android:layout_gravity="center_vertical"
-        android:text="@string/empty_list"
         android:drawableTop="@drawable/ic_chat_black_24dp"
-        android:visibility="gone"
-        style="@style/textEmptyStyle" />
-</FrameLayout>
+        android:text="@string/empty_list"
+        android:visibility="gone" />
+</merge>
