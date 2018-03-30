@@ -5,7 +5,7 @@
     android:id="@+id/constraint_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
+    android:background="@color/indigo500"
     tools:context="com.dialogapp.dialog.ui.loginscreen.LoginActivity">
 
     <ImageView
@@ -29,6 +29,7 @@
         android:layout_marginBottom="72dp"
         android:layout_marginEnd="24dp"
         android:layout_marginStart="24dp"
+        app:cardBackgroundColor="?attr/colorCardBackground"
         app:cardElevation="5dp"
         app:layout_constraintBottom_toTopOf="@+id/text_login_about"
         app:layout_constraintEnd_toEndOf="parent"
@@ -89,7 +90,7 @@
                 android:layout_marginBottom="8dp"
                 android:layout_marginTop="8dp"
                 android:text="@string/login_button"
-                android:textColor="@color/colorAccent" />
+                android:textColor="?attr/colorAccent" />
 
         </RelativeLayout>
 
@@ -100,11 +101,12 @@
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:layout_marginTop="8dp"
-        android:background="@color/colorPrimaryDark"
+        android:background="@color/indigo700"
         android:gravity="center_vertical"
         android:text="@string/login_about"
         android:textAlignment="center"
         android:textColor="@android:color/white"
+        android:textColorLink="@color/reda200"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

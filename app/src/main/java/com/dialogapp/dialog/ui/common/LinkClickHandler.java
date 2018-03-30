@@ -2,15 +2,18 @@ package com.dialogapp.dialog.ui.common;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.net.Uri;
 import android.text.Spannable;
+import android.text.TextPaint;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.ImageSpan;
 import android.text.style.URLSpan;
+import android.text.style.UnderlineSpan;
+import android.util.TypedValue;
 import android.view.View;
 
+import com.dialogapp.dialog.R;
 import com.dialogapp.dialog.ui.imageviewer.ImageViewerActivity;
 import com.dialogapp.dialog.ui.profilescreen.ProfileActivity;
 
@@ -41,8 +44,18 @@ public class LinkClickHandler {
                 }
             };
             htmlString.setSpan(clickable, start, end, flags);
-            if (htmlString.charAt(start) == '@')
-                htmlString.setSpan(new ForegroundColorSpan(Color.BLUE), start, end, 0);
+            if (htmlString.charAt(start) == '@') {
+                // Remove underline
+                htmlString.setSpan(new UnderlineSpan() {
+                    public void updateDrawState(TextPaint tp) {
+                        tp.setUnderlineText(false);
+                    }
+                }, start, end, 0);
+
+                TypedValue value = new TypedValue();
+                context.getTheme().resolveAttribute(R.attr.colorAccent, value, true);
+                htmlString.setSpan(new ForegroundColorSpan(value.data), start, end, 0);
+            }
             htmlString.removeSpan(span);
         }
 

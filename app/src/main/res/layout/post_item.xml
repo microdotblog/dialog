@@ -21,7 +21,6 @@
             android:layout_height="@dimen/post_image_profile"
             android:layout_gravity="top"
             android:layout_marginEnd="16dp"
-
             tools:src="@tools:sample/avatars" />
 
         <TextView
@@ -30,6 +29,7 @@
             android:layout_height="wrap_content"
             android:layout_alignTop="@id/image_thumbnail"
             android:layout_toEndOf="@id/image_thumbnail"
+            android:textIsSelectable="true"
             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
             tools:text="@tools:sample/full_names" />
 
@@ -41,6 +41,8 @@
             android:layout_alignStart="@id/text_username"
             android:layout_below="@id/text_username"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textColorLink="@color/blue700"
+            android:textIsSelectable="true"
             tools:text="@tools:sample/lorem/random" />
 
         <TextView

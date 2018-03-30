@@ -21,10 +21,10 @@
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="32dp"
-        app:cardBackgroundColor="@color/colorPrimaryDark"
+        app:cardBackgroundColor="?attr/colorCardBackground"
         app:cardUseCompatPadding="true"
         app:contentPaddingTop="40dp"
-        app:elevation="2dp">
+        app:elevation="5dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -39,7 +39,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:text="..."
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
                 tools:text="@tools:sample/full_names" />
 
             <TextView
@@ -48,8 +48,9 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/text_profile_fullname"
                 android:layout_centerHorizontal="true"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:visibility="gone"
+                android:autoLink="web"
                 tools:text="@tools:sample/lorem/random" />
 
             <TextView
@@ -60,7 +61,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="8dp"
                 android:textAlignment="center"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                 android:visibility="gone"
                 tools:text="@tools:sample/lorem" />
 

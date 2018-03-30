@@ -20,7 +20,7 @@ public class InsetDividerDecoration extends RecyclerView.ItemDecoration {
     private Drawable divider;
 
     public InsetDividerDecoration(Context context) {
-        this.divider = context.getApplicationContext().getDrawable(R.drawable.divider_drawable);
+        this.divider = context.getDrawable(R.drawable.divider_drawable);
     }
 
     @Override

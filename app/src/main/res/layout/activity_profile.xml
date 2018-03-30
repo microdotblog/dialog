@@ -9,15 +9,15 @@
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appBar_profile"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        android:layout_height="wrap_content">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar_profile"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="?attr/colorPrimary"
+            android:background="?attr/colorPrimaryDark"
             android:elevation="4dp"
+            android:theme="@style/AppTheme.AppBarOverlay"
             app:layout_collapseMode="pin"
             app:layout_scrollFlags="scroll|enterAlways" />
 
@@ -33,6 +33,7 @@
             android:id="@+id/tab_layout_profile"
             android:layout_width="match_parent"
             android:layout_height="48dp"
+            android:theme="@style/AppTheme.AppBarOverlay"
             app:layout_scrollFlags="scroll|snap|enterAlways"
             app:tabTextColor="?android:attr/textColorPrimary" />
 
