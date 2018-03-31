@@ -9,6 +9,7 @@ import android.view.MenuItem;
 
 import com.dialogapp.dialog.R;
 import com.dialogapp.dialog.ui.common.BaseListFragment;
+import com.dialogapp.dialog.ui.common.ListFragment;
 
 import javax.inject.Inject;
 
@@ -38,7 +39,7 @@ public class FavoritesActivity extends AppCompatActivity implements BaseListFrag
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.container_common, new FavoritesFragment())
+                .replace(R.id.container_common, ListFragment.newInstance(ListFragment.FAVORITES))
                 .commit();
     }
 

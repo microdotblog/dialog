@@ -93,7 +93,7 @@ public class ProfileFragment extends Fragment implements Injectable {
         swipeRefreshLayout.setEnabled(false);
 
         if (this.getContext() != null) {
-            adapter = new ProfileAdapter(this.getContext(), Glide.with(this));
+            adapter = new BaseRecyclerAdapter(Glide.with(this));
             recyclerView.setAdapter(adapter);
             recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
             recyclerView.addItemDecoration(new InsetDividerDecoration(this.getContext()));

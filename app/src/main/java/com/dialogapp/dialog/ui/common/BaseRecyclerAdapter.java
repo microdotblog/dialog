@@ -1,48 +1,41 @@
 package com.dialogapp.dialog.ui.common;
 
-import android.content.Context;
-import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
+
+import com.bumptech.glide.RequestManager;
+import com.dialogapp.dialog.R;
+import com.dialogapp.dialog.model.Item;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Generic RecyclerView Adapter base class. Handles basic common logic.
+ * RecyclerView Adapter base class. Handles basic common logic.
  *
- * @param <T>  type of the items to be used in the adapter's dataset
- * @param <VH> ViewHolder {@link BaseViewHolder}
  */
-public abstract class BaseRecyclerAdapter<T, VH extends BaseViewHolder<T>>
-        extends RecyclerView.Adapter<VH> {
+public class BaseRecyclerAdapter extends RecyclerView.Adapter<PostViewHolder> {
 
-    private LayoutInflater layoutInflater;
-    private List<T> items;
+    private RequestManager glide;
+    private List<Item> items;
 
-    public BaseRecyclerAdapter(Context context) {
-        layoutInflater = LayoutInflater.from(context);
+    public BaseRecyclerAdapter(RequestManager glide) {
         items = new ArrayList<>();
+        this.glide = glide;
     }
 
-    /**
-     * To be implemented in the subclass
-     *
-     * @param parent
-     * @param viewType
-     * @return
-     */
+    @NonNull
     @Override
-    public abstract VH onCreateViewHolder(ViewGroup parent, int viewType);
+    public PostViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        return new PostViewHolder(LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.post_item, parent, false), glide);
+    }
 
-    @SuppressWarnings("unchecked")
     @Override
-    public void onBindViewHolder(VH holder, int position) {
-        holder.onBind(items.get(position), position);
+    public void onBindViewHolder(@NonNull PostViewHolder holder, int position) {
+        holder.onBind(items.get(position));
     }
 
     @Override
@@ -50,7 +43,7 @@ public abstract class BaseRecyclerAdapter<T, VH extends BaseViewHolder<T>>
         return items != null ? items.size() : 0;
     }
 
-    public void setItems(List<T> posts) {
+    public void setItems(List<Item> posts) {
         if (posts == null) {
             throw new IllegalArgumentException("Cannot set 'null' item in Recycler Adapter");
         }
@@ -59,15 +52,15 @@ public abstract class BaseRecyclerAdapter<T, VH extends BaseViewHolder<T>>
         notifyDataSetChanged();
     }
 
-    public List<T> getItems() {
+    public List<Item> getItems() {
         return items;
     }
 
-    public T getItem(int position) {
+    public Item getItem(int position) {
         return items.get(position);
     }
 
-    public void addItem(T item) {
+    public void addItem(Item item) {
         if (item == null) {
             throw new IllegalArgumentException("Cannot add 'null' item to Recycler Adapter");
         }
@@ -75,7 +68,7 @@ public abstract class BaseRecyclerAdapter<T, VH extends BaseViewHolder<T>>
         notifyItemInserted(items.size() - 1);
     }
 
-    public void addAll(List<T> items) {
+    public void addAll(List<Item> items) {
         if (items == null) {
             throw new IllegalArgumentException("Cannot add 'null' items to Recycler Adapter");
         }
@@ -83,7 +76,7 @@ public abstract class BaseRecyclerAdapter<T, VH extends BaseViewHolder<T>>
         notifyItemRangeInserted(this.items.size() - items.size(), items.size());
     }
 
-    public void remove(T item) {
+    public void remove(Item item) {
         int position = items.indexOf(item);
         if (position > -1) {
             items.remove(position);
@@ -98,16 +91,5 @@ public abstract class BaseRecyclerAdapter<T, VH extends BaseViewHolder<T>>
 
     public boolean isEmpty() {
         return getItemCount() == 0;
-    }
-
-    @NonNull
-    protected View inflate(@LayoutRes final int layout, @Nullable final ViewGroup parent) {
-        return inflate(layout, parent, false);
-    }
-
-    @NonNull
-    protected View inflate(@LayoutRes final int layout, @Nullable final ViewGroup parent,
-                           final boolean attachToRoot) {
-        return layoutInflater.inflate(layout, parent, attachToRoot);
     }
 }

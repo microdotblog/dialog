@@ -1,7 +1,6 @@
 package com.dialogapp.dialog.di.viewmodule;
 
-import com.dialogapp.dialog.ui.mainscreen.mentions.MentionsFragment;
-import com.dialogapp.dialog.ui.mainscreen.timeline.TimelineFragment;
+import com.dialogapp.dialog.ui.common.ListFragment;
 
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
@@ -9,8 +8,5 @@ import dagger.android.ContributesAndroidInjector;
 @Module
 public abstract class MainActivityFragmentsModule {
     @ContributesAndroidInjector
-    abstract TimelineFragment contributeTimelineFragment();
-
-    @ContributesAndroidInjector
-    abstract MentionsFragment contributeMentionsFragment();
+    abstract ListFragment contributesListFragment();
 }

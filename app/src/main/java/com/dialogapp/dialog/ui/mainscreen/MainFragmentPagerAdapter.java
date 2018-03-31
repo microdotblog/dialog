@@ -11,8 +11,7 @@ import android.text.SpannableString;
 import android.text.style.ImageSpan;
 
 import com.dialogapp.dialog.R;
-import com.dialogapp.dialog.ui.mainscreen.mentions.MentionsFragment;
-import com.dialogapp.dialog.ui.mainscreen.timeline.TimelineFragment;
+import com.dialogapp.dialog.ui.common.ListFragment;
 
 public class MainFragmentPagerAdapter extends FragmentPagerAdapter {
 
@@ -33,9 +32,9 @@ public class MainFragmentPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return new TimelineFragment();
+                return ListFragment.newInstance(ListFragment.TIMELINE);
             case 1:
-                return new MentionsFragment();
+                return ListFragment.newInstance(ListFragment.MENTIONS);
             default:
                 return null;
         }
