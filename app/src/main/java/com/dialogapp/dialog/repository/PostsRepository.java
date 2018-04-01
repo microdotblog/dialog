@@ -10,7 +10,6 @@ import com.dialogapp.dialog.api.MicroblogService;
 import com.dialogapp.dialog.db.PostsDao;
 import com.dialogapp.dialog.model.Item;
 import com.dialogapp.dialog.model.MicroBlogResponse;
-import com.dialogapp.dialog.util.CacheLiveData;
 import com.dialogapp.dialog.util.Resource;
 
 import java.util.List;
@@ -180,7 +179,13 @@ public class PostsRepository {
             @NonNull
             @Override
             protected LiveData<MicroBlogResponse> loadFromDb() {
-                return CacheLiveData.getAsLiveData(responseData);
+                return new LiveData<MicroBlogResponse>() {
+                    @Override
+                    protected void onActive() {
+                        super.onActive();
+                        setValue(responseData);
+                    }
+                };
             }
         }.asLiveData();
     }
