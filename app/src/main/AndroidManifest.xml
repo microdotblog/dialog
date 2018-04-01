@@ -32,6 +32,9 @@
         <activity
             android:name=".ui.imageviewer.ImageViewerActivity"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.conversation.ConversationActivity"
+            android:label="Conversation" />
     </application>
 
 </manifest>

@@ -47,6 +47,7 @@ public class ListViewModelTest {
         when(postsRepository.loadFavorites()).thenReturn(data);
         when(postsRepository.loadMentions()).thenReturn(data);
         when(postsRepository.loadTimeline()).thenReturn(data);
+        when(postsRepository.loadConversation("123")).thenReturn(data);
 
         viewModel = new ListViewModel(postsRepository);
     }
@@ -66,6 +67,10 @@ public class ListViewModelTest {
         viewModel.setView(BaseListViewModel.FAVORITES, null);
         assertThat(viewModel.getPosts().getValue(), notNullValue());
         verify(postsRepository).loadMentions();
+
+        viewModel.setView(BaseListViewModel.CONVERSATION, "123");
+        assertThat(viewModel.getPosts().getValue(), notNullValue());
+        verify(postsRepository).loadConversation("123");
     }
 
     @Test
@@ -92,5 +97,12 @@ public class ListViewModelTest {
         viewModel.refresh();
         assertThat(viewModel.getPosts().getValue(), notNullValue());
         verify(postsRepository, times(2)).loadFavorites();
+
+        viewModel.setView(BaseListViewModel.CONVERSATION, "123");
+        assertThat(viewModel.getPosts().getValue(), notNullValue());
+
+        viewModel.refresh();
+        assertThat(viewModel.getPosts().getValue(), notNullValue());
+        verify(postsRepository, times(2)).loadConversation("123");
     }
 }

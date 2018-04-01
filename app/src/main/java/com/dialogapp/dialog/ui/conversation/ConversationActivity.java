@@ -1,5 +1,6 @@
-package com.dialogapp.dialog.ui.favorites;
+package com.dialogapp.dialog.ui.conversation;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
@@ -14,7 +15,8 @@ import com.dialogapp.dialog.ui.common.ListFragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class FavoritesActivity extends BaseInjectableActivity implements BaseListFragment.FragmentEventListener {
+public class ConversationActivity extends BaseInjectableActivity implements BaseListFragment.FragmentEventListener {
+    public static final String EXTRA_POST_ID = ConversationActivity.class.getName() + ".EXTRA_POST_ID";
     private Snackbar errorBar;
 
     @BindView(R.id.toolbar_container)
@@ -34,8 +36,11 @@ public class FavoritesActivity extends BaseInjectableActivity implements BaseLis
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        Intent intent = getIntent();
+        String postId = intent.getStringExtra(EXTRA_POST_ID);
+
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.frame_container, ListFragment.newInstance(ListFragment.FAVORITES, null))
+                .replace(R.id.frame_container, ListFragment.newInstance(ListFragment.CONVERSATION, postId))
                 .commit();
     }
 

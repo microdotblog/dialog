@@ -20,6 +20,7 @@ public abstract class BaseListViewModel extends ViewModel {
     public static final int TIMELINE = 0;
     public static final int MENTIONS = 1;
     public static final int FAVORITES = 2;
+    public static final int CONVERSATION = 3;
 
     protected MutableLiveData<Integer> view = new MutableLiveData<>();
     protected LiveData<Resource<List<Item>>> posts;
@@ -39,7 +40,7 @@ public abstract class BaseListViewModel extends ViewModel {
     }
 
     @Retention(RetentionPolicy.SOURCE)
-    @IntDef({TIMELINE, MENTIONS, FAVORITES})
+    @IntDef({TIMELINE, MENTIONS, FAVORITES, CONVERSATION})
     @interface ViewTypeDef {
     }
 }

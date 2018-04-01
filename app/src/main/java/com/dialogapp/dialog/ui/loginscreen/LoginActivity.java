@@ -21,11 +21,11 @@ public class LoginActivity extends BaseInjectableActivity implements LoginFragme
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_container);
-        coordinatorLayout = findViewById(R.id.coord_layout_common);
+        setContentView(R.layout.activity_blank);
+        coordinatorLayout = findViewById(R.id.coord_layout_blank);
 
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.container_common, new LoginFragment())
+                .replace(R.id.container_blank, new LoginFragment())
                 .commit();
     }
 

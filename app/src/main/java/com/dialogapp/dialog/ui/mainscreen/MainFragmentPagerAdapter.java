@@ -32,9 +32,9 @@ public class MainFragmentPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return ListFragment.newInstance(ListFragment.TIMELINE);
+                return ListFragment.newInstance(ListFragment.TIMELINE, null);
             case 1:
-                return ListFragment.newInstance(ListFragment.MENTIONS);
+                return ListFragment.newInstance(ListFragment.MENTIONS, null);
             default:
                 return null;
         }

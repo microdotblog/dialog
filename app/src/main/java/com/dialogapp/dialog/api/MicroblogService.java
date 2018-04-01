@@ -44,7 +44,7 @@ public interface MicroblogService {
     LiveData<ApiResponse<MicroBlogResponse>> getPostsByUsername(@Path("username") String username);
 
     @GET("posts/conversation")
-    Call<MicroBlogResponse> getConversation(@Query("id") long id);
+    LiveData<ApiResponse<MicroBlogResponse>> getConversation(@Query("id") String id);
 
     @GET("posts/check")
     Call<MicroBlogResponse> getNewPostsSince(@Query("since_id") long since_id);

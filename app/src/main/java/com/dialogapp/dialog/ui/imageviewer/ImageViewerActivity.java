@@ -11,12 +11,12 @@ public class ImageViewerActivity extends BaseInjectableActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_container);
+        setContentView(R.layout.activity_blank);
 
         String url = getIntent().getStringExtra(EXTRA_IMAGE_URL);
 
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.container_common, ImageViewerFragment.newInstance(url))
+                .replace(R.id.container_blank, ImageViewerFragment.newInstance(url))
                 .commit();
     }
 }

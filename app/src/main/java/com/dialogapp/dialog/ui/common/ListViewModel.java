@@ -19,6 +19,8 @@ public class ListViewModel extends BaseListViewModel {
                     return postsRepository.loadMentions();
                 case FAVORITES:
                     return postsRepository.loadFavorites();
+                case CONVERSATION:
+                    return postsRepository.loadConversation(arg);
                 default:
                     return AbsentLiveData.create();
             }

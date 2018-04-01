@@ -3,6 +3,7 @@ package com.dialogapp.dialog.di;
 import android.app.Application;
 
 import com.dialogapp.dialog.MicroblogApp;
+import com.dialogapp.dialog.di.viewmodule.ConversationActivityModule;
 import com.dialogapp.dialog.di.viewmodule.FavoritesActivityModule;
 import com.dialogapp.dialog.di.viewmodule.ImageViewerActivityModule;
 import com.dialogapp.dialog.di.viewmodule.LoginActivityModule;
@@ -23,6 +24,7 @@ import dagger.android.support.AndroidSupportInjectionModule;
         FavoritesActivityModule.class,
         ProfileActivityModule.class,
         ImageViewerActivityModule.class,
+        ConversationActivityModule.class,
         MainActivityModule.class
 })
 public interface AppComponent {

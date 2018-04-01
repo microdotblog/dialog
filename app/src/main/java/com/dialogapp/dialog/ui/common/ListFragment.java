@@ -20,18 +20,22 @@ public class ListFragment extends BaseListFragment implements Injectable {
     public static final int TIMELINE = 0;
     public static final int MENTIONS = 1;
     public static final int FAVORITES = 2;
-    private static String EXTRA_FRAGMENT = ListFragment.class.getName() + ".EXTRA_FRAGMENT";
+    public static final int CONVERSATION = 3;
+    private static final String EXTRA_ARG = ListFragment.class.getName() + ".EXTRA_ARG";
+    private static final String EXTRA_FRAGMENT = ListFragment.class.getName() + ".EXTRA_FRAGMENT";
 
     private int fragment;
+    private String postId;
     private ListViewModel viewModel;
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
 
-    public static Fragment newInstance(@FragmentTypeDef int fragment) {
+    public static Fragment newInstance(@FragmentTypeDef int fragment, String arg) {
         ListFragment listFragment = new ListFragment();
         Bundle bundle = new Bundle();
         bundle.putInt(EXTRA_FRAGMENT, fragment);
+        bundle.putString(EXTRA_ARG, arg);
         listFragment.setArguments(bundle);
         return listFragment;
     }
@@ -41,6 +45,7 @@ public class ListFragment extends BaseListFragment implements Injectable {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             fragment = getArguments().getInt(EXTRA_FRAGMENT);
+            postId = getArguments().getString(EXTRA_ARG);
         }
     }
 
@@ -56,6 +61,9 @@ public class ListFragment extends BaseListFragment implements Injectable {
                 break;
             case FAVORITES:
                 viewModel.setView(BaseListViewModel.FAVORITES, null);
+                break;
+            case CONVERSATION:
+                viewModel.setView(BaseListViewModel.CONVERSATION, postId);
         }
         viewModel.getPosts().observe(this, listResource -> {
             if (listResource != null) {
@@ -70,7 +78,7 @@ public class ListFragment extends BaseListFragment implements Injectable {
     }
 
     @Retention(RetentionPolicy.SOURCE)
-    @IntDef({TIMELINE, MENTIONS, FAVORITES})
+    @IntDef({TIMELINE, MENTIONS, FAVORITES, CONVERSATION})
     @interface FragmentTypeDef {
     }
 }
