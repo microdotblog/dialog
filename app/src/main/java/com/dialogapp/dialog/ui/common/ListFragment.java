@@ -23,6 +23,7 @@ public class ListFragment extends BaseListFragment implements Injectable {
     private static String EXTRA_FRAGMENT = ListFragment.class.getName() + ".EXTRA_FRAGMENT";
 
     private int fragment;
+    private ListViewModel viewModel;
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
@@ -56,6 +57,16 @@ public class ListFragment extends BaseListFragment implements Injectable {
             case FAVORITES:
                 viewModel.setView(BaseListViewModel.FAVORITES, null);
         }
+        viewModel.getPosts().observe(this, listResource -> {
+            if (listResource != null) {
+                setData(listResource.status, listResource.data, listResource.message);
+            }
+        });
+    }
+
+    @Override
+    protected void onViewRefreshed() {
+        viewModel.refresh();
     }
 
     @Retention(RetentionPolicy.SOURCE)

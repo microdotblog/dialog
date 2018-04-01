@@ -34,7 +34,6 @@ import butterknife.Unbinder;
 public abstract class BaseListFragment extends Fragment {
     protected Unbinder unbinder;
     protected BaseRecyclerAdapter adapter;
-    protected BaseListViewModel viewModel;
     protected FragmentEventListener listener;
 
     @BindView(R.id.recycler_list)
@@ -86,11 +85,6 @@ public abstract class BaseListFragment extends Fragment {
 
         showLoadingProgress();
         setViewModel();
-        viewModel.getPosts().observe(this, listResource -> {
-            if (listResource != null) {
-                setData(listResource.status, listResource.data, listResource.message);
-            }
-        });
     }
 
     @Override
@@ -135,7 +129,7 @@ public abstract class BaseListFragment extends Fragment {
 
     protected void refresh() {
         showLoadingProgress();
-        viewModel.refresh();
+        onViewRefreshed();
     }
 
     protected void setSwipeListener() {
@@ -145,6 +139,8 @@ public abstract class BaseListFragment extends Fragment {
     }
 
     protected abstract void setViewModel();
+
+    protected abstract void onViewRefreshed();
 
     private void swipeSetRefresh(boolean value) {
         if (swipeRefreshLayout != null) {
