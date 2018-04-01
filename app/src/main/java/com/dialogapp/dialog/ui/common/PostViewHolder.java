@@ -3,6 +3,7 @@ package com.dialogapp.dialog.ui.common;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.Spannable;
 import android.text.method.LinkMovementMethod;
@@ -26,9 +27,10 @@ import static android.text.Html.FROM_HTML_MODE_LEGACY;
 import static android.util.TypedValue.COMPLEX_UNIT_DIP;
 import static android.util.TypedValue.applyDimension;
 
-public class PostViewHolder extends BaseViewHolder<Item> {
+public class PostViewHolder extends RecyclerView.ViewHolder {
     private Context context;
     private Pattern pattern;
+    private RequestManager glide;
 
     @BindView(R.id.image_thumbnail)
     ImageView thumbnail;
@@ -43,15 +45,15 @@ public class PostViewHolder extends BaseViewHolder<Item> {
     TextView time;
 
     public PostViewHolder(View itemView, RequestManager glide) {
-        super(itemView, glide);
+        super(itemView);
+        this.glide = glide;
         ButterKnife.bind(this, itemView);
 
         this.context = this.itemView.getContext();
         this.pattern = Pattern.compile("<img");
     }
 
-    @Override
-    public void onBind(Item item, int position) {
+    public void onBind(Item item) {
         thumbnail.setOnClickListener(view -> {
             Intent intent = new Intent(context, ProfileActivity.class);
             intent.putExtra(ProfileActivity.EXTRA_USERNAME, item.author.microblog.username);

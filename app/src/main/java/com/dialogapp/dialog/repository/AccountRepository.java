@@ -3,7 +3,6 @@ package com.dialogapp.dialog.repository;
 import android.arch.lifecycle.LiveData;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.annotation.VisibleForTesting;
 
 import com.dialogapp.dialog.AppExecutors;
 import com.dialogapp.dialog.api.ApiResponse;
@@ -11,7 +10,6 @@ import com.dialogapp.dialog.api.MicroblogService;
 import com.dialogapp.dialog.db.AccountDao;
 import com.dialogapp.dialog.model.AccountResponse;
 import com.dialogapp.dialog.model.VerifiedAccount;
-import com.dialogapp.dialog.util.CacheLiveData;
 import com.dialogapp.dialog.util.Resource;
 
 import javax.inject.Inject;
@@ -24,9 +22,6 @@ public class AccountRepository {
     private final MicroblogService microblogService;
     private final AccountDao accountDao;
 
-    @VisibleForTesting
-    VerifiedAccount verifiedAccountData;
-
     @Inject
     public AccountRepository(AppExecutors appExecutors, AccountDao accountDao, MicroblogService microblogService) {
         this.appExecutors = appExecutors;
@@ -36,6 +31,8 @@ public class AccountRepository {
 
     public LiveData<Resource<VerifiedAccount>> verifyToken(String token) {
         return new NetworkBoundResource<VerifiedAccount, VerifiedAccount>(appExecutors) {
+            VerifiedAccount verifiedAccountData;
+
             @Override
             protected boolean shouldFetch(@Nullable VerifiedAccount dbData) {
                 // Always fetch
@@ -57,7 +54,13 @@ public class AccountRepository {
             @NonNull
             @Override
             protected LiveData<VerifiedAccount> loadFromDb() {
-                return CacheLiveData.getAsLiveData(verifiedAccountData);
+                return new LiveData<VerifiedAccount>() {
+                    @Override
+                    protected void onActive() {
+                        super.onActive();
+                        setValue(verifiedAccountData);
+                    }
+                };
             }
         }.asLiveData();
     }

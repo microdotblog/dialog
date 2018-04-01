@@ -10,7 +10,6 @@ import android.support.v4.app.FragmentManager;
 import com.dialogapp.dialog.MicroblogApp;
 
 import dagger.android.AndroidInjection;
-import dagger.android.HasActivityInjector;
 import dagger.android.support.AndroidSupportInjection;
 import dagger.android.support.HasSupportFragmentInjector;
 
@@ -59,8 +58,8 @@ public class AppInjector {
     }
 
     private static void handleActivity(Activity activity) {
-        // Inject plain activities and fragment activities
-        if (activity instanceof HasActivityInjector || activity instanceof HasSupportFragmentInjector)
+        // Inject fragment activities
+        if (activity instanceof HasSupportFragmentInjector)
             AndroidInjection.inject(activity);
 
         // Inject individual fragments

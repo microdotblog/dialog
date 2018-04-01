@@ -7,11 +7,9 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.ImageView;
@@ -22,7 +20,8 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestOptions;
 import com.dialogapp.dialog.R;
 import com.dialogapp.dialog.api.ServiceInterceptor;
-import com.dialogapp.dialog.ui.common.BaseListFragment;
+import com.dialogapp.dialog.ui.base.BaseInjectableActivity;
+import com.dialogapp.dialog.ui.base.BaseListFragment;
 import com.dialogapp.dialog.ui.favorites.FavoritesActivity;
 import com.dialogapp.dialog.ui.profilescreen.ProfileActivity;
 
@@ -30,21 +29,16 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import dagger.android.DispatchingAndroidInjector;
-import dagger.android.support.HasSupportFragmentInjector;
 
 import static com.dialogapp.dialog.ui.LauncherActivity.EXTRA_AVATARURL;
 import static com.dialogapp.dialog.ui.LauncherActivity.EXTRA_FULLNAME;
 import static com.dialogapp.dialog.ui.LauncherActivity.EXTRA_TOKEN;
 import static com.dialogapp.dialog.ui.LauncherActivity.EXTRA_USERNAME;
 
-public class MainActivity extends AppCompatActivity implements BaseListFragment.FragmentEventListener,
-        NavigationView.OnNavigationItemSelectedListener, HasSupportFragmentInjector {
+public class MainActivity extends BaseInjectableActivity implements BaseListFragment.FragmentEventListener,
+        NavigationView.OnNavigationItemSelectedListener {
 
     private Snackbar errorBar;
-
-    @Inject
-    DispatchingAndroidInjector<Fragment> dispatchingAndroidInjector;
 
     @Inject
     ServiceInterceptor serviceInterceptor;
@@ -97,11 +91,6 @@ public class MainActivity extends AppCompatActivity implements BaseListFragment.
         fullname.setText(saved_fullname);
 
         setupViewpager();
-    }
-
-    @Override
-    public DispatchingAndroidInjector<Fragment> supportFragmentInjector() {
-        return dispatchingAndroidInjector;
     }
 
     @Override
