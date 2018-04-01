@@ -6,7 +6,7 @@ import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
 
 @Module
-public abstract class MainActivityFragmentsModule {
+abstract class ListFragmentModule {
     @ContributesAndroidInjector
     abstract ListFragment contributesListFragment();
 }
