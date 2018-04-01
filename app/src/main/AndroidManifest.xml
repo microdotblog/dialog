@@ -27,8 +27,7 @@
         <activity android:name=".ui.mainscreen.MainActivity" />
         <activity
             android:name=".ui.favorites.FavoritesActivity"
-            android:label="@string/activity_favorites"
-            android:theme="@style/AppTheme" />
+            android:label="@string/activity_favorites" />
         <activity android:name=".ui.profilescreen.ProfileActivity" />
         <activity
             android:name=".ui.imageviewer.ImageViewerActivity"
