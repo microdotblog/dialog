@@ -17,6 +17,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.dialogapp.dialog.R;
 import com.dialogapp.dialog.model.MicroBlogResponse;
+import com.dialogapp.dialog.ui.base.BaseListFragment;
 
 import javax.inject.Inject;
 
@@ -25,7 +26,7 @@ import butterknife.ButterKnife;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.support.HasSupportFragmentInjector;
 
-public class ProfileActivity extends AppCompatActivity implements ProfileFragment.ProfileFragmentEventListener,
+public class ProfileActivity extends AppCompatActivity implements BaseListFragment.FragmentEventListener<MicroBlogResponse>,
         HasSupportFragmentInjector {
     public static final String EXTRA_USERNAME = ProfileActivity.class.getName() + ".EXTRA_USERNAME";
 
@@ -95,18 +96,18 @@ public class ProfileActivity extends AppCompatActivity implements ProfileFragmen
 
     @Override
     @SuppressWarnings("ConstantConditions")
-    public void onLoadSuccess(MicroBlogResponse microBlogResponse) {
-        Glide.with(this).load(microBlogResponse.author.avatar)
+    public void onLoadSuccess(MicroBlogResponse data) {
+        Glide.with(this).load(data.author.avatar)
                 .apply(new RequestOptions().circleCrop())
                 .into(avatar);
-        fullname.setText(microBlogResponse.author.name);
-        if (!microBlogResponse.author.url.isEmpty()) {
+        fullname.setText(data.author.name);
+        if (!data.author.url.isEmpty()) {
             website.setVisibility(View.VISIBLE);
-            website.setText(microBlogResponse.author.url);
+            website.setText(data.author.url);
         }
-        if (!microBlogResponse.microblog.bio.isEmpty()) {
+        if (!data.microblog.bio.isEmpty()) {
             about.setVisibility(View.VISIBLE);
-            about.setText(microBlogResponse.microblog.bio);
+            about.setText(data.microblog.bio);
         }
     }
 

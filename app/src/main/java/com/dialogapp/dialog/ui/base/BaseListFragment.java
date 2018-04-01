@@ -148,7 +148,10 @@ public abstract class BaseListFragment extends Fragment {
         }
     }
 
-    public interface FragmentEventListener {
+    public interface FragmentEventListener<T> {
+        default void onLoadSuccess(T data) {
+        }
+
         void onLoadError(String message);
     }
 }
