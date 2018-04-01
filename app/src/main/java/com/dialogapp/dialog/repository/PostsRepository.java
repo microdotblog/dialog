@@ -42,7 +42,7 @@ public class PostsRepository {
         this.microblogService = microblogService;
     }
 
-    public LiveData<Resource<List<Item>>> loadTimeline(boolean refresh) {
+    public LiveData<Resource<List<Item>>> loadTimeline() {
         return new NetworkBoundResource<List<Item>, MicroBlogResponse>(appExecutors) {
             @Override
             protected boolean shouldFetch(@Nullable List<Item> dbData) {
@@ -50,7 +50,7 @@ public class PostsRepository {
                     timelineTopPostId = Long.toString(dbData.get(0).id);
                 }
 
-                return refresh || shouldRefresh(lastTimelineRequestTimestamp) || dbData == null || dbData.isEmpty();
+                return shouldRefresh(lastTimelineRequestTimestamp) || dbData == null || dbData.isEmpty();
             }
 
             @NonNull
@@ -82,7 +82,7 @@ public class PostsRepository {
         }.asLiveData();
     }
 
-    public LiveData<Resource<List<Item>>> loadMentions(boolean refresh) {
+    public LiveData<Resource<List<Item>>> loadMentions() {
         return new NetworkBoundResource<List<Item>, MicroBlogResponse>(appExecutors) {
             @Override
             protected boolean shouldFetch(@Nullable List<Item> dbData) {
@@ -90,7 +90,7 @@ public class PostsRepository {
                     mentionsTopPostId = Long.toString(dbData.get(0).id);
                 }
 
-                return refresh || shouldRefresh(lastMentionsRequestTimestamp) || dbData == null || dbData.isEmpty();
+                return shouldRefresh(lastMentionsRequestTimestamp) || dbData == null || dbData.isEmpty();
             }
 
             @NonNull
@@ -122,7 +122,7 @@ public class PostsRepository {
         }.asLiveData();
     }
 
-    public LiveData<Resource<List<Item>>> loadFavorites(boolean refresh) {
+    public LiveData<Resource<List<Item>>> loadFavorites() {
         return new NetworkBoundResource<List<Item>, MicroBlogResponse>(appExecutors) {
             @Override
             protected boolean shouldFetch(@Nullable List<Item> dbData) {
@@ -145,8 +145,7 @@ public class PostsRepository {
 
             @Override
             protected void saveCallResult(@NonNull MicroBlogResponse response) {
-                if (refresh)
-                    postsDao.deletePosts(Endpoints.FAVORITES);
+                postsDao.deletePosts(Endpoints.FAVORITES);
                 postsDao.insertPosts(response.items);
             }
 

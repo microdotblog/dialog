@@ -43,18 +43,16 @@ public class ListFragment extends BaseListFragment implements Injectable {
 
     @Override
     protected void setViewModel() {
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(ListViewModel.class);
         switch (fragment) {
             case TIMELINE:
-                viewModel = ViewModelProviders.of(this, viewModelFactory).get(TimelineViewModel.class);
-                viewModel.refresh();
+                viewModel.setView(BaseListViewModel.TIMELINE, null);
                 break;
             case MENTIONS:
-                viewModel = ViewModelProviders.of(this, viewModelFactory).get(MentionsViewModel.class);
-                viewModel.refresh();
+                viewModel.setView(BaseListViewModel.MENTIONS, null);
                 break;
             case FAVORITES:
-                viewModel = ViewModelProviders.of(this, viewModelFactory).get(FavoritesViewModel.class);
-                viewModel.refresh();
+                viewModel.setView(BaseListViewModel.FAVORITES, null);
         }
     }
 
