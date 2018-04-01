@@ -1,4 +1,4 @@
-package com.dialogapp.dialog.ui.common;
+package com.dialogapp.dialog.ui.base;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -17,6 +17,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.dialogapp.dialog.R;
 import com.dialogapp.dialog.model.Item;
+import com.dialogapp.dialog.ui.common.PostViewHolder;
 import com.dialogapp.dialog.util.InsetDividerDecoration;
 import com.dialogapp.dialog.util.Status;
 

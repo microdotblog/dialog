@@ -3,6 +3,7 @@ package com.dialogapp.dialog.ui.common;
 import android.arch.lifecycle.Transformations;
 
 import com.dialogapp.dialog.repository.PostsRepository;
+import com.dialogapp.dialog.ui.base.BaseListViewModel;
 import com.dialogapp.dialog.util.AbsentLiveData;
 
 import javax.inject.Inject;

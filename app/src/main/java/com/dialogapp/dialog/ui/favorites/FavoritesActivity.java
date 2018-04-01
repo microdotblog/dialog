@@ -8,7 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
 import com.dialogapp.dialog.R;
-import com.dialogapp.dialog.ui.common.BaseListFragment;
+import com.dialogapp.dialog.ui.base.BaseListFragment;
 import com.dialogapp.dialog.ui.common.ListFragment;
 
 import javax.inject.Inject;

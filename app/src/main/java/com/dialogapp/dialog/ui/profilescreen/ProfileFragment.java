@@ -20,7 +20,7 @@ import com.dialogapp.dialog.R;
 import com.dialogapp.dialog.di.Injectable;
 import com.dialogapp.dialog.model.Item;
 import com.dialogapp.dialog.model.MicroBlogResponse;
-import com.dialogapp.dialog.ui.common.BaseRecyclerAdapter;
+import com.dialogapp.dialog.ui.base.BaseRecyclerAdapter;
 import com.dialogapp.dialog.util.InsetDividerDecoration;
 import com.dialogapp.dialog.util.Status;
 

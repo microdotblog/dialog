@@ -1,4 +1,4 @@
-package com.dialogapp.dialog.ui.common;
+package com.dialogapp.dialog.ui.base;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
@@ -22,9 +22,8 @@ public abstract class BaseListViewModel extends ViewModel {
     public static final int FAVORITES = 2;
 
     protected MutableLiveData<Integer> view = new MutableLiveData<>();
-
-    LiveData<Resource<List<Item>>> posts;
-    String arg;
+    protected LiveData<Resource<List<Item>>> posts;
+    protected String arg;
 
     public LiveData<Resource<List<Item>>> getPosts() {
         return posts;

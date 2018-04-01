@@ -1,4 +1,4 @@
-package com.dialogapp.dialog.ui.common;
+package com.dialogapp.dialog.ui.base;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -8,13 +8,13 @@ import android.view.ViewGroup;
 import com.bumptech.glide.RequestManager;
 import com.dialogapp.dialog.R;
 import com.dialogapp.dialog.model.Item;
+import com.dialogapp.dialog.ui.common.PostViewHolder;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * RecyclerView Adapter base class. Handles basic common logic.
- *
  */
 public class BaseRecyclerAdapter extends RecyclerView.Adapter<PostViewHolder> {
 

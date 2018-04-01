@@ -22,7 +22,7 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestOptions;
 import com.dialogapp.dialog.R;
 import com.dialogapp.dialog.api.ServiceInterceptor;
-import com.dialogapp.dialog.ui.common.BaseListFragment;
+import com.dialogapp.dialog.ui.base.BaseListFragment;
 import com.dialogapp.dialog.ui.favorites.FavoritesActivity;
 import com.dialogapp.dialog.ui.profilescreen.ProfileActivity;
 

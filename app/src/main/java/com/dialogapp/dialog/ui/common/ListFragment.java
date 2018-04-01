@@ -8,6 +8,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 
 import com.dialogapp.dialog.di.Injectable;
+import com.dialogapp.dialog.ui.base.BaseListFragment;
+import com.dialogapp.dialog.ui.base.BaseListViewModel;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
