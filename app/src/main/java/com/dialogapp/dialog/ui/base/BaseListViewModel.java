@@ -30,8 +30,8 @@ public abstract class BaseListViewModel extends ViewModel {
     }
 
     public void setView(@ViewTypeDef Integer view, String arg) {
-        this.view.setValue(view);
         this.arg = arg;
+        this.view.setValue(view);
     }
 
     public void refresh() {
