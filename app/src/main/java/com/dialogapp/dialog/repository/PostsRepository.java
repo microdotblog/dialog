@@ -224,6 +224,43 @@ public class PostsRepository {
         }.asLiveData();
     }
 
+    public LiveData<Resource<List<Item>>> loadDiscover(String topic) {
+        return new NetworkBoundResource<List<Item>, MicroBlogResponse>(appExecutors) {
+            List<Item> responseData;
+
+            @Override
+            protected boolean shouldFetch(@Nullable List<Item> dbData) {
+                return true;
+            }
+
+            @NonNull
+            @Override
+            protected LiveData<ApiResponse<MicroBlogResponse>> createCall() {
+                if (topic == null)
+                    return microblogService.getFeaturedPosts();
+                else
+                    return microblogService.getFeaturedPosts(topic);
+            }
+
+            @Override
+            protected void saveCallResult(@NonNull MicroBlogResponse response) {
+                responseData = response.items;
+            }
+
+            @NonNull
+            @Override
+            protected LiveData<List<Item>> loadFromDb() {
+                return new LiveData<List<Item>>() {
+                    @Override
+                    protected void onActive() {
+                        super.onActive();
+                        setValue(responseData);
+                    }
+                };
+            }
+        }.asLiveData();
+    }
+
     private boolean shouldRefresh(long lastRequestTimestamp) {
         return (System.currentTimeMillis() - lastRequestTimestamp) >= THRESHOLDMILLIS;
     }

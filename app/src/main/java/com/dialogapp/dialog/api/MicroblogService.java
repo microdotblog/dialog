@@ -38,7 +38,10 @@ public interface MicroblogService {
     LiveData<ApiResponse<MicroBlogResponse>> getFavorites();
 
     @GET("posts/discover")
-    Call<MicroBlogResponse> getFeaturedPosts();
+    LiveData<ApiResponse<MicroBlogResponse>> getFeaturedPosts();
+
+    @GET("posts/discover/{topic}")
+    LiveData<ApiResponse<MicroBlogResponse>> getFeaturedPosts(@Path("topic") String topic);
 
     @GET("posts/{username}")
     LiveData<ApiResponse<MicroBlogResponse>> getPostsByUsername(@Path("username") String username);

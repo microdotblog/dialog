@@ -21,6 +21,8 @@ public class ListFragment extends BaseListFragment implements Injectable {
     public static final int MENTIONS = 1;
     public static final int FAVORITES = 2;
     public static final int CONVERSATION = 3;
+    public static final int DISCOVER = 4;
+
     private static final String EXTRA_ARG = ListFragment.class.getName() + ".EXTRA_ARG";
     private static final String EXTRA_FRAGMENT = ListFragment.class.getName() + ".EXTRA_FRAGMENT";
 
@@ -64,6 +66,9 @@ public class ListFragment extends BaseListFragment implements Injectable {
                 break;
             case CONVERSATION:
                 viewModel.setView(BaseListViewModel.CONVERSATION, postId);
+                break;
+            case DISCOVER:
+                viewModel.setView(BaseListViewModel.DISCOVER, null);
         }
         viewModel.getPosts().observe(this, listResource -> {
             if (listResource != null) {
@@ -78,7 +83,7 @@ public class ListFragment extends BaseListFragment implements Injectable {
     }
 
     @Retention(RetentionPolicy.SOURCE)
-    @IntDef({TIMELINE, MENTIONS, FAVORITES, CONVERSATION})
+    @IntDef({TIMELINE, MENTIONS, FAVORITES, CONVERSATION, DISCOVER})
     @interface FragmentTypeDef {
     }
 }

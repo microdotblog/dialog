@@ -1,31 +1,18 @@
 package com.dialogapp.dialog.ui.mainscreen;
 
-import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.style.ImageSpan;
 
-import com.dialogapp.dialog.R;
 import com.dialogapp.dialog.ui.common.ListFragment;
 
 public class MainFragmentPagerAdapter extends FragmentPagerAdapter {
 
-    private final int PAGE_COUNT = 2;
-    private final String[] TAB_TITLES = new String[]{"TIMELINE", "MENTIONS"};
-    private final int[] ICONS = new int[]{
-            R.drawable.tab_ic_timeline_white_24px,
-            R.drawable.tab_ic_mentions_white_24px
-    };
-    private Context context;
+    private final String[] TAB_TITLES = new String[]{"TIMELINE", "MENTIONS", "DISCOVER"};
 
-    public MainFragmentPagerAdapter(FragmentManager fm, Context context) {
+    public MainFragmentPagerAdapter(FragmentManager fm) {
         super(fm);
-        this.context = context;
     }
 
     @Override
@@ -35,6 +22,8 @@ public class MainFragmentPagerAdapter extends FragmentPagerAdapter {
                 return ListFragment.newInstance(ListFragment.TIMELINE, null);
             case 1:
                 return ListFragment.newInstance(ListFragment.MENTIONS, null);
+            case 2:
+                return ListFragment.newInstance(ListFragment.DISCOVER, null);
             default:
                 return null;
         }
@@ -42,17 +31,12 @@ public class MainFragmentPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return PAGE_COUNT;
+        return 3;
     }
 
     @Nullable
     @Override
     public CharSequence getPageTitle(int position) {
-        Drawable image = context.getDrawable(ICONS[position]);
-        image.setBounds(0, 0, image.getIntrinsicWidth(), image.getIntrinsicHeight());
-        SpannableString sb = new SpannableString(" \n" + TAB_TITLES[position]);
-        ImageSpan imageSpan = new ImageSpan(image, ImageSpan.ALIGN_BOTTOM);
-        sb.setSpan(imageSpan, 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        return sb;
+        return TAB_TITLES[position];
     }
 }

@@ -121,8 +121,6 @@ public class MainActivity extends BaseInjectableActivity implements BaseListFrag
             case R.id.menu_item_fav:
                 intent = new Intent(this, FavoritesActivity.class);
                 break;
-            case R.id.menu_item_discover:
-                return false;
             case R.id.menu_item_settings:
                 return false;
         }
@@ -135,9 +133,13 @@ public class MainActivity extends BaseInjectableActivity implements BaseListFrag
 
     private void setupViewpager() {
         ViewPager viewPager = findViewById(R.id.viewpager_main);
-        viewPager.setAdapter(new MainFragmentPagerAdapter(getSupportFragmentManager(), this.getApplicationContext()));
+        viewPager.setOffscreenPageLimit(2);
+        viewPager.setAdapter(new MainFragmentPagerAdapter(getSupportFragmentManager()));
 
         TabLayout tabLayout = findViewById(R.id.tabLayout);
         tabLayout.setupWithViewPager(viewPager);
+        tabLayout.getTabAt(0).setIcon(R.drawable.tab_ic_timeline_white_24px);
+        tabLayout.getTabAt(1).setIcon(R.drawable.tab_ic_mentions_white_24px);
+        tabLayout.getTabAt(2).setIcon(R.drawable.tab_ic_discover_white_24px);
     }
 }
