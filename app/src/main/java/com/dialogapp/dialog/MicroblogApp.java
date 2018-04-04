@@ -5,6 +5,7 @@ import android.app.Application;
 
 import com.dialogapp.dialog.di.AppInjector;
 import com.orhanobut.hawk.Hawk;
+import com.orhanobut.hawk.NoEncryption;
 import com.squareup.leakcanary.LeakCanary;
 
 import javax.inject.Inject;
@@ -29,7 +30,9 @@ public class MicroblogApp extends Application implements HasActivityInjector {
         }
         LeakCanary.install(this);
 
-        Hawk.init(this).build();
+        Hawk.init(this)
+                .setEncryption(new NoEncryption())
+                .build();
 
         Timber.plant(new TimberImplementation());
         AppInjector.init(this);
