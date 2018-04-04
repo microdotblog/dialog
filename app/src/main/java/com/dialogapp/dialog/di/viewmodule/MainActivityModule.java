@@ -1,6 +1,6 @@
 package com.dialogapp.dialog.di.viewmodule;
 
-import com.dialogapp.dialog.ui.mainscreen.MainActivity;
+import com.dialogapp.dialog.ui.MainActivity;
 
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;

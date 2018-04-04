@@ -1,4 +1,4 @@
-package com.dialogapp.dialog.ui.mainscreen;
+package com.dialogapp.dialog.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -30,13 +30,12 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.dialogapp.dialog.LauncherActivity.EXTRA_AVATARURL;
-import static com.dialogapp.dialog.LauncherActivity.EXTRA_FULLNAME;
-import static com.dialogapp.dialog.LauncherActivity.EXTRA_TOKEN;
-import static com.dialogapp.dialog.LauncherActivity.EXTRA_USERNAME;
-
 public class MainActivity extends BaseInjectableActivity implements BaseListFragment.FragmentEventListener,
         NavigationView.OnNavigationItemSelectedListener {
+    public static final String EXTRA_USERNAME = MainActivity.class.getName() + ".EXTRA_USERNAME";
+    public static final String EXTRA_FULLNAME = MainActivity.class.getName() + ".EXTRA_FULLNAME";
+    public static final String EXTRA_AVATARURL = MainActivity.class.getName() + ".EXTRA_AVATARURL";
+    public static final String EXTRA_TOKEN = MainActivity.class.getName() + ".EXTRA_TOKEN";
 
     private Snackbar errorBar;
 

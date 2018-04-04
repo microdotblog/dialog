@@ -24,7 +24,7 @@
         <activity
             android:name=".ui.loginscreen.LoginActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".ui.mainscreen.MainActivity" />
+        <activity android:name=".ui.MainActivity" />
         <activity
             android:name=".ui.favorites.FavoritesActivity"
             android:label="@string/activity_favorites" />

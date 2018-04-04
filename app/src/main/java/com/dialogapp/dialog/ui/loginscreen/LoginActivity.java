@@ -7,13 +7,13 @@ import android.support.design.widget.Snackbar;
 import android.widget.Toast;
 
 import com.dialogapp.dialog.R;
+import com.dialogapp.dialog.ui.MainActivity;
 import com.dialogapp.dialog.ui.base.BaseInjectableActivity;
-import com.dialogapp.dialog.ui.mainscreen.MainActivity;
 
-import static com.dialogapp.dialog.LauncherActivity.EXTRA_AVATARURL;
-import static com.dialogapp.dialog.LauncherActivity.EXTRA_FULLNAME;
-import static com.dialogapp.dialog.LauncherActivity.EXTRA_TOKEN;
-import static com.dialogapp.dialog.LauncherActivity.EXTRA_USERNAME;
+import static com.dialogapp.dialog.ui.MainActivity.EXTRA_AVATARURL;
+import static com.dialogapp.dialog.ui.MainActivity.EXTRA_FULLNAME;
+import static com.dialogapp.dialog.ui.MainActivity.EXTRA_TOKEN;
+import static com.dialogapp.dialog.ui.MainActivity.EXTRA_USERNAME;
 
 public class LoginActivity extends BaseInjectableActivity implements LoginFragment.LoginFragmentEventListener {
     private CoordinatorLayout coordinatorLayout;

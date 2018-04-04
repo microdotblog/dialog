@@ -4,16 +4,16 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
+import com.dialogapp.dialog.ui.MainActivity;
 import com.dialogapp.dialog.ui.loginscreen.LoginActivity;
-import com.dialogapp.dialog.ui.mainscreen.MainActivity;
 import com.orhanobut.hawk.Hawk;
 
-public class LauncherActivity extends AppCompatActivity {
+import static com.dialogapp.dialog.ui.MainActivity.EXTRA_AVATARURL;
+import static com.dialogapp.dialog.ui.MainActivity.EXTRA_FULLNAME;
+import static com.dialogapp.dialog.ui.MainActivity.EXTRA_TOKEN;
+import static com.dialogapp.dialog.ui.MainActivity.EXTRA_USERNAME;
 
-    public static final String EXTRA_USERNAME = LauncherActivity.class.getName() + ".EXTRA_USERNAME";
-    public static final String EXTRA_FULLNAME = LauncherActivity.class.getName() + ".EXTRA_FULLNAME";
-    public static final String EXTRA_AVATARURL = LauncherActivity.class.getName() + ".EXTRA_AVATARURL";
-    public static final String EXTRA_TOKEN = LauncherActivity.class.getName() + ".EXTRA_TOKEN";
+public class LauncherActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
