@@ -1,10 +1,9 @@
-package com.dialogapp.dialog.ui;
+package com.dialogapp.dialog;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-import com.dialogapp.dialog.R;
 import com.dialogapp.dialog.ui.loginscreen.LoginActivity;
 import com.dialogapp.dialog.ui.mainscreen.MainActivity;
 import com.orhanobut.hawk.Hawk;

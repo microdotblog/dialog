@@ -30,10 +30,10 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.dialogapp.dialog.ui.LauncherActivity.EXTRA_AVATARURL;
-import static com.dialogapp.dialog.ui.LauncherActivity.EXTRA_FULLNAME;
-import static com.dialogapp.dialog.ui.LauncherActivity.EXTRA_TOKEN;
-import static com.dialogapp.dialog.ui.LauncherActivity.EXTRA_USERNAME;
+import static com.dialogapp.dialog.LauncherActivity.EXTRA_AVATARURL;
+import static com.dialogapp.dialog.LauncherActivity.EXTRA_FULLNAME;
+import static com.dialogapp.dialog.LauncherActivity.EXTRA_TOKEN;
+import static com.dialogapp.dialog.LauncherActivity.EXTRA_USERNAME;
 
 public class MainActivity extends BaseInjectableActivity implements BaseListFragment.FragmentEventListener,
         NavigationView.OnNavigationItemSelectedListener {
