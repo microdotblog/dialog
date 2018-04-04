@@ -51,6 +51,7 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:visibility="gone"
                 android:autoLink="web"
+                android:textColorLink="@color/blue700"
                 tools:text="@tools:sample/lorem/random" />
 
             <TextView

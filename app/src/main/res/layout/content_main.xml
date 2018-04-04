@@ -19,7 +19,7 @@
             android:background="?attr/colorPrimaryDark"
             android:elevation="4dp"
             android:minHeight="?attr/actionBarSize"
-            app:layout_scrollFlags="scroll|enterAlways|snap" />
+            app:layout_scrollFlags="scroll|enterAlwaysCollapsed|snap" />
 
         <android.support.design.widget.TabLayout
             android:id="@+id/tabLayout"

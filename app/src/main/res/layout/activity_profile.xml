@@ -19,7 +19,7 @@
             android:elevation="4dp"
             android:theme="@style/AppTheme.AppBarOverlay"
             app:layout_collapseMode="pin"
-            app:layout_scrollFlags="scroll|enterAlways" />
+            app:layout_scrollFlags="scroll" />
 
         <include
             android:id="@+id/header_card_profile"

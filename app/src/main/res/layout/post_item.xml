@@ -42,8 +42,7 @@
             android:layout_below="@id/text_username"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             android:textColorLink="@color/blue700"
-            android:textIsSelectable="true"
-            tools:text="@tools:sample/lorem/random" />
+            tools:text="@tools:sample/lorem" />
 
         <TextView
             android:id="@+id/text_time"
