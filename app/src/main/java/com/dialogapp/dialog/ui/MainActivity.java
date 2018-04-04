@@ -1,5 +1,7 @@
 package com.dialogapp.dialog.ui;
 
+import android.arch.lifecycle.ViewModelProvider;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -14,6 +16,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
@@ -23,7 +26,11 @@ import com.dialogapp.dialog.api.ServiceInterceptor;
 import com.dialogapp.dialog.ui.base.BaseInjectableActivity;
 import com.dialogapp.dialog.ui.base.BaseListFragment;
 import com.dialogapp.dialog.ui.favorites.FavoritesActivity;
+import com.dialogapp.dialog.ui.loginscreen.LoginActivity;
+import com.dialogapp.dialog.ui.loginscreen.LoginViewModel;
 import com.dialogapp.dialog.ui.profilescreen.ProfileActivity;
+import com.dialogapp.dialog.util.Status;
+import com.orhanobut.hawk.Hawk;
 
 import javax.inject.Inject;
 
@@ -41,6 +48,9 @@ public class MainActivity extends BaseInjectableActivity implements BaseListFrag
 
     @Inject
     ServiceInterceptor serviceInterceptor;
+
+    @Inject
+    ViewModelProvider.Factory viewModelFactory;
 
     @BindView(R.id.nav_view)
     NavigationView navigationView;
@@ -73,6 +83,21 @@ public class MainActivity extends BaseInjectableActivity implements BaseListFrag
         String saved_fullname = intent.getStringExtra(EXTRA_FULLNAME);
         String saved_avatarUrl = intent.getStringExtra(EXTRA_AVATARURL);
 
+        LoginViewModel loginViewModel = ViewModelProviders.of(this, viewModelFactory).get(LoginViewModel.class);
+        loginViewModel.setToken(saved_token);
+        loginViewModel.verifyToken().observe(this, verifiedAccountResource -> {
+            if (verifiedAccountResource != null) {
+                if (verifiedAccountResource.status == Status.ERROR) {
+                    Toast.makeText(this, R.string.login_verification_failed, Toast.LENGTH_SHORT).show();
+                } else if (verifiedAccountResource.status == Status.SUCCESS && verifiedAccountResource.data != null) {
+                    if (verifiedAccountResource.data.error != null) {
+                        Toast.makeText(this, R.string.login_invalid_token, Toast.LENGTH_LONG).show();
+                        startLoginActivity();
+                    }
+                }
+            }
+        });
+
         serviceInterceptor.setAuthToken(saved_token);
 
         navigationView.setNavigationItemSelectedListener(this);
@@ -80,6 +105,7 @@ public class MainActivity extends BaseInjectableActivity implements BaseListFrag
         ImageView imageView = navigationView.getHeaderView(0).findViewById(R.id.image_profile);
         TextView username = navigationView.getHeaderView(0).findViewById(R.id.text_username);
         TextView fullname = navigationView.getHeaderView(0).findViewById(R.id.text_fullname);
+        ImageView logout = navigationView.getHeaderView(0).findViewById(R.id.image_logout);
 
         Glide.with(this)
                 .load(saved_avatarUrl)
@@ -88,6 +114,9 @@ public class MainActivity extends BaseInjectableActivity implements BaseListFrag
                 .into(imageView);
         username.setText(saved_username);
         fullname.setText(saved_fullname);
+        logout.setOnClickListener(view -> {
+            startLoginActivity();
+        });
 
         setupViewpager();
     }
@@ -128,6 +157,13 @@ public class MainActivity extends BaseInjectableActivity implements BaseListFrag
 
         drawerLayout.closeDrawer(GravityCompat.START);
         return false;
+    }
+
+    private void startLoginActivity() {
+        Hawk.delete(getString(R.string.pref_token));
+        Intent loginIntent = new Intent(this, LoginActivity.class);
+        startActivity(loginIntent);
+        finish();
     }
 
     private void setupViewpager() {

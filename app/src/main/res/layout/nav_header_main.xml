@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="@dimen/nav_header_height"
@@ -17,24 +17,34 @@
         android:layout_height="@dimen/navdrawer_profile_image"
         tools:src="@tools:sample/avatars" />
 
-    <TextView
-        android:id="@+id/text_fullname"
-        android:layout_width="wrap_content"
+    <FrameLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="@dimen/nav_header_vertical_spacing"
-        android:layout_below="@id/image_profile"
-        android:layout_alignStart="@id/image_profile"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-        tools:text="@tools:sample/full_names" />
+        android:layout_marginTop="@dimen/nav_header_vertical_spacing">
 
-    <TextView
-        android:id="@+id/text_username"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/text_fullname"
-        android:layout_alignStart="@id/image_profile"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        tools:text="@tools:sample/lorem" />
+        <TextView
+            android:id="@+id/text_fullname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/nav_header_vertical_spacing"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            tools:text="@tools:sample/full_names" />
 
-</RelativeLayout>
+        <TextView
+            android:id="@+id/text_username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="@dimen/nav_header_vertical_spacing"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            tools:text="@tools:sample/lorem" />
+
+        <ImageButton
+            android:id="@+id/image_logout"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="wrap_content"
+            android:layout_height="?android:attr/listPreferredItemHeight"
+            android:layout_gravity="end"
+            android:src="@drawable/ic_logout_white_24px" />
+    </FrameLayout>
+</LinearLayout>
