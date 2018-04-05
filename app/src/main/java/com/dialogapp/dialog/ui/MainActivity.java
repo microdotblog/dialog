@@ -84,7 +84,9 @@ public class MainActivity extends BaseInjectableActivity implements BaseListFrag
         String saved_avatarUrl = intent.getStringExtra(EXTRA_AVATARURL);
 
         LoginViewModel loginViewModel = ViewModelProviders.of(this, viewModelFactory).get(LoginViewModel.class);
-        loginViewModel.setToken(saved_token);
+        if (savedInstanceState == null) {
+            loginViewModel.setToken(saved_token);
+        }
         loginViewModel.verifyToken().observe(this, verifiedAccountResource -> {
             if (verifiedAccountResource != null) {
                 if (verifiedAccountResource.status == Status.ERROR) {

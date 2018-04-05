@@ -24,9 +24,11 @@ public class LoginActivity extends BaseInjectableActivity implements LoginFragme
         setContentView(R.layout.activity_blank);
         coordinatorLayout = findViewById(R.id.coord_layout_blank);
 
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.container_blank, new LoginFragment())
-                .commit();
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.container_blank, new LoginFragment())
+                    .commit();
+        }
     }
 
     @Override

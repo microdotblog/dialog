@@ -18,8 +18,10 @@ public class ImageViewerActivity extends BaseInjectableActivity {
 
         String url = getIntent().getStringExtra(EXTRA_IMAGE_URL);
 
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.container_blank, ImageViewerFragment.newInstance(url))
-                .commit();
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.container_blank, ImageViewerFragment.newInstance(url))
+                    .commit();
+        }
     }
 }

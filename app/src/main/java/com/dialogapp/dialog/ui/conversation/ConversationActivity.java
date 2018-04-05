@@ -39,9 +39,11 @@ public class ConversationActivity extends BaseInjectableActivity implements Base
         Intent intent = getIntent();
         String postId = intent.getStringExtra(EXTRA_POST_ID);
 
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.frame_container, ListFragment.newInstance(ListFragment.CONVERSATION, postId))
-                .commit();
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.frame_container, ListFragment.newInstance(ListFragment.CONVERSATION, postId))
+                    .commit();
+        }
     }
 
     @Override

@@ -34,9 +34,11 @@ public class FavoritesActivity extends BaseInjectableActivity implements BaseLis
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.frame_container, ListFragment.newInstance(ListFragment.FAVORITES, null))
-                .commit();
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.frame_container, ListFragment.newInstance(ListFragment.FAVORITES, null))
+                    .commit();
+        }
     }
 
     @Override
