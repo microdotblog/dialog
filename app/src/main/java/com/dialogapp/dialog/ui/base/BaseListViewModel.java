@@ -26,18 +26,24 @@ public abstract class BaseListViewModel extends ViewModel {
     protected MutableLiveData<Integer> view = new MutableLiveData<>();
     protected LiveData<Resource<List<Item>>> posts;
     protected String arg;
+    protected boolean refresh;
 
     public LiveData<Resource<List<Item>>> getPosts() {
         return posts;
     }
 
     public void setView(@ViewTypeDef Integer view, String arg) {
+        refresh = false;
         this.arg = arg;
         this.view.setValue(view);
     }
 
     public void refresh() {
-        this.view.setValue(this.view.getValue());
+        Integer currentView = this.view.getValue();
+        if (currentView != null) {
+            refresh = true;
+            this.view.setValue(currentView);
+        }
     }
 
     @Retention(RetentionPolicy.SOURCE)

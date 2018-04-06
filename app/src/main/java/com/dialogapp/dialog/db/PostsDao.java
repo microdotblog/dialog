@@ -12,7 +12,7 @@ import java.util.List;
 
 @Dao
 public interface PostsDao {
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertPosts(List<Item> posts);
 
     @Query("SELECT * FROM posts WHERE endpoint = :endpoint ORDER BY datePublished DESC")

@@ -39,7 +39,7 @@ public class ProfileFragment extends BaseListFragment implements Injectable {
     @Override
     protected void setViewModel() {
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(ProfileViewModel.class);
-        viewModel.setUsername(username);
+        viewModel.setUsername(username, false);
         viewModel.getUserData().observe(this, microBlogResponseResource -> {
             if (microBlogResponseResource != null && microBlogResponseResource.data != null) {
                 listener.onLoadSuccess(microBlogResponseResource.data);
@@ -50,6 +50,6 @@ public class ProfileFragment extends BaseListFragment implements Injectable {
 
     @Override
     protected void onViewRefreshed() {
-        viewModel.setUsername(username);
+        viewModel.setUsername(username, true);
     }
 }

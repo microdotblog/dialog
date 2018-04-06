@@ -14,15 +14,15 @@ public class ListViewModel extends BaseListViewModel {
         posts = Transformations.switchMap(view, input -> {
             switch (input) {
                 case TIMELINE:
-                    return postsRepository.loadTimeline();
+                    return postsRepository.loadTimeline(refresh);
                 case MENTIONS:
-                    return postsRepository.loadMentions();
+                    return postsRepository.loadMentions(refresh);
                 case FAVORITES:
-                    return postsRepository.loadFavorites();
+                    return postsRepository.loadFavorites(refresh);
                 case CONVERSATION:
                     return postsRepository.loadConversation(arg);
                 case DISCOVER:
-                    return postsRepository.loadDiscover(arg);
+                    return postsRepository.loadDiscover(arg, refresh);
                 default:
                     return AbsentLiveData.create();
             }

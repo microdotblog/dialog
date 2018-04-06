@@ -21,9 +21,6 @@ import timber.log.Timber;
 
 @Singleton
 public class PostsRepository {
-
-    private final long THRESHOLDMILLIS = 900000; // 15 mins
-
     private final AppExecutors appExecutors;
     private final MicroblogService microblogService;
     private final PostsDao postsDao;
@@ -31,8 +28,8 @@ public class PostsRepository {
     private String timelineTopPostId;
     private String mentionsTopPostId;
 
-    private long lastTimelineRequestTimestamp;
-    private long lastMentionsRequestTimestamp;
+    private List<Item> discoverData;
+    private MicroBlogResponse userData;
 
     @Inject
     public PostsRepository(AppExecutors appExecutors, PostsDao postsDao, MicroblogService microblogService) {
@@ -41,7 +38,7 @@ public class PostsRepository {
         this.microblogService = microblogService;
     }
 
-    public LiveData<Resource<List<Item>>> loadTimeline() {
+    public LiveData<Resource<List<Item>>> loadTimeline(boolean refresh) {
         return new NetworkBoundResource<List<Item>, MicroBlogResponse>(appExecutors) {
             @Override
             protected boolean shouldFetch(@Nullable List<Item> dbData) {
@@ -49,7 +46,7 @@ public class PostsRepository {
                     timelineTopPostId = Long.toString(dbData.get(0).id);
                 }
 
-                return shouldRefresh(lastTimelineRequestTimestamp) || dbData == null || dbData.isEmpty();
+                return dbData == null || dbData.isEmpty() || refresh;
             }
 
             @NonNull
@@ -61,7 +58,6 @@ public class PostsRepository {
 
             @Override
             protected MicroBlogResponse processResponse(ApiResponse<MicroBlogResponse> response) {
-                lastTimelineRequestTimestamp = System.currentTimeMillis();
                 for (Item item : response.body.items) {
                     item.setEndpoint(Endpoints.TIMELINE);
                 }
@@ -81,7 +77,7 @@ public class PostsRepository {
         }.asLiveData();
     }
 
-    public LiveData<Resource<List<Item>>> loadMentions() {
+    public LiveData<Resource<List<Item>>> loadMentions(boolean refresh) {
         return new NetworkBoundResource<List<Item>, MicroBlogResponse>(appExecutors) {
             @Override
             protected boolean shouldFetch(@Nullable List<Item> dbData) {
@@ -89,7 +85,7 @@ public class PostsRepository {
                     mentionsTopPostId = Long.toString(dbData.get(0).id);
                 }
 
-                return shouldRefresh(lastMentionsRequestTimestamp) || dbData == null || dbData.isEmpty();
+                return dbData == null || dbData.isEmpty() || refresh;
             }
 
             @NonNull
@@ -101,7 +97,6 @@ public class PostsRepository {
 
             @Override
             protected MicroBlogResponse processResponse(ApiResponse<MicroBlogResponse> response) {
-                lastMentionsRequestTimestamp = System.currentTimeMillis();
                 for (Item item : response.body.items) {
                     item.setEndpoint(Endpoints.MENTIONS);
                 }
@@ -121,11 +116,11 @@ public class PostsRepository {
         }.asLiveData();
     }
 
-    public LiveData<Resource<List<Item>>> loadFavorites() {
+    public LiveData<Resource<List<Item>>> loadFavorites(boolean refresh) {
         return new NetworkBoundResource<List<Item>, MicroBlogResponse>(appExecutors) {
             @Override
             protected boolean shouldFetch(@Nullable List<Item> dbData) {
-                return dbData == null || dbData.isEmpty();
+                return dbData == null || dbData.isEmpty() || refresh;
             }
 
             @NonNull
@@ -144,7 +139,6 @@ public class PostsRepository {
 
             @Override
             protected void saveCallResult(@NonNull MicroBlogResponse response) {
-                postsDao.deletePosts(Endpoints.FAVORITES);
                 postsDao.insertPosts(response.items);
             }
 
@@ -156,13 +150,11 @@ public class PostsRepository {
         }.asLiveData();
     }
 
-    public LiveData<Resource<MicroBlogResponse>> loadPostsByUsername(String username) {
+    public LiveData<Resource<MicroBlogResponse>> loadPostsByUsername(String username, boolean refresh) {
         return new NetworkBoundResource<MicroBlogResponse, MicroBlogResponse>(appExecutors) {
-            MicroBlogResponse responseData;
-
             @Override
             protected boolean shouldFetch(@Nullable MicroBlogResponse dbData) {
-                return true;
+                return userData == null || refresh;
             }
 
             @NonNull
@@ -173,17 +165,21 @@ public class PostsRepository {
 
             @Override
             protected void saveCallResult(@NonNull MicroBlogResponse response) {
-                responseData = response;
+                userData = response;
             }
 
             @NonNull
             @Override
             protected LiveData<MicroBlogResponse> loadFromDb() {
+                // Nullify existing user data
+                if (userData != null && !userData.microblog.username.equals(username))
+                    userData = null;
+
                 return new LiveData<MicroBlogResponse>() {
                     @Override
                     protected void onActive() {
                         super.onActive();
-                        setValue(responseData);
+                        setValue(userData);
                     }
                 };
             }
@@ -224,13 +220,11 @@ public class PostsRepository {
         }.asLiveData();
     }
 
-    public LiveData<Resource<List<Item>>> loadDiscover(String topic) {
+    public LiveData<Resource<List<Item>>> loadDiscover(String topic, boolean refresh) {
         return new NetworkBoundResource<List<Item>, MicroBlogResponse>(appExecutors) {
-            List<Item> responseData;
-
             @Override
             protected boolean shouldFetch(@Nullable List<Item> dbData) {
-                return true;
+                return discoverData == null || refresh;
             }
 
             @NonNull
@@ -244,7 +238,7 @@ public class PostsRepository {
 
             @Override
             protected void saveCallResult(@NonNull MicroBlogResponse response) {
-                responseData = response.items;
+                discoverData = response.items;
             }
 
             @NonNull
@@ -254,14 +248,10 @@ public class PostsRepository {
                     @Override
                     protected void onActive() {
                         super.onActive();
-                        setValue(responseData);
+                        setValue(discoverData);
                     }
                 };
             }
         }.asLiveData();
-    }
-
-    private boolean shouldRefresh(long lastRequestTimestamp) {
-        return (System.currentTimeMillis() - lastRequestTimestamp) >= THRESHOLDMILLIS;
     }
 }

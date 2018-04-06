@@ -14,13 +14,14 @@ import javax.inject.Inject;
 
 public class ProfileViewModel extends ViewModel {
     private final MutableLiveData<String> username = new MutableLiveData<>();
-    private LiveData<Resource<MicroBlogResponse>> userData;
+    private final LiveData<Resource<MicroBlogResponse>> userData;
+    private boolean refresh;
 
     @Inject
     public ProfileViewModel(PostsRepository postsRepository) {
         userData = Transformations.switchMap(username, input -> {
             if (!input.isEmpty()) {
-                return postsRepository.loadPostsByUsername(input);
+                return postsRepository.loadPostsByUsername(input, refresh);
             } else {
                 return AbsentLiveData.create();
             }
@@ -31,7 +32,8 @@ public class ProfileViewModel extends ViewModel {
         return userData;
     }
 
-    public void setUsername(String username) {
+    public void setUsername(String username, boolean refresh) {
+        this.refresh = refresh;
         this.username.setValue(username);
     }
 }
