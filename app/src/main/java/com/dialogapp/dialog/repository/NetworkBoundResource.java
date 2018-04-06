@@ -25,31 +25,35 @@ import android.support.annotation.WorkerThread;
 
 import com.dialogapp.dialog.AppExecutors;
 import com.dialogapp.dialog.api.ApiResponse;
+import com.dialogapp.dialog.util.Objects;
 import com.dialogapp.dialog.util.Resource;
 
-import java.util.Objects;
-
+/**
+ * A generic class that can provide a resource backed by both the sqlite database and the network.
+ * <p>
+ * You can read more about it in the <a href="https://developer.android.com/arch">Architecture
+ * Guide</a>.
+ *
+ * @param <ResultType>
+ * @param <RequestType>
+ */
 public abstract class NetworkBoundResource<ResultType, RequestType> {
     private final AppExecutors appExecutors;
 
-    // acts as an intermediary between data source and consumer
     private final MediatorLiveData<Resource<ResultType>> result = new MediatorLiveData<>();
 
-    public NetworkBoundResource(AppExecutors appExecutors) {
+    @MainThread
+    NetworkBoundResource(AppExecutors appExecutors) {
         this.appExecutors = appExecutors;
         result.setValue(Resource.loading(null));
-
-        // observe db initially
         LiveData<ResultType> dbSource = loadFromDb();
-        // check db data to see if network fetch is required
-        result.addSource(dbSource, dbData -> {
-            // remove db as a source temporarily
+        result.addSource(dbSource, data -> {
             result.removeSource(dbSource);
-            if (shouldFetch(dbData))
+            if (shouldFetch(data)) {
                 fetchFromNetwork(dbSource);
-            else
-                // add back the db as a source (state==SUCCESS)
-                result.addSource(dbSource, newData -> setValue(Resource.success(dbData)));
+            } else {
+                result.addSource(dbSource, newData -> setValue(Resource.success(newData)));
+            }
         });
     }
 
@@ -59,37 +63,36 @@ public abstract class NetworkBoundResource<ResultType, RequestType> {
 
     private void fetchFromNetwork(final LiveData<ResultType> dbSource) {
         LiveData<ApiResponse<RequestType>> apiResponse = createCall();
-        // add back the db as a source to dispatch its value while the network call takes place (state==LOADING)
+        // we re-attach dbSource as a new source, it will dispatch its latest value quickly
         result.addSource(dbSource, newData -> setValue(Resource.loading(newData)));
-        // observe network source as a mediator
         result.addSource(apiResponse, response -> {
-            // remove existing sources after response becomes available
             result.removeSource(apiResponse);
             result.removeSource(dbSource);
-            // noinspection ConstantConditions
+            //noinspection ConstantConditions
             if (response.isSuccessful()) {
-                // write to db on a separate thread and send back the data
                 appExecutors.diskIO().execute(() -> {
                     saveCallResult(processResponse(response));
-                    appExecutors.mainThread().execute(() -> {
-                        // we specially request a new live data,
-                        // otherwise we will get immediately last cached value,
-                        // which may not be updated with latest results received from network.
-                        result.addSource(loadFromDb(), newData -> setValue(Resource.success(newData)));
-                    });
+                    appExecutors.mainThread().execute(() ->
+                            // we specially request a new live data,
+                            // otherwise we will get immediately last cached value,
+                            // which may not be updated with latest results received from network.
+                            result.addSource(loadFromDb(),
+                                    newData -> setValue(Resource.success(newData)))
+                    );
                 });
             } else {
-                // Handle network fetch failure in mediator
                 onFetchFailed();
-                // send back whatever data is in db (state==FAILURE)
-                result.addSource(dbSource, newData -> setValue(Resource.error(response.errorMessage, newData)));
+                result.addSource(dbSource,
+                        newData -> setValue(Resource.error(response.errorMessage, newData)));
             }
         });
     }
 
+    @MainThread
     private void setValue(Resource<ResultType> newValue) {
-        if (!Objects.equals(result.getValue(), newValue))
+        if (!Objects.equals(result.getValue(), newValue)) {
             result.setValue(newValue);
+        }
     }
 
     protected void onFetchFailed() {
@@ -101,7 +104,7 @@ public abstract class NetworkBoundResource<ResultType, RequestType> {
     }
 
     @MainThread
-    protected abstract boolean shouldFetch(@Nullable ResultType dbData);
+    protected abstract boolean shouldFetch(@Nullable ResultType data);
 
     @NonNull
     @MainThread
