@@ -13,6 +13,7 @@ import com.dialogapp.dialog.model.MicroBlogResponse;
 import com.dialogapp.dialog.util.Resource;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -31,6 +32,8 @@ public class PostsRepository {
     private List<Item> discoverData;
     private MicroBlogResponse userData;
 
+    private RateLimiter<String> endpointRateLimit = new RateLimiter<>(2, TimeUnit.MINUTES);
+
     @Inject
     public PostsRepository(AppExecutors appExecutors, PostsDao postsDao, MicroblogService microblogService) {
         this.appExecutors = appExecutors;
@@ -46,7 +49,7 @@ public class PostsRepository {
                     timelineTopPostId = Long.toString(dbData.get(0).id);
                 }
 
-                return dbData == null || dbData.isEmpty() || refresh;
+                return dbData == null || dbData.isEmpty() || (refresh && endpointRateLimit.shouldFetch(Endpoints.TIMELINE));
             }
 
             @NonNull
@@ -74,6 +77,11 @@ public class PostsRepository {
             protected LiveData<List<Item>> loadFromDb() {
                 return postsDao.loadEndpoint(Endpoints.TIMELINE);
             }
+
+            @Override
+            protected void onFetchFailed() {
+                endpointRateLimit.reset(Endpoints.TIMELINE);
+            }
         }.asLiveData();
     }
 
@@ -85,7 +93,7 @@ public class PostsRepository {
                     mentionsTopPostId = Long.toString(dbData.get(0).id);
                 }
 
-                return dbData == null || dbData.isEmpty() || refresh;
+                return dbData == null || dbData.isEmpty() || (refresh && endpointRateLimit.shouldFetch(Endpoints.MENTIONS));
             }
 
             @NonNull
@@ -113,6 +121,11 @@ public class PostsRepository {
             protected LiveData<List<Item>> loadFromDb() {
                 return postsDao.loadEndpoint(Endpoints.MENTIONS);
             }
+
+            @Override
+            protected void onFetchFailed() {
+                endpointRateLimit.reset(Endpoints.MENTIONS);
+            }
         }.asLiveData();
     }
 
@@ -120,7 +133,7 @@ public class PostsRepository {
         return new NetworkBoundResource<List<Item>, MicroBlogResponse>(appExecutors) {
             @Override
             protected boolean shouldFetch(@Nullable List<Item> dbData) {
-                return dbData == null || dbData.isEmpty() || refresh;
+                return dbData == null || dbData.isEmpty() || (refresh && endpointRateLimit.shouldFetch(Endpoints.FAVORITES));
             }
 
             @NonNull
@@ -147,6 +160,11 @@ public class PostsRepository {
             protected LiveData<List<Item>> loadFromDb() {
                 return postsDao.loadEndpoint(Endpoints.FAVORITES);
             }
+
+            @Override
+            protected void onFetchFailed() {
+                endpointRateLimit.reset(Endpoints.FAVORITES);
+            }
         }.asLiveData();
     }
 
@@ -154,7 +172,7 @@ public class PostsRepository {
         return new NetworkBoundResource<MicroBlogResponse, MicroBlogResponse>(appExecutors) {
             @Override
             protected boolean shouldFetch(@Nullable MicroBlogResponse dbData) {
-                return userData == null || refresh;
+                return userData == null || (refresh && endpointRateLimit.shouldFetch(username));
             }
 
             @NonNull
@@ -172,8 +190,10 @@ public class PostsRepository {
             @Override
             protected LiveData<MicroBlogResponse> loadFromDb() {
                 // Nullify existing user data
-                if (userData != null && !userData.microblog.username.equals(username))
+                if (userData != null && !userData.microblog.username.equals(username)) {
+                    endpointRateLimit.reset(userData.microblog.username);
                     userData = null;
+                }
 
                 return new LiveData<MicroBlogResponse>() {
                     @Override
@@ -182,6 +202,11 @@ public class PostsRepository {
                         setValue(userData);
                     }
                 };
+            }
+
+            @Override
+            protected void onFetchFailed() {
+                endpointRateLimit.reset(username);
             }
         }.asLiveData();
     }
@@ -224,7 +249,7 @@ public class PostsRepository {
         return new NetworkBoundResource<List<Item>, MicroBlogResponse>(appExecutors) {
             @Override
             protected boolean shouldFetch(@Nullable List<Item> dbData) {
-                return discoverData == null || refresh;
+                return discoverData == null || (refresh && endpointRateLimit.shouldFetch("discover"));
             }
 
             @NonNull
@@ -251,6 +276,11 @@ public class PostsRepository {
                         setValue(discoverData);
                     }
                 };
+            }
+
+            @Override
+            protected void onFetchFailed() {
+                endpointRateLimit.reset("discover");
             }
         }.asLiveData();
     }
