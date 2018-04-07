@@ -52,7 +52,7 @@ public class GlideImageGetter implements Html.ImageGetter, Drawable.Callback {
         this.size = size;
 
         this.requestOptions = new RequestOptions()
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                 .centerCrop();
         this.glide = createGlideRequest(glide);
         targetView.setTag(this);
