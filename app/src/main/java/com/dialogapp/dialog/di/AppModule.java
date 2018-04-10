@@ -6,6 +6,7 @@ import android.arch.persistence.room.Room;
 import com.dialogapp.dialog.api.MicroblogService;
 import com.dialogapp.dialog.api.ServiceInterceptor;
 import com.dialogapp.dialog.db.AccountDao;
+import com.dialogapp.dialog.db.DbOpenCallback;
 import com.dialogapp.dialog.db.MicroBlogDb;
 import com.dialogapp.dialog.db.PostsDao;
 import com.dialogapp.dialog.util.LiveDataCallAdapterFactory;
@@ -49,7 +50,9 @@ class AppModule {
     @Singleton
     @Provides
     MicroBlogDb provideDb(Application app) {
-        return Room.databaseBuilder(app, MicroBlogDb.class, "microblog.db").build();
+        return Room.databaseBuilder(app, MicroBlogDb.class, "microblog.db")
+                .addCallback(new DbOpenCallback())
+                .build();
     }
 
     @Singleton
