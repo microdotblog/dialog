@@ -6,13 +6,18 @@ import android.os.Bundle;
 import android.support.annotation.IntDef;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
 
+import com.bumptech.glide.Glide;
 import com.dialogapp.dialog.di.Injectable;
+import com.dialogapp.dialog.model.Item;
 import com.dialogapp.dialog.ui.base.BaseListFragment;
 import com.dialogapp.dialog.ui.base.BaseListViewModel;
+import com.dialogapp.dialog.util.InsetDividerDecoration;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -29,6 +34,7 @@ public class ListFragment extends BaseListFragment implements Injectable {
     private int fragment;
     private String postId;
     private ListViewModel viewModel;
+    private ItemRecyclerAdapter adapter;
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
@@ -49,6 +55,20 @@ public class ListFragment extends BaseListFragment implements Injectable {
             fragment = getArguments().getInt(EXTRA_FRAGMENT);
             postId = getArguments().getString(EXTRA_ARG);
         }
+    }
+
+    @Override
+    protected void setAdapterData(List<Item> data) {
+        adapter.submitList(data);
+    }
+
+    @Override
+    protected void setupRecyclerView() {
+        adapter = new ItemRecyclerAdapter(Glide.with(this));
+        recyclerView.setAdapter(adapter);
+        recyclerView.setRecyclerListener(holder -> ((PostViewHolder) holder).clearView());
+        recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
+        recyclerView.addItemDecoration(new InsetDividerDecoration(this.getActivity()));
     }
 
     @Override

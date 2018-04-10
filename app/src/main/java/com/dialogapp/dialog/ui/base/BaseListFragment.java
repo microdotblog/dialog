@@ -6,19 +6,14 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.RequestManager;
 import com.dialogapp.dialog.R;
 import com.dialogapp.dialog.model.Item;
-import com.dialogapp.dialog.ui.common.PostViewHolder;
-import com.dialogapp.dialog.util.InsetDividerDecoration;
 import com.dialogapp.dialog.util.Status;
 
 import java.util.List;
@@ -33,7 +28,6 @@ import butterknife.Unbinder;
 
 public abstract class BaseListFragment extends Fragment {
     protected Unbinder unbinder;
-    protected BaseRecyclerAdapter adapter;
     protected FragmentEventListener listener;
 
     @BindView(R.id.recycler_list)
@@ -70,20 +64,12 @@ public abstract class BaseListFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        setSwipeListener();
-        if (this.getContext() != null) {
-            setupRecyclerView(this.getContext(), Glide.with(this));
-        }
-    }
-
-    @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        showLoadingProgress();
+        swipeSetRefresh(true);
+        setSwipeListener();
+        setupRecyclerView();
         setViewModel();
     }
 
@@ -91,14 +77,6 @@ public abstract class BaseListFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
-    }
-
-    protected void setupRecyclerView(Context context, RequestManager glide) {
-        adapter = new BaseRecyclerAdapter(glide);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setRecyclerListener(holder -> ((PostViewHolder) holder).clearView());
-        recyclerView.setLayoutManager(new LinearLayoutManager(context));
-        recyclerView.addItemDecoration(new InsetDividerDecoration(context));
     }
 
     protected void setData(Status status, List<Item> data, String message) {
@@ -111,7 +89,7 @@ public abstract class BaseListFragment extends Fragment {
                 emptyPlaceholder.setVisibility(View.GONE);
                 recyclerView.setVisibility(View.VISIBLE);
 
-                adapter.setItems(data);
+                setAdapterData(data);
             }
         }
 
@@ -122,13 +100,8 @@ public abstract class BaseListFragment extends Fragment {
             swipeSetRefresh(false);
     }
 
-    protected void showLoadingProgress() {
-        swipeSetRefresh(true);
-        adapter.clear();
-    }
-
     protected void refresh() {
-        showLoadingProgress();
+        swipeSetRefresh(true);
         onViewRefreshed();
     }
 
@@ -137,6 +110,10 @@ public abstract class BaseListFragment extends Fragment {
             swipeRefreshLayout.setOnRefreshListener(this::refresh);
         }
     }
+
+    protected abstract void setAdapterData(List<Item> data);
+
+    protected abstract void setupRecyclerView();
 
     protected abstract void setViewModel();
 
