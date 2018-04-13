@@ -47,7 +47,7 @@ public class PostsRepositoryTest {
         microblogService = mock(MicroblogService.class);
         MicroBlogDb db = mock(MicroBlogDb.class);
         when(db.postsDao()).thenReturn(postsDao);
-        repository = new PostsRepository(new InstantAppExecutors(), postsDao, microblogService);
+        repository = new PostsRepository(new InstantAppExecutors(), db, postsDao, microblogService);
     }
 
     @Test
@@ -59,7 +59,7 @@ public class PostsRepositoryTest {
         LiveData<ApiResponse<MicroBlogResponse>> callTimeline = successCall(response);
         when(microblogService.getTimeLine(null)).thenReturn(callTimeline);
 
-        LiveData<Resource<List<Item>>> repoData = repository.loadTimeline(false);
+        LiveData<Resource<List<Item>>> repoData = repository.loadTimeline();
         verify(postsDao).loadEndpoint(Endpoints.TIMELINE);
         verifyNoMoreInteractions(microblogService);
 
@@ -88,7 +88,7 @@ public class PostsRepositoryTest {
         LiveData<ApiResponse<MicroBlogResponse>> callMentions = successCall(response);
         when(microblogService.getMentions(null)).thenReturn(callMentions);
 
-        LiveData<Resource<List<Item>>> repoData = repository.loadMentions(false);
+        LiveData<Resource<List<Item>>> repoData = repository.loadMentions();
         verify(postsDao).loadEndpoint(Endpoints.MENTIONS);
         verifyNoMoreInteractions(microblogService);
 
@@ -117,7 +117,7 @@ public class PostsRepositoryTest {
         LiveData<ApiResponse<MicroBlogResponse>> callFavorites = successCall(response);
         when(microblogService.getFavorites()).thenReturn(callFavorites);
 
-        LiveData<Resource<List<Item>>> repoData = repository.loadFavorites(false);
+        LiveData<Resource<List<Item>>> repoData = repository.loadFavorites();
         verify(postsDao).loadEndpoint(Endpoints.FAVORITES);
         verifyNoMoreInteractions(microblogService);
 

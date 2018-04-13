@@ -49,75 +49,63 @@ public class ListViewModelTest {
 
     @Test
     public void testLoading() {
-        ArgumentCaptor<Boolean> captor = ArgumentCaptor.forClass(Boolean.class);
-        ArgumentCaptor<String> captor2 = ArgumentCaptor.forClass(String.class);
+        ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
         viewModel.getPosts().observeForever(mock(Observer.class));
 
         viewModel.setView(BaseListViewModel.TIMELINE, null);
-        verify(postsRepository).loadTimeline(captor.capture());
-        assertThat(captor.getValue(), is(false));
+        verify(postsRepository).loadTimeline();
 
         viewModel.setView(BaseListViewModel.MENTIONS, null);
-        verify(postsRepository).loadMentions(captor.capture());
-        assertThat(captor.getValue(), is(false));
+        verify(postsRepository).loadMentions();
 
         viewModel.setView(BaseListViewModel.FAVORITES, null);
-        verify(postsRepository).loadMentions(captor.capture());
-        assertThat(captor.getValue(), is(false));
+        verify(postsRepository).loadMentions();
 
         viewModel.setView(BaseListViewModel.DISCOVER, null);
-        verify(postsRepository).loadDiscover(captor2.capture(), captor.capture());
-        assertThat(captor.getValue(), is(false));
-        assertThat(captor2.getValue(), is(nullValue()));
+        verify(postsRepository).loadDiscover(captor.capture());
+        assertThat(captor.getValue(), is(nullValue()));
 
         viewModel.setView(BaseListViewModel.DISCOVER, "abc");
-        verify(postsRepository, times(2)).loadDiscover(captor2.capture(), captor.capture());
-        assertThat(captor.getValue(), is(false));
-        assertThat(captor2.getValue(), is("abc"));
+        verify(postsRepository, times(2)).loadDiscover(captor.capture());
+        assertThat(captor.getValue(), is("abc"));
 
         viewModel.setView(BaseListViewModel.CONVERSATION, "123");
-        verify(postsRepository).loadConversation(captor2.capture());
-        assertThat(captor2.getValue(), is("123"));
+        verify(postsRepository).loadConversation(captor.capture());
+        assertThat(captor.getValue(), is("123"));
     }
 
     @Test
     public void testRefresh() {
-        ArgumentCaptor<Boolean> captor = ArgumentCaptor.forClass(Boolean.class);
-        ArgumentCaptor<String> captor2 = ArgumentCaptor.forClass(String.class);
+        ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
         viewModel.getPosts().observeForever(mock(Observer.class));
         verifyNoMoreInteractions(postsRepository);
 
         viewModel.setView(BaseListViewModel.TIMELINE, null);
         viewModel.refresh();
-        verify(postsRepository, times(2)).loadTimeline(captor.capture());
-        assertThat(captor.getValue(), is(true));
+        verify(postsRepository, times(2)).loadTimeline();
 
         viewModel.setView(BaseListViewModel.MENTIONS, null);
         viewModel.refresh();
-        verify(postsRepository, times(2)).loadMentions(captor.capture());
-        assertThat(captor.getValue(), is(true));
+        verify(postsRepository, times(2)).loadMentions();
 
         viewModel.setView(BaseListViewModel.FAVORITES, null);
         viewModel.refresh();
-        verify(postsRepository, times(2)).loadFavorites(captor.capture());
-        assertThat(captor.getValue(), is(true));
+        verify(postsRepository, times(2)).loadFavorites();
 
         viewModel.setView(BaseListViewModel.DISCOVER, null);
         viewModel.refresh();
-        verify(postsRepository, times(2)).loadDiscover(captor2.capture(), captor.capture());
-        assertThat(captor.getValue(), is(true));
-        assertThat(captor2.getValue(), is(nullValue()));
+        verify(postsRepository, times(2)).loadDiscover(captor.capture());
+        assertThat(captor.getValue(), is(nullValue()));
 
         viewModel.setView(BaseListViewModel.DISCOVER, "abc");
         viewModel.refresh();
-        verify(postsRepository, times(4)).loadDiscover(captor2.capture(), captor.capture());
-        assertThat(captor.getValue(), is(true));
-        assertThat(captor2.getValue(), is("abc"));
+        verify(postsRepository, times(4)).loadDiscover(captor.capture());
+        assertThat(captor.getValue(), is("abc"));
 
         viewModel.setView(BaseListViewModel.CONVERSATION, "123");
         viewModel.refresh();
-        verify(postsRepository, times(2)).loadConversation(captor2.capture());
-        assertThat(captor2.getValue(), is("123"));
+        verify(postsRepository, times(2)).loadConversation(captor.capture());
+        assertThat(captor.getValue(), is("123"));
     }
 
     @Test
@@ -125,10 +113,10 @@ public class ListViewModelTest {
         MutableLiveData<Resource<List<Item>>> data = new MutableLiveData<>();
         MicroBlogResponse response = TestUtil.readFromJson(getClass().getClassLoader(), "response.json");
         Resource<List<Item>> listResource = Resource.success(response.items);
-        when(postsRepository.loadFavorites(false)).thenReturn(data);
-        when(postsRepository.loadMentions(false)).thenReturn(data);
-        when(postsRepository.loadTimeline(false)).thenReturn(data);
-        when(postsRepository.loadDiscover(null, false)).thenReturn(data);
+        when(postsRepository.loadFavorites()).thenReturn(data);
+        when(postsRepository.loadMentions()).thenReturn(data);
+        when(postsRepository.loadTimeline()).thenReturn(data);
+        when(postsRepository.loadDiscover(null)).thenReturn(data);
         when(postsRepository.loadConversation("123")).thenReturn(data);
 
         Observer<Resource<List<Item>>> observer = mock(Observer.class);

@@ -12,17 +12,17 @@ public class ListViewModel extends BaseListViewModel {
     @Inject
     public ListViewModel(PostsRepository postsRepository) {
         posts = Transformations.switchMap(view, input -> {
-            switch (input) {
+            switch (input.view) {
                 case TIMELINE:
-                    return postsRepository.loadTimeline(refresh);
+                    return postsRepository.loadTimeline();
                 case MENTIONS:
-                    return postsRepository.loadMentions(refresh);
+                    return postsRepository.loadMentions();
                 case FAVORITES:
-                    return postsRepository.loadFavorites(refresh);
+                    return postsRepository.loadFavorites();
                 case CONVERSATION:
-                    return postsRepository.loadConversation(arg);
+                    return postsRepository.loadConversation(input.arg);
                 case DISCOVER:
-                    return postsRepository.loadDiscover(arg, refresh);
+                    return postsRepository.loadDiscover(input.arg);
                 default:
                     return AbsentLiveData.create();
             }

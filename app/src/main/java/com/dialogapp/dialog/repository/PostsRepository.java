@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import com.dialogapp.dialog.AppExecutors;
 import com.dialogapp.dialog.api.ApiResponse;
 import com.dialogapp.dialog.api.MicroblogService;
+import com.dialogapp.dialog.db.MicroBlogDb;
 import com.dialogapp.dialog.db.PostsDao;
 import com.dialogapp.dialog.model.Item;
 import com.dialogapp.dialog.model.MicroBlogResponse;
@@ -24,23 +25,23 @@ import timber.log.Timber;
 public class PostsRepository {
     private final AppExecutors appExecutors;
     private final MicroblogService microblogService;
+    private MicroBlogDb db;
     private final PostsDao postsDao;
 
     private String timelineTopPostId;
     private String mentionsTopPostId;
 
-    private List<Item> discoverData;
-
     private RateLimiter<String> endpointRateLimit = new RateLimiter<>(2, TimeUnit.MINUTES);
 
     @Inject
-    public PostsRepository(AppExecutors appExecutors, PostsDao postsDao, MicroblogService microblogService) {
+    public PostsRepository(AppExecutors appExecutors, MicroBlogDb db, PostsDao postsDao, MicroblogService microblogService) {
         this.appExecutors = appExecutors;
+        this.db = db;
         this.postsDao = postsDao;
         this.microblogService = microblogService;
     }
 
-    public LiveData<Resource<List<Item>>> loadTimeline(boolean refresh) {
+    public LiveData<Resource<List<Item>>> loadTimeline() {
         return new NetworkBoundResource<List<Item>, MicroBlogResponse>(appExecutors) {
             @Override
             protected boolean shouldFetch(@Nullable List<Item> dbData) {
@@ -48,7 +49,7 @@ public class PostsRepository {
                     timelineTopPostId = Long.toString(dbData.get(0).id);
                 }
 
-                return dbData == null || dbData.isEmpty() || (refresh && endpointRateLimit.shouldFetch(Endpoints.TIMELINE));
+                return dbData == null || dbData.isEmpty() || endpointRateLimit.shouldFetch(Endpoints.TIMELINE);
             }
 
             @NonNull
@@ -84,7 +85,7 @@ public class PostsRepository {
         }.asLiveData();
     }
 
-    public LiveData<Resource<List<Item>>> loadMentions(boolean refresh) {
+    public LiveData<Resource<List<Item>>> loadMentions() {
         return new NetworkBoundResource<List<Item>, MicroBlogResponse>(appExecutors) {
             @Override
             protected boolean shouldFetch(@Nullable List<Item> dbData) {
@@ -92,7 +93,7 @@ public class PostsRepository {
                     mentionsTopPostId = Long.toString(dbData.get(0).id);
                 }
 
-                return dbData == null || dbData.isEmpty() || (refresh && endpointRateLimit.shouldFetch(Endpoints.MENTIONS));
+                return dbData == null || dbData.isEmpty() || endpointRateLimit.shouldFetch(Endpoints.MENTIONS);
             }
 
             @NonNull
@@ -128,11 +129,11 @@ public class PostsRepository {
         }.asLiveData();
     }
 
-    public LiveData<Resource<List<Item>>> loadFavorites(boolean refresh) {
+    public LiveData<Resource<List<Item>>> loadFavorites() {
         return new NetworkBoundResource<List<Item>, MicroBlogResponse>(appExecutors) {
             @Override
             protected boolean shouldFetch(@Nullable List<Item> dbData) {
-                return dbData == null || dbData.isEmpty() || (refresh && endpointRateLimit.shouldFetch(Endpoints.FAVORITES));
+                return dbData == null || dbData.isEmpty() || endpointRateLimit.shouldFetch(Endpoints.FAVORITES);
             }
 
             @NonNull
@@ -167,11 +168,11 @@ public class PostsRepository {
         }.asLiveData();
     }
 
-    public LiveData<Resource<MicroBlogResponse>> loadPostsByUsername(String username, boolean refresh) {
+    public LiveData<Resource<MicroBlogResponse>> loadPostsByUsername(String username) {
         return new NetworkBoundResource<MicroBlogResponse, MicroBlogResponse>(appExecutors) {
             @Override
             protected boolean shouldFetch(@Nullable MicroBlogResponse dbData) {
-                return dbData == null || (refresh && endpointRateLimit.shouldFetch(username));
+                return dbData == null || endpointRateLimit.shouldFetch(username);
             }
 
             @NonNull
@@ -200,11 +201,9 @@ public class PostsRepository {
 
     public LiveData<Resource<List<Item>>> loadConversation(String id) {
         return new NetworkBoundResource<List<Item>, MicroBlogResponse>(appExecutors) {
-            List<Item> responseData;
-
             @Override
             protected boolean shouldFetch(@Nullable List<Item> dbData) {
-                return true;
+                return dbData == null || dbData.isEmpty() || endpointRateLimit.shouldFetch(id);
             }
 
             @NonNull
@@ -214,29 +213,43 @@ public class PostsRepository {
             }
 
             @Override
+            protected MicroBlogResponse processResponse(ApiResponse<MicroBlogResponse> response) {
+                for (Item item : response.body.items) {
+                    item.setEndpoint(Endpoints.CONVERSATION);
+                }
+                return response.body;
+            }
+
+            @Override
             protected void saveCallResult(@NonNull MicroBlogResponse response) {
-                responseData = response.items;
+                db.beginTransaction();
+                try {
+                    db.postsDao().deletePosts(Endpoints.CONVERSATION);
+                    db.postsDao().insertPosts(response.items);
+                    db.setTransactionSuccessful();
+                } finally {
+                    db.endTransaction();
+                }
             }
 
             @NonNull
             @Override
             protected LiveData<List<Item>> loadFromDb() {
-                return new LiveData<List<Item>>() {
-                    @Override
-                    protected void onActive() {
-                        super.onActive();
-                        setValue(responseData);
-                    }
-                };
+                return postsDao.loadEndpoint(Endpoints.CONVERSATION);
+            }
+
+            @Override
+            protected void onFetchFailed() {
+                endpointRateLimit.reset(id);
             }
         }.asLiveData();
     }
 
-    public LiveData<Resource<List<Item>>> loadDiscover(String topic, boolean refresh) {
+    public LiveData<Resource<List<Item>>> loadDiscover(String topic) {
         return new NetworkBoundResource<List<Item>, MicroBlogResponse>(appExecutors) {
             @Override
             protected boolean shouldFetch(@Nullable List<Item> dbData) {
-                return discoverData == null || (refresh && endpointRateLimit.shouldFetch("discover"));
+                return dbData == null || dbData.isEmpty() || endpointRateLimit.shouldFetch("discover");
             }
 
             @NonNull
@@ -249,20 +262,29 @@ public class PostsRepository {
             }
 
             @Override
+            protected MicroBlogResponse processResponse(ApiResponse<MicroBlogResponse> response) {
+                for (Item item : response.body.items) {
+                    item.setEndpoint(Endpoints.DISCOVER);
+                }
+                return response.body;
+            }
+
+            @Override
             protected void saveCallResult(@NonNull MicroBlogResponse response) {
-                discoverData = response.items;
+                db.beginTransaction();
+                try {
+                    db.postsDao().deletePosts(Endpoints.DISCOVER);
+                    db.postsDao().insertPosts(response.items);
+                    db.setTransactionSuccessful();
+                } finally {
+                    db.endTransaction();
+                }
             }
 
             @NonNull
             @Override
             protected LiveData<List<Item>> loadFromDb() {
-                return new LiveData<List<Item>>() {
-                    @Override
-                    protected void onActive() {
-                        super.onActive();
-                        setValue(discoverData);
-                    }
-                };
+                return postsDao.loadEndpoint(Endpoints.DISCOVER);
             }
 
             @Override

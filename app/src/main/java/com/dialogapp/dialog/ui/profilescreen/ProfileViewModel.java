@@ -8,20 +8,20 @@ import android.arch.lifecycle.ViewModel;
 import com.dialogapp.dialog.model.MicroBlogResponse;
 import com.dialogapp.dialog.repository.PostsRepository;
 import com.dialogapp.dialog.util.AbsentLiveData;
+import com.dialogapp.dialog.util.Objects;
 import com.dialogapp.dialog.util.Resource;
 
 import javax.inject.Inject;
 
 public class ProfileViewModel extends ViewModel {
-    private final MutableLiveData<String> username = new MutableLiveData<>();
+    private final MutableLiveData<String> user = new MutableLiveData<>();
     private final LiveData<Resource<MicroBlogResponse>> userData;
-    private boolean refresh;
 
     @Inject
     public ProfileViewModel(PostsRepository postsRepository) {
-        userData = Transformations.switchMap(username, input -> {
+        userData = Transformations.switchMap(user, input -> {
             if (!input.isEmpty()) {
-                return postsRepository.loadPostsByUsername(input, refresh);
+                return postsRepository.loadPostsByUsername(input);
             } else {
                 return AbsentLiveData.create();
             }
@@ -32,8 +32,16 @@ public class ProfileViewModel extends ViewModel {
         return userData;
     }
 
-    public void setUsername(String username, boolean refresh) {
-        this.refresh = refresh;
-        this.username.setValue(username);
+    public void refresh() {
+        if (this.user.getValue() != null) {
+            user.setValue(this.user.getValue());
+        }
+    }
+
+    public void setUsername(String username) {
+        if (Objects.equals(this.user.getValue(), username))
+            return;
+
+        this.user.setValue(username);
     }
 }

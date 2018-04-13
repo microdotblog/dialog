@@ -23,6 +23,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -43,26 +44,23 @@ public class ProfileViewModelTest {
 
     @Test
     public void loadUserPosts() {
-        ArgumentCaptor<Boolean> captor = ArgumentCaptor.forClass(Boolean.class);
-        ArgumentCaptor<String> captor2 = ArgumentCaptor.forClass(String.class);
+        ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
         viewModel.getUserData().observeForever(mock(Observer.class));
 
-        viewModel.setUsername("dialog", false);
-        verify(postsRepository).loadPostsByUsername(captor2.capture(), captor.capture());
-        assertThat(captor.getValue(), is(false));
-        assertThat(captor2.getValue(), is("dialog"));
+        viewModel.setUsername("dialog");
+        verify(postsRepository).loadPostsByUsername(captor.capture());
+        assertThat(captor.getValue(), is("dialog"));
     }
 
     @Test
     public void testRefresh() {
-        ArgumentCaptor<Boolean> captor = ArgumentCaptor.forClass(Boolean.class);
-        ArgumentCaptor<String> captor2 = ArgumentCaptor.forClass(String.class);
+        ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
         viewModel.getUserData().observeForever(mock(Observer.class));
 
-        viewModel.setUsername("dialog", true);
-        verify(postsRepository).loadPostsByUsername(captor2.capture(), captor.capture());
-        assertThat(captor.getValue(), is(true));
-        assertThat(captor2.getValue(), is("dialog"));
+        viewModel.setUsername("dialog");
+        viewModel.refresh();
+        verify(postsRepository, times(2)).loadPostsByUsername(captor.capture());
+        assertThat(captor.getValue(), is("dialog"));
     }
 
     @Test
@@ -70,11 +68,11 @@ public class ProfileViewModelTest {
         MutableLiveData<Resource<MicroBlogResponse>> data = new MutableLiveData<>();
         MicroBlogResponse response = TestUtil.readFromJson(getClass().getClassLoader(), "userpostsresponse.json");
         Resource<MicroBlogResponse> listResource = Resource.success(response);
-        when(postsRepository.loadPostsByUsername("dialog", false)).thenReturn(data);
+        when(postsRepository.loadPostsByUsername("dialog")).thenReturn(data);
 
         Observer<Resource<MicroBlogResponse>> observer = mock(Observer.class);
         viewModel.getUserData().observeForever(observer);
-        viewModel.setUsername("dialog", false);
+        viewModel.setUsername("dialog");
         verify(observer, never()).onChanged(any(Resource.class));
 
         data.setValue(listResource);
