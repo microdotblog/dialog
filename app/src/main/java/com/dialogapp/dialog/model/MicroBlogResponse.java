@@ -1,23 +1,33 @@
 package com.dialogapp.dialog.model;
 
+import android.arch.persistence.room.Embedded;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.TypeConverters;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.dialogapp.dialog.db.ListTypeConverters;
 import com.squareup.moshi.Json;
 
 import java.util.List;
 
+@Entity(tableName = "microblogData", primaryKeys = "homePageUrl")
+@TypeConverters(ListTypeConverters.class)
 public class MicroBlogResponse {
 
     @Json(name = "title")
     public final String title;
+    @NonNull
     @Json(name = "home_page_url")
     public final String homePageUrl;
     @Json(name = "feed_url")
     public final String feedUrl;
     @Json(name = "_microblog")
+    @Embedded(prefix = "microblog_")
     public final Microblog microblog;
     @Nullable
     @Json(name = "author")
+    @Embedded(prefix = "author_")
     public final Author author;
     @Json(name = "items")
     public final List<Item> items;

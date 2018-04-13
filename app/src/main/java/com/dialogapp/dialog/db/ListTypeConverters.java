@@ -3,6 +3,7 @@ package com.dialogapp.dialog.db;
 import android.arch.persistence.room.TypeConverter;
 
 import com.dialogapp.dialog.model.AccountResponse;
+import com.dialogapp.dialog.model.Item;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 import com.squareup.moshi.Types;
@@ -16,6 +17,26 @@ import java.util.List;
  * Room Type Converter for lists
  */
 public class ListTypeConverters {
+    @TypeConverter
+    public List<Item> stringToPostItem(String data) {
+        Moshi moshi = new Moshi.Builder().build();
+        Type type = Types.newParameterizedType(List.class, Item.class);
+        JsonAdapter<List<Item>> adapter = moshi.adapter(type);
+        try {
+            return adapter.fromJson(data);
+        } catch (IOException e) {
+            return Collections.emptyList();
+        }
+    }
+
+    @TypeConverter
+    public String PostItemToString(List<Item> list) {
+        Moshi moshi = new Moshi.Builder().build();
+        Type type = Types.newParameterizedType(List.class, Item.class);
+        JsonAdapter<List<Item>> adapter = moshi.adapter(type);
+        return adapter.toJson(list);
+    }
+
     @TypeConverter
     public List<AccountResponse.PaidSite> stringToPaidSiteList(String data) {
         Moshi moshi = new Moshi.Builder().build();

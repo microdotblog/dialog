@@ -7,6 +7,7 @@ import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
 
 import com.dialogapp.dialog.model.Item;
+import com.dialogapp.dialog.model.MicroBlogResponse;
 
 import java.util.List;
 
@@ -20,4 +21,10 @@ public interface PostsDao {
 
     @Query("DELETE FROM posts WHERE endpoint = :endpoint")
     void deletePosts(String endpoint);
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertMicroblogData(MicroBlogResponse data);
+
+    @Query("SELECT * FROM microblogData WHERE microblog_username = :username")
+    LiveData<MicroBlogResponse> loadMicroblogData(String username);
 }

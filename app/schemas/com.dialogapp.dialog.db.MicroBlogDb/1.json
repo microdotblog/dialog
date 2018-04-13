@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "67e92f9c21fd41f3f089cc8e0c0f4ced",
+    "identityHash": "4bed5ceac20d491878c57645cad235f3",
     "entities": [
       {
         "tableName": "account",
@@ -164,11 +164,109 @@
         },
         "indices": [],
         "foreignKeys": []
+      },
+      {
+        "tableName": "microblogData",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`title` TEXT, `homePageUrl` TEXT NOT NULL, `feedUrl` TEXT, `items` TEXT, `microblog_id` TEXT, `microblog_username` TEXT, `microblog_bio` TEXT, `microblog_is_following` INTEGER, `microblog_is_you` INTEGER, `microblog_following_count` INTEGER, `author_author_name` TEXT, `author_author_url` TEXT, `author_author_avatar_url` TEXT, `author_author_info_username` TEXT, PRIMARY KEY(`homePageUrl`))",
+        "fields": [
+          {
+            "fieldPath": "title",
+            "columnName": "title",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "homePageUrl",
+            "columnName": "homePageUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "feedUrl",
+            "columnName": "feedUrl",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "items",
+            "columnName": "items",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "microblog.id",
+            "columnName": "microblog_id",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "microblog.username",
+            "columnName": "microblog_username",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "microblog.bio",
+            "columnName": "microblog_bio",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "microblog.is_following",
+            "columnName": "microblog_is_following",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "microblog.is_you",
+            "columnName": "microblog_is_you",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "microblog.following_count",
+            "columnName": "microblog_following_count",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "author.name",
+            "columnName": "author_author_name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "author.url",
+            "columnName": "author_author_url",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "author.avatar",
+            "columnName": "author_author_avatar_url",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "author.microblog.username",
+            "columnName": "author_author_info_username",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "homePageUrl"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
       }
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"67e92f9c21fd41f3f089cc8e0c0f4ced\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"4bed5ceac20d491878c57645cad235f3\")"
     ]
   }
 }

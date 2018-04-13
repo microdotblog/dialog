@@ -30,7 +30,6 @@ public class PostsRepository {
     private String mentionsTopPostId;
 
     private List<Item> discoverData;
-    private MicroBlogResponse userData;
 
     private RateLimiter<String> endpointRateLimit = new RateLimiter<>(2, TimeUnit.MINUTES);
 
@@ -172,7 +171,7 @@ public class PostsRepository {
         return new NetworkBoundResource<MicroBlogResponse, MicroBlogResponse>(appExecutors) {
             @Override
             protected boolean shouldFetch(@Nullable MicroBlogResponse dbData) {
-                return userData == null || (refresh && endpointRateLimit.shouldFetch(username));
+                return dbData == null || (refresh && endpointRateLimit.shouldFetch(username));
             }
 
             @NonNull
@@ -183,25 +182,13 @@ public class PostsRepository {
 
             @Override
             protected void saveCallResult(@NonNull MicroBlogResponse response) {
-                userData = response;
+                postsDao.insertMicroblogData(response);
             }
 
             @NonNull
             @Override
             protected LiveData<MicroBlogResponse> loadFromDb() {
-                // Nullify existing user data
-                if (userData != null && !userData.microblog.username.equals(username)) {
-                    endpointRateLimit.reset(userData.microblog.username);
-                    userData = null;
-                }
-
-                return new LiveData<MicroBlogResponse>() {
-                    @Override
-                    protected void onActive() {
-                        super.onActive();
-                        setValue(userData);
-                    }
-                };
+                return postsDao.loadMicroblogData(username);
             }
 
             @Override
