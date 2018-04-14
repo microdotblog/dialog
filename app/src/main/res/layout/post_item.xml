@@ -13,7 +13,8 @@
         android:orientation="horizontal"
         android:paddingEnd="16dp"
         android:paddingStart="16dp"
-        android:paddingTop="16dp">
+        android:paddingTop="16dp"
+        android:paddingBottom="8dp">
 
         <ImageView
             android:id="@+id/image_thumbnail"
@@ -80,5 +81,15 @@
         android:layout_height="wrap_content"
         android:background="@color/grey400"
         android:orientation="horizontal"
-        android:visibility="gone"></LinearLayout>
+        android:visibility="gone">
+
+        <Button
+            android:id="@+id/button_conversation"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/indigo500"
+            android:textColor="@android:color/white"
+            android:layout_weight="1"
+            android:text="Conversation" />
+    </LinearLayout>
 </LinearLayout>

@@ -13,6 +13,7 @@ import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -23,6 +24,7 @@ import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
 import com.dialogapp.dialog.R;
 import com.dialogapp.dialog.model.Item;
+import com.dialogapp.dialog.ui.conversation.ConversationActivity;
 import com.dialogapp.dialog.ui.profilescreen.ProfileActivity;
 import com.dialogapp.dialog.util.GlideImageGetter;
 import com.dialogapp.dialog.util.Objects;
@@ -80,20 +82,34 @@ public class ItemRecyclerAdapter extends ListAdapter<Item, ItemRecyclerAdapter.P
             notifyItemChanged(position);
         });
 
+        viewHolder.conversationButton.setOnClickListener(v -> {
+            long postId = getItem(viewHolder.getAdapterPosition()).id;
+            Intent intent = new Intent(context, ConversationActivity.class);
+            intent.putExtra(ConversationActivity.EXTRA_POST_ID, Long.toString(postId));
+            context.startActivity(intent);
+        });
+
         return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull PostViewHolder holder, int position) {
-        final boolean isExpanded = position == expandedPosition;
-        holder.postOptions.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
-        holder.itemView.setActivated(isExpanded);
-        holder.toggleDrawable.setCompoundDrawablesWithIntrinsicBounds(0, 0,
-                0, isExpanded ? R.drawable.ic_collapse_grey_24px : R.drawable.ic_expand_grey_24px);
-        if (isExpanded)
-            previousExpandedPosition = position;
-
         Item item = getItem(position);
+
+        if (item.microblog.isConversation) {
+            holder.toggleButton.setVisibility(View.VISIBLE);
+            final boolean isExpanded = position == expandedPosition;
+            holder.postOptions.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
+            holder.itemView.setActivated(isExpanded);
+            holder.toggleDrawable.setCompoundDrawablesWithIntrinsicBounds(0, 0,
+                    0, isExpanded ? R.drawable.ic_collapse_grey_24px : R.drawable.ic_expand_grey_24px);
+            if (isExpanded)
+                previousExpandedPosition = position;
+        } else {
+            holder.toggleButton.setVisibility(View.GONE);
+            holder.postOptions.setVisibility(View.GONE);
+        }
+
         glide.load(item.author.avatar)
                 .apply(RequestOptions.circleCropTransform())
                 .into(holder.thumbnail);
@@ -138,6 +154,9 @@ public class ItemRecyclerAdapter extends ListAdapter<Item, ItemRecyclerAdapter.P
 
         @BindView(R.id.post_options)
         LinearLayout postOptions;
+
+        @BindView(R.id.button_conversation)
+        Button conversationButton;
 
         public PostViewHolder(View itemView) {
             super(itemView);

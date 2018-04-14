@@ -201,9 +201,11 @@ public class PostsRepository {
 
     public LiveData<Resource<List<Item>>> loadConversation(String id) {
         return new NetworkBoundResource<List<Item>, MicroBlogResponse>(appExecutors) {
+            List<Item> responseData;
+
             @Override
             protected boolean shouldFetch(@Nullable List<Item> dbData) {
-                return dbData == null || dbData.isEmpty() || endpointRateLimit.shouldFetch(id);
+                return true;
             }
 
             @NonNull
@@ -213,34 +215,20 @@ public class PostsRepository {
             }
 
             @Override
-            protected MicroBlogResponse processResponse(ApiResponse<MicroBlogResponse> response) {
-                for (Item item : response.body.items) {
-                    item.setEndpoint(Endpoints.CONVERSATION);
-                }
-                return response.body;
-            }
-
-            @Override
             protected void saveCallResult(@NonNull MicroBlogResponse response) {
-                db.beginTransaction();
-                try {
-                    db.postsDao().deletePosts(Endpoints.CONVERSATION);
-                    db.postsDao().insertPosts(response.items);
-                    db.setTransactionSuccessful();
-                } finally {
-                    db.endTransaction();
-                }
+                responseData = response.items;
             }
 
             @NonNull
             @Override
             protected LiveData<List<Item>> loadFromDb() {
-                return postsDao.loadEndpoint(Endpoints.CONVERSATION);
-            }
-
-            @Override
-            protected void onFetchFailed() {
-                endpointRateLimit.reset(id);
+                return new LiveData<List<Item>>() {
+                    @Override
+                    protected void onActive() {
+                        super.onActive();
+                        setValue(responseData);
+                    }
+                };
             }
         }.asLiveData();
     }
