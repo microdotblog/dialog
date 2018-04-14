@@ -5,15 +5,12 @@ import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.dialogapp.dialog.di.Injectable;
 import com.dialogapp.dialog.model.Item;
 import com.dialogapp.dialog.ui.base.BaseListFragment;
 import com.dialogapp.dialog.ui.common.ItemRecyclerAdapter;
-import com.dialogapp.dialog.ui.common.PostViewHolder;
-import com.dialogapp.dialog.util.InsetDividerDecoration;
 
 import java.util.List;
 
@@ -51,12 +48,9 @@ public class ProfileFragment extends BaseListFragment implements Injectable {
     }
 
     @Override
-    protected void setupRecyclerView() {
-        adapter = new ItemRecyclerAdapter(Glide.with(this));
-        recyclerView.setAdapter(adapter);
-        recyclerView.setRecyclerListener(holder -> ((PostViewHolder) holder).clearView());
-        recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
-        recyclerView.addItemDecoration(new InsetDividerDecoration(this.getActivity()));
+    protected RecyclerView.Adapter<ItemRecyclerAdapter.PostViewHolder> getAdapter(Bundle savedInstanceState) {
+        adapter = new ItemRecyclerAdapter(this.getActivity());
+        return adapter;
     }
 
     @Override

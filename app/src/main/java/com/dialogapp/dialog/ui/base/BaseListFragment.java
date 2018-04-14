@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 
 import com.dialogapp.dialog.R;
 import com.dialogapp.dialog.model.Item;
+import com.dialogapp.dialog.util.InsetDividerDecoration;
 import com.dialogapp.dialog.util.Status;
 
 import java.util.List;
@@ -69,7 +71,11 @@ public abstract class BaseListFragment extends Fragment {
 
         swipeSetRefresh(true);
         setSwipeListener();
-        setupRecyclerView();
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity(), LinearLayoutManager.VERTICAL, false));
+        recyclerView.addItemDecoration(new InsetDividerDecoration(this.getActivity()));
+        recyclerView.setAdapter(getAdapter(savedInstanceState));
+
         setViewModel();
     }
 
@@ -113,7 +119,7 @@ public abstract class BaseListFragment extends Fragment {
 
     protected abstract void setAdapterData(List<Item> data);
 
-    protected abstract void setupRecyclerView();
+    protected abstract RecyclerView.Adapter getAdapter(Bundle savedInstanceState);
 
     protected abstract void setViewModel();
 
