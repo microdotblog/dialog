@@ -13,7 +13,9 @@ import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -51,6 +53,9 @@ public class ItemRecyclerAdapter extends ListAdapter<Item, ItemRecyclerAdapter.P
                 }
             };
 
+    private int expandedPosition = -1;
+    private int previousExpandedPosition = -1;
+
     private Context context;
     private RequestManager glide;
 
@@ -63,12 +68,31 @@ public class ItemRecyclerAdapter extends ListAdapter<Item, ItemRecyclerAdapter.P
     @NonNull
     @Override
     public PostViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new PostViewHolder(LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.post_item, parent, false));
+        final View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.post_item, parent, false);
+        final PostViewHolder viewHolder = new PostViewHolder(view);
+
+        viewHolder.toggleButton.setOnClickListener(v -> {
+            int position = viewHolder.getAdapterPosition();
+            boolean isExpanded = position == expandedPosition;
+            expandedPosition = isExpanded ? -1 : position;
+            notifyItemChanged(previousExpandedPosition);
+            notifyItemChanged(position);
+        });
+
+        return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull PostViewHolder holder, int position) {
+        final boolean isExpanded = position == expandedPosition;
+        holder.postOptions.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
+        holder.itemView.setActivated(isExpanded);
+        holder.toggleDrawable.setCompoundDrawablesWithIntrinsicBounds(0, 0,
+                0, isExpanded ? R.drawable.ic_collapse_grey_24px : R.drawable.ic_expand_grey_24px);
+        if (isExpanded)
+            previousExpandedPosition = position;
+
         Item item = getItem(position);
         glide.load(item.author.avatar)
                 .apply(RequestOptions.circleCropTransform())
@@ -84,6 +108,15 @@ public class ItemRecyclerAdapter extends ListAdapter<Item, ItemRecyclerAdapter.P
         super.onViewRecycled(holder);
     }
 
+    public int getExpandedPosition() {
+        return expandedPosition;
+    }
+
+    public void setExpandedPosition(int expandedPosition) {
+        this.expandedPosition = expandedPosition;
+    }
+
+
     public class PostViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.image_thumbnail)
         ImageView thumbnail;
@@ -96,6 +129,15 @@ public class ItemRecyclerAdapter extends ListAdapter<Item, ItemRecyclerAdapter.P
 
         @BindView(R.id.text_time)
         TextView time;
+
+        @BindView(R.id.button_toggle)
+        FrameLayout toggleButton;
+
+        @BindView(R.id.toggle)
+        TextView toggleDrawable;
+
+        @BindView(R.id.post_options)
+        LinearLayout postOptions;
 
         public PostViewHolder(View itemView) {
             super(itemView);
