@@ -22,7 +22,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import dagger.android.support.HasSupportFragmentInjector;
 
-public class ProfileActivity extends BaseInjectableActivity implements BaseListFragment.FragmentEventListener<MicroBlogResponse>,
+public class ProfileActivity extends BaseInjectableActivity implements BaseListFragment.FragmentEventListener,
         HasSupportFragmentInjector {
     public static final String EXTRA_USERNAME = ProfileActivity.class.getName() + ".EXTRA_USERNAME";
 
@@ -84,18 +84,20 @@ public class ProfileActivity extends BaseInjectableActivity implements BaseListF
 
     @Override
     @SuppressWarnings("ConstantConditions")
-    public void onLoadSuccess(MicroBlogResponse data) {
-        Glide.with(this).load(data.author.avatar)
+    public void onLoadSuccess(Object data) {
+        MicroBlogResponse responseData = (MicroBlogResponse) data;
+
+        Glide.with(this).load(responseData.author.avatar)
                 .apply(new RequestOptions().circleCrop())
                 .into(avatar);
-        fullname.setText(data.author.name);
-        if (!data.author.url.isEmpty()) {
+        fullname.setText(responseData.author.name);
+        if (!responseData.author.url.isEmpty()) {
             website.setVisibility(View.VISIBLE);
-            website.setText(data.author.url);
+            website.setText(responseData.author.url);
         }
-        if (!data.microblog.bio.isEmpty()) {
+        if (!responseData.microblog.bio.isEmpty()) {
             about.setVisibility(View.VISIBLE);
-            about.setText(data.microblog.bio);
+            about.setText(responseData.microblog.bio);
         }
     }
 

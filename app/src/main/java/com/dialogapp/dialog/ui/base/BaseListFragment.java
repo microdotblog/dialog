@@ -35,7 +35,6 @@ public abstract class BaseListFragment extends Fragment {
     @BindView(R.id.recycler_list)
     protected RecyclerView recyclerView;
 
-    @Nullable
     @BindView(R.id.swipeContainer)
     protected SwipeRefreshLayout swipeRefreshLayout;
 
@@ -69,8 +68,7 @@ public abstract class BaseListFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        swipeSetRefresh(true);
-        setSwipeListener();
+        swipeRefreshLayout.setOnRefreshListener(this::refresh);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity(), LinearLayoutManager.VERTICAL, false));
         recyclerView.addItemDecoration(new InsetDividerDecoration(this.getActivity()));
@@ -99,22 +97,19 @@ public abstract class BaseListFragment extends Fragment {
             }
         }
 
+        if (status == Status.LOADING)
+            swipeRefreshLayout.setRefreshing(true);
+
         if (status == Status.ERROR)
             listener.onLoadError(message);
 
         if (status != Status.LOADING)
-            swipeSetRefresh(false);
+            swipeRefreshLayout.setRefreshing(false);
     }
 
     protected void refresh() {
-        swipeSetRefresh(true);
+        swipeRefreshLayout.setRefreshing(true);
         onViewRefreshed();
-    }
-
-    protected void setSwipeListener() {
-        if (swipeRefreshLayout != null) {
-            swipeRefreshLayout.setOnRefreshListener(this::refresh);
-        }
     }
 
     protected abstract void setAdapterData(List<Item> data);
@@ -125,14 +120,8 @@ public abstract class BaseListFragment extends Fragment {
 
     protected abstract void onViewRefreshed();
 
-    private void swipeSetRefresh(boolean value) {
-        if (swipeRefreshLayout != null) {
-            swipeRefreshLayout.setRefreshing(value);
-        }
-    }
-
-    public interface FragmentEventListener<T> {
-        default void onLoadSuccess(T data) {
+    public interface FragmentEventListener {
+        default void onLoadSuccess(Object data) {
         }
 
         void onLoadError(String message);

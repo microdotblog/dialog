@@ -18,8 +18,8 @@
         <TextView
             android:id="@+id/empty_list"
             style="@style/textEmptyStyle"
-            android:layout_gravity="center_vertical"
-            android:drawableTop="@drawable/ic_chat_black_24dp"
+            android:layout_gravity="top"
+            android:drawableTop="@drawable/ic_chat_grey_24dp"
             android:text="@string/empty_list"
             android:visibility="gone" />
     </FrameLayout>
