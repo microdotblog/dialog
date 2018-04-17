@@ -19,17 +19,12 @@ import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import timber.log.Timber;
-
 @Singleton
 public class PostsRepository {
     private final AppExecutors appExecutors;
     private final MicroblogService microblogService;
     private MicroBlogDb db;
     private final PostsDao postsDao;
-
-    private String timelineTopPostId;
-    private String mentionsTopPostId;
 
     private RateLimiter<String> endpointRateLimit = new RateLimiter<>(2, TimeUnit.MINUTES);
 
@@ -45,18 +40,13 @@ public class PostsRepository {
         return new NetworkBoundResource<List<Item>, MicroBlogResponse>(appExecutors) {
             @Override
             protected boolean shouldFetch(@Nullable List<Item> dbData) {
-                if (dbData != null && !dbData.isEmpty()) {
-                    timelineTopPostId = Long.toString(dbData.get(0).id);
-                }
-
                 return dbData == null || dbData.isEmpty() || endpointRateLimit.shouldFetch(Endpoints.TIMELINE);
             }
 
             @NonNull
             @Override
             protected LiveData<ApiResponse<MicroBlogResponse>> createCall() {
-                Timber.i("Timeline top ID: %s", timelineTopPostId);
-                return microblogService.getTimeLine(timelineTopPostId);
+                return microblogService.getTimeLine(null);
             }
 
             @Override
@@ -69,7 +59,14 @@ public class PostsRepository {
 
             @Override
             protected void saveCallResult(@NonNull MicroBlogResponse response) {
-                postsDao.insertPosts(response.items);
+                db.beginTransaction();
+                try {
+                    db.postsDao().deletePosts(Endpoints.TIMELINE);
+                    db.postsDao().insertPosts(response.items);
+                    db.setTransactionSuccessful();
+                } finally {
+                    db.endTransaction();
+                }
             }
 
             @NonNull
@@ -89,18 +86,13 @@ public class PostsRepository {
         return new NetworkBoundResource<List<Item>, MicroBlogResponse>(appExecutors) {
             @Override
             protected boolean shouldFetch(@Nullable List<Item> dbData) {
-                if (dbData != null && !dbData.isEmpty()) {
-                    mentionsTopPostId = Long.toString(dbData.get(0).id);
-                }
-
                 return dbData == null || dbData.isEmpty() || endpointRateLimit.shouldFetch(Endpoints.MENTIONS);
             }
 
             @NonNull
             @Override
             protected LiveData<ApiResponse<MicroBlogResponse>> createCall() {
-                Timber.i("Mentions top ID: %s", mentionsTopPostId);
-                return microblogService.getMentions(mentionsTopPostId);
+                return microblogService.getMentions(null);
             }
 
             @Override
@@ -113,7 +105,14 @@ public class PostsRepository {
 
             @Override
             protected void saveCallResult(@NonNull MicroBlogResponse response) {
-                postsDao.insertPosts(response.items);
+                db.beginTransaction();
+                try {
+                    db.postsDao().deletePosts(Endpoints.MENTIONS);
+                    db.postsDao().insertPosts(response.items);
+                    db.setTransactionSuccessful();
+                } finally {
+                    db.endTransaction();
+                }
             }
 
             @NonNull
