@@ -43,12 +43,6 @@ class AppModule {
 
     @Singleton
     @Provides
-    ServiceInterceptor provideServiceInterceptor() {
-        return new ServiceInterceptor();
-    }
-
-    @Singleton
-    @Provides
     MicroBlogDb provideDb(Application app) {
         return Room.databaseBuilder(app, MicroBlogDb.class, "microblog.db")
                 .addCallback(new DbOpenCallback())
