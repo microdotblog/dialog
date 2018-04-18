@@ -29,15 +29,19 @@ import com.dialogapp.dialog.ui.profilescreen.ProfileActivity;
 import com.dialogapp.dialog.util.GlideImageGetter;
 import com.dialogapp.dialog.util.Objects;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+import java.util.LinkedList;
+import java.util.Queue;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import timber.log.Timber;
 
 import static android.text.Html.FROM_HTML_MODE_LEGACY;
-import static android.util.TypedValue.COMPLEX_UNIT_DIP;
-import static android.util.TypedValue.applyDimension;
 
 public class ItemRecyclerAdapter extends ListAdapter<Item, ItemRecyclerAdapter.PostViewHolder> {
     public static final DiffUtil.ItemCallback<Item> DIFF_CALLBACK =
@@ -171,10 +175,11 @@ public class ItemRecyclerAdapter extends ListAdapter<Item, ItemRecyclerAdapter.P
 
         private void bindHtmlContent(String contentHtml) {
             CharSequence spannedText;
-            Matcher matcher = Pattern.compile("<img").matcher(contentHtml);
-            if (matcher.find()) {
-                float size = applyDimension(COMPLEX_UNIT_DIP, 64, context.getResources().getDisplayMetrics());
-                GlideImageGetter imageGetter = new GlideImageGetter(glide, content, (int) size);
+            Document doc = Jsoup.parse(contentHtml);
+            Elements images = doc.select("img");
+            if (!images.isEmpty()) {
+                Queue<Boolean> imagesQueue = getImages(images);
+                GlideImageGetter imageGetter = new GlideImageGetter(glide, content, imagesQueue);
                 spannedText = getSpanned(contentHtml, imageGetter);
             } else {
                 spannedText = getSpanned(contentHtml, null);
@@ -184,6 +189,38 @@ public class ItemRecyclerAdapter extends ListAdapter<Item, ItemRecyclerAdapter.P
             LinkClickHandler.makeLinksClickable(context, htmlString);
             content.setText(trimTrailingWhitespace(spannedText));
             content.setMovementMethod(LinkMovementMethod.getInstance());
+        }
+
+        /**
+         * Marks the images encountered while parsing the content as either large or small
+         * <p>
+         * An image is marked as small ('true') if the image tag has some particular class values or
+         * the dimensions of the image, if present, are smaller than predefined dimensions.
+         * 'false' otherwise.
+         *
+         * @param images list of image tags
+         * @return list of booleans representing the size of the image
+         */
+        @NonNull
+        private Queue<Boolean> getImages(Elements images) {
+            Queue<Boolean> imageQueue = new LinkedList<>();
+            for (Element img : images) {
+                Timber.i(img.outerHtml());
+                int width = -1, height = -1;
+                boolean hasAttribs = false;
+                if (img.hasAttr("width") && img.hasAttr("height")) {
+                    hasAttribs = true;
+                    width = Integer.parseInt(img.attributes().get("width"));
+                    height = Integer.parseInt(img.attributes().get("height"));
+                }
+
+                if (img.hasClass("wp-smiley") || img.hasClass("mini_thumbnail") ||
+                        (hasAttribs && (width > 0 && width <= 100) && (height > 0 && height <= 100)))
+                    imageQueue.add(true);
+                else
+                    imageQueue.add(false);
+            }
+            return imageQueue;
         }
 
         private CharSequence getSpanned(String contentHtml, GlideImageGetter imageGetter) {

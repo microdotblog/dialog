@@ -98,6 +98,9 @@ dependencies {
     // Hawk
     implementation 'com.orhanobut:hawk:2.0.1'
 
+    // Jsoup
+    implementation 'org.jsoup:jsoup:1.11.3'
+
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.mockito:mockito-core:2.15.0'
     testImplementation 'com.squareup.okhttp3:mockwebserver:3.9.1'

@@ -1,6 +1,7 @@
 package com.dialogapp.dialog.util;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
@@ -27,6 +28,7 @@ import com.dialogapp.dialog.R;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Queue;
 
 import timber.log.Timber;
 
@@ -36,20 +38,30 @@ import timber.log.Timber;
  * Adapted from https://github.com/TWiStErRob/glide-support/commit/c3de297d0daec8d2650a3a640c0404c35b937a30
  */
 public class GlideImageGetter implements Html.ImageGetter, Drawable.Callback {
+    private static final int DEFAULT_WIDTH_PX = 48;
+    private static final int DEFAULT_HEIGHT_PX = 48;
+    private static final int DEFAULT_IMAGE_HEIGHT_DP = 192;
+    private static final int DIFF_WIDTH_DP = 96; // value calculated from post_item layout
 
     private final RequestManager manager;
     private final RequestOptions requestOptions;
     private RequestBuilder<Drawable> glide;
     private TextView targetView;
     private Context context;
-    private int size;
+    private Queue<Boolean> imageQueue;
+    private int calculatedWidthPx;
+    private int calculatedHeightPx;
     private List<Target> imageTargets = new ArrayList<>();
 
-    public GlideImageGetter(RequestManager glide, TextView targetView, int size) {
+    public GlideImageGetter(RequestManager glide, TextView targetView, Queue<Boolean> imageQueue) {
         this.manager = glide;
         this.targetView = targetView;
         this.context = targetView.getContext().getApplicationContext();
-        this.size = size;
+        this.imageQueue = imageQueue;
+
+        this.calculatedHeightPx = dpToPx(DEFAULT_IMAGE_HEIGHT_DP);
+        int diffPx = dpToPx(DIFF_WIDTH_DP);
+        this.calculatedWidthPx = Resources.getSystem().getDisplayMetrics().widthPixels - diffPx;
 
         this.requestOptions = new RequestOptions()
                 .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
@@ -75,8 +87,19 @@ public class GlideImageGetter implements Html.ImageGetter, Drawable.Callback {
 
     @Override
     public Drawable getDrawable(String url) {
+        int drawableWidth;
+        int drawableHeight;
+        if (imageQueue.remove()) {
+            // image at current position in the text is small-sized
+            drawableWidth = DEFAULT_WIDTH_PX;
+            drawableHeight = DEFAULT_HEIGHT_PX;
+        } else {
+            // image at current position in the text is a large-sized
+            drawableWidth = calculatedWidthPx;
+            drawableHeight = calculatedHeightPx;
+        }
         // set up target for this Image inside the TextView
-        WrapperTarget imageTarget = new WrapperTarget(size);
+        WrapperTarget imageTarget = new WrapperTarget(drawableWidth, drawableHeight);
         Drawable asyncWrapper = imageTarget.getLazyDrawable();
         // listen for Drawable's request for invalidation
         asyncWrapper.setCallback(this);
@@ -122,6 +145,10 @@ public class GlideImageGetter implements Html.ImageGetter, Drawable.Callback {
                 });
     }
 
+    private int dpToPx(int dp) {
+        return (int) (dp * Resources.getSystem().getDisplayMetrics().density);
+    }
+
     private class WrapperTarget extends SimpleTarget<Drawable> {
         /**
          * Workaround because the AppCompat DrawableWrapper doesn't support null drawable as the API23 version does
@@ -130,11 +157,11 @@ public class GlideImageGetter implements Html.ImageGetter, Drawable.Callback {
         private final CircularProgressDrawable progressDrawable = new CircularProgressDrawable(context);
         private final DrawableWrapper wrapper = new DrawableWrapper(null/* temporarily null until a setDrawable call*/);
 
-        public WrapperTarget(int size) {
-            super(size, size);
+        public WrapperTarget(int width, int height) {
+            super(width, height);
             setDrawable(null);
-            // set wrapper bounds to fix the size of the view, TextViews don't like ImageSpans changing dimensions
-            wrapper.setBounds(0, 0, size, size);
+            // set wrapper bounds to fix the height of the view, TextViews don't like ImageSpans changing dimensions
+            wrapper.setBounds(0, 0, width, height);
 
             progressDrawable.setStyle(CircularProgressDrawable.DEFAULT);
         }
