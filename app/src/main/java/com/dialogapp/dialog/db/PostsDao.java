@@ -22,6 +22,9 @@ public interface PostsDao {
     @Query("DELETE FROM posts WHERE endpoint = :endpoint")
     void deletePosts(String endpoint);
 
+    @Query("DELETE FROM posts")
+    void dropTable();
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertMicroblogData(MicroBlogResponse data);
 

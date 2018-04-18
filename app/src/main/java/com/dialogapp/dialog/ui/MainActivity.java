@@ -21,8 +21,10 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestOptions;
+import com.dialogapp.dialog.AppExecutors;
 import com.dialogapp.dialog.R;
 import com.dialogapp.dialog.api.ServiceInterceptor;
+import com.dialogapp.dialog.db.PostsDao;
 import com.dialogapp.dialog.ui.base.BaseInjectableActivity;
 import com.dialogapp.dialog.ui.base.BaseListFragment;
 import com.dialogapp.dialog.ui.favorites.FavoritesActivity;
@@ -51,6 +53,12 @@ public class MainActivity extends BaseInjectableActivity implements BaseListFrag
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
+
+    @Inject
+    PostsDao postsDao;
+
+    @Inject
+    AppExecutors appExecutors;
 
     @BindView(R.id.nav_view)
     NavigationView navigationView;
@@ -163,6 +171,7 @@ public class MainActivity extends BaseInjectableActivity implements BaseListFrag
 
     private void startLoginActivity() {
         Hawk.delete(getString(R.string.pref_token));
+        appExecutors.diskIO().execute(() -> postsDao.dropTable());
         Intent loginIntent = new Intent(this, LoginActivity.class);
         startActivity(loginIntent);
         finish();
