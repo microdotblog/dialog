@@ -3,10 +3,12 @@ package com.dialogapp.dialog.ui.imageviewer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
@@ -36,6 +38,9 @@ public class ImageViewerFragment extends Fragment implements Injectable {
     private Unbinder unbinder;
     private boolean isGif;
 
+    @BindView(R.id.frame_image_viewer)
+    FrameLayout frameLayout;
+
     @BindView(R.id.image_post)
     BigImageView imagePost;
 
@@ -58,7 +63,7 @@ public class ImageViewerFragment extends Fragment implements Injectable {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             imageUrl = getArguments().getString(ARG_IMAGE_URL);
-            if (imageUrl.endsWith(".gif"))
+            if (imageUrl != null && imageUrl.endsWith(".gif"))
                 isGif = true;
         }
 
@@ -77,38 +82,44 @@ public class ImageViewerFragment extends Fragment implements Injectable {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        if (isGif) {
-            progressBar.setIndeterminate(true);
-            RequestOptions requestOptions = new RequestOptions()
-                    .diskCacheStrategy(DiskCacheStrategy.DATA)
-                    .error(R.drawable.ic_broken_image_white_24dp);
-
-            imagePost.setVisibility(View.GONE);
-            imagePostGif.setVisibility(View.VISIBLE);
-            Glide.with(this)
-                    .asGif()
-                    .apply(requestOptions)
-                    .load(imageUrl)
-                    .listener(new RequestListener<GifDrawable>() {
-                        @Override
-                        public boolean onLoadFailed(@Nullable GlideException e, Object model,
-                                                    Target<GifDrawable> target, boolean isFirstResource) {
-                            progressBar.setIndeterminate(false);
-                            return false;
-                        }
-
-                        @Override
-                        public boolean onResourceReady(GifDrawable resource, Object model,
-                                                       Target<GifDrawable> target, DataSource dataSource, boolean isFirstResource) {
-                            progressBar.setIndeterminate(false);
-                            progressBar.setVisibility(View.GONE);
-                            return false;
-                        }
-                    })
-                    .into(imagePostGif);
+        if (imageUrl == null) {
+            Snackbar.make(frameLayout, "Invalid image url", Snackbar.LENGTH_INDEFINITE)
+                    .show();
         } else {
-            imagePost.setProgressIndicator(new ProgressPieIndicator());
-            imagePost.showImage(Uri.parse(imageUrl));
+            if (isGif) {
+                progressBar.setVisibility(View.VISIBLE);
+                progressBar.setIndeterminate(true);
+                RequestOptions requestOptions = new RequestOptions()
+                        .diskCacheStrategy(DiskCacheStrategy.DATA)
+                        .error(R.drawable.ic_broken_image_white_24dp);
+
+                imagePost.setVisibility(View.GONE);
+                imagePostGif.setVisibility(View.VISIBLE);
+                Glide.with(this)
+                        .asGif()
+                        .apply(requestOptions)
+                        .load(imageUrl)
+                        .listener(new RequestListener<GifDrawable>() {
+                            @Override
+                            public boolean onLoadFailed(@Nullable GlideException e, Object model,
+                                                        Target<GifDrawable> target, boolean isFirstResource) {
+                                progressBar.setIndeterminate(false);
+                                return false;
+                            }
+
+                            @Override
+                            public boolean onResourceReady(GifDrawable resource, Object model,
+                                                           Target<GifDrawable> target, DataSource dataSource, boolean isFirstResource) {
+                                progressBar.setIndeterminate(false);
+                                progressBar.setVisibility(View.GONE);
+                                return false;
+                            }
+                        })
+                        .into(imagePostGif);
+            } else {
+                imagePost.setProgressIndicator(new ProgressPieIndicator());
+                imagePost.showImage(Uri.parse(imageUrl));
+            }
         }
     }
 

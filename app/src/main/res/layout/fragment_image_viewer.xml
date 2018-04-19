@@ -1,6 +1,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frame_image_viewer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/black"
@@ -10,9 +11,10 @@
     <ProgressBar
         android:id="@+id/progressBar_image_viewer"
         style="?android:attr/progressBarStyleHorizontal"
-        android:progressTint="?attr/colorAccent"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:progressTint="?attr/colorAccent"
+        android:visibility="gone" />
 
     <com.github.piasy.biv.view.BigImageView
         android:id="@+id/image_post"
