@@ -18,5 +18,16 @@
         <item name="android:windowBackground">@color/grey50</item>
     </style>
 
+    <style name="AppTheme.Settings" parent="@style/PreferenceFixTheme.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/indigo500</item>
+        <item name="colorPrimaryDark">@color/indigo700</item>
+        <item name="colorAccent">@color/reda200</item>
+        <item name="android:statusBarColor">@color/indigo800</item>
+        <item name="android:textColorPrimary">@color/blacka87</item>
+        <item name="android:textColorSecondary">@color/blacka54</item>
+        <item name="android:textColorHint">@color/blacka38</item>
+        <item name="android:windowBackground">@color/grey50</item>
+    </style>
+
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 </resources>

@@ -31,6 +31,7 @@ import com.dialogapp.dialog.ui.favorites.FavoritesActivity;
 import com.dialogapp.dialog.ui.loginscreen.LoginActivity;
 import com.dialogapp.dialog.ui.loginscreen.LoginViewModel;
 import com.dialogapp.dialog.ui.profilescreen.ProfileActivity;
+import com.dialogapp.dialog.ui.settings.SettingsActivity;
 import com.dialogapp.dialog.util.Status;
 import com.orhanobut.hawk.Hawk;
 
@@ -160,7 +161,7 @@ public class MainActivity extends BaseInjectableActivity implements BaseListFrag
                 intent = new Intent(this, FavoritesActivity.class);
                 break;
             case R.id.menu_item_settings:
-                return false;
+                intent = new Intent(this, SettingsActivity.class);
         }
 
         startActivity(intent);
