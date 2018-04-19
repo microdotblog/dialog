@@ -12,6 +12,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.preference.PreferenceManagerFix;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -23,12 +24,19 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class SettingsActivity extends AppCompatActivity
-        implements SharedPreferences.OnSharedPreferenceChangeListener, SettingsFragment.SettingsFragmentEventListener {
-    public static final String KEY_PREF_LOC_PERM = "pref_locationPermission";
+        implements SettingsFragment.SettingsFragmentEventListener {
     public static final int LOCATION_REQUEST_CODE = 99;
 
     @BindView(R.id.toolbar_container)
     Toolbar toolbar;
+
+    private SharedPreferences.OnSharedPreferenceChangeListener listener = (sharedPreferences, key) -> {
+        if (key.equals(getString(R.string.pref_nightMode))) {
+            getDelegate().setLocalNightMode(Integer.parseInt(sharedPreferences.getString(key,
+                    String.valueOf(AppCompatDelegate.MODE_NIGHT_AUTO))));
+            recreate();
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,14 +58,14 @@ public class SettingsActivity extends AppCompatActivity
     protected void onResume() {
         super.onResume();
         PreferenceManagerFix.getDefaultSharedPreferences(this)
-                .registerOnSharedPreferenceChangeListener(this);
+                .registerOnSharedPreferenceChangeListener(listener);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         PreferenceManagerFix.getDefaultSharedPreferences(this)
-                .unregisterOnSharedPreferenceChangeListener(this);
+                .unregisterOnSharedPreferenceChangeListener(listener);
     }
 
     @Override
@@ -70,11 +78,6 @@ public class SettingsActivity extends AppCompatActivity
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    @Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-
     }
 
     @Override

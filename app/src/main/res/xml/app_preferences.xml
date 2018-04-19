@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <android.support.v7.preference.PreferenceCategory android:title="Appearance">
+        <android.support.v7.preference.ListPreference
+            android:entries="@array/modes"
+            android:entryValues="@array/nightModes"
+            android:key="@string/pref_nightMode"
+            android:defaultValue="0"
+            android:summary="@string/settings_night_mode"
+            android:title="Theme mode" />
+    </android.support.v7.preference.PreferenceCategory>
+
     <android.support.v7.preference.PreferenceCategory android:title="General">
 
         <android.support.v7.preference.Preference

@@ -1,14 +1,13 @@
 package com.dialogapp.dialog.ui.base;
 
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 
 import javax.inject.Inject;
 
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.support.HasSupportFragmentInjector;
 
-public abstract class BaseInjectableActivity extends AppCompatActivity implements HasSupportFragmentInjector {
+public abstract class BaseInjectableActivity extends BaseThemedActivity implements HasSupportFragmentInjector {
     @Inject
     DispatchingAndroidInjector<Fragment> dispatchingAndroidInjector;
 

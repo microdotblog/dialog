@@ -25,4 +25,5 @@
     <string name="connection_error">Could not connect to Microblog. Showing cached posts.</string>
 
     <string name="settings_location">Location access is required for accurate auto day-night theme switching</string>
+    <string name="settings_night_mode">Set the application theme mode</string>
 </resources>
