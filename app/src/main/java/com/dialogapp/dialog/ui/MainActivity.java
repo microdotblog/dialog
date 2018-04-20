@@ -185,8 +185,8 @@ public class MainActivity extends BaseInjectableActivity implements BaseListFrag
 
         TabLayout tabLayout = findViewById(R.id.tabLayout);
         tabLayout.setupWithViewPager(viewPager);
-        tabLayout.getTabAt(0).setIcon(R.drawable.tab_ic_timeline_white_24px);
-        tabLayout.getTabAt(1).setIcon(R.drawable.tab_ic_mentions_white_24px);
+        tabLayout.getTabAt(0).setIcon(R.drawable.tab_ic_view_stream_white_24px);
+        tabLayout.getTabAt(1).setIcon(R.drawable.tab_ic_chat_white_24px);
         tabLayout.getTabAt(2).setIcon(R.drawable.tab_ic_discover_white_24px);
     }
 }
