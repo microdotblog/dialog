@@ -23,6 +23,20 @@ public class LinkClickHandler {
         ImageSpan[] images = htmlString.getSpans(0, htmlString.length(), ImageSpan.class);
         URLSpan[] urls = htmlString.getSpans(0, htmlString.length(), URLSpan.class);
 
+        for (ImageSpan span : images) {
+            int start = htmlString.getSpanStart(span);
+            int end = htmlString.getSpanEnd(span);
+            int flags = htmlString.getSpanFlags(span);
+            ClickableSpan clickable = new ClickableSpan() {
+                public void onClick(View view) {
+                    Intent intent = new Intent(context, ImageViewerActivity.class);
+                    intent.putExtra(ImageViewerActivity.EXTRA_IMAGE_URL, span.getSource());
+                    context.startActivity(intent);
+                }
+            };
+            htmlString.setSpan(clickable, start, end, flags);
+        }
+
         for (URLSpan span : urls) {
             int start = htmlString.getSpanStart(span);
             int end = htmlString.getSpanEnd(span);
@@ -57,20 +71,6 @@ public class LinkClickHandler {
                 htmlString.setSpan(new ForegroundColorSpan(value.data), start, end, 0);
             }
             htmlString.removeSpan(span);
-        }
-
-        for (ImageSpan span : images) {
-            int start = htmlString.getSpanStart(span);
-            int end = htmlString.getSpanEnd(span);
-            int flags = htmlString.getSpanFlags(span);
-            ClickableSpan clickable = new ClickableSpan() {
-                public void onClick(View view) {
-                    Intent intent = new Intent(context, ImageViewerActivity.class);
-                    intent.putExtra(ImageViewerActivity.EXTRA_IMAGE_URL, span.getSource());
-                    context.startActivity(intent);
-                }
-            };
-            htmlString.setSpan(clickable, start, end, flags);
         }
     }
 }
