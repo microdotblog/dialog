@@ -1,5 +1,4 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/frame_image_viewer"
     android:layout_width="match_parent"
@@ -13,22 +12,13 @@
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="top"
         android:progressTint="?attr/colorAccent"
         android:visibility="gone" />
 
-    <com.github.piasy.biv.view.BigImageView
+    <com.github.chrisbanes.photoview.PhotoView
         android:id="@+id/image_post"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:failureImage="@drawable/ic_broken_image_white_24dp"
-        app:failureImageInitScaleType="center"
-        app:optimizeDisplay="true">
-
-    </com.github.piasy.biv.view.BigImageView>
-
-    <ImageView
-        android:id="@+id/image_post_gif"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone" />
+        tools:src="@tools:sample/backgrounds/scenic" />
 </FrameLayout>
