@@ -1,5 +1,6 @@
 package com.dialogapp.dialog.ui.common;
 
+import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import com.dialogapp.dialog.di.Injectable;
 import com.dialogapp.dialog.model.Item;
 import com.dialogapp.dialog.ui.base.BaseListFragment;
 import com.dialogapp.dialog.ui.base.BaseListViewModel;
+import com.dialogapp.dialog.util.Resource;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -29,6 +31,12 @@ public class ListFragment extends BaseListFragment implements Injectable {
 
     private static final String EXTRA_ARG = ListFragment.class.getName() + ".EXTRA_ARG";
     private static final String EXTRA_FRAGMENT = ListFragment.class.getName() + ".EXTRA_FRAGMENT";
+
+    private final Observer<Resource<List<Item>>> observer = listResource -> {
+        if (listResource != null) {
+            setData(listResource.status, listResource.data, listResource.message);
+        }
+    };
 
     private int fragment;
     private String postId;
@@ -94,11 +102,8 @@ public class ListFragment extends BaseListFragment implements Injectable {
             case DISCOVER:
                 viewModel.setView(BaseListViewModel.DISCOVER, null);
         }
-        viewModel.getPosts().observe(this, listResource -> {
-            if (listResource != null) {
-                setData(listResource.status, listResource.data, listResource.message);
-            }
-        });
+        viewModel.getPosts().removeObserver(observer);
+        viewModel.getPosts().observe(this, observer);
     }
 
     @Override
