@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="modes">
-        <item>AUTO</item>
-        <item>DAY</item>
-        <item>NIGHT</item>
+        <item>Auto</item>
+        <item>Day</item>
+        <item>Night</item>
     </string-array>
 
     <string-array name="nightModes">

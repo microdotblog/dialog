@@ -7,7 +7,7 @@
             android:entryValues="@array/nightModes"
             android:key="@string/pref_nightMode"
             android:defaultValue="0"
-            android:summary="@string/settings_night_mode"
+            android:summary="%s"
             android:title="Theme mode" />
     </android.support.v7.preference.PreferenceCategory>
 
