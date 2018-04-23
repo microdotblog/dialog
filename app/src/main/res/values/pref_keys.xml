@@ -5,4 +5,5 @@
     <string translatable="false" name="pref_avatar_url">AVATAR_URL</string>
     <string translatable="false" name="pref_fullname">FULLNAME</string>
     <string translatable="false" name="pref_nightMode">nightmode</string>
+    <string translatable="false" name="pref_preloadImages">preloadimages</string>
 </resources>

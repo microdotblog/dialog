@@ -1,6 +1,7 @@
 package com.dialogapp.dialog.util;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Rect;
@@ -10,6 +11,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.CircularProgressDrawable;
+import android.support.v7.preference.PreferenceManager;
 import android.text.Html;
 import android.view.Gravity;
 import android.widget.TextView;
@@ -45,10 +47,12 @@ public class GlideImageGetter implements Html.ImageGetter, Drawable.Callback {
 
     private final RequestManager manager;
     private final RequestOptions requestOptions;
+    private final boolean isConnectedToWifi;
     private RequestBuilder<Drawable> glide;
     private TextView targetView;
     private Context context;
     private Queue<Boolean> imageQueue;
+    private int shouldLoadImages;
     private int calculatedWidthPx;
     private int calculatedHeightPx;
     private List<Target> imageTargets = new ArrayList<>();
@@ -58,6 +62,10 @@ public class GlideImageGetter implements Html.ImageGetter, Drawable.Callback {
         this.targetView = targetView;
         this.context = targetView.getContext().getApplicationContext();
         this.imageQueue = imageQueue;
+        this.isConnectedToWifi = NetworkUtil.getConnectivityStatus(context) == NetworkUtil.TYPE_WIFI;
+
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
+        this.shouldLoadImages = Integer.parseInt(sharedPref.getString(context.getString(R.string.pref_preloadImages), "0"));
 
         this.calculatedHeightPx = dpToPx(DEFAULT_IMAGE_HEIGHT_DP);
         int diffPx = dpToPx(DIFF_WIDTH_DP);
@@ -89,7 +97,9 @@ public class GlideImageGetter implements Html.ImageGetter, Drawable.Callback {
     public Drawable getDrawable(String url) {
         int drawableWidth;
         int drawableHeight;
-        if (imageQueue.remove()) {
+
+        boolean smallImage = imageQueue.remove();
+        if (smallImage) {
             // image at current position in the text is small-sized
             drawableWidth = DEFAULT_WIDTH_PX;
             drawableHeight = DEFAULT_HEIGHT_PX;
@@ -105,7 +115,13 @@ public class GlideImageGetter implements Html.ImageGetter, Drawable.Callback {
         asyncWrapper.setCallback(this);
 
         // start Glide's async load
-        glide.load(url).into(imageTarget);
+        if (smallImage || shouldLoadImages == 0 || (shouldLoadImages == 1 && isConnectedToWifi)) {
+            glide.load(url).into(imageTarget);
+        } else {
+            glide.load(url)
+                    .apply(new RequestOptions().onlyRetrieveFromCache(true))
+                    .into(imageTarget);
+        }
         // save target for clearing it later
         imageTargets.add(imageTarget);
         return asyncWrapper;
@@ -182,7 +198,11 @@ public class GlideImageGetter implements Html.ImageGetter, Drawable.Callback {
         public void onLoadFailed(@Nullable Drawable errorDrawable) {
             Timber.i("Load Failed : %s", this);
             progressDrawable.stop();
-            errorDrawable = ContextCompat.getDrawable(context, R.drawable.ic_broken_image_black_24dp);
+            if (shouldLoadImages == 0 || (shouldLoadImages == 1 && isConnectedToWifi)) {
+                errorDrawable = ContextCompat.getDrawable(context, R.drawable.ic_broken_image_grey_24dp);
+            } else {
+                errorDrawable = ContextCompat.getDrawable(context, R.drawable.ic_image_grey_24px);
+            }
             setDrawable(errorDrawable);
         }
 

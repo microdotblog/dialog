@@ -11,4 +11,16 @@
         <item>1</item>
         <item>2</item>
     </string-array>
+
+    <string-array name="preloadImages">
+        <item>Always</item>
+        <item>WiFi only</item>
+        <item>Never</item>
+    </string-array>
+
+    <string-array name="preloadImagesValues">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
 </resources>
