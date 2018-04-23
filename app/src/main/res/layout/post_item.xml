@@ -7,14 +7,17 @@
     android:orientation="vertical">
 
     <RelativeLayout
-        android:id="@+id/view_foreground"
+        android:id="@+id/post_item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
         android:orientation="horizontal"
         android:paddingEnd="16dp"
         android:paddingStart="16dp"
         android:paddingTop="16dp"
-        android:paddingBottom="8dp">
+        android:paddingBottom="16dp">
 
         <ImageView
             android:id="@+id/image_thumbnail"
