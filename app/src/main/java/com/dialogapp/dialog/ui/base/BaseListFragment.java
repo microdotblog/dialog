@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.dialogapp.dialog.R;
 import com.dialogapp.dialog.model.Item;
+import com.dialogapp.dialog.ui.common.ItemRecyclerAdapter;
 import com.dialogapp.dialog.util.InsetDividerDecoration;
 import com.dialogapp.dialog.util.Status;
 
@@ -31,6 +32,7 @@ import butterknife.Unbinder;
 public abstract class BaseListFragment extends Fragment {
     protected Unbinder unbinder;
     protected FragmentEventListener listener;
+    protected ItemRecyclerAdapter adapter;
 
     @BindView(R.id.recycler_list)
     protected RecyclerView recyclerView;
@@ -70,11 +72,22 @@ public abstract class BaseListFragment extends Fragment {
 
         swipeRefreshLayout.setOnRefreshListener(this::refresh);
 
+        adapter = new ItemRecyclerAdapter(this.getActivity());
+        if (savedInstanceState != null)
+            adapter.setExpandedPosition(savedInstanceState.getInt("ADAPTER_EXPANDED_POSITION"));
+
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity(), LinearLayoutManager.VERTICAL, false));
         recyclerView.addItemDecoration(new InsetDividerDecoration(this.getActivity()));
-        recyclerView.setAdapter(getAdapter(savedInstanceState));
+        recyclerView.setAdapter(adapter);
 
         setViewModel();
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        if (adapter != null)
+            outState.putInt("ADAPTER_EXPANDED_POSITION", adapter.getExpandedPosition());
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -93,7 +106,7 @@ public abstract class BaseListFragment extends Fragment {
                 emptyPlaceholder.setVisibility(View.GONE);
                 recyclerView.setVisibility(View.VISIBLE);
 
-                setAdapterData(data);
+                adapter.submitList(data);
             }
         }
 
@@ -111,10 +124,6 @@ public abstract class BaseListFragment extends Fragment {
         swipeRefreshLayout.setRefreshing(true);
         onViewRefreshed();
     }
-
-    protected abstract void setAdapterData(List<Item> data);
-
-    protected abstract RecyclerView.Adapter getAdapter(Bundle savedInstanceState);
 
     protected abstract void setViewModel();
 

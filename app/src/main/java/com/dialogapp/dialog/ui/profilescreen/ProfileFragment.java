@@ -4,16 +4,10 @@ package com.dialogapp.dialog.ui.profilescreen;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.RecyclerView;
 
 import com.dialogapp.dialog.di.Injectable;
-import com.dialogapp.dialog.model.Item;
 import com.dialogapp.dialog.ui.base.BaseListFragment;
-import com.dialogapp.dialog.ui.common.ItemRecyclerAdapter;
-
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -22,7 +16,6 @@ import static com.dialogapp.dialog.ui.profilescreen.ProfileActivity.EXTRA_USERNA
 public class ProfileFragment extends BaseListFragment implements Injectable {
     private String username;
     private ProfileViewModel viewModel;
-    private ItemRecyclerAdapter adapter;
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
@@ -41,25 +34,6 @@ public class ProfileFragment extends BaseListFragment implements Injectable {
         if (getArguments() != null) {
             username = getArguments().getString(EXTRA_USERNAME);
         }
-    }
-
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        outState.putInt("ADAPTER_EXPANDED_POSITION", adapter.getExpandedPosition());
-        super.onSaveInstanceState(outState);
-    }
-
-    @Override
-    protected void setAdapterData(List<Item> data) {
-        adapter.submitList(data);
-    }
-
-    @Override
-    protected RecyclerView.Adapter<ItemRecyclerAdapter.PostViewHolder> getAdapter(Bundle savedInstanceState) {
-        adapter = new ItemRecyclerAdapter(this.getActivity());
-        if (savedInstanceState != null)
-            adapter.setExpandedPosition(savedInstanceState.getInt("ADAPTER_EXPANDED_POSITION"));
-        return adapter;
     }
 
     @Override
