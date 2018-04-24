@@ -1,7 +1,5 @@
 package com.dialogapp.dialog.ui;
 
-import android.arch.lifecycle.ViewModelProvider;
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -16,7 +14,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
@@ -30,10 +27,8 @@ import com.dialogapp.dialog.ui.base.BaseListFragment;
 import com.dialogapp.dialog.ui.common.AlertDialogFragment;
 import com.dialogapp.dialog.ui.favorites.FavoritesActivity;
 import com.dialogapp.dialog.ui.loginscreen.LoginActivity;
-import com.dialogapp.dialog.ui.loginscreen.LoginViewModel;
 import com.dialogapp.dialog.ui.profilescreen.ProfileActivity;
 import com.dialogapp.dialog.ui.settings.SettingsActivity;
-import com.dialogapp.dialog.util.Status;
 import com.orhanobut.hawk.Hawk;
 
 import javax.inject.Inject;
@@ -53,9 +48,6 @@ public class MainActivity extends BaseInjectableActivity implements BaseListFrag
 
     @Inject
     ServiceInterceptor serviceInterceptor;
-
-    @Inject
-    ViewModelProvider.Factory viewModelFactory;
 
     @Inject
     PostsDao postsDao;
@@ -93,23 +85,6 @@ public class MainActivity extends BaseInjectableActivity implements BaseListFrag
         String saved_username = intent.getStringExtra(EXTRA_USERNAME);
         String saved_fullname = intent.getStringExtra(EXTRA_FULLNAME);
         String saved_avatarUrl = intent.getStringExtra(EXTRA_AVATARURL);
-
-        LoginViewModel loginViewModel = ViewModelProviders.of(this, viewModelFactory).get(LoginViewModel.class);
-        if (savedInstanceState == null) {
-            loginViewModel.setToken(saved_token);
-        }
-        loginViewModel.verifyToken().observe(this, verifiedAccountResource -> {
-            if (verifiedAccountResource != null) {
-                if (verifiedAccountResource.status == Status.ERROR) {
-                    Toast.makeText(this, R.string.login_verification_failed, Toast.LENGTH_SHORT).show();
-                } else if (verifiedAccountResource.status == Status.SUCCESS && verifiedAccountResource.data != null) {
-                    if (verifiedAccountResource.data.error != null) {
-                        Toast.makeText(this, R.string.login_invalid_token, Toast.LENGTH_LONG).show();
-                        startLoginActivity();
-                    }
-                }
-            }
-        });
 
         serviceInterceptor.setAuthToken(saved_token);
 
