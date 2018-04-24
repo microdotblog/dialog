@@ -10,12 +10,14 @@ import android.view.MenuItem;
 import com.dialogapp.dialog.R;
 import com.dialogapp.dialog.ui.base.BaseInjectableActivity;
 import com.dialogapp.dialog.ui.base.BaseListFragment;
+import com.dialogapp.dialog.ui.common.AlertDialogFragment;
 import com.dialogapp.dialog.ui.common.ListFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ConversationActivity extends BaseInjectableActivity implements BaseListFragment.FragmentEventListener {
+public class ConversationActivity extends BaseInjectableActivity implements BaseListFragment.FragmentEventListener,
+        AlertDialogFragment.AlertDialogListener {
     public static final String EXTRA_POST_ID = ConversationActivity.class.getName() + ".EXTRA_POST_ID";
     private Snackbar errorBar;
 
@@ -60,6 +62,18 @@ public class ConversationActivity extends BaseInjectableActivity implements Base
 
     @Override
     public void onLoadError(String message) {
-        errorBar.show();
+        if (!errorBar.isShownOrQueued()) {
+            errorBar.setAction("Show error", view -> {
+                AlertDialogFragment alertDialog = AlertDialogFragment
+                        .newInstance("Connection Error", message, false);
+                alertDialog.show(getSupportFragmentManager(), "ErrorAlertDialogFragment");
+            });
+            errorBar.show();
+        }
+    }
+
+    @Override
+    public void onFinishAlertDialog(boolean userChoice) {
+
     }
 }

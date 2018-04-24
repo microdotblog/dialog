@@ -9,12 +9,14 @@ import android.view.MenuItem;
 import com.dialogapp.dialog.R;
 import com.dialogapp.dialog.ui.base.BaseInjectableActivity;
 import com.dialogapp.dialog.ui.base.BaseListFragment;
+import com.dialogapp.dialog.ui.common.AlertDialogFragment;
 import com.dialogapp.dialog.ui.common.ListFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class FavoritesActivity extends BaseInjectableActivity implements BaseListFragment.FragmentEventListener {
+public class FavoritesActivity extends BaseInjectableActivity implements BaseListFragment.FragmentEventListener,
+        AlertDialogFragment.AlertDialogListener {
     private Snackbar errorBar;
 
     @BindView(R.id.toolbar_container)
@@ -55,6 +57,18 @@ public class FavoritesActivity extends BaseInjectableActivity implements BaseLis
 
     @Override
     public void onLoadError(String message) {
-        errorBar.show();
+        if (!errorBar.isShownOrQueued()) {
+            errorBar.setAction("Show error", view -> {
+                AlertDialogFragment alertDialog = AlertDialogFragment
+                        .newInstance("Connection Error", message, false);
+                alertDialog.show(getSupportFragmentManager(), "ErrorAlertDialogFragment");
+            });
+            errorBar.show();
+        }
+    }
+
+    @Override
+    public void onFinishAlertDialog(boolean userChoice) {
+
     }
 }

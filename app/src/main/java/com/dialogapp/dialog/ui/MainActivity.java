@@ -49,6 +49,7 @@ public class MainActivity extends BaseInjectableActivity implements BaseListFrag
     public static final String EXTRA_TOKEN = MainActivity.class.getName() + ".EXTRA_TOKEN";
 
     private Snackbar errorBar;
+    private boolean errorHasBeenShown;
 
     @Inject
     ServiceInterceptor serviceInterceptor;
@@ -135,7 +136,15 @@ public class MainActivity extends BaseInjectableActivity implements BaseListFrag
 
     @Override
     public void onLoadError(String message) {
-        errorBar.show();
+        if (!errorHasBeenShown && !errorBar.isShownOrQueued()) {
+            errorBar.setAction("Show error", view -> {
+                AlertDialogFragment alertDialog = AlertDialogFragment
+                        .newInstance("Connection Error", message, false);
+                alertDialog.show(getSupportFragmentManager(), "ErrorAlertDialogFragment");
+            });
+            errorBar.show();
+            errorHasBeenShown = true;
+        }
     }
 
     @Override

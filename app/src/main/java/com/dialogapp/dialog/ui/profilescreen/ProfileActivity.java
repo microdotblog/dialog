@@ -2,7 +2,6 @@ package com.dialogapp.dialog.ui.profilescreen;
 
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
@@ -20,14 +19,11 @@ import com.dialogapp.dialog.ui.base.BaseListFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import dagger.android.support.HasSupportFragmentInjector;
 
-public class ProfileActivity extends BaseInjectableActivity implements BaseListFragment.FragmentEventListener,
-        HasSupportFragmentInjector {
+public class ProfileActivity extends BaseInjectableActivity implements BaseListFragment.FragmentEventListener {
     public static final String EXTRA_USERNAME = ProfileActivity.class.getName() + ".EXTRA_USERNAME";
 
     private ProfileFragmentPagerAdapter adapter;
-    private Snackbar errorBar;
 
     @BindView(R.id.toolbar_profile)
     Toolbar toolbar;
@@ -58,8 +54,6 @@ public class ProfileActivity extends BaseInjectableActivity implements BaseListF
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         ButterKnife.bind(this);
-
-        errorBar = Snackbar.make(coordinatorLayout, R.string.connection_error, Snackbar.LENGTH_LONG);
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -103,7 +97,7 @@ public class ProfileActivity extends BaseInjectableActivity implements BaseListF
 
     @Override
     public void onLoadError(String message) {
-        errorBar.show();
+
     }
 
     private void setupViewpager() {
