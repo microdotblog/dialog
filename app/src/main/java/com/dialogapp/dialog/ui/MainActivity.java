@@ -27,6 +27,7 @@ import com.dialogapp.dialog.api.ServiceInterceptor;
 import com.dialogapp.dialog.db.PostsDao;
 import com.dialogapp.dialog.ui.base.BaseInjectableActivity;
 import com.dialogapp.dialog.ui.base.BaseListFragment;
+import com.dialogapp.dialog.ui.common.AlertDialogFragment;
 import com.dialogapp.dialog.ui.favorites.FavoritesActivity;
 import com.dialogapp.dialog.ui.loginscreen.LoginActivity;
 import com.dialogapp.dialog.ui.loginscreen.LoginViewModel;
@@ -41,7 +42,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MainActivity extends BaseInjectableActivity implements BaseListFragment.FragmentEventListener,
-        NavigationView.OnNavigationItemSelectedListener {
+        NavigationView.OnNavigationItemSelectedListener, AlertDialogFragment.AlertDialogListener {
     public static final String EXTRA_USERNAME = MainActivity.class.getName() + ".EXTRA_USERNAME";
     public static final String EXTRA_FULLNAME = MainActivity.class.getName() + ".EXTRA_FULLNAME";
     public static final String EXTRA_AVATARURL = MainActivity.class.getName() + ".EXTRA_AVATARURL";
@@ -126,7 +127,7 @@ public class MainActivity extends BaseInjectableActivity implements BaseListFrag
         username.setText(saved_username);
         fullname.setText(saved_fullname);
         logout.setOnClickListener(view -> {
-            startLoginActivity();
+            showLogoutDialog();
         });
 
         setupViewpager();
@@ -170,12 +171,24 @@ public class MainActivity extends BaseInjectableActivity implements BaseListFrag
         return false;
     }
 
+    @Override
+    public void onFinishAlertDialog(boolean userChoice) {
+        if (userChoice)
+            startLoginActivity();
+    }
+
     private void startLoginActivity() {
         Hawk.delete(getString(R.string.pref_token));
         appExecutors.diskIO().execute(() -> postsDao.dropTable());
         Intent loginIntent = new Intent(this, LoginActivity.class);
         startActivity(loginIntent);
         finish();
+    }
+
+    private void showLogoutDialog() {
+        AlertDialogFragment alertDialog = AlertDialogFragment.newInstance(null,
+                "Do you want to log out?", true);
+        alertDialog.show(getSupportFragmentManager(), "AlertDialogFragment");
     }
 
     private void setupViewpager() {
