@@ -209,5 +209,40 @@ public class MainActivity extends BaseInjectableActivity implements BaseListFrag
         tabLayout.getTabAt(0).setIcon(R.drawable.tab_ic_view_stream_white_24px);
         tabLayout.getTabAt(1).setIcon(R.drawable.tab_ic_chat_white_24px);
         tabLayout.getTabAt(2).setIcon(R.drawable.tab_ic_discover_white_24px);
+
+        tabLayout.getTabAt(1).getIcon().setAlpha(178);
+        tabLayout.getTabAt(2).getIcon().setAlpha(178);
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                switch (position) {
+                    case 0:
+                        tabLayout.getTabAt(0).getIcon().setAlpha(255);
+                        tabLayout.getTabAt(1).getIcon().setAlpha(178);
+                        tabLayout.getTabAt(2).getIcon().setAlpha(178);
+                        break;
+                    case 1:
+                        tabLayout.getTabAt(0).getIcon().setAlpha(178);
+                        tabLayout.getTabAt(1).getIcon().setAlpha(255);
+                        tabLayout.getTabAt(2).getIcon().setAlpha(178);
+                        break;
+                    case 2:
+                        tabLayout.getTabAt(0).getIcon().setAlpha(178);
+                        tabLayout.getTabAt(1).getIcon().setAlpha(178);
+                        tabLayout.getTabAt(2).getIcon().setAlpha(255);
+                        break;
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
     }
 }
