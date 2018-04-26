@@ -6,7 +6,7 @@
     android:background="?attr/colorPrimaryDark"
     android:gravity="bottom"
     android:orientation="vertical"
-    android:paddingBottom="@dimen/nav_header_bottom_padding"
+    android:paddingBottom="16dp"
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
@@ -45,6 +45,6 @@
             android:layout_width="wrap_content"
             android:layout_height="?android:attr/listPreferredItemHeight"
             android:layout_gravity="end"
-            android:src="@drawable/ic_logout_white_24px" />
+            android:src="@drawable/ic_logout_white_24dp" />
     </FrameLayout>
 </LinearLayout>

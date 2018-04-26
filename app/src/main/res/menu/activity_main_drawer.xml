@@ -10,7 +10,7 @@
             android:title="@string/drawer_item_profile" />
         <item
             android:id="@+id/menu_item_fav"
-            android:icon="@drawable/menu_ic_favorite_black_24dp"
+            android:icon="@drawable/menu_ic_star_black_24dp"
             android:title="@string/drawer_item_favorites" />
         <item
             android:id="@+id/menu_item_settings"

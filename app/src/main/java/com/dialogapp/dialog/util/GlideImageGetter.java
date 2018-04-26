@@ -43,7 +43,11 @@ public class GlideImageGetter implements Html.ImageGetter, Drawable.Callback {
     private static final int DEFAULT_WIDTH_PX = 48;
     private static final int DEFAULT_HEIGHT_PX = 48;
     private static final int DEFAULT_IMAGE_HEIGHT_DP = 192;
-    private static final int DIFF_WIDTH_DP = 96; // value calculated from post_item layout
+
+    // values from post_item layout
+    private static final int CONTENT_MARGIN_START_DP = 80;
+    private static final int CONTENT_MARGIN_END_DP = 8;
+    private static final int TOGGLEBTN_MARGIN_END_DP = 16;
 
     private final RequestManager manager;
     private final RequestOptions requestOptions;
@@ -57,7 +61,7 @@ public class GlideImageGetter implements Html.ImageGetter, Drawable.Callback {
     private int calculatedHeightPx;
     private List<Target> imageTargets = new ArrayList<>();
 
-    public GlideImageGetter(RequestManager glide, TextView targetView, Queue<Boolean> imageQueue) {
+    public GlideImageGetter(RequestManager glide, TextView targetView, Queue<Boolean> imageQueue, int toggleButtonWidthPx) {
         this.manager = glide;
         this.targetView = targetView;
         this.context = targetView.getContext().getApplicationContext();
@@ -68,7 +72,7 @@ public class GlideImageGetter implements Html.ImageGetter, Drawable.Callback {
         this.shouldLoadImages = Integer.parseInt(sharedPref.getString(context.getString(R.string.pref_preloadImages), "0"));
 
         this.calculatedHeightPx = dpToPx(DEFAULT_IMAGE_HEIGHT_DP);
-        int diffPx = dpToPx(DIFF_WIDTH_DP);
+        int diffPx = dpToPx(CONTENT_MARGIN_START_DP + CONTENT_MARGIN_END_DP + TOGGLEBTN_MARGIN_END_DP) + toggleButtonWidthPx;
         this.calculatedWidthPx = Resources.getSystem().getDisplayMetrics().widthPixels - diffPx;
 
         this.requestOptions = new RequestOptions()

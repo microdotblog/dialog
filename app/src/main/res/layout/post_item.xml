@@ -1,98 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:animateLayoutChanges="true"
     android:orientation="vertical">
 
-    <RelativeLayout
+    <android.support.constraint.ConstraintLayout
         android:id="@+id/post_item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?attr/selectableItemBackground"
         android:clickable="true"
-        android:focusable="true"
-        android:orientation="horizontal"
-        android:paddingEnd="16dp"
-        android:paddingStart="16dp"
-        android:paddingTop="16dp"
-        android:paddingBottom="16dp">
+        android:focusable="true">
 
         <ImageView
             android:id="@+id/image_thumbnail"
-            android:layout_width="@dimen/post_image_profile"
+            android:layout_width="48dp"
             android:layout_height="@dimen/post_image_profile"
-            android:layout_gravity="top"
-            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             tools:src="@tools:sample/avatars" />
 
         <TextView
             android:id="@+id/text_username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignTop="@id/image_thumbnail"
-            android:layout_toEndOf="@id/image_thumbnail"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
             android:textIsSelectable="true"
+            app:layout_constraintStart_toEndOf="@+id/image_thumbnail"
+            app:layout_constraintTop_toTopOf="parent"
             tools:text="@tools:sample/full_names" />
 
         <TextView
             android:id="@+id/text_content"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_alignStart="@id/text_username"
-            android:layout_below="@id/text_username"
+            android:layout_marginBottom="16dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:textColorLink="@color/blue700"
+            android:textColorLink="@color/reda200"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/button_toggle"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintStart_toEndOf="@+id/image_thumbnail"
+            app:layout_constraintTop_toBottomOf="@+id/text_username"
             tools:text="@tools:sample/lorem" />
 
         <TextView
             android:id="@+id/text_time"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_alignBaseline="@id/text_username"
-            android:layout_alignEnd="@id/text_content"
-            android:layout_marginStart="16dp"
-            android:layout_toEndOf="@id/text_username"
+            android:layout_marginEnd="16dp"
             android:textAlignment="textEnd"
             android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+            app:layout_constraintBaseline_toBaselineOf="@+id/text_username"
+            app:layout_constraintEnd_toEndOf="parent"
             tools:text="@tools:sample/date/ddmmyy" />
 
-        <FrameLayout
+        <ImageButton
             android:id="@+id/button_toggle"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_alignParentEnd="true"
-            android:layout_alignStart="@id/text_content"
-            android:layout_below="@id/text_content"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="8dp"
             android:foreground="?attr/selectableItemBackground"
-            tools:visibility="visible">
-
-            <TextView
-                android:id="@+id/toggle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical|center" />
-        </FrameLayout>
-    </RelativeLayout>
+            app:layout_constraintBottom_toBottomOf="@+id/text_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/text_content"
+            app:layout_constraintVertical_bias="1.0" />
+    </android.support.constraint.ConstraintLayout>
 
     <LinearLayout
         android:id="@+id/post_options"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/grey400"
         android:orientation="horizontal"
         android:visibility="gone">
 
         <Button
             android:id="@+id/button_conversation"
+            style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/indigo500"
-            android:textColor="@android:color/white"
             android:layout_weight="1"
-            android:text="Conversation" />
+            android:backgroundTint="@color/indigo500"
+            android:text="Conversation"
+            android:textColor="@android:color/white" />
     </LinearLayout>
 </LinearLayout>

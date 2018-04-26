@@ -3,6 +3,7 @@ package com.dialogapp.dialog.ui.common;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.v4.content.ContextCompat;
 import android.text.Spannable;
 import android.text.TextPaint;
 import android.text.style.ClickableSpan;
@@ -10,7 +11,6 @@ import android.text.style.ForegroundColorSpan;
 import android.text.style.ImageSpan;
 import android.text.style.URLSpan;
 import android.text.style.UnderlineSpan;
-import android.util.TypedValue;
 import android.view.View;
 
 import com.dialogapp.dialog.R;
@@ -66,9 +66,7 @@ public class LinkClickHandler {
                     }
                 }, start, end, 0);
 
-                TypedValue value = new TypedValue();
-                context.getTheme().resolveAttribute(R.attr.colorAccent, value, true);
-                htmlString.setSpan(new ForegroundColorSpan(value.data), start, end, 0);
+                htmlString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(context, R.color.bluegrey300)), start, end, 0);
             }
             htmlString.removeSpan(span);
         }

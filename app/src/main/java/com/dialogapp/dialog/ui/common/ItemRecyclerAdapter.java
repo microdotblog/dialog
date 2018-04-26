@@ -14,7 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -105,12 +105,11 @@ public class ItemRecyclerAdapter extends ListAdapter<Item, ItemRecyclerAdapter.P
             final boolean isExpanded = position == expandedPosition;
             holder.postOptions.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
             holder.itemView.setActivated(isExpanded);
-            holder.toggleDrawable.setCompoundDrawablesWithIntrinsicBounds(0, 0,
-                    0, isExpanded ? R.drawable.ic_collapse_grey_24px : R.drawable.ic_expand_grey_24px);
+            holder.toggleButton.setBackgroundResource(isExpanded ? R.drawable.ic_collapse_grey_24px : R.drawable.ic_expand_grey_24px);
             if (isExpanded)
                 previousExpandedPosition = position;
         } else {
-            holder.toggleButton.setVisibility(View.GONE);
+            holder.toggleButton.setVisibility(View.INVISIBLE);
             holder.postOptions.setVisibility(View.GONE);
         }
 
@@ -151,10 +150,7 @@ public class ItemRecyclerAdapter extends ListAdapter<Item, ItemRecyclerAdapter.P
         TextView time;
 
         @BindView(R.id.button_toggle)
-        FrameLayout toggleButton;
-
-        @BindView(R.id.toggle)
-        TextView toggleDrawable;
+        ImageButton toggleButton;
 
         @BindView(R.id.post_options)
         LinearLayout postOptions;
@@ -179,7 +175,7 @@ public class ItemRecyclerAdapter extends ListAdapter<Item, ItemRecyclerAdapter.P
             Elements images = doc.select("img");
             if (!images.isEmpty()) {
                 Queue<Boolean> imagesQueue = getImages(images);
-                GlideImageGetter imageGetter = new GlideImageGetter(glide, content, imagesQueue);
+                GlideImageGetter imageGetter = new GlideImageGetter(glide, content, imagesQueue, toggleButton.getMeasuredWidth());
                 spannedText = getSpanned(contentHtml, imageGetter);
             } else {
                 spannedText = getSpanned(contentHtml, null);

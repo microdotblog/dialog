@@ -9,19 +9,24 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <android.support.v4.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/empty_list"
+                style="@style/textEmptyStyle"
+                android:layout_gravity="center"
+                android:drawableTop="@drawable/ic_chat_grey_24dp"
+                android:text="@string/empty_list"
+                android:visibility="gone" />
+        </android.support.v4.widget.NestedScrollView>
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler_list"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             tools:listitem="@layout/post_item" />
-
-        <TextView
-            android:id="@+id/empty_list"
-            style="@style/textEmptyStyle"
-            android:layout_gravity="top"
-            android:drawableTop="@drawable/ic_chat_grey_24dp"
-            android:text="@string/empty_list"
-            android:visibility="gone" />
     </FrameLayout>
 
 </android.support.v4.widget.SwipeRefreshLayout>

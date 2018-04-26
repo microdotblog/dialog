@@ -37,7 +37,7 @@ public class ProfileActivity extends BaseInjectableActivity implements BaseListF
     @BindView(R.id.tab_layout_profile)
     TabLayout tabLayout;
 
-    @BindView(R.id.image_profile)
+    @BindView(R.id.image_avatar)
     ImageView avatar;
 
     @BindView(R.id.text_profile_fullname)
