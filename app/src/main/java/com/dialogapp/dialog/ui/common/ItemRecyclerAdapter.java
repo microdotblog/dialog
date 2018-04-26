@@ -16,7 +16,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -103,14 +102,14 @@ public class ItemRecyclerAdapter extends ListAdapter<Item, ItemRecyclerAdapter.P
         if (item.microblog.isConversation) {
             holder.toggleButton.setVisibility(View.VISIBLE);
             final boolean isExpanded = position == expandedPosition;
-            holder.postOptions.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
+            holder.conversationButton.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
             holder.itemView.setActivated(isExpanded);
             holder.toggleButton.setBackgroundResource(isExpanded ? R.drawable.ic_collapse_grey_24px : R.drawable.ic_expand_grey_24px);
             if (isExpanded)
                 previousExpandedPosition = position;
         } else {
             holder.toggleButton.setVisibility(View.INVISIBLE);
-            holder.postOptions.setVisibility(View.GONE);
+            holder.conversationButton.setVisibility(View.GONE);
         }
 
         glide.load(item.author.avatar)
@@ -151,9 +150,6 @@ public class ItemRecyclerAdapter extends ListAdapter<Item, ItemRecyclerAdapter.P
 
         @BindView(R.id.button_toggle)
         ImageButton toggleButton;
-
-        @BindView(R.id.post_options)
-        LinearLayout postOptions;
 
         @BindView(R.id.button_conversation)
         Button conversationButton;
