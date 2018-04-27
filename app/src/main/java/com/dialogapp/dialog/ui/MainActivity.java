@@ -177,6 +177,7 @@ public class MainActivity extends BaseInjectableActivity implements BaseListFrag
 
     private void setupViewpager() {
         ViewPager viewPager = findViewById(R.id.viewpager_main);
+        viewPager.setOffscreenPageLimit(2);
         viewPager.setAdapter(new MainFragmentPagerAdapter(getSupportFragmentManager()));
 
         TabLayout tabLayout = findViewById(R.id.tabLayout);
