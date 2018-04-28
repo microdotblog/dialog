@@ -171,7 +171,7 @@ public class ItemRecyclerAdapter extends ListAdapter<Item, ItemRecyclerAdapter.P
             Elements images = doc.select("img");
             if (!images.isEmpty()) {
                 Queue<Boolean> imagesQueue = getImages(images);
-                GlideImageGetter imageGetter = new GlideImageGetter(glide, content, imagesQueue, toggleButton.getMeasuredWidth());
+                GlideImageGetter imageGetter = new GlideImageGetter(glide, content, imagesQueue);
                 spannedText = getSpanned(contentHtml, imageGetter);
             } else {
                 spannedText = getSpanned(contentHtml, null);
