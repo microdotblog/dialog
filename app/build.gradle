@@ -97,7 +97,7 @@ dependencies {
     // Jsoup
     implementation 'org.jsoup:jsoup:1.11.3'
 
-    implementation 'com.takisoft.fix:preference-v7:27.1.0.0'
+    implementation 'com.takisoft.fix:preference-v7:27.1.1.0'
 
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.mockito:mockito-core:2.15.0'
