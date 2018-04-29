@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "4bed5ceac20d491878c57645cad235f3",
+    "identityHash": "903c72552c5975d517eef317e31c5095",
     "entities": [
       {
         "tableName": "account",
@@ -74,18 +74,12 @@
       },
       {
         "tableName": "posts",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`endpoint` TEXT NOT NULL, `id` INTEGER NOT NULL, `contentHtml` TEXT, `url` TEXT, `datePublished` TEXT, `author_author_name` TEXT, `author_author_url` TEXT, `author_author_avatar_url` TEXT, `author_author_info_username` TEXT, `post_property_dateRelative` TEXT, `post_property_isDeletable` INTEGER, `post_property_isFavorite` INTEGER, `post_property_isConversation` INTEGER, PRIMARY KEY(`id`, `endpoint`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `contentHtml` TEXT, `url` TEXT, `datePublished` TEXT, `endpoint` TEXT NOT NULL, `actualId` TEXT, `author_author_name` TEXT, `author_author_url` TEXT, `author_author_avatar_url` TEXT, `author_author_info_username` TEXT, `post_property_dateRelative` TEXT, `post_property_isDeletable` INTEGER, `post_property_isFavorite` INTEGER, `post_property_isConversation` INTEGER, PRIMARY KEY(`id`, `endpoint`))",
         "fields": [
-          {
-            "fieldPath": "endpoint",
-            "columnName": "endpoint",
-            "affinity": "TEXT",
-            "notNull": true
-          },
           {
             "fieldPath": "id",
             "columnName": "id",
-            "affinity": "INTEGER",
+            "affinity": "TEXT",
             "notNull": true
           },
           {
@@ -103,6 +97,18 @@
           {
             "fieldPath": "datePublished",
             "columnName": "datePublished",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "endpoint",
+            "columnName": "endpoint",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "actualId",
+            "columnName": "actualId",
             "affinity": "TEXT",
             "notNull": false
           },
@@ -266,7 +272,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"4bed5ceac20d491878c57645cad235f3\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"903c72552c5975d517eef317e31c5095\")"
     ]
   }
 }
