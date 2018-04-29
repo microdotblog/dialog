@@ -3,6 +3,7 @@ package com.dialogapp.dialog.di;
 import android.app.Application;
 import android.arch.persistence.room.Room;
 
+import com.dialogapp.dialog.StethoImplementation;
 import com.dialogapp.dialog.api.MicroblogService;
 import com.dialogapp.dialog.api.ServiceInterceptor;
 import com.dialogapp.dialog.db.AccountDao;
@@ -36,9 +37,11 @@ class AppModule {
     @Singleton
     @Provides
     OkHttpClient provideOkHttpClient(ServiceInterceptor interceptor) {
-        return new OkHttpClient.Builder()
-                .addInterceptor(interceptor)
-                .build();
+        OkHttpClient.Builder builder = new OkHttpClient.Builder()
+                .addInterceptor(interceptor);
+
+        return StethoImplementation.addStetho(builder).build();
+
     }
 
     @Singleton

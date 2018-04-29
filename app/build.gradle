@@ -99,6 +99,10 @@ dependencies {
 
     implementation 'com.takisoft.fix:preference-v7:27.1.1.0'
 
+    // Stetho
+    debugImplementation 'com.facebook.stetho:stetho:1.5.0'
+    debugImplementation 'com.facebook.stetho:stetho-okhttp3:1.5.0'
+
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.mockito:mockito-core:2.15.0'
     testImplementation 'com.squareup.okhttp3:mockwebserver:3.9.1'
