@@ -151,7 +151,14 @@ public class PostsRepository {
 
             @Override
             protected void saveCallResult(@NonNull MicroBlogResponse response) {
-                postsDao.insertPosts(response.items);
+                db.beginTransaction();
+                try {
+                    postsDao.deletePosts(Endpoints.FAVORITES);
+                    postsDao.insertPosts(response.items);
+                    db.setTransactionSuccessful();
+                } finally {
+                    db.endTransaction();
+                }
             }
 
             @NonNull
@@ -242,11 +249,9 @@ public class PostsRepository {
 
     public LiveData<Resource<List<Item>>> loadConversation(String id) {
         return new NetworkBoundResource<List<Item>, MicroBlogResponse>(appExecutors) {
-            List<Item> responseData;
-
             @Override
             protected boolean shouldFetch(@Nullable List<Item> dbData) {
-                return true;
+                return dbData == null || dbData.isEmpty() || endpointRateLimit.shouldFetch(id);
             }
 
             @NonNull
@@ -256,20 +261,27 @@ public class PostsRepository {
             }
 
             @Override
+            protected MicroBlogResponse processResponse(ApiResponse<MicroBlogResponse> response) {
+                for (Item item : response.body.items) {
+                    item.setEndpoint(id);
+                }
+                return response.body;
+            }
+
+            @Override
             protected void saveCallResult(@NonNull MicroBlogResponse response) {
-                responseData = response.items;
+                db.postsDao().insertPosts(response.items);
             }
 
             @NonNull
             @Override
             protected LiveData<List<Item>> loadFromDb() {
-                return new LiveData<List<Item>>() {
-                    @Override
-                    protected void onActive() {
-                        super.onActive();
-                        setValue(responseData);
-                    }
-                };
+                return postsDao.loadEndpoint(id);
+            }
+
+            @Override
+            protected void onFetchFailed() {
+                endpointRateLimit.reset(id);
             }
         }.asLiveData();
     }

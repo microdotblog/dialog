@@ -176,4 +176,33 @@ public class PostsRepositoryTest {
         updatedUserData.postValue(response);
         verify(observer).onChanged(Resource.success(testUserPostsData));
     }
+
+    @Test
+    public void loadConversationDataFromNetwork() throws IOException {
+        MutableLiveData<List<Item>> conversationDbData = new MutableLiveData<>();
+        when(postsDao.loadEndpoint("12345")).thenReturn(conversationDbData);
+
+        MicroBlogResponse response = TestUtil.readFromJson(getClass().getClassLoader(), "response.json");
+        LiveData<ApiResponse<MicroBlogResponse>> callConversation = successCall(response);
+        when(microblogService.getConversation("12345")).thenReturn(callConversation);
+
+        LiveData<Resource<List<Item>>> repoData = repository.loadConversation("12345");
+        verify(postsDao).loadEndpoint("12345");
+        verifyNoMoreInteractions(microblogService);
+
+        Observer observer = mock(Observer.class);
+        repoData.observeForever(observer);
+        verifyNoMoreInteractions(microblogService);
+        verify(observer).onChanged(Resource.loading(null));
+
+        MutableLiveData<List<Item>> updatedConversationData = new MutableLiveData<>();
+        when(postsDao.loadEndpoint("12345")).thenReturn(updatedConversationData);
+        conversationDbData.postValue(null);
+        verify(microblogService).getConversation("12345");
+        List<Item> testConversationData = response.items;
+        verify(postsDao).insertPosts(testConversationData);
+
+        updatedConversationData.postValue(testConversationData);
+        verify(observer).onChanged(Resource.success(testConversationData));
+    }
 }
