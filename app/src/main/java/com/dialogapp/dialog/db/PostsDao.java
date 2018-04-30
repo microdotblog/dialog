@@ -30,4 +30,8 @@ public interface PostsDao {
 
     @Query("SELECT * FROM microblogData WHERE microblog_username = :username")
     LiveData<MicroBlogResponse> loadMicroblogData(String username);
+
+    @Query("SELECT DISTINCT id FROM posts WHERE author_author_info_username = :username AND " +
+            "datePublished = :datePublished AND endpoint != \"favorites\"")
+    String getActualIdOfFavoritePost(String username, String datePublished);
 }
