@@ -44,8 +44,10 @@ public class ProfileFragment extends BaseListFragment implements Injectable {
         viewModel.getUserData().observe(this, microBlogResponseResource -> {
             if (microBlogResponseResource != null && microBlogResponseResource.data != null) {
                 listener.onLoadSuccess(microBlogResponseResource.data);
-                setData(microBlogResponseResource.status, microBlogResponseResource.data.items, microBlogResponseResource.message);
             }
+        });
+        viewModel.getUserPosts().observe(this, listResource -> {
+            setData(listResource.status, listResource.data, listResource.message);
         });
     }
 

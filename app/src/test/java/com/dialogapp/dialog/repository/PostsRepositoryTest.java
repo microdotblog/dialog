@@ -25,8 +25,8 @@ import java.io.IOException;
 import java.util.List;
 
 import static com.dialogapp.dialog.util.ApiUtil.successCall;
-import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
@@ -102,7 +102,7 @@ public class PostsRepositoryTest {
         mentionsDbData.postValue(null);
         verify(microblogService).getMentions(null);
         List<Item> testMentionsData = response.items;
-        verify(postsDao).insertPosts(anyList());
+        verify(postsDao).insertPosts(testMentionsData);
 
         updatedMentionsData.postValue(testMentionsData);
         verify(observer).onChanged(Resource.success(testMentionsData));
@@ -131,9 +131,49 @@ public class PostsRepositoryTest {
         favoritesDbData.postValue(null);
         verify(microblogService).getFavorites();
         List<Item> testFavoritesData = response.items;
-        verify(postsDao).insertPosts(anyList());
+        verify(postsDao).insertPosts(testFavoritesData);
 
         updatedFavoritesData.postValue(testFavoritesData);
         verify(observer).onChanged(Resource.success(testFavoritesData));
+    }
+
+    @Test
+    public void loadUserDataFromNetwork() throws IOException {
+        MutableLiveData<MicroBlogResponse> userDbData = new MutableLiveData<>();
+        when(postsDao.loadMicroblogData("dialog")).thenReturn(userDbData);
+
+        MutableLiveData<List<Item>> userPostsData = new MutableLiveData<>();
+        when(postsDao.loadEndpoint("dialog")).thenReturn(userPostsData);
+
+        MicroBlogResponse response = TestUtil.readFromJson(getClass().getClassLoader(), "userpostsresponse.json");
+        LiveData<ApiResponse<MicroBlogResponse>> microblogData = successCall(response);
+        when(microblogService.getPostsByUsername("dialog")).thenReturn(microblogData);
+
+        LiveData<Resource<MicroBlogResponse>> userRepoData = repository.loadUserData("dialog");
+        verify(postsDao).loadMicroblogData("dialog");
+        LiveData<Resource<List<Item>>> userPostsRepoData = repository.loadPostsByUsername("dialog");
+        verify(postsDao).loadEndpoint("dialog");
+        verifyNoMoreInteractions(microblogService);
+
+        Observer observer = mock(Observer.class);
+        userRepoData.observeForever(observer);
+        userPostsRepoData.observeForever(observer);
+        verifyNoMoreInteractions(microblogService);
+        verify(observer, times(2)).onChanged(Resource.loading(null));
+
+        MutableLiveData<List<Item>> updatedUserPostsData = new MutableLiveData<>();
+        MutableLiveData<MicroBlogResponse> updatedUserData = new MutableLiveData<>();
+        when(postsDao.loadMicroblogData("dialog")).thenReturn(updatedUserData);
+        when(postsDao.loadEndpoint("dialog")).thenReturn(updatedUserPostsData);
+        userDbData.postValue(null);
+        userPostsData.postValue(null);
+        verify(microblogService).getPostsByUsername("dialog");
+        List<Item> testUserPostsData = response.items;
+        verify(postsDao).insertPosts(testUserPostsData);
+        verify(postsDao).insertMicroblogData(response);
+
+        updatedUserPostsData.postValue(testUserPostsData);
+        updatedUserData.postValue(response);
+        verify(observer).onChanged(Resource.success(testUserPostsData));
     }
 }

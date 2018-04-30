@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "903c72552c5975d517eef317e31c5095",
+    "identityHash": "52b7d5f862899c816943ae1703dda1f6",
     "entities": [
       {
         "tableName": "account",
@@ -173,7 +173,7 @@
       },
       {
         "tableName": "microblogData",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`title` TEXT, `homePageUrl` TEXT NOT NULL, `feedUrl` TEXT, `items` TEXT, `microblog_id` TEXT, `microblog_username` TEXT, `microblog_bio` TEXT, `microblog_is_following` INTEGER, `microblog_is_you` INTEGER, `microblog_following_count` INTEGER, `author_author_name` TEXT, `author_author_url` TEXT, `author_author_avatar_url` TEXT, `author_author_info_username` TEXT, PRIMARY KEY(`homePageUrl`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`title` TEXT, `homePageUrl` TEXT, `feedUrl` TEXT NOT NULL, `microblog_id` TEXT, `microblog_username` TEXT, `microblog_bio` TEXT, `microblog_is_following` INTEGER, `microblog_is_you` INTEGER, `microblog_following_count` INTEGER, `author_author_name` TEXT, `author_author_url` TEXT, `author_author_avatar_url` TEXT, `author_author_info_username` TEXT, PRIMARY KEY(`feedUrl`))",
         "fields": [
           {
             "fieldPath": "title",
@@ -185,19 +185,13 @@
             "fieldPath": "homePageUrl",
             "columnName": "homePageUrl",
             "affinity": "TEXT",
-            "notNull": true
+            "notNull": false
           },
           {
             "fieldPath": "feedUrl",
             "columnName": "feedUrl",
             "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "items",
-            "columnName": "items",
-            "affinity": "TEXT",
-            "notNull": false
+            "notNull": true
           },
           {
             "fieldPath": "microblog.id",
@@ -262,7 +256,7 @@
         ],
         "primaryKey": {
           "columnNames": [
-            "homePageUrl"
+            "feedUrl"
           ],
           "autoGenerate": false
         },
@@ -272,7 +266,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"903c72552c5975d517eef317e31c5095\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"52b7d5f862899c816943ae1703dda1f6\")"
     ]
   }
 }

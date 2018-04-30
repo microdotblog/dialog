@@ -5,6 +5,7 @@ import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Observer;
 
 import com.dialogapp.dialog.TestUtil;
+import com.dialogapp.dialog.model.Item;
 import com.dialogapp.dialog.model.MicroBlogResponse;
 import com.dialogapp.dialog.repository.PostsRepository;
 import com.dialogapp.dialog.util.Resource;
@@ -17,6 +18,7 @@ import org.junit.runners.JUnit4;
 import org.mockito.ArgumentCaptor;
 
 import java.io.IOException;
+import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -25,6 +27,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 @SuppressWarnings("unchecked")
@@ -45,37 +48,54 @@ public class ProfileViewModelTest {
     @Test
     public void loadUserPosts() {
         ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
+        ArgumentCaptor<String> captor2 = ArgumentCaptor.forClass(String.class);
         viewModel.getUserData().observeForever(mock(Observer.class));
+        viewModel.getUserPosts().observeForever(mock(Observer.class));
+        verifyNoMoreInteractions(postsRepository);
 
         viewModel.setUsername("dialog");
         verify(postsRepository).loadPostsByUsername(captor.capture());
+        verify(postsRepository).loadUserData(captor2.capture());
         assertThat(captor.getValue(), is("dialog"));
+        assertThat(captor2.getValue(), is("dialog"));
     }
 
     @Test
     public void testRefresh() {
         ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
+        ArgumentCaptor<String> captor2 = ArgumentCaptor.forClass(String.class);
         viewModel.getUserData().observeForever(mock(Observer.class));
+        viewModel.getUserPosts().observeForever(mock(Observer.class));
 
         viewModel.setUsername("dialog");
         viewModel.refresh();
-        verify(postsRepository, times(2)).loadPostsByUsername(captor.capture());
+        verify(postsRepository, times(2)).loadUserData(captor.capture());
+        verify(postsRepository, times(2)).loadPostsByUsername(captor2.capture());
         assertThat(captor.getValue(), is("dialog"));
+        assertThat(captor2.getValue(), is("dialog"));
     }
 
     @Test
     public void sendResultToUI() throws IOException {
-        MutableLiveData<Resource<MicroBlogResponse>> data = new MutableLiveData<>();
+        MutableLiveData<Resource<MicroBlogResponse>> userData = new MutableLiveData<>();
+        MutableLiveData<Resource<List<Item>>> userPosts = new MutableLiveData<>();
         MicroBlogResponse response = TestUtil.readFromJson(getClass().getClassLoader(), "userpostsresponse.json");
-        Resource<MicroBlogResponse> listResource = Resource.success(response);
-        when(postsRepository.loadPostsByUsername("dialog")).thenReturn(data);
+        Resource<MicroBlogResponse> microBlogResponseResource = Resource.success(response);
+        Resource<List<Item>> listResource = Resource.success(response.items);
+        when(postsRepository.loadUserData("dialog")).thenReturn(userData);
+        when(postsRepository.loadPostsByUsername("dialog")).thenReturn(userPosts);
 
         Observer<Resource<MicroBlogResponse>> observer = mock(Observer.class);
+        Observer<Resource<List<Item>>> observer2 = mock(Observer.class);
         viewModel.getUserData().observeForever(observer);
+        viewModel.getUserPosts().observeForever(observer2);
+        verifyNoMoreInteractions(postsRepository);
         viewModel.setUsername("dialog");
         verify(observer, never()).onChanged(any(Resource.class));
 
-        data.setValue(listResource);
-        verify(observer).onChanged(listResource);
+        userData.setValue(microBlogResponseResource);
+        userPosts.setValue(listResource);
+        verify(observer).onChanged(microBlogResponseResource);
+        verify(observer2).onChanged(listResource);
     }
 }

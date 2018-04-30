@@ -2,6 +2,7 @@ package com.dialogapp.dialog.ui.profilescreen;
 
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
@@ -16,11 +17,13 @@ import com.dialogapp.dialog.R;
 import com.dialogapp.dialog.model.MicroBlogResponse;
 import com.dialogapp.dialog.ui.base.BaseInjectableActivity;
 import com.dialogapp.dialog.ui.base.BaseListFragment;
+import com.dialogapp.dialog.ui.common.AlertDialogFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ProfileActivity extends BaseInjectableActivity implements BaseListFragment.FragmentEventListener {
+public class ProfileActivity extends BaseInjectableActivity implements BaseListFragment.FragmentEventListener,
+        AlertDialogFragment.AlertDialogListener {
     public static final String EXTRA_USERNAME = ProfileActivity.class.getName() + ".EXTRA_USERNAME";
 
     private ProfileFragmentPagerAdapter adapter;
@@ -97,7 +100,13 @@ public class ProfileActivity extends BaseInjectableActivity implements BaseListF
 
     @Override
     public void onLoadError(String message) {
-
+        Snackbar errorBar = Snackbar.make(coordinatorLayout, R.string.connection_error, Snackbar.LENGTH_LONG);
+        errorBar.setAction("Show error", view -> {
+            AlertDialogFragment alertDialog = AlertDialogFragment
+                    .newInstance("Connection Error", message, false);
+            alertDialog.show(getSupportFragmentManager(), "ErrorAlertDialogFragment");
+        });
+        errorBar.show();
     }
 
     private void setupViewpager() {
@@ -105,5 +114,10 @@ public class ProfileActivity extends BaseInjectableActivity implements BaseListF
         adapter.addFragment(ProfileFragment.newInstance(getIntent().getStringExtra(EXTRA_USERNAME)));
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
+    }
+
+    @Override
+    public void onFinishAlertDialog(boolean userChoice) {
+
     }
 }

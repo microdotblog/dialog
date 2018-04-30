@@ -167,10 +167,10 @@ public class PostsRepository {
         }.asLiveData();
     }
 
-    public LiveData<Resource<MicroBlogResponse>> loadPostsByUsername(String username) {
-        return new NetworkBoundResource<MicroBlogResponse, MicroBlogResponse>(appExecutors) {
+    public LiveData<Resource<List<Item>>> loadPostsByUsername(String username) {
+        return new NetworkBoundResource<List<Item>, MicroBlogResponse>(appExecutors) {
             @Override
-            protected boolean shouldFetch(@Nullable MicroBlogResponse dbData) {
+            protected boolean shouldFetch(@Nullable List<Item> dbData) {
                 return dbData == null || endpointRateLimit.shouldFetch(username);
             }
 
@@ -181,19 +181,61 @@ public class PostsRepository {
             }
 
             @Override
+            protected MicroBlogResponse processResponse(ApiResponse<MicroBlogResponse> response) {
+                for (Item item : response.body.items) {
+                    item.setEndpoint(username);
+                }
+                return response.body;
+            }
+
+            @Override
             protected void saveCallResult(@NonNull MicroBlogResponse response) {
-                postsDao.insertMicroblogData(response);
+                db.beginTransaction();
+                try {
+                    postsDao.insertMicroblogData(response);
+                    postsDao.insertPosts(response.items);
+                    db.setTransactionSuccessful();
+                } finally {
+                    db.endTransaction();
+                }
+            }
+
+            @NonNull
+            @Override
+            protected LiveData<List<Item>> loadFromDb() {
+                return postsDao.loadEndpoint(username);
+            }
+
+            @Override
+            protected void onFetchFailed() {
+                endpointRateLimit.reset(username);
+            }
+        }.asLiveData();
+    }
+
+    public LiveData<Resource<MicroBlogResponse>> loadUserData(String username) {
+        return new NetworkBoundResource<MicroBlogResponse, MicroBlogResponse>(appExecutors) {
+            @Override
+            protected boolean shouldFetch(@Nullable MicroBlogResponse dbData) {
+                // Fetching is done in loadPostsByUsername()
+                return false;
+            }
+
+            @NonNull
+            @Override
+            protected LiveData<ApiResponse<MicroBlogResponse>> createCall() {
+                return microblogService.getPostsByUsername(username);
+            }
+
+            @Override
+            protected void saveCallResult(@NonNull MicroBlogResponse response) {
+
             }
 
             @NonNull
             @Override
             protected LiveData<MicroBlogResponse> loadFromDb() {
                 return postsDao.loadMicroblogData(username);
-            }
-
-            @Override
-            protected void onFetchFailed() {
-                endpointRateLimit.reset(username);
             }
         }.asLiveData();
     }
