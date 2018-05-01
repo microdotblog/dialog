@@ -88,14 +88,14 @@ public class ProfileActivity extends BaseInjectableActivity implements BaseListF
                 .apply(new RequestOptions().circleCrop())
                 .into(avatar);
         fullname.setText(userInfo.author_author_name);
-        if (!userInfo.author_author_url.isEmpty()) {
-            website.setVisibility(View.VISIBLE);
+        if (!userInfo.author_author_url.isEmpty())
             website.setText(userInfo.author_author_url);
-        }
-        if (!userInfo.microblog_bio.isEmpty()) {
-            about.setVisibility(View.VISIBLE);
+        else
+            website.setVisibility(View.GONE);
+        if (!userInfo.microblog_bio.isEmpty())
             about.setText(userInfo.microblog_bio);
-        }
+        else
+            about.setVisibility(View.GONE);
     }
 
     @Override
