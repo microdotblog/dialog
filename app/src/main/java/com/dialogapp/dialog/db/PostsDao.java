@@ -34,4 +34,10 @@ public interface PostsDao {
     @Query("SELECT DISTINCT id FROM posts WHERE author_author_info_username = :username AND " +
             "datePublished = :datePublished AND endpoint != \"favorites\"")
     String getActualIdOfFavoritePost(String username, String datePublished);
+
+    @Query("DELETE FROM posts WHERE endpoint NOT IN (\"timeline\", \"mentions\", \"discover\", \"favorites\")")
+    void prunePosts();
+
+    @Query("DELETE FROM microblogData WHERE microblog_username != :username")
+    void pruneUserData(String username);
 }
