@@ -11,6 +11,7 @@ import com.dialogapp.dialog.db.MicroBlogDb;
 import com.dialogapp.dialog.db.PostsDao;
 import com.dialogapp.dialog.model.Item;
 import com.dialogapp.dialog.model.MicroBlogResponse;
+import com.dialogapp.dialog.model.UserInfo;
 import com.dialogapp.dialog.util.Resource;
 
 import java.util.List;
@@ -59,14 +60,7 @@ public class PostsRepository {
 
             @Override
             protected void saveCallResult(@NonNull MicroBlogResponse response) {
-                db.beginTransaction();
-                try {
-                    db.postsDao().deletePosts(Endpoints.TIMELINE);
-                    db.postsDao().insertPosts(response.items);
-                    db.setTransactionSuccessful();
-                } finally {
-                    db.endTransaction();
-                }
+                postsDao.deleteAndInsertPostsInTransaction(Endpoints.TIMELINE, response.items);
             }
 
             @NonNull
@@ -105,14 +99,7 @@ public class PostsRepository {
 
             @Override
             protected void saveCallResult(@NonNull MicroBlogResponse response) {
-                db.beginTransaction();
-                try {
-                    db.postsDao().deletePosts(Endpoints.MENTIONS);
-                    db.postsDao().insertPosts(response.items);
-                    db.setTransactionSuccessful();
-                } finally {
-                    db.endTransaction();
-                }
+                postsDao.deleteAndInsertPostsInTransaction(Endpoints.MENTIONS, response.items);
             }
 
             @NonNull
@@ -145,13 +132,16 @@ public class PostsRepository {
             protected MicroBlogResponse processResponse(ApiResponse<MicroBlogResponse> response) {
                 for (Item item : response.body.items) {
                     item.setEndpoint(Endpoints.FAVORITES);
+
+                    String actualId = postsDao.getActualIdOfFavoritePost(item.author.microblog.username, item.datePublished);
+                    item.setActualId(actualId);
                 }
                 return response.body;
             }
 
             @Override
             protected void saveCallResult(@NonNull MicroBlogResponse response) {
-                postsDao.insertPosts(response.items);
+                postsDao.deleteAndInsertPostsInTransaction(Endpoints.FAVORITES, response.items);
             }
 
             @NonNull
@@ -167,10 +157,10 @@ public class PostsRepository {
         }.asLiveData();
     }
 
-    public LiveData<Resource<MicroBlogResponse>> loadPostsByUsername(String username) {
-        return new NetworkBoundResource<MicroBlogResponse, MicroBlogResponse>(appExecutors) {
+    public LiveData<Resource<List<Item>>> loadPostsByUsername(String username) {
+        return new NetworkBoundResource<List<Item>, MicroBlogResponse>(appExecutors) {
             @Override
-            protected boolean shouldFetch(@Nullable MicroBlogResponse dbData) {
+            protected boolean shouldFetch(@Nullable List<Item> dbData) {
                 return dbData == null || endpointRateLimit.shouldFetch(username);
             }
 
@@ -181,14 +171,29 @@ public class PostsRepository {
             }
 
             @Override
+            protected MicroBlogResponse processResponse(ApiResponse<MicroBlogResponse> response) {
+                for (Item item : response.body.items) {
+                    item.setEndpoint(username);
+                }
+                return response.body;
+            }
+
+            @Override
             protected void saveCallResult(@NonNull MicroBlogResponse response) {
-                postsDao.insertMicroblogData(response);
+                db.beginTransaction();
+                try {
+                    postsDao.insertMicroblogData(response);
+                    postsDao.deleteAndInsertPostsInTransaction(username, response.items);
+                    db.setTransactionSuccessful();
+                } finally {
+                    db.endTransaction();
+                }
             }
 
             @NonNull
             @Override
-            protected LiveData<MicroBlogResponse> loadFromDb() {
-                return postsDao.loadMicroblogData(username);
+            protected LiveData<List<Item>> loadFromDb() {
+                return postsDao.loadEndpoint(username);
             }
 
             @Override
@@ -198,13 +203,38 @@ public class PostsRepository {
         }.asLiveData();
     }
 
-    public LiveData<Resource<List<Item>>> loadConversation(String id) {
-        return new NetworkBoundResource<List<Item>, MicroBlogResponse>(appExecutors) {
-            List<Item> responseData;
+    public LiveData<Resource<UserInfo>> loadUserData(String username) {
+        return new NetworkBoundResource<UserInfo, MicroBlogResponse>(appExecutors) {
+            @Override
+            protected boolean shouldFetch(@Nullable UserInfo dbData) {
+                // Fetching is done in loadPostsByUsername()
+                return false;
+            }
+
+            @NonNull
+            @Override
+            protected LiveData<ApiResponse<MicroBlogResponse>> createCall() {
+                return microblogService.getPostsByUsername(username);
+            }
 
             @Override
+            protected void saveCallResult(@NonNull MicroBlogResponse response) {
+
+            }
+
+            @NonNull
+            @Override
+            protected LiveData<UserInfo> loadFromDb() {
+                return postsDao.loadUserData(username);
+            }
+        }.asLiveData();
+    }
+
+    public LiveData<Resource<List<Item>>> loadConversation(String id) {
+        return new NetworkBoundResource<List<Item>, MicroBlogResponse>(appExecutors) {
+            @Override
             protected boolean shouldFetch(@Nullable List<Item> dbData) {
-                return true;
+                return dbData == null || dbData.isEmpty() || endpointRateLimit.shouldFetch(id);
             }
 
             @NonNull
@@ -214,20 +244,27 @@ public class PostsRepository {
             }
 
             @Override
+            protected MicroBlogResponse processResponse(ApiResponse<MicroBlogResponse> response) {
+                for (Item item : response.body.items) {
+                    item.setEndpoint(id);
+                }
+                return response.body;
+            }
+
+            @Override
             protected void saveCallResult(@NonNull MicroBlogResponse response) {
-                responseData = response.items;
+                postsDao.deleteAndInsertPostsInTransaction(id, response.items);
             }
 
             @NonNull
             @Override
             protected LiveData<List<Item>> loadFromDb() {
-                return new LiveData<List<Item>>() {
-                    @Override
-                    protected void onActive() {
-                        super.onActive();
-                        setValue(responseData);
-                    }
-                };
+                return postsDao.loadEndpoint(id);
+            }
+
+            @Override
+            protected void onFetchFailed() {
+                endpointRateLimit.reset(id);
             }
         }.asLiveData();
     }
@@ -258,14 +295,7 @@ public class PostsRepository {
 
             @Override
             protected void saveCallResult(@NonNull MicroBlogResponse response) {
-                db.beginTransaction();
-                try {
-                    db.postsDao().deletePosts(Endpoints.DISCOVER);
-                    db.postsDao().insertPosts(response.items);
-                    db.setTransactionSuccessful();
-                } finally {
-                    db.endTransaction();
-                }
+                postsDao.deleteAndInsertPostsInTransaction(Endpoints.DISCOVER, response.items);
             }
 
             @NonNull

@@ -86,9 +86,8 @@ public class ItemRecyclerAdapter extends ListAdapter<Item, ItemRecyclerAdapter.P
         });
 
         viewHolder.conversationButton.setOnClickListener(v -> {
-            long postId = getItem(viewHolder.getAdapterPosition()).id;
             Intent intent = new Intent(context, ConversationActivity.class);
-            intent.putExtra(ConversationActivity.EXTRA_POST_ID, Long.toString(postId));
+            intent.putExtra(ConversationActivity.EXTRA_POST_ID, getItem(viewHolder.getAdapterPosition()).id);
             context.startActivity(intent);
         });
 
