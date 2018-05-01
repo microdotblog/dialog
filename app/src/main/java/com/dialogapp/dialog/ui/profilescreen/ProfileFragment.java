@@ -41,9 +41,9 @@ public class ProfileFragment extends BaseListFragment implements Injectable {
         swipeRefreshLayout.setRefreshing(true);
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(ProfileViewModel.class);
         viewModel.setUsername(username);
-        viewModel.getUserData().observe(this, microBlogResponseResource -> {
-            if (microBlogResponseResource != null && microBlogResponseResource.data != null) {
-                listener.onLoadSuccess(microBlogResponseResource.data);
+        viewModel.getUserInfo().observe(this, userInfoResource -> {
+            if (userInfoResource != null && userInfoResource.data != null) {
+                listener.onLoadSuccess(userInfoResource.data);
             }
         });
         viewModel.getUserPosts().observe(this, listResource -> {

@@ -14,7 +14,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.dialogapp.dialog.R;
-import com.dialogapp.dialog.model.MicroBlogResponse;
+import com.dialogapp.dialog.model.UserInfo;
 import com.dialogapp.dialog.ui.base.BaseInjectableActivity;
 import com.dialogapp.dialog.ui.base.BaseListFragment;
 import com.dialogapp.dialog.ui.common.AlertDialogFragment;
@@ -82,19 +82,19 @@ public class ProfileActivity extends BaseInjectableActivity implements BaseListF
     @Override
     @SuppressWarnings("ConstantConditions")
     public void onLoadSuccess(Object data) {
-        MicroBlogResponse responseData = (MicroBlogResponse) data;
+        UserInfo userInfo = (UserInfo) data;
 
-        Glide.with(this).load(responseData.author.avatar)
+        Glide.with(this).load(userInfo.author_author_avatar_url)
                 .apply(new RequestOptions().circleCrop())
                 .into(avatar);
-        fullname.setText(responseData.author.name);
-        if (!responseData.author.url.isEmpty()) {
+        fullname.setText(userInfo.author_author_name);
+        if (!userInfo.author_author_url.isEmpty()) {
             website.setVisibility(View.VISIBLE);
-            website.setText(responseData.author.url);
+            website.setText(userInfo.author_author_url);
         }
-        if (!responseData.microblog.bio.isEmpty()) {
+        if (!userInfo.microblog_bio.isEmpty()) {
             about.setVisibility(View.VISIBLE);
-            about.setText(responseData.microblog.bio);
+            about.setText(userInfo.microblog_bio);
         }
     }
 

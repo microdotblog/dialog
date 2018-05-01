@@ -12,6 +12,7 @@ import com.dialogapp.dialog.db.MicroBlogDb;
 import com.dialogapp.dialog.db.PostsDao;
 import com.dialogapp.dialog.model.Item;
 import com.dialogapp.dialog.model.MicroBlogResponse;
+import com.dialogapp.dialog.model.UserInfo;
 import com.dialogapp.dialog.util.InstantAppExecutors;
 import com.dialogapp.dialog.util.Resource;
 
@@ -139,8 +140,8 @@ public class PostsRepositoryTest {
 
     @Test
     public void loadUserDataFromNetwork() throws IOException {
-        MutableLiveData<MicroBlogResponse> userDbData = new MutableLiveData<>();
-        when(postsDao.loadMicroblogData("dialog")).thenReturn(userDbData);
+        MutableLiveData<UserInfo> userDbData = new MutableLiveData<>();
+        when(postsDao.loadUserData("dialog")).thenReturn(userDbData);
 
         MutableLiveData<List<Item>> userPostsData = new MutableLiveData<>();
         when(postsDao.loadEndpoint("dialog")).thenReturn(userPostsData);
@@ -149,8 +150,8 @@ public class PostsRepositoryTest {
         LiveData<ApiResponse<MicroBlogResponse>> microblogData = successCall(response);
         when(microblogService.getPostsByUsername("dialog")).thenReturn(microblogData);
 
-        LiveData<Resource<MicroBlogResponse>> userRepoData = repository.loadUserData("dialog");
-        verify(postsDao).loadMicroblogData("dialog");
+        LiveData<Resource<UserInfo>> userRepoData = repository.loadUserData("dialog");
+        verify(postsDao).loadUserData("dialog");
         LiveData<Resource<List<Item>>> userPostsRepoData = repository.loadPostsByUsername("dialog");
         verify(postsDao).loadEndpoint("dialog");
         verifyNoMoreInteractions(microblogService);
@@ -162,8 +163,8 @@ public class PostsRepositoryTest {
         verify(observer, times(2)).onChanged(Resource.loading(null));
 
         MutableLiveData<List<Item>> updatedUserPostsData = new MutableLiveData<>();
-        MutableLiveData<MicroBlogResponse> updatedUserData = new MutableLiveData<>();
-        when(postsDao.loadMicroblogData("dialog")).thenReturn(updatedUserData);
+        MutableLiveData<UserInfo> updatedUserData = new MutableLiveData<>();
+        when(postsDao.loadUserData("dialog")).thenReturn(updatedUserData);
         when(postsDao.loadEndpoint("dialog")).thenReturn(updatedUserPostsData);
         userDbData.postValue(null);
         userPostsData.postValue(null);
@@ -173,7 +174,10 @@ public class PostsRepositoryTest {
         verify(postsDao).insertMicroblogData(response);
 
         updatedUserPostsData.postValue(testUserPostsData);
-        updatedUserData.postValue(response);
+        UserInfo userInfo = new UserInfo(response.microblog.bio, response.author.name,
+                response.author.url, response.author.avatar, response.microblog.is_following,
+                response.microblog.is_you, response.microblog.following_count);
+        updatedUserData.postValue(userInfo);
         verify(observer).onChanged(Resource.success(testUserPostsData));
     }
 

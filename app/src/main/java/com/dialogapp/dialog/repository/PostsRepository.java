@@ -11,6 +11,7 @@ import com.dialogapp.dialog.db.MicroBlogDb;
 import com.dialogapp.dialog.db.PostsDao;
 import com.dialogapp.dialog.model.Item;
 import com.dialogapp.dialog.model.MicroBlogResponse;
+import com.dialogapp.dialog.model.UserInfo;
 import com.dialogapp.dialog.util.Resource;
 
 import java.util.List;
@@ -202,10 +203,10 @@ public class PostsRepository {
         }.asLiveData();
     }
 
-    public LiveData<Resource<MicroBlogResponse>> loadUserData(String username) {
-        return new NetworkBoundResource<MicroBlogResponse, MicroBlogResponse>(appExecutors) {
+    public LiveData<Resource<UserInfo>> loadUserData(String username) {
+        return new NetworkBoundResource<UserInfo, MicroBlogResponse>(appExecutors) {
             @Override
-            protected boolean shouldFetch(@Nullable MicroBlogResponse dbData) {
+            protected boolean shouldFetch(@Nullable UserInfo dbData) {
                 // Fetching is done in loadPostsByUsername()
                 return false;
             }
@@ -223,8 +224,8 @@ public class PostsRepository {
 
             @NonNull
             @Override
-            protected LiveData<MicroBlogResponse> loadFromDb() {
-                return postsDao.loadMicroblogData(username);
+            protected LiveData<UserInfo> loadFromDb() {
+                return postsDao.loadUserData(username);
             }
         }.asLiveData();
     }

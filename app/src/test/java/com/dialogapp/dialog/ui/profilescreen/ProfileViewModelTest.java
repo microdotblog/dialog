@@ -7,6 +7,7 @@ import android.arch.lifecycle.Observer;
 import com.dialogapp.dialog.TestUtil;
 import com.dialogapp.dialog.model.Item;
 import com.dialogapp.dialog.model.MicroBlogResponse;
+import com.dialogapp.dialog.model.UserInfo;
 import com.dialogapp.dialog.repository.PostsRepository;
 import com.dialogapp.dialog.util.Resource;
 
@@ -49,7 +50,7 @@ public class ProfileViewModelTest {
     public void loadUserPosts() {
         ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
         ArgumentCaptor<String> captor2 = ArgumentCaptor.forClass(String.class);
-        viewModel.getUserData().observeForever(mock(Observer.class));
+        viewModel.getUserInfo().observeForever(mock(Observer.class));
         viewModel.getUserPosts().observeForever(mock(Observer.class));
         verifyNoMoreInteractions(postsRepository);
 
@@ -64,7 +65,7 @@ public class ProfileViewModelTest {
     public void testRefresh() {
         ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
         ArgumentCaptor<String> captor2 = ArgumentCaptor.forClass(String.class);
-        viewModel.getUserData().observeForever(mock(Observer.class));
+        viewModel.getUserInfo().observeForever(mock(Observer.class));
         viewModel.getUserPosts().observeForever(mock(Observer.class));
 
         viewModel.setUsername("dialog");
@@ -77,25 +78,28 @@ public class ProfileViewModelTest {
 
     @Test
     public void sendResultToUI() throws IOException {
-        MutableLiveData<Resource<MicroBlogResponse>> userData = new MutableLiveData<>();
+        MutableLiveData<Resource<UserInfo>> userDbData = new MutableLiveData<>();
         MutableLiveData<Resource<List<Item>>> userPosts = new MutableLiveData<>();
         MicroBlogResponse response = TestUtil.readFromJson(getClass().getClassLoader(), "userpostsresponse.json");
-        Resource<MicroBlogResponse> microBlogResponseResource = Resource.success(response);
+        UserInfo userInfo = new UserInfo(response.microblog.bio, response.author.name,
+                response.author.url, response.author.avatar, response.microblog.is_following,
+                response.microblog.is_you, response.microblog.following_count);
+        Resource<UserInfo> userDataResource = Resource.success(userInfo);
         Resource<List<Item>> listResource = Resource.success(response.items);
-        when(postsRepository.loadUserData("dialog")).thenReturn(userData);
+        when(postsRepository.loadUserData("dialog")).thenReturn(userDbData);
         when(postsRepository.loadPostsByUsername("dialog")).thenReturn(userPosts);
 
-        Observer<Resource<MicroBlogResponse>> observer = mock(Observer.class);
+        Observer<Resource<UserInfo>> observer = mock(Observer.class);
         Observer<Resource<List<Item>>> observer2 = mock(Observer.class);
-        viewModel.getUserData().observeForever(observer);
+        viewModel.getUserInfo().observeForever(observer);
         viewModel.getUserPosts().observeForever(observer2);
         verifyNoMoreInteractions(postsRepository);
         viewModel.setUsername("dialog");
         verify(observer, never()).onChanged(any(Resource.class));
 
-        userData.setValue(microBlogResponseResource);
+        userDbData.setValue(userDataResource);
         userPosts.setValue(listResource);
-        verify(observer).onChanged(microBlogResponseResource);
+        verify(observer).onChanged(userDataResource);
         verify(observer2).onChanged(listResource);
     }
 }

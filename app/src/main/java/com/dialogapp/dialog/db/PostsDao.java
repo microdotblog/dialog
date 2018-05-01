@@ -9,6 +9,7 @@ import android.arch.persistence.room.Transaction;
 
 import com.dialogapp.dialog.model.Item;
 import com.dialogapp.dialog.model.MicroBlogResponse;
+import com.dialogapp.dialog.model.UserInfo;
 
 import java.util.List;
 
@@ -35,8 +36,10 @@ public abstract class PostsDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     public abstract void insertMicroblogData(MicroBlogResponse data);
 
-    @Query("SELECT * FROM microblogData WHERE microblog_username = :username")
-    public abstract LiveData<MicroBlogResponse> loadMicroblogData(String username);
+    @Query("SELECT microblog_bio, author_author_name, author_author_url, author_author_avatar_url, " +
+            "microblog_is_following, microblog_is_you, microblog_following_count " +
+            "FROM microblogData WHERE microblog_username = :username")
+    public abstract LiveData<UserInfo> loadUserData(String username);
 
     @Query("SELECT DISTINCT id FROM posts WHERE author_author_info_username = :username AND " +
             "datePublished = :datePublished AND endpoint != \"favorites\"")
