@@ -59,14 +59,7 @@ public class PostsRepository {
 
             @Override
             protected void saveCallResult(@NonNull MicroBlogResponse response) {
-                db.beginTransaction();
-                try {
-                    db.postsDao().deletePosts(Endpoints.TIMELINE);
-                    db.postsDao().insertPosts(response.items);
-                    db.setTransactionSuccessful();
-                } finally {
-                    db.endTransaction();
-                }
+                postsDao.deleteAndInsertPostsInTransaction(Endpoints.TIMELINE, response.items);
             }
 
             @NonNull
@@ -105,14 +98,7 @@ public class PostsRepository {
 
             @Override
             protected void saveCallResult(@NonNull MicroBlogResponse response) {
-                db.beginTransaction();
-                try {
-                    db.postsDao().deletePosts(Endpoints.MENTIONS);
-                    db.postsDao().insertPosts(response.items);
-                    db.setTransactionSuccessful();
-                } finally {
-                    db.endTransaction();
-                }
+                postsDao.deleteAndInsertPostsInTransaction(Endpoints.MENTIONS, response.items);
             }
 
             @NonNull
@@ -154,14 +140,7 @@ public class PostsRepository {
 
             @Override
             protected void saveCallResult(@NonNull MicroBlogResponse response) {
-                db.beginTransaction();
-                try {
-                    postsDao.deletePosts(Endpoints.FAVORITES);
-                    postsDao.insertPosts(response.items);
-                    db.setTransactionSuccessful();
-                } finally {
-                    db.endTransaction();
-                }
+                postsDao.deleteAndInsertPostsInTransaction(Endpoints.FAVORITES, response.items);
             }
 
             @NonNull
@@ -203,7 +182,7 @@ public class PostsRepository {
                 db.beginTransaction();
                 try {
                     postsDao.insertMicroblogData(response);
-                    postsDao.insertPosts(response.items);
+                    postsDao.deleteAndInsertPostsInTransaction(username, response.items);
                     db.setTransactionSuccessful();
                 } finally {
                     db.endTransaction();
@@ -273,7 +252,7 @@ public class PostsRepository {
 
             @Override
             protected void saveCallResult(@NonNull MicroBlogResponse response) {
-                db.postsDao().insertPosts(response.items);
+                postsDao.deleteAndInsertPostsInTransaction(id, response.items);
             }
 
             @NonNull
@@ -315,14 +294,7 @@ public class PostsRepository {
 
             @Override
             protected void saveCallResult(@NonNull MicroBlogResponse response) {
-                db.beginTransaction();
-                try {
-                    db.postsDao().deletePosts(Endpoints.DISCOVER);
-                    db.postsDao().insertPosts(response.items);
-                    db.setTransactionSuccessful();
-                } finally {
-                    db.endTransaction();
-                }
+                postsDao.deleteAndInsertPostsInTransaction(Endpoints.DISCOVER, response.items);
             }
 
             @NonNull

@@ -73,7 +73,7 @@ public class PostsRepositoryTest {
         timelineDbData.postValue(null);
         verify(microblogService).getTimeLine(null);
         List<Item> testTimelineData = response.items;
-        verify(postsDao).insertPosts(testTimelineData);
+        verify(postsDao).deleteAndInsertPostsInTransaction(Endpoints.TIMELINE, testTimelineData);
 
         updatedTimelineData.postValue(testTimelineData);
         verify(observer).onChanged(Resource.success(testTimelineData));
@@ -102,7 +102,7 @@ public class PostsRepositoryTest {
         mentionsDbData.postValue(null);
         verify(microblogService).getMentions(null);
         List<Item> testMentionsData = response.items;
-        verify(postsDao).insertPosts(testMentionsData);
+        verify(postsDao).deleteAndInsertPostsInTransaction(Endpoints.MENTIONS, testMentionsData);
 
         updatedMentionsData.postValue(testMentionsData);
         verify(observer).onChanged(Resource.success(testMentionsData));
@@ -131,7 +131,7 @@ public class PostsRepositoryTest {
         favoritesDbData.postValue(null);
         verify(microblogService).getFavorites();
         List<Item> testFavoritesData = response.items;
-        verify(postsDao).insertPosts(testFavoritesData);
+        verify(postsDao).deleteAndInsertPostsInTransaction(Endpoints.FAVORITES, testFavoritesData);
 
         updatedFavoritesData.postValue(testFavoritesData);
         verify(observer).onChanged(Resource.success(testFavoritesData));
@@ -169,7 +169,7 @@ public class PostsRepositoryTest {
         userPostsData.postValue(null);
         verify(microblogService).getPostsByUsername("dialog");
         List<Item> testUserPostsData = response.items;
-        verify(postsDao).insertPosts(testUserPostsData);
+        verify(postsDao).deleteAndInsertPostsInTransaction("dialog", testUserPostsData);
         verify(postsDao).insertMicroblogData(response);
 
         updatedUserPostsData.postValue(testUserPostsData);
@@ -200,7 +200,7 @@ public class PostsRepositoryTest {
         conversationDbData.postValue(null);
         verify(microblogService).getConversation("12345");
         List<Item> testConversationData = response.items;
-        verify(postsDao).insertPosts(testConversationData);
+        verify(postsDao).deleteAndInsertPostsInTransaction("12345", testConversationData);
 
         updatedConversationData.postValue(testConversationData);
         verify(observer).onChanged(Resource.success(testConversationData));
