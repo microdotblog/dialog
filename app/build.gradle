@@ -98,6 +98,8 @@ dependencies {
 
     implementation 'com.takisoft.fix:preference-v7:27.1.1.0'
 
+    implementation 'de.hdodenhof:circleimageview:2.2.0'
+
     // Stetho
     debugImplementation 'com.facebook.stetho:stetho:1.5.0'
     debugImplementation 'com.facebook.stetho:stetho-okhttp3:1.5.0'

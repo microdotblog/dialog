@@ -6,9 +6,9 @@ import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
+import android.util.TypedValue;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -21,6 +21,7 @@ import com.dialogapp.dialog.ui.common.AlertDialogFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ProfileActivity extends BaseInjectableActivity implements BaseListFragment.FragmentEventListener,
         AlertDialogFragment.AlertDialogListener {
@@ -41,7 +42,7 @@ public class ProfileActivity extends BaseInjectableActivity implements BaseListF
     TabLayout tabLayout;
 
     @BindView(R.id.image_avatar)
-    ImageView avatar;
+    CircleImageView avatar;
 
     @BindView(R.id.text_profile_fullname)
     TextView fullname;
@@ -84,8 +85,12 @@ public class ProfileActivity extends BaseInjectableActivity implements BaseListF
     public void onLoadSuccess(Object data) {
         UserInfo userInfo = (UserInfo) data;
 
-        Glide.with(this).load(userInfo.author_author_avatar_url)
-                .apply(new RequestOptions().circleCrop())
+        TypedValue outValue = new TypedValue();
+        getTheme().resolveAttribute(R.attr.colorCardBackground, outValue, true);
+        Glide.with(this)
+                .load(userInfo.author_author_avatar_url)
+                .apply(RequestOptions.placeholderOf(outValue.resourceId))
+                .apply(RequestOptions.noAnimation())
                 .into(avatar);
         fullname.setText(userInfo.author_author_name);
         if (!userInfo.author_author_url.isEmpty())

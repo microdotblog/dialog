@@ -16,7 +16,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestOptions;
 import com.dialogapp.dialog.AppExecutors;
 import com.dialogapp.dialog.R;
@@ -35,6 +34,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends BaseInjectableActivity implements BaseListFragment.FragmentEventListener,
         NavigationView.OnNavigationItemSelectedListener, AlertDialogFragment.AlertDialogListener {
@@ -90,15 +90,14 @@ public class MainActivity extends BaseInjectableActivity implements BaseListFrag
 
         navigationView.setNavigationItemSelectedListener(this);
 
-        ImageView imageView = navigationView.getHeaderView(0).findViewById(R.id.image_profile);
+        CircleImageView imageView = navigationView.getHeaderView(0).findViewById(R.id.image_profile);
         TextView username = navigationView.getHeaderView(0).findViewById(R.id.text_username);
         TextView fullname = navigationView.getHeaderView(0).findViewById(R.id.text_fullname);
         ImageView logout = navigationView.getHeaderView(0).findViewById(R.id.image_logout);
 
         Glide.with(this)
                 .load(saved_avatarUrl)
-                .apply(RequestOptions.circleCropTransform())
-                .transition(DrawableTransitionOptions.withCrossFade())
+                .apply(RequestOptions.noAnimation())
                 .into(imageView);
         username.setText(saved_username);
         fullname.setText(saved_fullname);

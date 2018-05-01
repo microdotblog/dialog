@@ -15,7 +15,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -38,6 +37,7 @@ import java.util.Queue;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import de.hdodenhof.circleimageview.CircleImageView;
 import timber.log.Timber;
 
 import static android.text.Html.FROM_HTML_MODE_LEGACY;
@@ -112,7 +112,8 @@ public class ItemRecyclerAdapter extends ListAdapter<Item, ItemRecyclerAdapter.P
         }
 
         glide.load(item.author.avatar)
-                .apply(RequestOptions.circleCropTransform())
+                .apply(RequestOptions.placeholderOf(R.color.grey400))
+                .apply(RequestOptions.noAnimation())
                 .into(holder.thumbnail);
         holder.username.setText(item.author.microblog.username);
         holder.time.setText(item.microblog.dateRelative);
@@ -136,7 +137,7 @@ public class ItemRecyclerAdapter extends ListAdapter<Item, ItemRecyclerAdapter.P
 
     public class PostViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.image_thumbnail)
-        ImageView thumbnail;
+        CircleImageView thumbnail;
 
         @BindView(R.id.text_username)
         TextView username;
