@@ -46,9 +46,7 @@ public class GlideImageGetter implements Html.ImageGetter, Drawable.Callback {
 
     // values from post_item layout
     private static final int CONTENT_MARGIN_START_DP = 80;
-    private static final int CONTENT_MARGIN_END_DP = 8;
-    private static final int TOGGLEBTN_MARGIN_END_DP = 16;
-    private static final int TOGGLEBTN_WIDTH_DP = 24;
+    private static final int CONTENT_MARGIN_END_DP = 16;
 
     private final RequestManager manager;
     private final RequestOptions requestOptions;
@@ -73,7 +71,7 @@ public class GlideImageGetter implements Html.ImageGetter, Drawable.Callback {
         this.shouldLoadImages = Integer.parseInt(sharedPref.getString(context.getString(R.string.pref_preloadImages), "0"));
 
         this.calculatedHeightPx = dpToPx(DEFAULT_IMAGE_HEIGHT_DP);
-        int diffPx = dpToPx(CONTENT_MARGIN_START_DP + CONTENT_MARGIN_END_DP + TOGGLEBTN_MARGIN_END_DP + TOGGLEBTN_WIDTH_DP);
+        int diffPx = dpToPx(CONTENT_MARGIN_START_DP + CONTENT_MARGIN_END_DP);
         this.calculatedWidthPx = Resources.getSystem().getDisplayMetrics().widthPixels - diffPx;
 
         this.requestOptions = new RequestOptions()

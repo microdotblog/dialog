@@ -11,6 +11,7 @@
         <item name="colorNavDrawer">@android:color/white</item>
         <item name="colorDivider">@color/blacka12</item>
         <item name="colorDrawerIcons">@android:color/black</item>
+        <item name="conversationIcon">@drawable/ic_forum_black_24dp</item>
         <item name="android:statusBarColor">@color/indigo800</item>
         <item name="android:textColorPrimary">@color/blacka87</item>
         <item name="android:textColorSecondary">@color/blacka54</item>

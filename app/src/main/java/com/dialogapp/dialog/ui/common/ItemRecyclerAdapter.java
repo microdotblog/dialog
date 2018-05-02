@@ -1,7 +1,7 @@
 package com.dialogapp.dialog.ui.common;
 
 import android.content.Context;
-import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v7.recyclerview.extensions.ListAdapter;
@@ -11,10 +11,11 @@ import android.text.Html;
 import android.text.Spannable;
 import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -22,8 +23,6 @@ import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
 import com.dialogapp.dialog.R;
 import com.dialogapp.dialog.model.Item;
-import com.dialogapp.dialog.ui.conversation.ConversationActivity;
-import com.dialogapp.dialog.ui.profilescreen.ProfileActivity;
 import com.dialogapp.dialog.util.GlideImageGetter;
 import com.dialogapp.dialog.util.Objects;
 
@@ -58,16 +57,18 @@ public class ItemRecyclerAdapter extends ListAdapter<Item, ItemRecyclerAdapter.P
                 }
             };
 
-    private int expandedPosition = -1;
-    private int previousExpandedPosition = -1;
-
-    private Context context;
+    Context context;
+    PostItemOptionClickedListener listener;
     private RequestManager glide;
+    private int currentNightMode;
 
     public ItemRecyclerAdapter(Context context) {
         super(DIFF_CALLBACK);
         this.context = context;
         this.glide = Glide.with(context);
+
+        currentNightMode = context.getResources().getConfiguration().uiMode
+                & Configuration.UI_MODE_NIGHT_MASK;
     }
 
     @NonNull
@@ -75,41 +76,25 @@ public class ItemRecyclerAdapter extends ListAdapter<Item, ItemRecyclerAdapter.P
     public PostViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         final View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.post_item, parent, false);
-        final PostViewHolder viewHolder = new PostViewHolder(view);
-
-        viewHolder.toggleButton.setOnClickListener(v -> {
-            int position = viewHolder.getAdapterPosition();
-            boolean isExpanded = position == expandedPosition;
-            expandedPosition = isExpanded ? -1 : position;
-            notifyItemChanged(previousExpandedPosition);
-            notifyItemChanged(position);
-        });
-
-        viewHolder.conversationButton.setOnClickListener(v -> {
-            Intent intent = new Intent(context, ConversationActivity.class);
-            intent.putExtra(ConversationActivity.EXTRA_POST_ID, getItem(viewHolder.getAdapterPosition()).id);
-            context.startActivity(intent);
-        });
-
-        return viewHolder;
+        return new PostViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull PostViewHolder holder, int position) {
         Item item = getItem(position);
 
-        if (item.microblog.isConversation) {
-            holder.toggleButton.setVisibility(View.VISIBLE);
-            final boolean isExpanded = position == expandedPosition;
-            holder.conversationButton.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
-            holder.itemView.setActivated(isExpanded);
-            holder.toggleButton.setBackgroundResource(isExpanded ? R.drawable.ic_collapse_grey_24px : R.drawable.ic_expand_grey_24px);
-            if (isExpanded)
-                previousExpandedPosition = position;
-        } else {
-            holder.toggleButton.setVisibility(View.INVISIBLE);
-            holder.conversationButton.setVisibility(View.GONE);
+        switch (currentNightMode) {
+            case Configuration.UI_MODE_NIGHT_NO:
+                holder.conversationButton.setImageAlpha(138);
+                break;
+            case Configuration.UI_MODE_NIGHT_YES:
+                holder.conversationButton.setImageAlpha(255);
+                break;
+            case Configuration.UI_MODE_NIGHT_UNDEFINED:
+                holder.conversationButton.setImageAlpha(138);
         }
+        holder.conversationButton.setVisibility(getItem(position).microblog.isConversation ?
+                View.VISIBLE : View.GONE);
 
         glide.load(item.author.avatar)
                 .apply(RequestOptions.placeholderOf(R.color.grey400))
@@ -126,16 +111,19 @@ public class ItemRecyclerAdapter extends ListAdapter<Item, ItemRecyclerAdapter.P
         super.onViewRecycled(holder);
     }
 
-    public int getExpandedPosition() {
-        return expandedPosition;
+    public void setListener(PostItemOptionClickedListener listener) {
+        this.listener = listener;
     }
 
-    public void setExpandedPosition(int expandedPosition) {
-        this.expandedPosition = expandedPosition;
+    public interface PostItemOptionClickedListener {
+        void onAvatarClicked(String username);
+
+        void onConversationButtonClicked(String postId);
+
+        boolean onMenuItemClicked(int menuItemId, Item item);
     }
 
-
-    public class PostViewHolder extends RecyclerView.ViewHolder {
+    public class PostViewHolder extends RecyclerView.ViewHolder implements PopupMenu.OnMenuItemClickListener {
         @BindView(R.id.image_thumbnail)
         CircleImageView thumbnail;
 
@@ -148,21 +136,36 @@ public class ItemRecyclerAdapter extends ListAdapter<Item, ItemRecyclerAdapter.P
         @BindView(R.id.text_time)
         TextView time;
 
-        @BindView(R.id.button_toggle)
-        ImageButton toggleButton;
-
         @BindView(R.id.button_conversation)
-        Button conversationButton;
+        ImageButton conversationButton;
+
+        @BindView(R.id.button_post_options)
+        ImageButton optionsButtons;
 
         public PostViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
 
-            thumbnail.setOnClickListener(view -> {
-                Intent intent = new Intent(context, ProfileActivity.class);
-                intent.putExtra(ProfileActivity.EXTRA_USERNAME, getItem(getAdapterPosition()).author.microblog.username);
-                context.startActivity(intent);
+            conversationButton.setOnClickListener(v -> {
+                listener.onConversationButtonClicked(getItem(getAdapterPosition()).id);
             });
+
+            thumbnail.setOnClickListener(view -> {
+                listener.onAvatarClicked(getItem(getAdapterPosition()).author.microblog.username);
+            });
+
+            optionsButtons.setOnClickListener(v -> {
+                PopupMenu popupMenu = new PopupMenu(context, v);
+                popupMenu.setOnMenuItemClickListener(this);
+                popupMenu.inflate(R.menu.post_options_popup);
+                popupMenu.show();
+            });
+        }
+
+
+        @Override
+        public boolean onMenuItemClick(MenuItem menuItem) {
+            return listener.onMenuItemClicked(menuItem.getItemId(), getItem(getAdapterPosition()));
         }
 
         private void bindHtmlContent(String contentHtml) {

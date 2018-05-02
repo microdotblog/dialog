@@ -38,18 +38,15 @@
         android:id="@+id/text_content"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textColorLink="@color/reda200"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/button_toggle"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_chainStyle="spread_inside"
         app:layout_constraintStart_toEndOf="@+id/image_thumbnail"
         app:layout_constraintTop_toBottomOf="@+id/text_username"
-        app:layout_constraintVertical_bias="0.0"
         tools:text="@tools:sample/lorem" />
 
     <TextView
@@ -65,30 +62,25 @@
         tools:text="@tools:sample/date/ddmmyy" />
 
     <ImageButton
-        android:id="@+id/button_toggle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="8dp"
-        android:foreground="?attr/selectableItemBackground"
-        app:layout_constraintBottom_toBottomOf="@+id/text_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/text_content"
-        app:layout_constraintVertical_bias="1.0" />
-
-    <Button
         android:id="@+id/button_conversation"
-        style="@style/Widget.AppCompat.Button.Colored"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:backgroundTint="@color/indigo500"
-        android:text="Conversation"
-        android:textColor="@android:color/white"
+        android:background="?attr/selectableItemBackground"
+        android:padding="8dp"
+        android:src="?attr/conversationIcon"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/image_thumbnail"
+        app:layout_constraintTop_toBottomOf="@+id/text_content" />
+
+    <ImageButton
+        android:id="@+id/button_post_options"
+        style="?android:attr/actionOverflowButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/image_thumbnail"
         app:layout_constraintTop_toBottomOf="@+id/text_content" />
 </android.support.constraint.ConstraintLayout>
