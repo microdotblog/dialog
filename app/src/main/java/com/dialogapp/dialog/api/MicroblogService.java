@@ -62,7 +62,7 @@ public interface MicroblogService {
 
     @FormUrlEncoded
     @POST("posts/favorites")
-    Call<Response> favoriteAPost(@Field("id") String id);
+    Call<ResponseBody> favoritePostHaving(@Field("id") String id);
 
     @FormUrlEncoded
     @POST("posts/reply")
@@ -79,7 +79,7 @@ public interface MicroblogService {
     // DELETE
 
     @DELETE("posts/favorites/{id}")
-    Call<Response> unfavoriteAPost(@Path("id") String id);
+    Call<ResponseBody> unfavoritePostHaving(@Path("id") String id);
 
     @DELETE("posts/{id}")
     Call<Response> deleteById(@Path("id") String id);

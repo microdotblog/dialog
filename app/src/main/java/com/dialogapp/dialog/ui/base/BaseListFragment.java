@@ -1,6 +1,8 @@
 package com.dialogapp.dialog.ui.base;
 
+import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -15,14 +17,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dialogapp.dialog.R;
 import com.dialogapp.dialog.di.Injectable;
 import com.dialogapp.dialog.model.Item;
 import com.dialogapp.dialog.ui.common.ItemRecyclerAdapter;
+import com.dialogapp.dialog.ui.common.RequestViewModel;
 import com.dialogapp.dialog.ui.conversation.ConversationActivity;
 import com.dialogapp.dialog.ui.profilescreen.ProfileActivity;
+import com.dialogapp.dialog.util.Event;
 import com.dialogapp.dialog.util.InsetDividerDecoration;
+import com.dialogapp.dialog.util.Resource;
 import com.dialogapp.dialog.util.Status;
 
 import java.util.List;
@@ -53,6 +59,18 @@ public abstract class BaseListFragment extends Fragment implements Injectable, I
 
     @Inject
     protected ViewModelProvider.Factory viewModelFactory;
+
+    protected RequestViewModel requestViewModel;
+
+    private final Observer<Event<Resource<Boolean>>> requestObserver = booleanResource -> {
+        if (booleanResource.getContentIfNotHandled() != null) {
+            if (booleanResource.peekContent().data) {
+                Toast.makeText(getActivity(), R.string.request_successful, Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getActivity(), R.string.request_unsuccessful, Toast.LENGTH_SHORT).show();
+            }
+        }
+    };
 
     @Override
     public void onAttach(Context context) {
@@ -90,6 +108,9 @@ public abstract class BaseListFragment extends Fragment implements Injectable, I
         recyclerView.addItemDecoration(new InsetDividerDecoration(this.getActivity()));
         recyclerView.setAdapter(adapter);
 
+        requestViewModel = ViewModelProviders.of(this, viewModelFactory).get(RequestViewModel.class);
+        requestViewModel.getResponseFavorite().removeObserver(requestObserver);
+        requestViewModel.getResponseFavorite().observe(this, requestObserver);
         setViewModel();
     }
 
@@ -104,6 +125,12 @@ public abstract class BaseListFragment extends Fragment implements Injectable, I
         Intent intent = new Intent(getActivity(), ProfileActivity.class);
         intent.putExtra(ProfileActivity.EXTRA_USERNAME, username);
         startActivity(intent);
+    }
+
+    @Override
+    public void onFavoriteButtonClicked(String postId, boolean state) {
+        Toast.makeText(getActivity(), "Requesting...", Toast.LENGTH_SHORT).show();
+        requestViewModel.setFavoriteState(postId, state);
     }
 
     @Override

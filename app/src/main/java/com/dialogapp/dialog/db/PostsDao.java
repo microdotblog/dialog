@@ -54,4 +54,10 @@ public abstract class PostsDao {
 
     @Query("UPDATE microblogData SET microblog_is_following = :follow WHERE microblog_username = :username")
     public abstract void updateFollowState(String username, boolean follow);
+
+    @Query("UPDATE posts SET post_property_isFavorite = :favorite WHERE id = :id")
+    public abstract void updateFavoriteState(String id, boolean favorite);
+
+    @Query("DELETE FROM posts WHERE id = :id AND endpoint = \"favorites\"")
+    public abstract void deleteFromFavorites(String id);
 }

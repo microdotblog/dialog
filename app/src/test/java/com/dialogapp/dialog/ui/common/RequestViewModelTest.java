@@ -63,4 +63,31 @@ public class RequestViewModelTest {
         liveData.setValue(eventResource);
         verify(observer).onChanged(eventResource);
     }
+
+    @Test
+    public void testFavoriteRequest() {
+        ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
+        ArgumentCaptor<Boolean> captor2 = ArgumentCaptor.forClass(Boolean.class);
+        viewModel.getResponseFavorite().observeForever(mock(Observer.class));
+
+        viewModel.setFavoriteState("123", true);
+        verify(postRequestManager).sendFavoriteRequest(captor.capture(), captor2.capture());
+        assertThat(captor.getValue(), is("123"));
+        assertThat(captor2.getValue(), is(true));
+    }
+
+    @Test
+    public void sendFavoriteResultToUI() {
+        Event<Resource<Boolean>> eventResource = Event.createEvent(Resource.success(true));
+        MutableLiveData<Event<Resource<Boolean>>> liveData = new MutableLiveData<>();
+        when(postRequestManager.sendFavoriteRequest("123", true)).thenReturn(liveData);
+
+        Observer<Event<Resource<Boolean>>> observer = mock(Observer.class);
+        viewModel.getResponseFavorite().observeForever(observer);
+        viewModel.setFavoriteState("123", true);
+        verify(observer, never()).onChanged(any(Event.class));
+
+        liveData.setValue(eventResource);
+        verify(observer).onChanged(eventResource);
+    }
 }

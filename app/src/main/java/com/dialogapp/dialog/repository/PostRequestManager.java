@@ -71,4 +71,40 @@ public class PostRequestManager {
             }
         }.asEventLiveData();
     }
+
+    public LiveData<Event<Resource<Boolean>>> sendFavoriteRequest(String id, boolean favoriteValue) {
+        return new NetworkBoundRequestResource<ResponseBody>(appExecutors) {
+            @NonNull
+            @Override
+            protected Call<ResponseBody> createCall() {
+                if (favoriteValue)
+                    return microblogService.favoritePostHaving(id);
+                else
+                    return microblogService.unfavoritePostHaving(id);
+            }
+
+            @Override
+            protected boolean wasExpectedResponse(ApiResponse<ResponseBody> apiResponse) {
+                try {
+                    return apiResponse.body.string().equals("{}");
+                } catch (IOException e) {
+                    Timber.e("Unexpected response : %s", e.getMessage());
+                    return false;
+                }
+            }
+
+            @Override
+            protected void performDbOperation() {
+                db.beginTransaction();
+                try {
+                    postsDao.updateFavoriteState(id, favoriteValue);
+                    if (!favoriteValue)
+                        postsDao.deleteFromFavorites(id);
+                    db.setTransactionSuccessful();
+                } finally {
+                    db.endTransaction();
+                }
+            }
+        }.asEventLiveData();
+    }
 }

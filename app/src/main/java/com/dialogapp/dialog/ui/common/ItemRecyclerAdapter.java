@@ -4,12 +4,14 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.recyclerview.extensions.ListAdapter;
 import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.Spannable;
 import android.text.method.LinkMovementMethod;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -53,7 +55,11 @@ public class ItemRecyclerAdapter extends ListAdapter<Item, ItemRecyclerAdapter.P
                 @Override
                 public boolean areContentsTheSame(
                         @NonNull Item oldItem, @NonNull Item newItem) {
-                    return Objects.equals(oldItem.contentHtml, newItem.contentHtml);
+                    return Objects.equals(oldItem.contentHtml, newItem.contentHtml) &&
+                            Objects.equals(oldItem.microblog.isFavorite, newItem.microblog.isFavorite) &&
+                            Objects.equals(oldItem.microblog.isConversation, newItem.microblog.isConversation) &&
+                            Objects.equals(oldItem.microblog.dateRelative, newItem.microblog.dateRelative) &&
+                            Objects.equals(oldItem.author.microblog.username, newItem.author.microblog.username);
                 }
             };
 
@@ -83,18 +89,24 @@ public class ItemRecyclerAdapter extends ListAdapter<Item, ItemRecyclerAdapter.P
     public void onBindViewHolder(@NonNull PostViewHolder holder, int position) {
         Item item = getItem(position);
 
-        switch (currentNightMode) {
-            case Configuration.UI_MODE_NIGHT_NO:
-                holder.conversationButton.setImageAlpha(138);
-                break;
-            case Configuration.UI_MODE_NIGHT_YES:
-                holder.conversationButton.setImageAlpha(255);
-                break;
-            case Configuration.UI_MODE_NIGHT_UNDEFINED:
-                holder.conversationButton.setImageAlpha(138);
-        }
+        setIconAlpha(holder.conversationButton, 138, 255);
         holder.conversationButton.setVisibility(getItem(position).microblog.isConversation ?
                 View.VISIBLE : View.GONE);
+
+        TypedValue valueActive = new TypedValue();
+        TypedValue valueInactive = new TypedValue();
+        context.getTheme().resolveAttribute(R.attr.favoriteIconActive, valueActive, true);
+        context.getTheme().resolveAttribute(R.attr.favoriteIconInactive, valueInactive, true);
+
+        if (item.microblog.isFavorite) {
+            holder.favoriteButton.setImageResource(valueActive.resourceId);
+            holder.favoriteButton.setImageAlpha(255);
+            holder.favoriteButton.setColorFilter(ContextCompat.getColor(context, R.color.reda200));
+        } else {
+            holder.favoriteButton.setImageResource(valueInactive.resourceId);
+            holder.favoriteButton.clearColorFilter();
+            setIconAlpha(holder.favoriteButton, 97, 128);
+        }
 
         glide.load(item.author.avatar)
                 .apply(RequestOptions.placeholderOf(R.color.grey400))
@@ -115,8 +127,23 @@ public class ItemRecyclerAdapter extends ListAdapter<Item, ItemRecyclerAdapter.P
         this.listener = listener;
     }
 
+    private void setIconAlpha(ImageButton button, int dayAlpha, int nightAlpha) {
+        switch (currentNightMode) {
+            case Configuration.UI_MODE_NIGHT_NO:
+                button.setImageAlpha(dayAlpha);
+                break;
+            case Configuration.UI_MODE_NIGHT_YES:
+                button.setImageAlpha(nightAlpha);
+                break;
+            case Configuration.UI_MODE_NIGHT_UNDEFINED:
+                button.setImageAlpha(dayAlpha);
+        }
+    }
+
     public interface PostItemOptionClickedListener {
         void onAvatarClicked(String username);
+
+        void onFavoriteButtonClicked(String postId, boolean state);
 
         void onConversationButtonClicked(String postId);
 
@@ -139,12 +166,20 @@ public class ItemRecyclerAdapter extends ListAdapter<Item, ItemRecyclerAdapter.P
         @BindView(R.id.button_conversation)
         ImageButton conversationButton;
 
+        @BindView(R.id.button_favorite)
+        ImageButton favoriteButton;
+
         @BindView(R.id.button_post_options)
         ImageButton optionsButtons;
 
         public PostViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+
+            favoriteButton.setOnClickListener(v -> {
+                listener.onFavoriteButtonClicked(getItem(getAdapterPosition()).id,
+                        !getItem(getAdapterPosition()).microblog.isFavorite);
+            });
 
             conversationButton.setOnClickListener(v -> {
                 listener.onConversationButtonClicked(getItem(getAdapterPosition()).id);

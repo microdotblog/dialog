@@ -25,4 +25,6 @@
     <string name="connection_error">Could not connect to Microblog.</string>
 
     <string name="settings_location">Location access is required for accurate auto day-night theme switching</string>
+    <string name="request_successful">Request successful</string>
+    <string name="request_unsuccessful">Request unsuccessful</string>
 </resources>

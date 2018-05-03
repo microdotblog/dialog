@@ -28,6 +28,8 @@ import retrofit2.Response;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.verifyZeroInteractions;
@@ -75,6 +77,55 @@ public class PostRequestManagerTest {
 
         LiveData<Event<Resource<Boolean>>> request = requestManager.followUser("dialog", true);
         verify(microblogService).followUser("dialog");
+        verifyNoMoreInteractions(microblogService);
+
+        Observer observer = mock(Observer.class);
+        request.observeForever(observer);
+        verifyNoMoreInteractions(microblogService);
+        verifyZeroInteractions(postsDao);
+        assertThat(request.getValue().peekContent().status, is(Status.ERROR));
+        assertThat(request.getValue().peekContent().data, is(false));
+        verify(observer).onChanged(request.getValue());
+    }
+
+    @Test
+    public void sendSuccessfulFavoriteRequest() throws IOException {
+        Call<ResponseBody> response = createCall(false);
+        when(microblogService.favoritePostHaving("123")).thenReturn(response);
+
+        LiveData<Event<Resource<Boolean>>> request = requestManager.sendFavoriteRequest("123", true);
+        verify(microblogService).favoritePostHaving("123");
+        verifyNoMoreInteractions(microblogService);
+
+        Observer observer = mock(Observer.class);
+        request.observeForever(observer);
+        verifyNoMoreInteractions(microblogService);
+        verify(postsDao).updateFavoriteState("123", true);
+        verify(postsDao, never()).deleteFromFavorites("123");
+        assertThat(request.getValue().peekContent().data, is(true));
+        verify(observer).onChanged(request.getValue());
+
+        Call<ResponseBody> response2 = createCall(false);
+        when(microblogService.unfavoritePostHaving("123")).thenReturn(response2);
+
+        reset(observer);
+        request = requestManager.sendFavoriteRequest("123", false);
+        request.observeForever(observer);
+        verify(microblogService).unfavoritePostHaving("123");
+        verifyNoMoreInteractions(microblogService);
+        verify(postsDao).updateFavoriteState("123", false);
+        verify(postsDao).deleteFromFavorites("123");
+        assertThat(request.getValue().peekContent().data, is(true));
+        verify(observer).onChanged(request.getValue());
+    }
+
+    @Test
+    public void sendUnsuccessfulFavoriteRequest() throws IOException {
+        Call<ResponseBody> response = createCall(true);
+        when(microblogService.favoritePostHaving("123")).thenReturn(response);
+
+        LiveData<Event<Resource<Boolean>>> request = requestManager.sendFavoriteRequest("123", true);
+        verify(microblogService).favoritePostHaving("123");
         verifyNoMoreInteractions(microblogService);
 
         Observer observer = mock(Observer.class);

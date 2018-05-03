@@ -85,10 +85,10 @@ public class ProfileActivity extends BaseInjectableActivity implements BaseListF
         viewModel.getResponseFollow().observe(this, resourceEvent -> {
             if (resourceEvent.getContentIfNotHandled() != null) {
                 if (resourceEvent.peekContent().data) {
-                    Toast.makeText(this, "Request successful",
+                    Toast.makeText(this, R.string.request_successful,
                             Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(this, "Request failed", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, R.string.request_unsuccessful, Toast.LENGTH_SHORT).show();
                     followButton.setEnabled(true);
                 }
             }
