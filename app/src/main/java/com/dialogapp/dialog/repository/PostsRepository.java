@@ -132,9 +132,6 @@ public class PostsRepository {
             protected MicroBlogResponse processResponse(ApiResponse<MicroBlogResponse> response) {
                 for (Item item : response.body.items) {
                     item.setEndpoint(Endpoints.FAVORITES);
-
-                    String actualId = postsDao.getActualIdOfFavoritePost(item.author.microblog.username, item.datePublished);
-                    item.setActualId(actualId);
                 }
                 return response.body;
             }

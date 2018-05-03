@@ -41,10 +41,6 @@ public abstract class PostsDao {
             "FROM microblogData WHERE microblog_username = :username")
     public abstract LiveData<UserInfo> loadUserData(String username);
 
-    @Query("SELECT DISTINCT id FROM posts WHERE author_author_info_username = :username AND " +
-            "datePublished = :datePublished AND endpoint != \"favorites\"")
-    public abstract String getActualIdOfFavoritePost(String username, String datePublished);
-
     @Query("DELETE FROM posts WHERE endpoint NOT IN (\"timeline\", \"mentions\", \"discover\", \"favorites\")")
     public abstract void prunePosts();
 

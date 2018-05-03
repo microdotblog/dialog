@@ -3,7 +3,6 @@ package com.dialogapp.dialog.model;
 import android.arch.persistence.room.Embedded;
 import android.arch.persistence.room.Entity;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import com.squareup.moshi.Json;
 
@@ -28,11 +27,9 @@ public class Item {
     // Custom field
     @NonNull
     private String endpoint;
-    @Nullable
-    private String actualId; // Relevant only for favorites feed
 
     public Item(@NonNull String id, String contentHtml, String url, String datePublished,
-                Author author, PostProperties microblog, @NonNull String endpoint, @Nullable String actualId) {
+                Author author, PostProperties microblog, @NonNull String endpoint) {
         this.id = id;
         this.contentHtml = contentHtml;
         this.url = url;
@@ -40,7 +37,6 @@ public class Item {
         this.author = author;
         this.microblog = microblog;
         this.endpoint = endpoint;
-        this.actualId = actualId;
     }
 
     @NonNull
@@ -50,15 +46,6 @@ public class Item {
 
     public void setEndpoint(@NonNull String endpoint) {
         this.endpoint = endpoint;
-    }
-
-    @Nullable
-    public String getActualId() {
-        return actualId;
-    }
-
-    public void setActualId(@Nullable String actualId) {
-        this.actualId = actualId;
     }
 
     public static class PostProperties {

@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "52b7d5f862899c816943ae1703dda1f6",
+    "identityHash": "991f4ea5e1e63202e3819d872ad7f2c6",
     "entities": [
       {
         "tableName": "account",
@@ -74,7 +74,7 @@
       },
       {
         "tableName": "posts",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `contentHtml` TEXT, `url` TEXT, `datePublished` TEXT, `endpoint` TEXT NOT NULL, `actualId` TEXT, `author_author_name` TEXT, `author_author_url` TEXT, `author_author_avatar_url` TEXT, `author_author_info_username` TEXT, `post_property_dateRelative` TEXT, `post_property_isDeletable` INTEGER, `post_property_isFavorite` INTEGER, `post_property_isConversation` INTEGER, PRIMARY KEY(`id`, `endpoint`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `contentHtml` TEXT, `url` TEXT, `datePublished` TEXT, `endpoint` TEXT NOT NULL, `author_author_name` TEXT, `author_author_url` TEXT, `author_author_avatar_url` TEXT, `author_author_info_username` TEXT, `post_property_dateRelative` TEXT, `post_property_isDeletable` INTEGER, `post_property_isFavorite` INTEGER, `post_property_isConversation` INTEGER, PRIMARY KEY(`id`, `endpoint`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -105,12 +105,6 @@
             "columnName": "endpoint",
             "affinity": "TEXT",
             "notNull": true
-          },
-          {
-            "fieldPath": "actualId",
-            "columnName": "actualId",
-            "affinity": "TEXT",
-            "notNull": false
           },
           {
             "fieldPath": "author.name",
@@ -266,7 +260,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"52b7d5f862899c816943ae1703dda1f6\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"991f4ea5e1e63202e3819d872ad7f2c6\")"
     ]
   }
 }
