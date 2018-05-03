@@ -19,7 +19,17 @@
             android:elevation="4dp"
             android:theme="@style/AppTheme.AppBarOverlay"
             app:layout_collapseMode="pin"
-            app:layout_scrollFlags="scroll" />
+            app:layout_scrollFlags="scroll">
+
+            <ImageButton
+                android:id="@+id/button_follow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:background="?attr/selectableItemBackground"
+                android:padding="16dp"
+                android:visibility="invisible" />
+        </android.support.v7.widget.Toolbar>
 
         <include
             android:id="@+id/header_card_profile"

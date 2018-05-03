@@ -7,6 +7,7 @@ import com.dialogapp.dialog.model.MediaEndPoint;
 import com.dialogapp.dialog.model.MicroBlogResponse;
 import com.dialogapp.dialog.model.VerifiedAccount;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.http.DELETE;
@@ -69,11 +70,11 @@ public interface MicroblogService {
 
     @FormUrlEncoded
     @POST("users/follow")
-    Call<Response> followUser(@Field("username") String user);
+    Call<ResponseBody> followUser(@Field("username") String user);
 
     @FormUrlEncoded
     @POST("users/unfollow")
-    Call<Response> unfollowUser(@Field("username") String user);
+    Call<ResponseBody> unfollowUser(@Field("username") String user);
 
     // DELETE
 

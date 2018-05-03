@@ -46,4 +46,12 @@ public abstract class PostsDao {
 
     @Query("DELETE FROM microblogData WHERE microblog_username != :username")
     public abstract void pruneUserData(String username);
+
+    @Query("DELETE FROM posts WHERE id IN " +
+            "(SELECT id FROM posts WHERE author_author_info_username = :username " +
+            "AND endpoint = \"timeline\")")
+    public abstract void deleteTimelinePostsOf(String username);
+
+    @Query("UPDATE microblogData SET microblog_is_following = :follow WHERE microblog_username = :username")
+    public abstract void updateFollowState(String username, boolean follow);
 }

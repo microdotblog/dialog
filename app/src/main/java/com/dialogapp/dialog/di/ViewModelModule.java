@@ -4,6 +4,7 @@ import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
 
 import com.dialogapp.dialog.ui.common.ListViewModel;
+import com.dialogapp.dialog.ui.common.RequestViewModel;
 import com.dialogapp.dialog.ui.loginscreen.LoginViewModel;
 import com.dialogapp.dialog.ui.profilescreen.AccountViewModel;
 import com.dialogapp.dialog.ui.profilescreen.ProfileViewModel;
@@ -41,4 +42,9 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(ProfileViewModel.class)
     abstract ViewModel bindProfileViewModel(ProfileViewModel profileViewModel);
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(RequestViewModel.class)
+    abstract ViewModel bindRequestViewModel(RequestViewModel requestViewModel);
 }
