@@ -1,28 +1,21 @@
 package com.dialogapp.dialog.ui.profilescreen;
 
 
-import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
-import com.dialogapp.dialog.di.Injectable;
 import com.dialogapp.dialog.model.UserInfo;
 import com.dialogapp.dialog.ui.base.BaseListFragment;
 import com.dialogapp.dialog.util.Status;
 
-import javax.inject.Inject;
-
 import static com.dialogapp.dialog.ui.profilescreen.ProfileActivity.EXTRA_USERNAME;
 
-public class ProfileFragment extends BaseListFragment implements Injectable {
+public class ProfileFragment extends BaseListFragment {
     private String username;
     private ProfileViewModel viewModel;
     private UserDataEventListener userDataEventListener;
-
-    @Inject
-    ViewModelProvider.Factory viewModelFactory;
 
     public static ProfileFragment newInstance(String username) {
         ProfileFragment fragment = new ProfileFragment();

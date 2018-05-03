@@ -1,14 +1,12 @@
 package com.dialogapp.dialog.ui.common;
 
 import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.IntDef;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 
-import com.dialogapp.dialog.di.Injectable;
 import com.dialogapp.dialog.model.Item;
 import com.dialogapp.dialog.ui.base.BaseListFragment;
 import com.dialogapp.dialog.ui.base.BaseListViewModel;
@@ -18,9 +16,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.List;
 
-import javax.inject.Inject;
-
-public class ListFragment extends BaseListFragment implements Injectable {
+public class ListFragment extends BaseListFragment {
     public static final int TIMELINE = 0;
     public static final int MENTIONS = 1;
     public static final int FAVORITES = 2;
@@ -39,9 +35,6 @@ public class ListFragment extends BaseListFragment implements Injectable {
     private int fragment;
     private String postId;
     private ListViewModel viewModel;
-
-    @Inject
-    ViewModelProvider.Factory viewModelFactory;
 
     public static Fragment newInstance(@FragmentTypeDef int fragment, String arg) {
         ListFragment listFragment = new ListFragment();

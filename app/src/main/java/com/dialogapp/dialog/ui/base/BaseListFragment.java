@@ -1,5 +1,6 @@
 package com.dialogapp.dialog.ui.base;
 
+import android.arch.lifecycle.ViewModelProvider;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -16,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.dialogapp.dialog.R;
+import com.dialogapp.dialog.di.Injectable;
 import com.dialogapp.dialog.model.Item;
 import com.dialogapp.dialog.ui.common.ItemRecyclerAdapter;
 import com.dialogapp.dialog.ui.conversation.ConversationActivity;
@@ -25,6 +27,8 @@ import com.dialogapp.dialog.util.Status;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -33,7 +37,7 @@ import butterknife.Unbinder;
  * Base Fragment class for displaying lists
  */
 
-public abstract class BaseListFragment extends Fragment implements ItemRecyclerAdapter.PostItemOptionClickedListener {
+public abstract class BaseListFragment extends Fragment implements Injectable, ItemRecyclerAdapter.PostItemOptionClickedListener {
     protected Unbinder unbinder;
     protected FragmentEventListener listener;
     protected ItemRecyclerAdapter adapter;
@@ -46,6 +50,9 @@ public abstract class BaseListFragment extends Fragment implements ItemRecyclerA
 
     @BindView(R.id.empty_list)
     protected TextView emptyPlaceholder;
+
+    @Inject
+    protected ViewModelProvider.Factory viewModelFactory;
 
     @Override
     public void onAttach(Context context) {
