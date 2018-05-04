@@ -9,7 +9,7 @@ import android.support.v7.recyclerview.extensions.ListAdapter;
 import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
-import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -29,7 +29,6 @@ import com.dialogapp.dialog.util.GlideImageGetter;
 import com.dialogapp.dialog.util.Objects;
 
 import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
@@ -105,7 +104,7 @@ public class ItemRecyclerAdapter extends ListAdapter<Item, ItemRecyclerAdapter.P
         } else {
             holder.favoriteButton.setImageResource(valueInactive.resourceId);
             holder.favoriteButton.clearColorFilter();
-            setIconAlpha(holder.favoriteButton, 97, 128);
+            setIconAlpha(holder.favoriteButton, 138, 255);
         }
 
         glide.load(item.author.avatar)
@@ -204,19 +203,16 @@ public class ItemRecyclerAdapter extends ListAdapter<Item, ItemRecyclerAdapter.P
         }
 
         private void bindHtmlContent(String contentHtml) {
-            CharSequence spannedText;
-            Document doc = Jsoup.parse(contentHtml);
-            Elements images = doc.select("img");
+            SpannableString spannedText;
+            Elements images = Jsoup.parse(contentHtml).select("img");
+            GlideImageGetter imageGetter = null;
             if (!images.isEmpty()) {
                 Queue<Boolean> imagesQueue = getImages(images);
-                GlideImageGetter imageGetter = new GlideImageGetter(glide, content, imagesQueue);
-                spannedText = getSpanned(contentHtml, imageGetter);
-            } else {
-                spannedText = getSpanned(contentHtml, null);
+                imageGetter = new GlideImageGetter(glide, content, imagesQueue);
             }
+            spannedText = getSpanned(contentHtml, imageGetter);
 
-            Spannable htmlString = (Spannable) spannedText;
-            LinkClickHandler.makeLinksClickable(context, htmlString);
+            LinkClickHandler.makeLinksClickable(context, spannedText);
             content.setText(trimTrailingWhitespace(spannedText));
             content.setMovementMethod(LinkMovementMethod.getInstance());
         }
@@ -253,11 +249,11 @@ public class ItemRecyclerAdapter extends ListAdapter<Item, ItemRecyclerAdapter.P
             return imageQueue;
         }
 
-        private CharSequence getSpanned(String contentHtml, GlideImageGetter imageGetter) {
+        private SpannableString getSpanned(String contentHtml, GlideImageGetter imageGetter) {
             if (Build.VERSION.SDK_INT >= 24) {
-                return Html.fromHtml(contentHtml, FROM_HTML_MODE_LEGACY, imageGetter, null);
+                return new SpannableString(Html.fromHtml(contentHtml, FROM_HTML_MODE_LEGACY, imageGetter, null));
             } else {
-                return Html.fromHtml(contentHtml, imageGetter, null);
+                return new SpannableString(Html.fromHtml(contentHtml, imageGetter, null));
             }
         }
 

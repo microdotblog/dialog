@@ -2,13 +2,15 @@ package com.dialogapp.dialog.ui.common;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.support.v4.content.ContextCompat;
-import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.TextPaint;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.ImageSpan;
+import android.text.style.StyleSpan;
 import android.text.style.URLSpan;
 import android.text.style.UnderlineSpan;
 import android.view.View;
@@ -19,7 +21,7 @@ import com.dialogapp.dialog.ui.profilescreen.ProfileActivity;
 
 public class LinkClickHandler {
 
-    public static void makeLinksClickable(Context context, Spannable htmlString) {
+    public static void makeLinksClickable(Context context, SpannableString htmlString) {
         ImageSpan[] images = htmlString.getSpans(0, htmlString.length(), ImageSpan.class);
         URLSpan[] urls = htmlString.getSpans(0, htmlString.length(), URLSpan.class);
 
@@ -64,9 +66,10 @@ public class LinkClickHandler {
                     public void updateDrawState(TextPaint tp) {
                         tp.setUnderlineText(false);
                     }
-                }, start, end, 0);
+                }, start, end, flags);
 
-                htmlString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(context, R.color.bluegrey300)), start, end, 0);
+                htmlString.setSpan(new StyleSpan(Typeface.BOLD), start, end, flags);
+                htmlString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(context, R.color.bluegrey300)), start, end, flags);
             }
             htmlString.removeSpan(span);
         }
