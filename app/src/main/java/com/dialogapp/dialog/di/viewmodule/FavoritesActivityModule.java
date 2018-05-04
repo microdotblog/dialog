@@ -7,6 +7,6 @@ import dagger.android.ContributesAndroidInjector;
 
 @Module
 public abstract class FavoritesActivityModule {
-    @ContributesAndroidInjector(modules = ListFragmentModule.class)
+    @ContributesAndroidInjector(modules = FavoritesActivityFragmentsModule.class)
     abstract FavoritesActivity contributesFavoriteActivity();
 }

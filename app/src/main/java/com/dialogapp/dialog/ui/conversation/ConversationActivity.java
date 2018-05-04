@@ -11,7 +11,6 @@ import com.dialogapp.dialog.R;
 import com.dialogapp.dialog.ui.base.BaseInjectableActivity;
 import com.dialogapp.dialog.ui.base.BaseListFragment;
 import com.dialogapp.dialog.ui.common.AlertDialogFragment;
-import com.dialogapp.dialog.ui.common.ListFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -43,7 +42,7 @@ public class ConversationActivity extends BaseInjectableActivity implements Base
 
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.frame_container, ListFragment.newInstance(ListFragment.CONVERSATION, postId))
+                    .replace(R.id.frame_container, ConversationFragment.newInstance(postId))
                     .commit();
         }
     }

@@ -111,7 +111,6 @@ public abstract class BaseListFragment extends Fragment implements Injectable, I
         requestViewModel = ViewModelProviders.of(this, viewModelFactory).get(RequestViewModel.class);
         requestViewModel.getResponseFavorite().removeObserver(requestObserver);
         requestViewModel.getResponseFavorite().observe(this, requestObserver);
-        setViewModel();
     }
 
     @Override
@@ -181,12 +180,7 @@ public abstract class BaseListFragment extends Fragment implements Injectable, I
 
     protected void refresh() {
         swipeRefreshLayout.setRefreshing(true);
-        onViewRefreshed();
     }
-
-    protected abstract void setViewModel();
-
-    protected abstract void onViewRefreshed();
 
     public interface FragmentEventListener {
         default void onLoadSuccess(Object data) {

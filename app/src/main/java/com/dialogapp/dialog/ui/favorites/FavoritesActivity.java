@@ -10,7 +10,6 @@ import com.dialogapp.dialog.R;
 import com.dialogapp.dialog.ui.base.BaseInjectableActivity;
 import com.dialogapp.dialog.ui.base.BaseListFragment;
 import com.dialogapp.dialog.ui.common.AlertDialogFragment;
-import com.dialogapp.dialog.ui.common.ListFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -38,7 +37,7 @@ public class FavoritesActivity extends BaseInjectableActivity implements BaseLis
 
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.frame_container, ListFragment.newInstance(ListFragment.FAVORITES, null))
+                    .replace(R.id.frame_container, new FavoritesFragment())
                     .commit();
         }
     }

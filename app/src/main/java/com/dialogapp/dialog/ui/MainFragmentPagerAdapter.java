@@ -5,7 +5,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.dialogapp.dialog.ui.common.ListFragment;
+import com.dialogapp.dialog.ui.mainscreen.DiscoverFragment;
+import com.dialogapp.dialog.ui.mainscreen.ListFragment;
 
 public class MainFragmentPagerAdapter extends FragmentPagerAdapter {
 
@@ -19,11 +20,11 @@ public class MainFragmentPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return ListFragment.newInstance(ListFragment.TIMELINE, null);
+                return ListFragment.newInstance(ListFragment.TIMELINE);
             case 1:
-                return ListFragment.newInstance(ListFragment.MENTIONS, null);
+                return ListFragment.newInstance(ListFragment.MENTIONS);
             case 2:
-                return ListFragment.newInstance(ListFragment.DISCOVER, null);
+                return new DiscoverFragment();
             default:
                 return null;
         }

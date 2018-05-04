@@ -276,7 +276,7 @@ public class PostsRepository {
             @NonNull
             @Override
             protected LiveData<ApiResponse<MicroBlogResponse>> createCall() {
-                if (topic == null)
+                if (topic.equals(""))
                     return microblogService.getFeaturedPosts();
                 else
                     return microblogService.getFeaturedPosts(topic);

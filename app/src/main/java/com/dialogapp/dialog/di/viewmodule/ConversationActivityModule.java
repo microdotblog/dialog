@@ -7,6 +7,6 @@ import dagger.android.ContributesAndroidInjector;
 
 @Module
 public abstract class ConversationActivityModule {
-    @ContributesAndroidInjector(modules = ListFragmentModule.class)
+    @ContributesAndroidInjector(modules = ConversationActivityFragmentsModule.class)
     abstract ConversationActivity contributesConversationActivity();
 }
