@@ -20,7 +20,6 @@ import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
 import com.dialogapp.dialog.R;
@@ -67,10 +66,10 @@ public class ItemRecyclerAdapter extends ListAdapter<Item, ItemRecyclerAdapter.P
     private RequestManager glide;
     private int currentNightMode;
 
-    public ItemRecyclerAdapter(Context context) {
+    public ItemRecyclerAdapter(Context context, RequestManager glide) {
         super(DIFF_CALLBACK);
         this.context = context;
-        this.glide = Glide.with(context);
+        this.glide = glide;
 
         currentNightMode = context.getResources().getConfiguration().uiMode
                 & Configuration.UI_MODE_NIGHT_MASK;

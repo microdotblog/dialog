@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.dialogapp.dialog.R;
 import com.dialogapp.dialog.di.Injectable;
 import com.dialogapp.dialog.model.Item;
@@ -101,7 +102,7 @@ public abstract class BaseListFragment extends Fragment implements Injectable, I
 
         swipeRefreshLayout.setOnRefreshListener(this::refresh);
 
-        adapter = new ItemRecyclerAdapter(this.getActivity());
+        adapter = new ItemRecyclerAdapter(this.getActivity(), Glide.with(this));
         adapter.setListener(this);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity(), LinearLayoutManager.VERTICAL, false));
