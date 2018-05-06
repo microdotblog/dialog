@@ -1,7 +1,6 @@
 package com.dialogapp.dialog.ui.common;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
@@ -9,58 +8,45 @@ import android.support.v7.app.AlertDialog;
 public class AlertDialogFragment extends DialogFragment {
     private AlertDialogListener listener;
 
-    public static AlertDialogFragment newInstance(String title, String message, boolean negativeButton) {
+    public static AlertDialogFragment newInstance(String title, String message) {
         AlertDialogFragment frag = new AlertDialogFragment();
         Bundle args = new Bundle();
         args.putString("title", title);
         args.putString("message", message);
-        args.putBoolean("negative", negativeButton);
         frag.setArguments(args);
         return frag;
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        try {
-            listener = (AlertDialogListener) getActivity();
-        } catch (ClassCastException e) {
-            throw new ClassCastException(getActivity().toString()
-                    + " must implement AlertDialogListener");
-        }
     }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         String title = getArguments().getString("title");
         String message = getArguments().getString("message");
-        boolean negativeButton = getArguments().getBoolean("negative");
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
-        alertDialogBuilder.setTitle(title);
-        alertDialogBuilder.setMessage(message);
+        alertDialogBuilder
+                .setTitle(title)
+                .setMessage(message)
+                .setPositiveButton("OK", (dialog, which) -> {
+                    if (listener != null)
+                        listener.onDismissAlertDialog(true);
+                    dismiss();
+                });
 
-        if (negativeButton) {
-            alertDialogBuilder.setPositiveButton("OK", (dialog, which) -> {
-                listener.onFinishAlertDialog(true);
-            });
-
+        if (listener != null) {
             alertDialogBuilder.setNegativeButton("Cancel", (dialog, which) -> {
-                if (dialog != null) {
-                    listener.onFinishAlertDialog(false);
-                    dialog.cancel();
-                }
-            });
-        } else {
-            alertDialogBuilder.setPositiveButton("OK", (dialog, which) -> {
-                dismiss();
+                listener.onDismissAlertDialog(false);
+                dialog.cancel();
             });
         }
 
         return alertDialogBuilder.create();
     }
 
+    public void setListener(AlertDialogListener listener) {
+        this.listener = listener;
+    }
+
     public interface AlertDialogListener {
-        void onFinishAlertDialog(boolean userChoice);
+        void onDismissAlertDialog(boolean userChoice);
     }
 }

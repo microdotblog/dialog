@@ -32,7 +32,7 @@ import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ProfileActivity extends BaseInjectableActivity implements BaseListFragment.FragmentEventListener,
-        AlertDialogFragment.AlertDialogListener, ProfileFragment.UserDataEventListener {
+        ProfileFragment.UserDataEventListener {
     public static final String EXTRA_USERNAME = ProfileActivity.class.getName() + ".EXTRA_USERNAME";
 
     @Inject
@@ -152,7 +152,7 @@ public class ProfileActivity extends BaseInjectableActivity implements BaseListF
         Snackbar errorBar = Snackbar.make(coordinatorLayout, R.string.connection_error, Snackbar.LENGTH_LONG);
         errorBar.setAction("Show error", view -> {
             AlertDialogFragment alertDialog = AlertDialogFragment
-                    .newInstance("Connection Error", message, false);
+                    .newInstance("Connection Error", message);
             alertDialog.show(getSupportFragmentManager(), "ErrorAlertDialogFragment");
         });
         errorBar.show();
@@ -163,11 +163,6 @@ public class ProfileActivity extends BaseInjectableActivity implements BaseListF
         adapter.addFragment(ProfileFragment.newInstance(getIntent().getStringExtra(EXTRA_USERNAME)));
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
-    }
-
-    @Override
-    public void onFinishAlertDialog(boolean userChoice) {
-
     }
 
     private void initFavButton() {

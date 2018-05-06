@@ -15,8 +15,7 @@ import com.dialogapp.dialog.ui.common.AlertDialogFragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ConversationActivity extends BaseInjectableActivity implements BaseListFragment.FragmentEventListener,
-        AlertDialogFragment.AlertDialogListener {
+public class ConversationActivity extends BaseInjectableActivity implements BaseListFragment.FragmentEventListener {
     public static final String EXTRA_POST_ID = ConversationActivity.class.getName() + ".EXTRA_POST_ID";
     private Snackbar errorBar;
 
@@ -64,15 +63,10 @@ public class ConversationActivity extends BaseInjectableActivity implements Base
         if (!errorBar.isShownOrQueued()) {
             errorBar.setAction("Show error", view -> {
                 AlertDialogFragment alertDialog = AlertDialogFragment
-                        .newInstance("Connection Error", message, false);
+                        .newInstance("Connection Error", message);
                 alertDialog.show(getSupportFragmentManager(), "ErrorAlertDialogFragment");
             });
             errorBar.show();
         }
-    }
-
-    @Override
-    public void onFinishAlertDialog(boolean userChoice) {
-
     }
 }

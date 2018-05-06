@@ -37,7 +37,7 @@ import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends BaseInjectableActivity implements BaseListFragment.FragmentEventListener,
-        NavigationView.OnNavigationItemSelectedListener, AlertDialogFragment.AlertDialogListener {
+        NavigationView.OnNavigationItemSelectedListener {
     public static final String EXTRA_USERNAME = MainActivity.class.getName() + ".EXTRA_USERNAME";
     public static final String EXTRA_FULLNAME = MainActivity.class.getName() + ".EXTRA_FULLNAME";
     public static final String EXTRA_AVATARURL = MainActivity.class.getName() + ".EXTRA_AVATARURL";
@@ -113,7 +113,7 @@ public class MainActivity extends BaseInjectableActivity implements BaseListFrag
         if (!errorHasBeenShown && !errorBar.isShownOrQueued()) {
             errorBar.setAction("Show error", view -> {
                 AlertDialogFragment alertDialog = AlertDialogFragment
-                        .newInstance("Connection Error", message, false);
+                        .newInstance("Connection Error", message);
                 alertDialog.show(getSupportFragmentManager(), "ErrorAlertDialogFragment");
             });
             errorBar.show();
@@ -154,12 +154,6 @@ public class MainActivity extends BaseInjectableActivity implements BaseListFrag
         return false;
     }
 
-    @Override
-    public void onFinishAlertDialog(boolean userChoice) {
-        if (userChoice)
-            startLoginActivity();
-    }
-
     private void startLoginActivity() {
         Hawk.delete(getString(R.string.pref_token));
         appExecutors.diskIO().execute(() -> postsDao.dropTable());
@@ -170,7 +164,11 @@ public class MainActivity extends BaseInjectableActivity implements BaseListFrag
 
     private void showLogoutDialog() {
         AlertDialogFragment alertDialog = AlertDialogFragment.newInstance(null,
-                "Do you want to log out?", true);
+                "Do you want to log out?");
+        alertDialog.setListener(userChoice -> {
+            if (userChoice)
+                startLoginActivity();
+        });
         alertDialog.show(getSupportFragmentManager(), "AlertDialogFragment");
     }
 

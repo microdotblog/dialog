@@ -14,8 +14,7 @@ import com.dialogapp.dialog.ui.common.AlertDialogFragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class FavoritesActivity extends BaseInjectableActivity implements BaseListFragment.FragmentEventListener,
-        AlertDialogFragment.AlertDialogListener {
+public class FavoritesActivity extends BaseInjectableActivity implements BaseListFragment.FragmentEventListener {
     private Snackbar errorBar;
 
     @BindView(R.id.toolbar_container)
@@ -59,15 +58,10 @@ public class FavoritesActivity extends BaseInjectableActivity implements BaseLis
         if (!errorBar.isShownOrQueued()) {
             errorBar.setAction("Show error", view -> {
                 AlertDialogFragment alertDialog = AlertDialogFragment
-                        .newInstance("Connection Error", message, false);
+                        .newInstance("Connection Error", message);
                 alertDialog.show(getSupportFragmentManager(), "ErrorAlertDialogFragment");
             });
             errorBar.show();
         }
-    }
-
-    @Override
-    public void onFinishAlertDialog(boolean userChoice) {
-
     }
 }
