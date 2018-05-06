@@ -2,6 +2,7 @@ package com.dialogapp.dialog.ui.common;
 
 import android.content.Context;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
@@ -91,6 +92,9 @@ public class ItemRecyclerAdapter extends ListAdapter<Item, ItemRecyclerAdapter.P
         holder.conversationButton.setVisibility(getItem(position).microblog.isConversation ?
                 View.VISIBLE : View.GONE);
 
+        holder.replyButton.setColorFilter(currentNightMode == Configuration.UI_MODE_NIGHT_YES ? Color.WHITE : Color.BLACK);
+        setIconAlpha(holder.replyButton, 138, 255);
+
         TypedValue valueActive = new TypedValue();
         TypedValue valueInactive = new TypedValue();
         context.getTheme().resolveAttribute(R.attr.favoriteIconActive, valueActive, true);
@@ -146,6 +150,8 @@ public class ItemRecyclerAdapter extends ListAdapter<Item, ItemRecyclerAdapter.P
         void onConversationButtonClicked(String postId);
 
         boolean onMenuItemClicked(int menuItemId, Item item);
+
+        void onReplyButtonClicked(String id, String username);
     }
 
     public class PostViewHolder extends RecyclerView.ViewHolder implements PopupMenu.OnMenuItemClickListener {
@@ -160,6 +166,9 @@ public class ItemRecyclerAdapter extends ListAdapter<Item, ItemRecyclerAdapter.P
 
         @BindView(R.id.text_time)
         TextView time;
+
+        @BindView(R.id.button_reply_send)
+        ImageButton replyButton;
 
         @BindView(R.id.button_conversation)
         ImageButton conversationButton;
@@ -181,6 +190,11 @@ public class ItemRecyclerAdapter extends ListAdapter<Item, ItemRecyclerAdapter.P
 
             conversationButton.setOnClickListener(v -> {
                 listener.onConversationButtonClicked(getItem(getAdapterPosition()).id);
+            });
+
+            replyButton.setOnClickListener(v -> {
+                listener.onReplyButtonClicked(getItem(getAdapterPosition()).id,
+                        getItem(getAdapterPosition()).author.microblog.username);
             });
 
             thumbnail.setOnClickListener(view -> {

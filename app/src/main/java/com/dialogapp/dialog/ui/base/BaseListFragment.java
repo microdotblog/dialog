@@ -24,6 +24,7 @@ import com.dialogapp.dialog.R;
 import com.dialogapp.dialog.di.Injectable;
 import com.dialogapp.dialog.model.Item;
 import com.dialogapp.dialog.ui.common.ItemRecyclerAdapter;
+import com.dialogapp.dialog.ui.common.ReplyBottomSheetDialogFragment;
 import com.dialogapp.dialog.ui.common.RequestViewModel;
 import com.dialogapp.dialog.ui.conversation.ConversationActivity;
 import com.dialogapp.dialog.ui.profilescreen.ProfileActivity;
@@ -138,6 +139,13 @@ public abstract class BaseListFragment extends Fragment implements Injectable, I
         Intent intent = new Intent(getActivity(), ConversationActivity.class);
         intent.putExtra(ConversationActivity.EXTRA_POST_ID, postId);
         startActivity(intent);
+    }
+
+    @Override
+    public void onReplyButtonClicked(String postId, String username) {
+        ReplyBottomSheetDialogFragment bottom = ReplyBottomSheetDialogFragment.newInstance(postId, username);
+        bottom.setCancelable(false);
+        bottom.show(getFragmentManager(), "ReplyBottomSheetFragment");
     }
 
     @Override
