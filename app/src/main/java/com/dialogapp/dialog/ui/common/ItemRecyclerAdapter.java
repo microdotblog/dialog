@@ -234,9 +234,13 @@ public class ItemRecyclerAdapter extends ListAdapter<Item, ItemRecyclerAdapter.P
                 int width = -1, height = -1;
                 boolean hasAttribs = false;
                 if (img.hasAttr("width") && img.hasAttr("height")) {
-                    hasAttribs = true;
-                    width = Integer.parseInt(img.attributes().get("width"));
-                    height = Integer.parseInt(img.attributes().get("height"));
+                    try {
+                        width = Integer.parseInt(img.attributes().get("width"));
+                        height = Integer.parseInt(img.attributes().get("height"));
+                        hasAttribs = true;
+                    } catch (NumberFormatException e) {
+                        hasAttribs = false;
+                    }
                 }
 
                 if (img.hasClass("wp-smiley") || img.hasClass("mini_thumbnail") ||

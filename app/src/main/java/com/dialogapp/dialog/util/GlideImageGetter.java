@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Rect;
+import android.graphics.drawable.Animatable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
@@ -18,10 +19,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.RequestBuilder;
 import com.bumptech.glide.RequestManager;
-import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.target.Target;
@@ -32,7 +30,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
 
-import timber.log.Timber;
+import static com.bumptech.glide.request.RequestOptions.centerCropTransform;
+import static com.bumptech.glide.request.RequestOptions.diskCacheStrategyOf;
 
 /**
  * Custom ImageGetter using Glide 4
@@ -49,7 +48,6 @@ public class GlideImageGetter implements Html.ImageGetter, Drawable.Callback {
     private static final int CONTENT_MARGIN_END_DP = 16;
 
     private final RequestManager manager;
-    private final RequestOptions requestOptions;
     private final boolean isConnectedToWifi;
     private RequestBuilder<Drawable> glide;
     private TextView targetView;
@@ -74,9 +72,6 @@ public class GlideImageGetter implements Html.ImageGetter, Drawable.Callback {
         int diffPx = dpToPx(CONTENT_MARGIN_START_DP + CONTENT_MARGIN_END_DP);
         this.calculatedWidthPx = Resources.getSystem().getDisplayMetrics().widthPixels - diffPx;
 
-        this.requestOptions = new RequestOptions()
-                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                .centerCrop();
         this.glide = createGlideRequest(glide);
         targetView.setTag(this);
     }
@@ -146,22 +141,9 @@ public class GlideImageGetter implements Html.ImageGetter, Drawable.Callback {
     }
 
     private RequestBuilder<Drawable> createGlideRequest(RequestManager glide) {
-        return glide.asDrawable().apply(requestOptions)
-                .listener(new RequestListener<Drawable>() {
-                    @Override
-                    public boolean onLoadFailed(@Nullable GlideException e, Object model,
-                                                Target<Drawable> target, boolean isFirstResource) {
-                        Timber.e(e);
-                        return false;
-                    }
-
-                    @Override
-                    public boolean onResourceReady(Drawable resource, Object model,
-                                                   Target<Drawable> target, DataSource dataSource,
-                                                   boolean isFirstResource) {
-                        return false;
-                    }
-                });
+        return glide.asDrawable()
+                .apply(centerCropTransform())
+                .apply(diskCacheStrategyOf(DiskCacheStrategy.AUTOMATIC));
     }
 
     private int dpToPx(int dp) {
@@ -183,6 +165,7 @@ public class GlideImageGetter implements Html.ImageGetter, Drawable.Callback {
             wrapper.setBounds(0, 0, width, height);
 
             progressDrawable.setStyle(CircularProgressDrawable.DEFAULT);
+            progressDrawable.setColorSchemeColors(ContextCompat.getColor(context, R.color.reda200));
         }
 
         public Drawable getLazyDrawable() {
@@ -191,15 +174,12 @@ public class GlideImageGetter implements Html.ImageGetter, Drawable.Callback {
 
         @Override
         public void onLoadStarted(Drawable placeholder) {
-            Timber.i("Load started : %s", this);
-            placeholder = progressDrawable;
             progressDrawable.start();
-            setDrawable(placeholder);
+            setDrawable(progressDrawable);
         }
 
         @Override
         public void onLoadFailed(@Nullable Drawable errorDrawable) {
-            Timber.i("Load Failed : %s", this);
             progressDrawable.stop();
             if (shouldLoadImages == 0 || (shouldLoadImages == 1 && isConnectedToWifi)) {
                 errorDrawable = ContextCompat.getDrawable(context, R.drawable.ic_broken_image_grey_24dp);
@@ -211,14 +191,14 @@ public class GlideImageGetter implements Html.ImageGetter, Drawable.Callback {
 
         @Override
         public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
-            Timber.i("Resource Ready : %s", this);
             progressDrawable.stop();
             setDrawable(resource);
+            if (resource instanceof Animatable)
+                ((Animatable) resource).start();
         }
 
         @Override
         public void onLoadCleared(Drawable placeholder) {
-            Timber.i("Load cleared : %s", this);
             progressDrawable.stop();
             setDrawable(placeholder);
         }
