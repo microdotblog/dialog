@@ -66,7 +66,7 @@ public interface MicroblogService {
 
     @FormUrlEncoded
     @POST("posts/reply")
-    Call<Response> replyToPost(@Field("id") String id);
+    Call<ResponseBody> replyToPost(@Field("id") String id, @Field("text") String content);
 
     @FormUrlEncoded
     @POST("users/follow")

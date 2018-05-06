@@ -20,6 +20,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -85,6 +86,50 @@ public class RequestViewModelTest {
         Observer<Event<Resource<Boolean>>> observer = mock(Observer.class);
         viewModel.getResponseFavorite().observeForever(observer);
         viewModel.setFavoriteState("123", true);
+        verify(observer, never()).onChanged(any(Event.class));
+
+        liveData.setValue(eventResource);
+        verify(observer).onChanged(eventResource);
+    }
+
+    @Test
+    public void testReply() {
+        ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
+        ArgumentCaptor<String> captor2 = ArgumentCaptor.forClass(String.class);
+        viewModel.getResponseReply().observeForever(mock(Observer.class));
+
+        viewModel.sendReply("123", "test");
+        verify(postRequestManager).sendReply(captor.capture(), captor2.capture());
+        assertThat(captor.getValue(), is("123"));
+        assertThat(captor2.getValue(), is("test"));
+    }
+
+    @Test
+    public void testReplyRetry() {
+        ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
+        ArgumentCaptor<String> captor2 = ArgumentCaptor.forClass(String.class);
+        viewModel.getResponseReply().observeForever(mock(Observer.class));
+
+        viewModel.sendReply("123", "test");
+        verify(postRequestManager).sendReply(captor.capture(), captor2.capture());
+        assertThat(captor.getValue(), is("123"));
+        assertThat(captor2.getValue(), is("test"));
+        reset(postRequestManager);
+        viewModel.retryReply();
+        verify(postRequestManager).sendReply(captor.capture(), captor2.capture());
+        assertThat(captor.getValue(), is("123"));
+        assertThat(captor2.getValue(), is("test"));
+    }
+
+    @Test
+    public void sendReplyResultToUI() {
+        Event<Resource<Boolean>> eventResource = Event.createEvent(Resource.success(true));
+        MutableLiveData<Event<Resource<Boolean>>> liveData = new MutableLiveData<>();
+        when(postRequestManager.sendReply("123", "test")).thenReturn(liveData);
+
+        Observer<Event<Resource<Boolean>>> observer = mock(Observer.class);
+        viewModel.getResponseReply().observeForever(observer);
+        viewModel.sendReply("123", "test");
         verify(observer, never()).onChanged(any(Event.class));
 
         liveData.setValue(eventResource);

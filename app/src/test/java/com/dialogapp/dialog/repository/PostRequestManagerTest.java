@@ -146,4 +146,38 @@ public class PostRequestManagerTest {
         //noinspection unchecked
         return call;
     }
+
+    @Test
+    public void sendSuccessfulReply() throws IOException {
+        Call<ResponseBody> response = createCall(false);
+        when(microblogService.replyToPost("123", "test")).thenReturn(response);
+
+        LiveData<Event<Resource<Boolean>>> request = requestManager.sendReply("123", "test");
+        verify(microblogService).replyToPost("123", "test");
+        verifyNoMoreInteractions(microblogService);
+
+        Observer observer = mock(Observer.class);
+        request.observeForever(observer);
+        verifyNoMoreInteractions(microblogService);
+        verifyNoMoreInteractions(postsDao);
+        assertThat(request.getValue().peekContent().data, is(true));
+        verify(observer).onChanged(request.getValue());
+    }
+
+    @Test
+    public void sendUnsuccessfulReply() throws IOException {
+        Call<ResponseBody> response = createCall(true);
+        when(microblogService.replyToPost("123", "test")).thenReturn(response);
+
+        LiveData<Event<Resource<Boolean>>> request = requestManager.sendReply("123", "test");
+        verify(microblogService).replyToPost("123", "test");
+        verifyNoMoreInteractions(microblogService);
+
+        Observer observer = mock(Observer.class);
+        request.observeForever(observer);
+        verifyNoMoreInteractions(microblogService);
+        verifyNoMoreInteractions(postsDao);
+        assertThat(request.getValue().peekContent().data, is(false));
+        verify(observer).onChanged(request.getValue());
+    }
 }

@@ -107,4 +107,24 @@ public class PostRequestManager {
             }
         }.asEventLiveData();
     }
+
+    public LiveData<Event<Resource<Boolean>>> sendReply(String id, String content) {
+        return new NetworkBoundRequestResource<ResponseBody>(appExecutors) {
+            @NonNull
+            @Override
+            protected Call<ResponseBody> createCall() {
+                return microblogService.replyToPost(id, content);
+            }
+
+            @Override
+            protected boolean wasExpectedResponse(ApiResponse<ResponseBody> apiResponse) {
+                try {
+                    return apiResponse.body.string().equals("{}");
+                } catch (IOException e) {
+                    Timber.e("Unexpected response : %s", e.getMessage());
+                    return false;
+                }
+            }
+        }.asEventLiveData();
+    }
 }

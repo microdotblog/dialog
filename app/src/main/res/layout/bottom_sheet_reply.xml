@@ -10,9 +10,9 @@
 
     <TextView
         android:id="@+id/text_label_reply"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Reply"
+        android:text="@string/label_reply"
         android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
 
     <android.support.design.widget.TextInputLayout

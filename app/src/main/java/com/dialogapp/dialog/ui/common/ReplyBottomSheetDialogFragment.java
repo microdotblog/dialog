@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.dialogapp.dialog.R;
 
@@ -28,12 +29,19 @@ public class ReplyBottomSheetDialogFragment extends BottomSheetDialogFragment {
     private String id;
     private String username;
     private String defaultText;
+    private SendButtonClickListener listener;
+
+    @BindView(R.id.text_label_reply)
+    TextView label;
 
     @BindView(R.id.reply_input)
     EditText replyContent;
 
     @BindView(R.id.button_reply_cancel)
     Button cancel;
+
+    @BindView(R.id.button_reply_send)
+    Button send;
 
     public static ReplyBottomSheetDialogFragment newInstance(String id, String username) {
         ReplyBottomSheetDialogFragment listFragment = new ReplyBottomSheetDialogFragment();
@@ -80,6 +88,11 @@ public class ReplyBottomSheetDialogFragment extends BottomSheetDialogFragment {
         View view = inflater.inflate(R.layout.bottom_sheet_reply, container, false);
         unbinder = ButterKnife.bind(this, view);
 
+        send.setOnClickListener(view12 -> {
+            listener.onSendButtonClicked(replyContent.getText().toString());
+            dismiss();
+        });
+
         cancel.setOnClickListener(view1 -> {
             if (!replyContent.getText().toString().equals(defaultText)) {
                 AlertDialogFragment dialogFragment = AlertDialogFragment.newInstance(null, "Discard?");
@@ -110,6 +123,7 @@ public class ReplyBottomSheetDialogFragment extends BottomSheetDialogFragment {
         super.onViewCreated(view, savedInstanceState);
 
         defaultText = "@" + username + " ";
+        label.setText(getString(R.string.label_reply, defaultText));
         replyContent.setText(defaultText);
         replyContent.setSelection(defaultText.length());
     }
@@ -118,5 +132,13 @@ public class ReplyBottomSheetDialogFragment extends BottomSheetDialogFragment {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+    }
+
+    public void setSendButtonListener(SendButtonClickListener listener) {
+        this.listener = listener;
+    }
+
+    public interface SendButtonClickListener {
+        void onSendButtonClicked(String text);
     }
 }
