@@ -41,7 +41,7 @@ public abstract class PostsDao {
             "FROM microblogData WHERE microblog_username = :username")
     public abstract LiveData<UserInfo> loadUserData(String username);
 
-    @Query("DELETE FROM posts WHERE endpoint NOT IN (\"timeline\", \"mentions\", \"discover\", \"favorites\")")
+    @Query("DELETE FROM posts WHERE endpoint NOT IN (\"timeline\", \"mentions\", \"favorites\")")
     public abstract void prunePosts();
 
     @Query("DELETE FROM microblogData WHERE microblog_username != :username")

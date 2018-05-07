@@ -24,7 +24,6 @@ public class DiscoverFragment extends BaseListFragment {
         super.onActivityCreated(savedInstanceState);
 
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(DiscoverViewModel.class);
-        viewModel.setTopic("");
         viewModel.getPosts().removeObserver(observer);
         viewModel.getPosts().observe(this, observer);
     }
@@ -33,5 +32,12 @@ public class DiscoverFragment extends BaseListFragment {
     protected void refresh() {
         super.refresh();
         viewModel.refresh();
+    }
+
+    public void setTopic(String topic) {
+        if (topic.equals("Recent"))
+            viewModel.setTopic("");
+        else
+            viewModel.setTopic(topic.toLowerCase());
     }
 }

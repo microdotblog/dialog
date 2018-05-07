@@ -209,4 +209,33 @@ public class PostsRepositoryTest {
         updatedConversationData.postValue(testConversationData);
         verify(observer).onChanged(Resource.success(testConversationData));
     }
+
+    @Test
+    public void loadDiscoverDataFromNetwork() throws IOException {
+        MutableLiveData<List<Item>> discoverTopicDbData = new MutableLiveData<>();
+        when(postsDao.loadEndpoint("xyz")).thenReturn(discoverTopicDbData);
+
+        MicroBlogResponse response = TestUtil.readFromJson(getClass().getClassLoader(), "response.json");
+        LiveData<ApiResponse<MicroBlogResponse>> callDiscover = successCall(response);
+        when(microblogService.getFeaturedPosts("xyz")).thenReturn(callDiscover);
+
+        LiveData<Resource<List<Item>>> repoData = repository.loadDiscover("xyz");
+        verify(postsDao).loadEndpoint("xyz");
+        verifyNoMoreInteractions(microblogService);
+
+        Observer observer = mock(Observer.class);
+        repoData.observeForever(observer);
+        verifyNoMoreInteractions(microblogService);
+        verify(observer).onChanged(Resource.loading(null));
+
+        MutableLiveData<List<Item>> updatedDiscoverData = new MutableLiveData<>();
+        when(postsDao.loadEndpoint("xyz")).thenReturn(updatedDiscoverData);
+        discoverTopicDbData.postValue(null);
+        verify(microblogService).getFeaturedPosts("xyz");
+        List<Item> testDiscoverData = response.items;
+        verify(postsDao).deleteAndInsertPostsInTransaction("xyz", testDiscoverData);
+
+        updatedDiscoverData.postValue(testDiscoverData);
+        verify(observer).onChanged(Resource.success(testDiscoverData));
+    }
 }

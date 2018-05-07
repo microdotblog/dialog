@@ -19,6 +19,7 @@
         <item name="android:textColorSecondary">@color/blacka54</item>
         <item name="android:textColorHint">@color/blacka38</item>
         <item name="android:windowBackground">@color/grey50</item>
+        <item name="android:spinnerItemStyle">@style/ThemeOverlay.AppCompat.Light</item>
     </style>
 
     <style name="AppTheme.Settings" parent="@style/PreferenceFixTheme.DayNight.NoActionBar">

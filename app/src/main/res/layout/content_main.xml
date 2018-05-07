@@ -18,7 +18,17 @@
             android:layout_height="wrap_content"
             android:background="?attr/colorPrimaryDark"
             android:minHeight="?attr/actionBarSize"
-            app:layout_scrollFlags="scroll|enterAlwaysCollapsed|snap" />
+            app:layout_scrollFlags="scroll|enterAlwaysCollapsed|snap">
+
+            <Spinner
+                android:id="@+id/spinner_discover"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:popupTheme="?android:spinnerItemStyle"
+                android:visibility="gone" />
+
+        </android.support.v7.widget.Toolbar>
 
         <android.support.design.widget.TabLayout
             android:id="@+id/tabLayout"
