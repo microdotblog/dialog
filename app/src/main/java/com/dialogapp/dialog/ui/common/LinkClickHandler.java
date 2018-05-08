@@ -2,20 +2,18 @@ package com.dialogapp.dialog.ui.common;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Typeface;
+import android.content.res.Configuration;
+import android.graphics.Color;
 import android.net.Uri;
-import android.support.v4.content.ContextCompat;
 import android.text.SpannableString;
 import android.text.TextPaint;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.ImageSpan;
-import android.text.style.StyleSpan;
 import android.text.style.URLSpan;
 import android.text.style.UnderlineSpan;
 import android.view.View;
 
-import com.dialogapp.dialog.R;
 import com.dialogapp.dialog.ui.imageviewer.ImageViewerActivity;
 import com.dialogapp.dialog.ui.profilescreen.ProfileActivity;
 
@@ -68,8 +66,11 @@ public class LinkClickHandler {
                     }
                 }, start, end, flags);
 
-                htmlString.setSpan(new StyleSpan(Typeface.BOLD), start, end, flags);
-                htmlString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(context, R.color.bluegrey300)), start, end, flags);
+                if ((context.getResources().getConfiguration().uiMode
+                        & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES)
+                    htmlString.setSpan(new ForegroundColorSpan(Color.rgb(250, 250, 250)), start, end, flags);
+                else
+                    htmlString.setSpan(new ForegroundColorSpan(Color.rgb(32, 32, 32)), start, end, flags);
             }
             htmlString.removeSpan(span);
         }

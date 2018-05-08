@@ -123,7 +123,6 @@ public class ReplyBottomSheetDialogFragment extends BottomSheetDialogFragment {
         super.onViewCreated(view, savedInstanceState);
 
         defaultText = "@" + username + " ";
-        label.setText(getString(R.string.label_reply, defaultText));
         replyContent.setText(defaultText);
         replyContent.setSelection(defaultText.length());
     }

@@ -28,5 +28,5 @@
     <string name="request_successful">Request successful</string>
     <string name="request_unsuccessful">Request unsuccessful</string>
     <string name="retry_reply">Retry</string>
-    <string name="label_reply">Replying to %1$s</string>
+    <string name="label_reply">Reply</string>
 </resources>

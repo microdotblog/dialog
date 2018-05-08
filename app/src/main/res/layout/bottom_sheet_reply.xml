@@ -25,7 +25,6 @@
 
         <android.support.design.widget.TextInputEditText
             android:id="@+id/reply_input"
-            style="@style/Widget.AppCompat.EditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
@@ -39,19 +38,19 @@
 
     <Button
         android:id="@+id/button_reply_send"
+        style="@style/Base.Widget.AppCompat.Button.Colored"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_below="@id/text_input_layout"
+        android:backgroundTint="@color/reda200"
         android:text="Send" />
 
     <Button
         android:id="@+id/button_reply_cancel"
-        style="@style/Base.Widget.AppCompat.Button.Colored"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/text_input_layout"
         android:layout_toStartOf="@id/button_reply_send"
-        android:backgroundTint="@color/reda200"
         android:text="Cancel" />
 </RelativeLayout>
