@@ -11,9 +11,6 @@
         <item name="colorNavDrawer">@color/grey850</item>
         <item name="colorDivider">@color/whitea12</item>
         <item name="colorDrawerIcons">@android:color/white</item>
-        <item name="conversationIcon">@drawable/ic_forum_white_24dp</item>
-        <item name="favoriteIconActive">@drawable/ic_star_white_24dp</item>
-        <item name="favoriteIconInactive">@drawable/ic_star_border_white_24dp</item>
         <item name="bottomSheetDialogTheme">@style/Theme.Design.BottomSheetDialog</item>
         <item name="android:statusBarColor">@android:color/black</item>
         <item name="android:textColorPrimary">@color/grey50</item>

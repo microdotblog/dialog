@@ -43,7 +43,6 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textColorLink="@color/reda200"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_chainStyle="spread_inside"
         app:layout_constraintStart_toEndOf="@+id/image_thumbnail"
         app:layout_constraintTop_toBottomOf="@+id/text_username"
         tools:text="@tools:sample/lorem" />
@@ -79,7 +78,7 @@
         android:layout_marginEnd="8dp"
         android:background="?attr/selectableItemBackground"
         android:padding="8dp"
-        android:src="?attr/conversationIcon"
+        android:src="@drawable/ic_forum_black_24dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/button_favorite"
         app:layout_constraintTop_toBottomOf="@+id/text_content" />
@@ -91,6 +90,7 @@
         android:layout_marginEnd="8dp"
         android:background="?attr/selectableItemBackground"
         android:padding="8dp"
+        android:src="@drawable/ic_star_black_24dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/button_post_options"
         app:layout_constraintTop_toBottomOf="@+id/text_content" />

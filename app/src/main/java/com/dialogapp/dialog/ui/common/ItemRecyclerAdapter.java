@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.recyclerview.extensions.ListAdapter;
@@ -12,7 +13,6 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -33,6 +33,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
 import butterknife.BindView;
@@ -43,22 +44,49 @@ import timber.log.Timber;
 import static android.text.Html.FROM_HTML_MODE_LEGACY;
 
 public class ItemRecyclerAdapter extends ListAdapter<Item, ItemRecyclerAdapter.PostViewHolder> {
-    public static final DiffUtil.ItemCallback<Item> DIFF_CALLBACK =
+    private static final DiffUtil.ItemCallback<Item> DIFF_CALLBACK =
             new DiffUtil.ItemCallback<Item>() {
                 @Override
                 public boolean areItemsTheSame(
                         @NonNull Item oldItem, @NonNull Item newItem) {
-                    return Objects.equals(oldItem.id, newItem.id);
+                    return Objects.equals(oldItem.id, newItem.id) &&
+                            Objects.equals(oldItem.author.microblog.username, newItem.author.microblog.username);
                 }
 
                 @Override
                 public boolean areContentsTheSame(
                         @NonNull Item oldItem, @NonNull Item newItem) {
-                    return Objects.equals(oldItem.contentHtml, newItem.contentHtml) &&
-                            Objects.equals(oldItem.microblog.isFavorite, newItem.microblog.isFavorite) &&
+                    return Objects.equals(oldItem.microblog.isFavorite, newItem.microblog.isFavorite) &&
                             Objects.equals(oldItem.microblog.isConversation, newItem.microblog.isConversation) &&
                             Objects.equals(oldItem.microblog.dateRelative, newItem.microblog.dateRelative) &&
-                            Objects.equals(oldItem.author.microblog.username, newItem.author.microblog.username);
+                            Objects.equals(oldItem.author.avatar, newItem.author.avatar) &&
+                            Objects.equals(oldItem.author.microblog.username, newItem.author.microblog.username) &&
+                            Objects.equals(oldItem.contentHtml, newItem.contentHtml);
+                }
+
+                @Override
+                public Object getChangePayload(Item oldItem, Item newItem) {
+                    Bundle diffBundle = new Bundle();
+
+                    if (!Objects.equals(oldItem.microblog.isFavorite, newItem.microblog.isFavorite))
+                        diffBundle.putBoolean("FAV", newItem.microblog.isFavorite);
+
+                    if (!Objects.equals(oldItem.microblog.isConversation, newItem.microblog.isConversation))
+                        diffBundle.putBoolean("CONV", newItem.microblog.isConversation);
+
+                    if (!Objects.equals(oldItem.microblog.dateRelative, newItem.microblog.dateRelative))
+                        diffBundle.putString("DATE", newItem.microblog.dateRelative);
+
+                    if (!Objects.equals(oldItem.author.avatar, newItem.author.avatar))
+                        diffBundle.putString("AVATAR", newItem.author.avatar);
+
+                    if (!Objects.equals(oldItem.author.microblog.username, newItem.author.microblog.username))
+                        diffBundle.putString("USERNAME", newItem.author.microblog.username);
+
+                    if (!Objects.equals(oldItem.contentHtml, newItem.contentHtml))
+                        diffBundle.putString("CONTENT", newItem.contentHtml);
+
+                    return (diffBundle.size() == 0) ? null : diffBundle;
                 }
             };
 
@@ -85,29 +113,69 @@ public class ItemRecyclerAdapter extends ListAdapter<Item, ItemRecyclerAdapter.P
     }
 
     @Override
+    public void onBindViewHolder(@NonNull PostViewHolder holder, int position, @NonNull List<Object> payloads) {
+        if (payloads.isEmpty()) {
+            onBindViewHolder(holder, position);
+        } else {
+            Bundle diffBundle = (Bundle) payloads.get(0);
+
+            for (String key : diffBundle.keySet()) {
+                switch (key) {
+                    case "CONV":
+                        holder.conversationButton.setVisibility(diffBundle.getBoolean("CONV") ?
+                                View.VISIBLE : View.GONE);
+                        break;
+                    case "FAV":
+                        if (diffBundle.getBoolean("FAV")) {
+                            holder.favoriteButton.setImageResource(R.drawable.ic_star_black_24dp);
+                            holder.favoriteButton.setImageAlpha(255);
+                            holder.favoriteButton.setColorFilter(ContextCompat.getColor(context, R.color.reda200));
+                        } else {
+                            holder.favoriteButton.setImageResource(R.drawable.ic_star_border_black_24dp);
+                            holder.favoriteButton.setColorFilter(isNight() ? Color.WHITE : Color.BLACK);
+                            setIconAlpha(holder.favoriteButton);
+                        }
+                        break;
+                    case "DATE":
+                        holder.time.setText(diffBundle.getString("DATE"));
+                        break;
+                    case "AVATAR":
+                        glide.load(diffBundle.getString("AVATAR"))
+                                .apply(RequestOptions.placeholderOf(R.color.grey400))
+                                .apply(RequestOptions.noAnimation())
+                                .into(holder.thumbnail);
+                        break;
+                    case "USERNAME":
+                        holder.username.setText(diffBundle.getString("USERNAME"));
+                        break;
+                    case "CONTENT":
+                        holder.bindHtmlContent(diffBundle.getString("CONTENT"));
+                        break;
+                }
+            }
+        }
+    }
+
+    @Override
     public void onBindViewHolder(@NonNull PostViewHolder holder, int position) {
         Item item = getItem(position);
 
-        setIconAlpha(holder.conversationButton, 138, 255);
+        setIconAlpha(holder.conversationButton);
+        holder.conversationButton.setColorFilter(isNight() ? Color.WHITE : Color.BLACK);
         holder.conversationButton.setVisibility(getItem(position).microblog.isConversation ?
                 View.VISIBLE : View.GONE);
 
-        holder.replyButton.setColorFilter(currentNightMode == Configuration.UI_MODE_NIGHT_YES ? Color.WHITE : Color.BLACK);
-        setIconAlpha(holder.replyButton, 138, 255);
-
-        TypedValue valueActive = new TypedValue();
-        TypedValue valueInactive = new TypedValue();
-        context.getTheme().resolveAttribute(R.attr.favoriteIconActive, valueActive, true);
-        context.getTheme().resolveAttribute(R.attr.favoriteIconInactive, valueInactive, true);
+        holder.replyButton.setColorFilter(isNight() ? Color.WHITE : Color.BLACK);
+        setIconAlpha(holder.replyButton);
 
         if (item.microblog.isFavorite) {
-            holder.favoriteButton.setImageResource(valueActive.resourceId);
+            holder.favoriteButton.setImageResource(R.drawable.ic_star_black_24dp);
             holder.favoriteButton.setImageAlpha(255);
             holder.favoriteButton.setColorFilter(ContextCompat.getColor(context, R.color.reda200));
         } else {
-            holder.favoriteButton.setImageResource(valueInactive.resourceId);
-            holder.favoriteButton.clearColorFilter();
-            setIconAlpha(holder.favoriteButton, 138, 255);
+            holder.favoriteButton.setImageResource(R.drawable.ic_star_border_black_24dp);
+            holder.favoriteButton.setColorFilter(isNight() ? Color.WHITE : Color.BLACK);
+            setIconAlpha(holder.favoriteButton);
         }
 
         glide.load(item.author.avatar)
@@ -129,17 +197,15 @@ public class ItemRecyclerAdapter extends ListAdapter<Item, ItemRecyclerAdapter.P
         this.listener = listener;
     }
 
-    private void setIconAlpha(ImageButton button, int dayAlpha, int nightAlpha) {
-        switch (currentNightMode) {
-            case Configuration.UI_MODE_NIGHT_NO:
-                button.setImageAlpha(dayAlpha);
-                break;
-            case Configuration.UI_MODE_NIGHT_YES:
-                button.setImageAlpha(nightAlpha);
-                break;
-            case Configuration.UI_MODE_NIGHT_UNDEFINED:
-                button.setImageAlpha(dayAlpha);
-        }
+    private void setIconAlpha(ImageButton button) {
+        if (isNight())
+            button.setImageAlpha(255);
+        else
+            button.setImageAlpha(138);
+    }
+
+    private boolean isNight() {
+        return currentNightMode == Configuration.UI_MODE_NIGHT_YES;
     }
 
     public interface PostItemOptionClickedListener {
@@ -215,7 +281,7 @@ public class ItemRecyclerAdapter extends ListAdapter<Item, ItemRecyclerAdapter.P
             return listener.onMenuItemClicked(menuItem.getItemId(), getItem(getAdapterPosition()));
         }
 
-        private void bindHtmlContent(String contentHtml) {
+        void bindHtmlContent(String contentHtml) {
             SpannableString spannedText;
             Elements images = Jsoup.parse(contentHtml).select("img");
             GlideImageGetter imageGetter = null;

@@ -4,7 +4,4 @@
     <attr name="colorNavDrawer" format="reference" />
     <attr name="colorDivider" format="reference" />
     <attr name="colorDrawerIcons" format="reference" />
-    <attr name="conversationIcon" format="reference" />
-    <attr name="favoriteIconActive" format="reference" />
-    <attr name="favoriteIconInactive" format="reference" />
 </resources>
