@@ -2,10 +2,13 @@ package com.dialogapp.dialog.api;
 
 import android.arch.lifecycle.LiveData;
 
+import com.dialogapp.dialog.model.AccountInfo;
 import com.dialogapp.dialog.model.AccountResponse;
 import com.dialogapp.dialog.model.MediaEndPoint;
 import com.dialogapp.dialog.model.MicroBlogResponse;
 import com.dialogapp.dialog.model.VerifiedAccount;
+
+import java.util.List;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -52,6 +55,9 @@ public interface MicroblogService {
 
     @GET("posts/check")
     Call<MicroBlogResponse> getNewPostsSince(@Query("since_id") long since_id);
+
+    @GET("users/following/{username}")
+    LiveData<ApiResponse<List<AccountInfo>>> getFollowing(@Path("username") String username);
 
     // POST
 

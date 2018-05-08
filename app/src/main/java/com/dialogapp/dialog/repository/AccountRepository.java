@@ -8,9 +8,12 @@ import com.dialogapp.dialog.AppExecutors;
 import com.dialogapp.dialog.api.ApiResponse;
 import com.dialogapp.dialog.api.MicroblogService;
 import com.dialogapp.dialog.db.AccountDao;
+import com.dialogapp.dialog.model.AccountInfo;
 import com.dialogapp.dialog.model.AccountResponse;
 import com.dialogapp.dialog.model.VerifiedAccount;
 import com.dialogapp.dialog.util.Resource;
+
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -69,7 +72,7 @@ public class AccountRepository {
         return new NetworkBoundResource<AccountResponse, AccountResponse>(appExecutors) {
             @Override
             protected boolean shouldFetch(@Nullable AccountResponse dbData) {
-                return dbData == null;
+                return true;
             }
 
             @NonNull
@@ -87,6 +90,40 @@ public class AccountRepository {
             @Override
             protected LiveData<AccountResponse> loadFromDb() {
                 return accountDao.fetchAccountInfo(username);
+            }
+        }.asLiveData();
+    }
+
+    public LiveData<Resource<List<AccountInfo>>> loadFollowingData(String username) {
+        return new NetworkBoundResource<List<AccountInfo>, List<AccountInfo>>(appExecutors) {
+            List<AccountInfo> accountInfos;
+
+            @Override
+            protected boolean shouldFetch(@Nullable List<AccountInfo> dbData) {
+                return accountInfos == null;
+            }
+
+            @NonNull
+            @Override
+            protected LiveData<ApiResponse<List<AccountInfo>>> createCall() {
+                return microblogService.getFollowing(username);
+            }
+
+            @Override
+            protected void saveCallResult(@NonNull List<AccountInfo> item) {
+                accountInfos = item;
+            }
+
+            @NonNull
+            @Override
+            protected LiveData<List<AccountInfo>> loadFromDb() {
+                return new LiveData<List<AccountInfo>>() {
+                    @Override
+                    protected void onActive() {
+                        super.onActive();
+                        setValue(accountInfos);
+                    }
+                };
             }
         }.asLiveData();
     }

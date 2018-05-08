@@ -24,6 +24,7 @@ import com.dialogapp.dialog.ui.base.BaseInjectableActivity;
 import com.dialogapp.dialog.ui.base.BaseListFragment;
 import com.dialogapp.dialog.ui.common.AlertDialogFragment;
 import com.dialogapp.dialog.ui.common.RequestViewModel;
+import com.orhanobut.hawk.Hawk;
 
 import javax.inject.Inject;
 
@@ -161,6 +162,9 @@ public class ProfileActivity extends BaseInjectableActivity implements BaseListF
     private void setupViewpager() {
         adapter = new ProfileFragmentPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(ProfileFragment.newInstance(getIntent().getStringExtra(EXTRA_USERNAME)));
+        if (Hawk.get(getString(R.string.pref_username)).equals(getIntent().getStringExtra(EXTRA_USERNAME))) {
+            adapter.addFragment(FollowingFragment.newInstance(getIntent().getStringExtra(EXTRA_USERNAME)));
+        }
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
     }

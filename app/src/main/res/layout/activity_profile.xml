@@ -44,6 +44,8 @@
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:theme="@style/AppTheme.AppBarOverlay"
+            app:tabMode="fixed"
+            app:tabGravity="center"
             app:layout_scrollFlags="scroll|snap|enterAlways"
             app:tabTextColor="?android:attr/textColorPrimary" />
 

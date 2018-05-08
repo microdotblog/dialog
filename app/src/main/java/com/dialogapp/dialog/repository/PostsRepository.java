@@ -158,7 +158,7 @@ public class PostsRepository {
         return new NetworkBoundResource<List<Item>, MicroBlogResponse>(appExecutors) {
             @Override
             protected boolean shouldFetch(@Nullable List<Item> dbData) {
-                return dbData == null || endpointRateLimit.shouldFetch(username);
+                return dbData == null || dbData.isEmpty() || endpointRateLimit.shouldFetch(username);
             }
 
             @NonNull

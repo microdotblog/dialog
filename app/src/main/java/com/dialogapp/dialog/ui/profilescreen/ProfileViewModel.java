@@ -5,8 +5,10 @@ import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Transformations;
 import android.arch.lifecycle.ViewModel;
 
+import com.dialogapp.dialog.model.AccountInfo;
 import com.dialogapp.dialog.model.Item;
 import com.dialogapp.dialog.model.UserInfo;
+import com.dialogapp.dialog.repository.AccountRepository;
 import com.dialogapp.dialog.repository.PostsRepository;
 import com.dialogapp.dialog.util.AbsentLiveData;
 import com.dialogapp.dialog.util.Objects;
@@ -20,9 +22,11 @@ public class ProfileViewModel extends ViewModel {
     private final MutableLiveData<String> user = new MutableLiveData<>();
     private final LiveData<Resource<UserInfo>> userInfo;
     private final LiveData<Resource<List<Item>>> userPosts;
+    private final MutableLiveData<String> self = new MutableLiveData<>();
+    private final LiveData<Resource<List<AccountInfo>>> followingData;
 
     @Inject
-    public ProfileViewModel(PostsRepository postsRepository) {
+    public ProfileViewModel(PostsRepository postsRepository, AccountRepository accountRepository) {
         userInfo = Transformations.switchMap(user, input -> {
             if (!input.isEmpty()) {
                 return postsRepository.loadUserData(input);
@@ -37,6 +41,13 @@ public class ProfileViewModel extends ViewModel {
                 return AbsentLiveData.create();
             }
         });
+        followingData = Transformations.switchMap(self, input -> {
+            if (!input.isEmpty()) {
+                return accountRepository.loadFollowingData(input);
+            } else {
+                return AbsentLiveData.create();
+            }
+        });
     }
 
     public LiveData<Resource<UserInfo>> getUserInfo() {
@@ -45,6 +56,10 @@ public class ProfileViewModel extends ViewModel {
 
     public LiveData<Resource<List<Item>>> getUserPosts() {
         return userPosts;
+    }
+
+    public LiveData<Resource<List<AccountInfo>>> getFollowingData() {
+        return followingData;
     }
 
     public void refresh() {
@@ -58,5 +73,15 @@ public class ProfileViewModel extends ViewModel {
             return;
 
         this.user.setValue(username);
+    }
+
+    public void setFollowing(String username) {
+        if (Objects.equals(this.self.getValue(), username))
+            return;
+        this.self.setValue(username);
+    }
+
+    public void refreshFollowingData() {
+        this.self.setValue(this.self.getValue());
     }
 }
