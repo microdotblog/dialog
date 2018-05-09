@@ -31,7 +31,10 @@ public abstract class PostsDao {
     public abstract void deletePosts(String endpoint);
 
     @Query("DELETE FROM posts")
-    public abstract void dropTable();
+    public abstract void dropPosts();
+
+    @Query("DELETE FROM microblogData")
+    public abstract void dropUsers();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     public abstract void insertMicroblogData(MicroBlogResponse data);

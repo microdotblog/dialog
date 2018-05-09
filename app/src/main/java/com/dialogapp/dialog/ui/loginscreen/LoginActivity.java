@@ -4,18 +4,19 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
-import android.widget.Toast;
 
 import com.dialogapp.dialog.R;
+import com.dialogapp.dialog.api.ServiceInterceptor;
 import com.dialogapp.dialog.ui.MainActivity;
 import com.dialogapp.dialog.ui.base.BaseInjectableActivity;
+import com.orhanobut.hawk.Hawk;
 
-import static com.dialogapp.dialog.ui.MainActivity.EXTRA_AVATARURL;
-import static com.dialogapp.dialog.ui.MainActivity.EXTRA_FULLNAME;
-import static com.dialogapp.dialog.ui.MainActivity.EXTRA_TOKEN;
-import static com.dialogapp.dialog.ui.MainActivity.EXTRA_USERNAME;
+import javax.inject.Inject;
 
 public class LoginActivity extends BaseInjectableActivity implements LoginFragment.LoginFragmentEventListener {
+    @Inject
+    ServiceInterceptor serviceInterceptor;
+
     private CoordinatorLayout coordinatorLayout;
 
     @Override
@@ -32,11 +33,6 @@ public class LoginActivity extends BaseInjectableActivity implements LoginFragme
     }
 
     @Override
-    public void showVerifyingMsg() {
-        Toast.makeText(this, R.string.login_msg_verification, Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
     public void onVerificationFailed() {
         Snackbar.make(coordinatorLayout, R.string.login_verification_failed, Snackbar.LENGTH_SHORT).show();
     }
@@ -47,12 +43,15 @@ public class LoginActivity extends BaseInjectableActivity implements LoginFragme
     }
 
     @Override
-    public void onVerificationComplete(String token, String username, String fullName, String gravatarUrl) {
+    public void onVerificationComplete(String token, String username, String fullName, String avatarUrl) {
+        serviceInterceptor.setAuthToken(token);
+
+        Hawk.put(getString(R.string.pref_token), token);
+        Hawk.put(getString(R.string.pref_username), username);
+        Hawk.put(getString(R.string.pref_fullname), fullName);
+        Hawk.put(getString(R.string.pref_avatar_url), avatarUrl);
+
         Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtra(EXTRA_TOKEN, token);
-        intent.putExtra(EXTRA_USERNAME, username);
-        intent.putExtra(EXTRA_FULLNAME, fullName);
-        intent.putExtra(EXTRA_AVATARURL, gravatarUrl);
         startActivity(intent);
         finish();
     }

@@ -15,12 +15,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dialogapp.dialog.R;
 import com.dialogapp.dialog.di.Injectable;
-import com.dialogapp.dialog.model.VerifiedAccount;
 import com.dialogapp.dialog.util.Status;
-import com.orhanobut.hawk.Hawk;
 
 import javax.inject.Inject;
 
@@ -56,7 +55,7 @@ public class LoginFragment extends Fragment implements Injectable {
         token = input.getText().toString().trim();
         if (!token.isEmpty()) {
             loginButton.setEnabled(false);
-            listener.showVerifyingMsg();
+            Toast.makeText(getActivity(), R.string.login_msg_verification, Toast.LENGTH_SHORT).show();
             progressBar.setVisibility(View.VISIBLE);
 
             loginViewModel.setToken(token);
@@ -105,7 +104,15 @@ public class LoginFragment extends Fragment implements Injectable {
 
                             listener.onVerificationFailed();
                         } else if (verifiedAccountResource.status == Status.SUCCESS && verifiedAccountResource.data != null) {
-                            check(verifiedAccountResource.data);
+                            progressBar.setVisibility(View.INVISIBLE);
+                            if (verifiedAccountResource.data.error == null) {
+                                loginViewModel.clearCachedData();
+                                listener.onVerificationComplete(token, verifiedAccountResource.data.username,
+                                        verifiedAccountResource.data.fullName, verifiedAccountResource.data.gravatarUrl);
+                            } else {
+                                loginButton.setEnabled(true);
+                                listener.onInvalidToken();
+                            }
                         }
                     }
                 });
@@ -117,31 +124,11 @@ public class LoginFragment extends Fragment implements Injectable {
         unbinder.unbind();
     }
 
-    private void check(VerifiedAccount data) {
-        if (data.error == null) {
-            progressBar.setVisibility(View.INVISIBLE);
-
-            Hawk.put(getString(R.string.pref_token), token);
-            Hawk.put(getString(R.string.pref_username), data.username);
-            Hawk.put(getString(R.string.pref_fullname), data.fullName);
-            Hawk.put(getString(R.string.pref_avatar_url), data.gravatarUrl);
-
-            listener.onVerificationComplete(token, data.username, data.fullName, data.gravatarUrl);
-        } else {
-            progressBar.setVisibility(View.INVISIBLE);
-            loginButton.setEnabled(true);
-
-            listener.onInvalidToken();
-        }
-    }
-
     public interface LoginFragmentEventListener {
-        void showVerifyingMsg();
-
         void onVerificationFailed();
 
         void onInvalidToken();
 
-        void onVerificationComplete(String token, String username, String fullName, String gravatarUrl);
+        void onVerificationComplete(String token, String username, String fullName, String avatarUrl);
     }
 }

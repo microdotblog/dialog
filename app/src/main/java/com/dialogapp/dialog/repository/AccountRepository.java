@@ -127,4 +127,8 @@ public class AccountRepository {
             }
         }.asLiveData();
     }
+
+    public void removeAccountData() {
+        appExecutors.diskIO().execute(accountDao::dropAccount);
+    }
 }

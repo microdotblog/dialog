@@ -15,4 +15,7 @@ public interface AccountDao {
 
     @Query("SELECT * FROM account WHERE username = :username")
     LiveData<AccountResponse> fetchAccountInfo(String username);
+
+    @Query("DELETE FROM account")
+    void dropAccount();
 }

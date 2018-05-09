@@ -2,6 +2,8 @@ package com.dialogapp.dialog.api;
 
 import android.support.annotation.NonNull;
 
+import com.orhanobut.hawk.Hawk;
+
 import java.io.IOException;
 
 import javax.inject.Inject;
@@ -25,6 +27,12 @@ public class ServiceInterceptor implements Interceptor {
     public ServiceInterceptor() {
     }
 
+    public String getAuthToken() {
+        if (authToken == null || authToken.isEmpty())
+            authToken = Hawk.get("token");
+        return authToken;
+    }
+
     public void setAuthToken(String authToken) {
         this.authToken = authToken;
     }
@@ -35,7 +43,7 @@ public class ServiceInterceptor implements Interceptor {
 
         Request.Builder builder = request.newBuilder();
         if (request.header("NO-AUTH") == null) {
-            request = builder.addHeader("Authorization", "Token " + authToken).build();
+            request = builder.addHeader("Authorization", "Token " + getAuthToken()).build();
         }
         return chain.proceed(request);
     }

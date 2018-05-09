@@ -21,10 +21,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.dialogapp.dialog.AppExecutors;
 import com.dialogapp.dialog.R;
-import com.dialogapp.dialog.api.ServiceInterceptor;
-import com.dialogapp.dialog.db.PostsDao;
 import com.dialogapp.dialog.ui.base.BaseInjectableActivity;
 import com.dialogapp.dialog.ui.base.BaseListFragment;
 import com.dialogapp.dialog.ui.common.AlertDialogFragment;
@@ -35,33 +32,17 @@ import com.dialogapp.dialog.ui.profilescreen.ProfileActivity;
 import com.dialogapp.dialog.ui.settings.SettingsActivity;
 import com.orhanobut.hawk.Hawk;
 
-import javax.inject.Inject;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends BaseInjectableActivity implements BaseListFragment.FragmentEventListener,
         NavigationView.OnNavigationItemSelectedListener {
-    public static final String EXTRA_USERNAME = MainActivity.class.getName() + ".EXTRA_USERNAME";
-    public static final String EXTRA_FULLNAME = MainActivity.class.getName() + ".EXTRA_FULLNAME";
-    public static final String EXTRA_AVATARURL = MainActivity.class.getName() + ".EXTRA_AVATARURL";
-    public static final String EXTRA_TOKEN = MainActivity.class.getName() + ".EXTRA_TOKEN";
-
     private String[] category = {"Recent", "Books", "Music"};
 
     private ViewPager viewPager;
     private Snackbar errorBar;
     private boolean errorHasBeenShown;
-
-    @Inject
-    ServiceInterceptor serviceInterceptor;
-
-    @Inject
-    PostsDao postsDao;
-
-    @Inject
-    AppExecutors appExecutors;
 
     @BindView(R.id.nav_view)
     NavigationView navigationView;
@@ -91,14 +72,6 @@ public class MainActivity extends BaseInjectableActivity implements BaseListFrag
 
         errorBar = Snackbar.make(coordinatorLayout, R.string.connection_error, Snackbar.LENGTH_LONG);
 
-        Intent intent = getIntent();
-        String saved_token = intent.getStringExtra(EXTRA_TOKEN);
-        String saved_username = intent.getStringExtra(EXTRA_USERNAME);
-        String saved_fullname = intent.getStringExtra(EXTRA_FULLNAME);
-        String saved_avatarUrl = intent.getStringExtra(EXTRA_AVATARURL);
-
-        serviceInterceptor.setAuthToken(saved_token);
-
         navigationView.setNavigationItemSelectedListener(this);
         setSpinnerDiscover();
 
@@ -108,11 +81,11 @@ public class MainActivity extends BaseInjectableActivity implements BaseListFrag
         ImageView logout = navigationView.getHeaderView(0).findViewById(R.id.image_logout);
 
         Glide.with(this)
-                .load(saved_avatarUrl)
+                .load((String) Hawk.get(getString(R.string.pref_avatar_url)))
                 .apply(RequestOptions.noAnimation())
                 .into(imageView);
-        username.setText(saved_username);
-        fullname.setText(saved_fullname);
+        username.setText(Hawk.get(getString(R.string.pref_username)));
+        fullname.setText(Hawk.get(getString(R.string.pref_fullname)));
         logout.setOnClickListener(view -> {
             showLogoutDialog();
         });
@@ -151,7 +124,7 @@ public class MainActivity extends BaseInjectableActivity implements BaseListFrag
         switch (id) {
             case R.id.menu_item_profile:
                 intent = new Intent(this, ProfileActivity.class);
-                intent.putExtra(ProfileActivity.EXTRA_USERNAME, getIntent().getStringExtra(EXTRA_USERNAME));
+                intent.putExtra(ProfileActivity.EXTRA_USERNAME, (String) Hawk.get(getString(R.string.pref_username)));
                 break;
             case R.id.menu_item_fav:
                 intent = new Intent(this, FavoritesActivity.class);
@@ -168,7 +141,6 @@ public class MainActivity extends BaseInjectableActivity implements BaseListFrag
 
     private void startLoginActivity() {
         Hawk.delete(getString(R.string.pref_token));
-        appExecutors.diskIO().execute(() -> postsDao.dropTable());
         Intent loginIntent = new Intent(this, LoginActivity.class);
         startActivity(loginIntent);
         finish();

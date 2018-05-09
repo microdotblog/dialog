@@ -307,4 +307,11 @@ public class PostsRepository {
             }
         }.asLiveData();
     }
+
+    public void removeUserData() {
+        appExecutors.diskIO().execute(() -> {
+            postsDao.dropUsers();
+            postsDao.dropPosts();
+        });
+    }
 }
