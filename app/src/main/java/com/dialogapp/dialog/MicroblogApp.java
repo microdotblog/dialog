@@ -2,6 +2,9 @@ package com.dialogapp.dialog;
 
 import android.app.Activity;
 import android.app.Application;
+import android.content.SharedPreferences;
+import android.support.v7.app.AppCompatDelegate;
+import android.support.v7.preference.PreferenceManager;
 
 import com.dialogapp.dialog.di.AppInjector;
 import com.orhanobut.hawk.Hawk;
@@ -22,6 +25,11 @@ public class MicroblogApp extends Application implements HasActivityInjector {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        String nightMode = sharedPref.getString(getString(R.string.pref_nightMode),
+                String.valueOf(AppCompatDelegate.MODE_NIGHT_NO));
+        AppCompatDelegate.setDefaultNightMode(Integer.parseInt(nightMode));
 
         if (LeakCanary.isInAnalyzerProcess(this)) {
             // This process is dedicated to LeakCanary for heap analysis.

@@ -24,9 +24,9 @@
     <string name="empty_list">It\'s quiet in here</string>
     <string name="connection_error">Could not connect to Microblog.</string>
 
-    <string name="settings_location">Location access is required for accurate auto day-night theme switching</string>
     <string name="request_successful">Request successful</string>
     <string name="request_unsuccessful">Request unsuccessful</string>
     <string name="retry_reply">Retry</string>
     <string name="label_reply">Reply</string>
+    <string name="location_permission_message">Location access is optionally required for the accurate calculation of sunrise and sunset times. \n\nDefault sunrise time : 6AM \nDefault sunset time : 10PM</string>
 </resources>

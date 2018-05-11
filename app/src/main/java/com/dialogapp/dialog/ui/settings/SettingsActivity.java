@@ -1,13 +1,10 @@
 package com.dialogapp.dialog.ui.settings;
 
 import android.Manifest;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -19,12 +16,12 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.dialogapp.dialog.R;
+import com.dialogapp.dialog.ui.common.AlertDialogFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class SettingsActivity extends AppCompatActivity
-        implements SettingsFragment.SettingsFragmentEventListener {
+public class SettingsActivity extends AppCompatActivity {
     public static final int LOCATION_REQUEST_CODE = 99;
 
     @BindView(R.id.toolbar_container)
@@ -32,9 +29,20 @@ public class SettingsActivity extends AppCompatActivity
 
     private SharedPreferences.OnSharedPreferenceChangeListener listener = (sharedPreferences, key) -> {
         if (key.equals(getString(R.string.pref_nightMode))) {
-            getDelegate().setLocalNightMode(Integer.parseInt(sharedPreferences.getString(key,
-                    String.valueOf(AppCompatDelegate.MODE_NIGHT_AUTO))));
-            recreate();
+            String value = sharedPreferences.getString(key, String.valueOf(AppCompatDelegate.MODE_NIGHT_NO));
+            AppCompatDelegate.setDefaultNightMode(Integer.parseInt(value));
+            if (Build.VERSION.SDK_INT >= 23 && value.equals("0") && !locationPermissionGranted()) {
+                AlertDialogFragment alertDialog = AlertDialogFragment.newInstance("Allow access to location?",
+                        getString(R.string.location_permission_message));
+                alertDialog.setListener(userChoice -> {
+                    if (userChoice) {
+                        ActivityCompat.requestPermissions(this,
+                                new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+                                LOCATION_REQUEST_CODE);
+                    }
+                });
+                alertDialog.show(getSupportFragmentManager(), "LocationAlertDialogFragment");
+            }
         }
     };
 
@@ -96,35 +104,9 @@ public class SettingsActivity extends AppCompatActivity
         }
     }
 
-    @Override
-    public void onPreferenceClicked() {
-        if (Build.VERSION.SDK_INT >= 23)
-            checkLocationPermission();
-        else
-            openAppSettingsPage();
-    }
-
-    public void checkLocationPermission() {
-        if (ContextCompat.checkSelfPermission(this,
+    public boolean locationPermissionGranted() {
+        return ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_COARSE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
-                    LOCATION_REQUEST_CODE);
-        } else {
-            openAppSettingsPage();
-        }
-    }
-
-    private void openAppSettingsPage() {
-        final Intent i = new Intent();
-        i.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-        i.addCategory(Intent.CATEGORY_DEFAULT);
-        i.setData(Uri.parse("package:" + getPackageName()));
-        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        i.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-        i.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
-        startActivity(i);
+                == PackageManager.PERMISSION_GRANTED;
     }
 }

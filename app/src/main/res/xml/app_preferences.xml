@@ -6,7 +6,7 @@
             android:entries="@array/modes"
             android:entryValues="@array/nightModes"
             android:key="@string/pref_nightMode"
-            android:defaultValue="0"
+            android:defaultValue="1"
             android:summary="%s"
             android:title="Theme mode" />
     </android.support.v7.preference.PreferenceCategory>
@@ -20,11 +20,6 @@
             android:defaultValue="0"
             android:summary="%s"
             android:title="Preload large images" />
-
-        <android.support.v7.preference.Preference
-            android:key="pref_locationPermission"
-            android:summary="@string/settings_location"
-            android:title="Location" />
 
     </android.support.v7.preference.PreferenceCategory>
 
