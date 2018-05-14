@@ -38,7 +38,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends BaseInjectableActivity implements BaseListFragment.FragmentEventListener,
         NavigationView.OnNavigationItemSelectedListener {
-    private String[] category = {"Recent", "Books", "Music"};
+    private String[] category = {"Recent", "Books", "Music", "Podcasts"};
 
     private ViewPager viewPager;
     private Snackbar errorBar;
