@@ -23,4 +23,17 @@
 
     </android.support.v7.preference.PreferenceCategory>
 
+    <android.support.v7.preference.PreferenceCategory android:title="Other">
+
+        <android.support.v7.preference.PreferenceScreen
+            android:key="button_voicemail_setting_key"
+            android:persistent="false"
+            android:title="About">
+            <intent
+                android:targetClass="com.dialogapp.dialog.ui.settings.AboutActivity"
+                android:targetPackage="com.dialogapp.dialog" />
+        </android.support.v7.preference.PreferenceScreen>
+
+    </android.support.v7.preference.PreferenceCategory>
+
 </android.support.v7.preference.PreferenceScreen>

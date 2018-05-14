@@ -22,15 +22,6 @@
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/nav_header_main"
         app:itemIconTint="?attr/colorDrawerIcons"
-        app:menu="@menu/activity_main_drawer">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_gravity="bottom"
-            android:gravity="center"
-            android:text="@string/app_version" />
-
-    </android.support.design.widget.NavigationView>
+        app:menu="@menu/activity_main_drawer" />
 
 </android.support.v4.widget.DrawerLayout>

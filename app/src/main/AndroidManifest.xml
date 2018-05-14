@@ -42,6 +42,10 @@
             android:label="Settings"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Settings" />
+        <activity
+            android:name=".ui.settings.AboutActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Settings" />
     </application>
 
 </manifest>
