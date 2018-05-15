@@ -1,13 +1,23 @@
 apply plugin: 'com.android.application'
 
+ext {
+    versionMajor = 1
+    versionMinor = 0
+    versionPatch = 0
+    minimumSdkVersion = 21
+
+    supportLibsVersion = '27.1.1'
+    retrofitVersion = '2.3.0'
+}
+
 android {
     compileSdkVersion 27
     defaultConfig {
         applicationId "com.dialogapp.dialog"
-        minSdkVersion 21
+        minSdkVersion project.ext.minimumSdkVersion
         targetSdkVersion 26
-        versionCode 1
-        versionName "1.0"
+        versionCode generateVersionCode()
+        versionName generateVersionName()
         testInstrumentationRunner "com.dialogapp.dialog.util.CustomTestRunner"
 
         javaCompileOptions {
@@ -37,9 +47,12 @@ android {
     }
 }
 
-ext {
-    supportLibsVersion = '27.1.1'
-    retrofitVersion = '2.3.0'
+private Integer generateVersionCode() {
+    return ext.minimumSdkVersion * 10000000 + ext.versionMajor * 10000 + ext.versionMinor * 100 + ext.versionPatch
+}
+
+private String generateVersionName() {
+    return "${ext.versionMajor}.${ext.versionMinor}.${ext.versionPatch}"
 }
 
 dependencies {
