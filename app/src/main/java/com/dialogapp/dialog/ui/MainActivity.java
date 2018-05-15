@@ -30,7 +30,9 @@ import com.dialogapp.dialog.ui.loginscreen.LoginActivity;
 import com.dialogapp.dialog.ui.mainscreen.DiscoverFragment;
 import com.dialogapp.dialog.ui.profilescreen.ProfileActivity;
 import com.dialogapp.dialog.ui.settings.SettingsActivity;
-import com.orhanobut.hawk.Hawk;
+import com.dialogapp.dialog.util.SharedPrefUtil;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -43,6 +45,9 @@ public class MainActivity extends BaseInjectableActivity implements BaseListFrag
     private ViewPager viewPager;
     private Snackbar errorBar;
     private boolean errorHasBeenShown;
+
+    @Inject
+    SharedPrefUtil sharedPrefUtil;
 
     @BindView(R.id.nav_view)
     NavigationView navigationView;
@@ -81,11 +86,11 @@ public class MainActivity extends BaseInjectableActivity implements BaseListFrag
         ImageView logout = navigationView.getHeaderView(0).findViewById(R.id.image_logout);
 
         Glide.with(this)
-                .load((String) Hawk.get(getString(R.string.pref_avatar_url)))
+                .load(sharedPrefUtil.getStringPreference(getString(R.string.pref_avatar_url), ""))
                 .apply(RequestOptions.noAnimation())
                 .into(imageView);
-        username.setText(Hawk.get(getString(R.string.pref_username)));
-        fullname.setText(Hawk.get(getString(R.string.pref_fullname)));
+        username.setText(sharedPrefUtil.getStringPreference(getString(R.string.pref_username), ""));
+        fullname.setText(sharedPrefUtil.getStringPreference(getString(R.string.pref_fullname), ""));
         logout.setOnClickListener(view -> {
             showLogoutDialog();
         });
@@ -124,7 +129,7 @@ public class MainActivity extends BaseInjectableActivity implements BaseListFrag
         switch (id) {
             case R.id.menu_item_profile:
                 intent = new Intent(this, ProfileActivity.class);
-                intent.putExtra(ProfileActivity.EXTRA_USERNAME, (String) Hawk.get(getString(R.string.pref_username)));
+                intent.putExtra(ProfileActivity.EXTRA_USERNAME, sharedPrefUtil.getStringPreference(getString(R.string.pref_username), ""));
                 break;
             case R.id.menu_item_fav:
                 intent = new Intent(this, FavoritesActivity.class);
@@ -140,7 +145,7 @@ public class MainActivity extends BaseInjectableActivity implements BaseListFrag
     }
 
     private void startLoginActivity() {
-        Hawk.delete(getString(R.string.pref_token));
+        sharedPrefUtil.remove(getString(R.string.pref_token));
         Intent loginIntent = new Intent(this, LoginActivity.class);
         startActivity(loginIntent);
         finish();

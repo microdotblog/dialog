@@ -103,9 +103,6 @@ dependencies {
     implementation 'com.google.dagger:dagger-android-support:2.15'
     annotationProcessor 'com.google.dagger:dagger-android-processor:2.14.1'
 
-    // Hawk
-    implementation 'com.orhanobut:hawk:2.0.1'
-
     // Jsoup
     implementation 'org.jsoup:jsoup:1.11.3'
 

@@ -47,8 +47,8 @@ public abstract class PostsDao {
     @Query("DELETE FROM posts WHERE endpoint NOT IN (\"timeline\", \"mentions\", \"favorites\")")
     public abstract void prunePosts();
 
-    @Query("DELETE FROM microblogData WHERE microblog_username != :username")
-    public abstract void pruneUserData(String username);
+    @Query("DELETE FROM microblogData")
+    public abstract void pruneUserData();
 
     @Query("DELETE FROM posts WHERE id IN " +
             "(SELECT id FROM posts WHERE author_author_info_username = :username " +

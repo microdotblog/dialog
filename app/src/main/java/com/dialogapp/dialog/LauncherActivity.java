@@ -2,20 +2,24 @@ package com.dialogapp.dialog;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 
 import com.dialogapp.dialog.ui.MainActivity;
+import com.dialogapp.dialog.ui.base.BaseInjectableActivity;
 import com.dialogapp.dialog.ui.loginscreen.LoginActivity;
-import com.orhanobut.hawk.Hawk;
+import com.dialogapp.dialog.util.SharedPrefUtil;
 
-public class LauncherActivity extends AppCompatActivity {
+import javax.inject.Inject;
+
+public class LauncherActivity extends BaseInjectableActivity {
+    @Inject
+    SharedPrefUtil sharedPrefUtil;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         Intent intent;
-        if (!Hawk.contains(getString(R.string.pref_token)))
+        if (sharedPrefUtil.getStringPreference(getString(R.string.pref_token), null) == null)
             intent = new Intent(this, LoginActivity.class);
         else {
             intent = new Intent(this, MainActivity.class);

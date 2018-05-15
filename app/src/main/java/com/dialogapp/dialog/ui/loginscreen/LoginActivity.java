@@ -9,13 +9,16 @@ import com.dialogapp.dialog.R;
 import com.dialogapp.dialog.api.ServiceInterceptor;
 import com.dialogapp.dialog.ui.MainActivity;
 import com.dialogapp.dialog.ui.base.BaseInjectableActivity;
-import com.orhanobut.hawk.Hawk;
+import com.dialogapp.dialog.util.SharedPrefUtil;
 
 import javax.inject.Inject;
 
 public class LoginActivity extends BaseInjectableActivity implements LoginFragment.LoginFragmentEventListener {
     @Inject
     ServiceInterceptor serviceInterceptor;
+
+    @Inject
+    SharedPrefUtil sharedPrefUtil;
 
     private CoordinatorLayout coordinatorLayout;
 
@@ -46,10 +49,10 @@ public class LoginActivity extends BaseInjectableActivity implements LoginFragme
     public void onVerificationComplete(String token, String username, String fullName, String avatarUrl) {
         serviceInterceptor.setAuthToken(token);
 
-        Hawk.put(getString(R.string.pref_token), token);
-        Hawk.put(getString(R.string.pref_username), username);
-        Hawk.put(getString(R.string.pref_fullname), fullName);
-        Hawk.put(getString(R.string.pref_avatar_url), avatarUrl);
+        sharedPrefUtil.setStringPreference(getString(R.string.pref_token), token);
+        sharedPrefUtil.setStringPreference(getString(R.string.pref_username), username);
+        sharedPrefUtil.setStringPreference(getString(R.string.pref_fullname), fullName);
+        sharedPrefUtil.setStringPreference(getString(R.string.pref_avatar_url), avatarUrl);
 
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);

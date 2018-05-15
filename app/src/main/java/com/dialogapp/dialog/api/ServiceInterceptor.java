@@ -2,7 +2,7 @@ package com.dialogapp.dialog.api;
 
 import android.support.annotation.NonNull;
 
-import com.orhanobut.hawk.Hawk;
+import com.dialogapp.dialog.util.SharedPrefUtil;
 
 import java.io.IOException;
 
@@ -22,14 +22,16 @@ import okhttp3.Response;
 @Singleton
 public class ServiceInterceptor implements Interceptor {
     private String authToken;
+    private SharedPrefUtil sharedPrefUtil;
 
     @Inject
-    public ServiceInterceptor() {
+    public ServiceInterceptor(SharedPrefUtil sharedPrefUtil) {
+        this.sharedPrefUtil = sharedPrefUtil;
     }
 
     public String getAuthToken() {
         if (authToken == null || authToken.isEmpty())
-            authToken = Hawk.get("token");
+            authToken = sharedPrefUtil.getStringPreference("token", "");
         return authToken;
     }
 

@@ -6,6 +6,7 @@ import com.dialogapp.dialog.MicroblogApp;
 import com.dialogapp.dialog.di.viewmodule.ConversationActivityModule;
 import com.dialogapp.dialog.di.viewmodule.FavoritesActivityModule;
 import com.dialogapp.dialog.di.viewmodule.ImageViewerActivityModule;
+import com.dialogapp.dialog.di.viewmodule.LauncherActivityModule;
 import com.dialogapp.dialog.di.viewmodule.LoginActivityModule;
 import com.dialogapp.dialog.di.viewmodule.MainActivityModule;
 import com.dialogapp.dialog.di.viewmodule.ProfileActivityModule;
@@ -25,6 +26,7 @@ import dagger.android.support.AndroidSupportInjectionModule;
         ProfileActivityModule.class,
         ImageViewerActivityModule.class,
         ConversationActivityModule.class,
+        LauncherActivityModule.class,
         MainActivityModule.class
 })
 public interface AppComponent {

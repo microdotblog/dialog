@@ -2,13 +2,10 @@ package com.dialogapp.dialog;
 
 import android.app.Activity;
 import android.app.Application;
-import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatDelegate;
-import android.support.v7.preference.PreferenceManager;
 
 import com.dialogapp.dialog.di.AppInjector;
-import com.orhanobut.hawk.Hawk;
-import com.orhanobut.hawk.NoEncryption;
+import com.dialogapp.dialog.util.SharedPrefUtil;
 import com.squareup.leakcanary.LeakCanary;
 
 import javax.inject.Inject;
@@ -22,12 +19,16 @@ public class MicroblogApp extends Application implements HasActivityInjector {
     @Inject
     DispatchingAndroidInjector<Activity> dispatchingAndroidInjector;
 
+    @Inject
+    SharedPrefUtil sharedPrefUtil;
+
     @Override
     public void onCreate() {
         super.onCreate();
 
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-        String nightMode = sharedPref.getString(getString(R.string.pref_nightMode),
+        AppInjector.init(this);
+
+        String nightMode = sharedPrefUtil.getStringPreference(getString(R.string.pref_nightMode),
                 String.valueOf(AppCompatDelegate.MODE_NIGHT_NO));
         AppCompatDelegate.setDefaultNightMode(Integer.parseInt(nightMode));
 
@@ -38,12 +39,7 @@ public class MicroblogApp extends Application implements HasActivityInjector {
         }
         LeakCanary.install(this);
 
-        Hawk.init(this)
-                .setEncryption(new NoEncryption())
-                .build();
-
         Timber.plant(new TimberImplementation());
-        AppInjector.init(this);
     }
 
     @Override
