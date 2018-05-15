@@ -7,7 +7,7 @@
         <item name="colorPrimary">@color/indigo500</item>
         <item name="colorPrimaryDark">@color/indigo700</item>
         <item name="colorAccent">@color/reda200</item>
-        <item name="colorCardBackground">@android:color/white</item>
+        <item name="colorCardBackground">@color/grey50</item>
         <item name="colorNavDrawer">@android:color/white</item>
         <item name="colorDivider">@color/blacka12</item>
         <item name="colorDrawerIcons">@android:color/black</item>

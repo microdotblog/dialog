@@ -28,5 +28,5 @@
     <string name="request_unsuccessful">Request unsuccessful</string>
     <string name="retry_reply">Retry</string>
     <string name="label_reply">Reply</string>
-    <string name="location_permission_message">Location access is optionally required for the accurate calculation of sunrise and sunset times. \n\nDefault sunrise time : 6AM \nDefault sunset time : 10PM</string>
+    <string name="location_permission_message">Location access is required for the accurate calculation of sunrise and sunset times. \n\nDefault sunrise time : 6AM \nDefault sunset time : 10PM</string>
 </resources>
