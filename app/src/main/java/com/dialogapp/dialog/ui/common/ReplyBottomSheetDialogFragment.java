@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.dialogapp.dialog.R;
 
 import butterknife.BindView;
@@ -95,12 +96,15 @@ public class ReplyBottomSheetDialogFragment extends BottomSheetDialogFragment {
 
         cancel.setOnClickListener(view1 -> {
             if (!replyContent.getText().toString().equals(defaultText)) {
-                AlertDialogFragment dialogFragment = AlertDialogFragment.newInstance(null, "Discard?");
-                dialogFragment.setListener(userChoice -> {
-                    if (userChoice)
-                        dismiss();
-                });
-                dialogFragment.show(getFragmentManager(), "ReplyAlertDialogFragment");
+                new MaterialDialog.Builder(getActivity())
+                        .content("Discard?")
+                        .positiveText(R.string.dialog_ok)
+                        .negativeText(R.string.dialog_cancel)
+                        .onPositive((dialog1, which) -> {
+                            dialog1.dismiss();
+                            dismiss();
+                        })
+                        .show();
             } else {
                 dismiss();
             }

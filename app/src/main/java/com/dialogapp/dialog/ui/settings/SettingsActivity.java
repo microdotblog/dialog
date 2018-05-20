@@ -15,8 +15,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.dialogapp.dialog.R;
-import com.dialogapp.dialog.ui.common.AlertDialogFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -32,16 +32,17 @@ public class SettingsActivity extends AppCompatActivity {
             String value = sharedPreferences.getString(key, String.valueOf(AppCompatDelegate.MODE_NIGHT_NO));
             AppCompatDelegate.setDefaultNightMode(Integer.parseInt(value));
             if (Build.VERSION.SDK_INT >= 23 && value.equals("0") && !locationPermissionGranted()) {
-                AlertDialogFragment alertDialog = AlertDialogFragment.newInstance("Allow access to location?",
-                        getString(R.string.location_permission_message));
-                alertDialog.setListener(userChoice -> {
-                    if (userChoice) {
-                        ActivityCompat.requestPermissions(this,
-                                new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
-                                LOCATION_REQUEST_CODE);
-                    }
-                });
-                alertDialog.show(getSupportFragmentManager(), "LocationAlertDialogFragment");
+                new MaterialDialog.Builder(this)
+                        .title("Allow access to location?")
+                        .content(R.string.location_permission_message)
+                        .positiveText(R.string.dialog_allow)
+                        .negativeText(R.string.dialog_cancel)
+                        .onPositive((dialog, which) -> {
+                            ActivityCompat.requestPermissions(this,
+                                    new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+                                    LOCATION_REQUEST_CODE);
+                        })
+                        .show();
             }
         }
     };

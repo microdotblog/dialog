@@ -6,10 +6,10 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.dialogapp.dialog.R;
 import com.dialogapp.dialog.ui.base.BaseInjectableActivity;
 import com.dialogapp.dialog.ui.base.BaseListFragment;
-import com.dialogapp.dialog.ui.common.AlertDialogFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -57,9 +57,11 @@ public class FavoritesActivity extends BaseInjectableActivity implements BaseLis
     public void onLoadError(String message) {
         if (!errorBar.isShownOrQueued()) {
             errorBar.setAction("Show error", view -> {
-                AlertDialogFragment alertDialog = AlertDialogFragment
-                        .newInstance("Connection Error", message);
-                alertDialog.show(getSupportFragmentManager(), "ErrorAlertDialogFragment");
+                new MaterialDialog.Builder(this)
+                        .title("Connection Error")
+                        .content(message)
+                        .positiveText(R.string.dialog_dismiss)
+                        .show();
             });
             errorBar.show();
         }

@@ -19,12 +19,12 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.dialogapp.dialog.R;
 import com.dialogapp.dialog.ui.base.BaseInjectableActivity;
 import com.dialogapp.dialog.ui.base.BaseListFragment;
-import com.dialogapp.dialog.ui.common.AlertDialogFragment;
 import com.dialogapp.dialog.ui.favorites.FavoritesActivity;
 import com.dialogapp.dialog.ui.loginscreen.LoginActivity;
 import com.dialogapp.dialog.ui.mainscreen.DiscoverFragment;
@@ -102,9 +102,11 @@ public class MainActivity extends BaseInjectableActivity implements BaseListFrag
     public void onLoadError(String message) {
         if (!errorHasBeenShown && !errorBar.isShownOrQueued()) {
             errorBar.setAction("Show error", view -> {
-                AlertDialogFragment alertDialog = AlertDialogFragment
-                        .newInstance("Connection Error", message);
-                alertDialog.show(getSupportFragmentManager(), "ErrorAlertDialogFragment");
+                new MaterialDialog.Builder(this)
+                        .title("Connection Error")
+                        .content(message)
+                        .positiveText(R.string.dialog_dismiss)
+                        .show();
             });
             errorBar.show();
             errorHasBeenShown = true;
@@ -152,13 +154,14 @@ public class MainActivity extends BaseInjectableActivity implements BaseListFrag
     }
 
     private void showLogoutDialog() {
-        AlertDialogFragment alertDialog = AlertDialogFragment.newInstance(null,
-                "Do you want to log out?");
-        alertDialog.setListener(userChoice -> {
-            if (userChoice)
-                startLoginActivity();
-        });
-        alertDialog.show(getSupportFragmentManager(), "AlertDialogFragment");
+        new MaterialDialog.Builder(this)
+                .content("Do you want to log out?")
+                .positiveText(R.string.dialog_ok)
+                .negativeText(R.string.dialog_cancel)
+                .onPositive((dialog, which) -> {
+                    startLoginActivity();
+                })
+                .show();
     }
 
     private void setSpinnerDiscover() {

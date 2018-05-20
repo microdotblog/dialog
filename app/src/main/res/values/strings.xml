@@ -29,4 +29,8 @@
     <string name="retry_reply">Retry</string>
     <string name="label_reply">Reply</string>
     <string name="location_permission_message">Location access is required for the accurate calculation of sunrise and sunset times. \n\nDefault sunrise time : 6AM \nDefault sunset time : 10PM</string>
+    <string name="dialog_ok">OK</string>
+    <string name="dialog_cancel">Cancel</string>
+    <string name="dialog_allow">Allow</string>
+    <string name="dialog_dismiss">Dismiss</string>
 </resources>

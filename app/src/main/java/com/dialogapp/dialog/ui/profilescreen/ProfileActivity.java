@@ -16,13 +16,13 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.dialogapp.dialog.R;
 import com.dialogapp.dialog.model.UserInfo;
 import com.dialogapp.dialog.ui.base.BaseInjectableActivity;
 import com.dialogapp.dialog.ui.base.BaseListFragment;
-import com.dialogapp.dialog.ui.common.AlertDialogFragment;
 import com.dialogapp.dialog.ui.common.RequestViewModel;
 import com.dialogapp.dialog.util.SharedPrefUtil;
 
@@ -155,9 +155,11 @@ public class ProfileActivity extends BaseInjectableActivity implements BaseListF
     public void onLoadError(String message) {
         Snackbar errorBar = Snackbar.make(coordinatorLayout, R.string.connection_error, Snackbar.LENGTH_LONG);
         errorBar.setAction("Show error", view -> {
-            AlertDialogFragment alertDialog = AlertDialogFragment
-                    .newInstance("Connection Error", message);
-            alertDialog.show(getSupportFragmentManager(), "ErrorAlertDialogFragment");
+            new MaterialDialog.Builder(this)
+                    .title("Connection Error")
+                    .content(message)
+                    .positiveText(R.string.dialog_dismiss)
+                    .show();
         });
         errorBar.show();
     }
