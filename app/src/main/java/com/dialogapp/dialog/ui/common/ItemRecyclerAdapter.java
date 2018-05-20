@@ -7,12 +7,19 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.recyclerview.extensions.ListAdapter;
 import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.SpannableString;
+import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.ImageSpan;
+import android.text.style.QuoteSpan;
+import android.text.style.URLSpan;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,6 +34,7 @@ import com.dialogapp.dialog.R;
 import com.dialogapp.dialog.model.Item;
 import com.dialogapp.dialog.util.GlideImageGetter;
 import com.dialogapp.dialog.util.Objects;
+import com.dialogapp.dialog.util.CustomQuoteSpan;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
@@ -218,6 +226,10 @@ public class ItemRecyclerAdapter extends ListAdapter<Item, ItemRecyclerAdapter.P
         boolean onMenuItemClicked(int menuItemId, Item item);
 
         void onReplyButtonClicked(String id, String username);
+
+        void onLinkClicked(boolean isInternalLink, String text);
+
+        void onImageClick(String imageUrl);
     }
 
     public class PostViewHolder extends RecyclerView.ViewHolder implements PopupMenu.OnMenuItemClickListener {
@@ -291,9 +303,66 @@ public class ItemRecyclerAdapter extends ListAdapter<Item, ItemRecyclerAdapter.P
             }
             spannedText = getSpanned(contentHtml, imageGetter);
 
-            LinkClickHandler.makeLinksClickable(context, spannedText);
+            setSpans(spannedText);
             content.setText(trimTrailingWhitespace(spannedText));
             content.setMovementMethod(LinkMovementMethod.getInstance());
+        }
+
+        private void setSpans(SpannableString text) {
+            for (final ImageSpan span : text.getSpans(0, text.length(), ImageSpan.class)) {
+                int flags = text.getSpanFlags(span);
+                int start = text.getSpanStart(span);
+                int end = text.getSpanEnd(span);
+
+                text.setSpan(new ClickableSpan() {
+                    @Override
+                    public void onClick(View widget) {
+                        listener.onImageClick(span.getSource());
+                    }
+                }, start, end, flags);
+            }
+
+            for (URLSpan span : text.getSpans(0, text.length(), URLSpan.class)) {
+                int start = text.getSpanStart(span);
+                int end = text.getSpanEnd(span);
+                int flags = text.getSpanFlags(span);
+
+                text.setSpan(new ClickableSpan() {
+                    @Override
+                    public void onClick(View view) {
+                        if (text.charAt(start) == '@')
+                            listener.onLinkClicked(true, text.subSequence(start + 1, end).toString());
+                        else
+                            listener.onLinkClicked(false, span.getURL());
+                    }
+                }, start, end, flags);
+
+                if (text.charAt(start) == '@') {
+                    text.removeSpan(span);
+                    text.setSpan(new URLSpan(span.getURL()) {
+                        @Override
+                        public void updateDrawState(TextPaint ds) {
+                            super.updateDrawState(ds);
+                            ds.setUnderlineText(false);
+                        }
+                    }, start, end, 0);
+
+                    if (isNight())
+                        text.setSpan(new ForegroundColorSpan(Color.WHITE), start, end, flags);
+                    else
+                        text.setSpan(new ForegroundColorSpan(ContextCompat.getColor(context, R.color.primary_text_default_material_light)), start, end, flags);
+                }
+            }
+
+            int primaryColor = ResourcesCompat.getColor(context.getResources(), R.color.reda200, null);
+
+            for(QuoteSpan span : text.getSpans(0, text.length(), QuoteSpan.class)) {
+                CustomQuoteSpan quoteSpan = new CustomQuoteSpan(primaryColor, 4, 8);
+                int start = text.getSpanStart(span);
+                int end = text.getSpanEnd(span);
+                text.removeSpan(span);
+                text.setSpan(quoteSpan, start, end, 0);
+            }
         }
 
         /**

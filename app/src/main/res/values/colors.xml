@@ -24,4 +24,6 @@
     <color name="reda200">#ff5252</color>
     <color name="bluegrey300">#90A4AE</color>
     <color name="blue700">#1E88E5</color>
+
+    <color name="primary_text_default_material_light">#de000000</color>
 </resources>

@@ -28,6 +28,7 @@ import com.dialogapp.dialog.ui.common.ItemRecyclerAdapter;
 import com.dialogapp.dialog.ui.common.ReplyBottomSheetDialogFragment;
 import com.dialogapp.dialog.ui.common.RequestViewModel;
 import com.dialogapp.dialog.ui.conversation.ConversationActivity;
+import com.dialogapp.dialog.ui.imageviewer.ImageViewerActivity;
 import com.dialogapp.dialog.ui.profilescreen.ProfileActivity;
 import com.dialogapp.dialog.util.Event;
 import com.dialogapp.dialog.util.InsetDividerDecoration;
@@ -170,6 +171,25 @@ public abstract class BaseListFragment extends Fragment implements Injectable, I
             requestViewModel.sendReply(postId, text);
         });
         bottom.show(getFragmentManager(), "ReplyBottomSheetFragment");
+    }
+
+    @Override
+    public void onLinkClicked(boolean isInternalLink, String text) {
+        if (isInternalLink) {
+            Intent intent = new Intent(getActivity(), ProfileActivity.class);
+            intent.putExtra(ProfileActivity.EXTRA_USERNAME, text);
+            startActivity(intent);
+        } else {
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(text));
+            startActivity(intent);
+        }
+    }
+
+    @Override
+    public void onImageClick(String imageUrl) {
+        Intent intent = new Intent(getActivity(), ImageViewerActivity.class);
+        intent.putExtra(ImageViewerActivity.EXTRA_IMAGE_URL, imageUrl);
+        startActivity(intent);
     }
 
     @Override
