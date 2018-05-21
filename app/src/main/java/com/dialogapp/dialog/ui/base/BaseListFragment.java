@@ -12,6 +12,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -31,7 +32,6 @@ import com.dialogapp.dialog.ui.conversation.ConversationActivity;
 import com.dialogapp.dialog.ui.imageviewer.ImageViewerActivity;
 import com.dialogapp.dialog.ui.profilescreen.ProfileActivity;
 import com.dialogapp.dialog.util.Event;
-import com.dialogapp.dialog.util.InsetDividerDecoration;
 import com.dialogapp.dialog.util.Resource;
 import com.dialogapp.dialog.util.Status;
 
@@ -125,7 +125,7 @@ public abstract class BaseListFragment extends Fragment implements Injectable, I
         adapter.setListener(this);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity(), LinearLayoutManager.VERTICAL, false));
-        recyclerView.addItemDecoration(new InsetDividerDecoration(this.getActivity()));
+        recyclerView.addItemDecoration(new DividerItemDecoration(this.getActivity(), DividerItemDecoration.VERTICAL));
         recyclerView.setAdapter(adapter);
 
         requestViewModel = ViewModelProviders.of(this, viewModelFactory).get(RequestViewModel.class);

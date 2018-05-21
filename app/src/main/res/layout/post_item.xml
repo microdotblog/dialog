@@ -4,14 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/post_item"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="?attr/selectableItemBackground"
-    android:clickable="true"
-    android:focusable="true">
+    android:layout_height="wrap_content">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/image_thumbnail"
-        android:layout_width="48dp"
+        android:layout_width="@dimen/post_image_profile"
         android:layout_height="@dimen/post_image_profile"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
@@ -58,38 +55,38 @@
 
     <ImageButton
         android:id="@+id/button_reply_send"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:background="?attr/selectableItemBackground"
+        android:layout_marginStart="8dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
         android:padding="8dp"
         android:src="@drawable/ic_reply_black_24dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/button_conversation"
+        app:layout_constraintStart_toEndOf="@+id/image_thumbnail"
         app:layout_constraintTop_toBottomOf="@+id/text_content" />
 
     <ImageButton
         android:id="@+id/button_conversation"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:background="?attr/selectableItemBackground"
+        android:layout_marginStart="8dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
         android:padding="8dp"
         android:src="@drawable/ic_forum_black_24dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/button_favorite"
+        app:layout_constraintStart_toEndOf="@+id/button_favorite"
         app:layout_constraintTop_toBottomOf="@+id/text_content" />
 
     <ImageButton
         android:id="@+id/button_favorite"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:background="?attr/selectableItemBackground"
+        android:layout_marginStart="8dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
         android:padding="8dp"
         android:src="@drawable/ic_star_black_24dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/button_post_options"
+        app:layout_constraintStart_toEndOf="@+id/button_reply_send"
         app:layout_constraintTop_toBottomOf="@+id/text_content" />
 
     <ImageButton

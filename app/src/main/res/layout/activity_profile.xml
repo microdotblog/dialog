@@ -23,11 +23,10 @@
 
             <ImageButton
                 android:id="@+id/button_follow"
+                style="@style/Widget.AppCompat.Toolbar.Button.Navigation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
-                android:background="?attr/selectableItemBackground"
-                android:padding="16dp"
                 android:visibility="invisible" />
         </android.support.v7.widget.Toolbar>
 
