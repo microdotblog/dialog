@@ -8,6 +8,7 @@ import android.graphics.Rect;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -156,7 +157,9 @@ public class GlideImageGetter implements Html.ImageGetter, Drawable.Callback {
          */
         private final Drawable nullObject = new ColorDrawable(Color.TRANSPARENT);
         private final CircularProgressDrawable progressDrawable = new CircularProgressDrawable(context);
+        private final ColorDrawable placeholderDrawable = new ColorDrawable(ContextCompat.getColor(context, R.color.grey300));
         private final DrawableWrapper wrapper = new DrawableWrapper(null/* temporarily null until a setDrawable call*/);
+        private LayerDrawable layerDrawable;
 
         public WrapperTarget(int width, int height) {
             super(width, height);
@@ -164,6 +167,9 @@ public class GlideImageGetter implements Html.ImageGetter, Drawable.Callback {
             // set wrapper bounds to fix the height of the view, TextViews don't like ImageSpans changing dimensions
             wrapper.setBounds(0, 0, width, height);
 
+            Drawable[] drawables = new Drawable[] {placeholderDrawable, progressDrawable};
+            layerDrawable = new LayerDrawable(drawables);
+            wrapper.setWrappedDrawable(layerDrawable);
             progressDrawable.setStyle(CircularProgressDrawable.DEFAULT);
             progressDrawable.setColorSchemeColors(ContextCompat.getColor(context, R.color.reda200));
         }
@@ -175,18 +181,12 @@ public class GlideImageGetter implements Html.ImageGetter, Drawable.Callback {
         @Override
         public void onLoadStarted(Drawable placeholder) {
             progressDrawable.start();
-            setDrawable(progressDrawable);
+            setDrawable(layerDrawable);
         }
 
         @Override
         public void onLoadFailed(@Nullable Drawable errorDrawable) {
             progressDrawable.stop();
-            if (shouldLoadImages == 0 || (shouldLoadImages == 1 && isConnectedToWifi)) {
-                errorDrawable = ContextCompat.getDrawable(context, R.drawable.ic_broken_image_grey_24dp);
-            } else {
-                errorDrawable = ContextCompat.getDrawable(context, R.drawable.ic_image_grey_24px);
-            }
-            setDrawable(errorDrawable);
         }
 
         @Override
@@ -200,7 +200,6 @@ public class GlideImageGetter implements Html.ImageGetter, Drawable.Callback {
         @Override
         public void onLoadCleared(Drawable placeholder) {
             progressDrawable.stop();
-            setDrawable(placeholder);
         }
 
         private void setDrawable(Drawable drawable) {
