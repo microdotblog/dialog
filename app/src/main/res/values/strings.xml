@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Dialog</string>
-    <string name="app_version">v1.0.0</string>
 
     <string name="activity_favorites">Favorites</string>
 

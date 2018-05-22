@@ -5,7 +5,9 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.widget.TextView;
 
+import com.dialogapp.dialog.BuildConfig;
 import com.dialogapp.dialog.R;
 
 import butterknife.BindView;
@@ -21,6 +23,9 @@ public class AboutActivity extends AppCompatActivity {
     @BindView(R.id.collapsing_toolbar_about)
     CollapsingToolbarLayout collapsingToolbarLayout;
 
+    @BindView(R.id.version)
+    TextView version;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,6 +35,8 @@ public class AboutActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        version.setText("v" + BuildConfig.VERSION_NAME);
 
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             boolean mIsShown = false;
