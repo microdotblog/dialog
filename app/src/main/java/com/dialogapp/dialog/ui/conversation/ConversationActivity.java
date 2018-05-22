@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
-import android.view.MenuItem;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.dialogapp.dialog.R;
@@ -43,18 +42,6 @@ public class ConversationActivity extends BaseInjectableActivity implements Base
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.frame_container, ConversationFragment.newInstance(postId))
                     .commit();
-        }
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                return true;
-
-            default:
-                return super.onOptionsItemSelected(item);
         }
     }
 

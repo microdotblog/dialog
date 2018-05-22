@@ -114,6 +114,15 @@ public class MainActivity extends BaseInjectableActivity implements BaseListFrag
     }
 
     @Override
+    public void onBackPressed() {
+        if (drawerLayout.isDrawerVisible(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
