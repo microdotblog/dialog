@@ -9,7 +9,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DividerItemDecoration;
@@ -26,7 +25,7 @@ import com.dialogapp.dialog.R;
 import com.dialogapp.dialog.di.Injectable;
 import com.dialogapp.dialog.model.Item;
 import com.dialogapp.dialog.ui.common.ItemRecyclerAdapter;
-import com.dialogapp.dialog.ui.common.ReplyBottomSheetDialogFragment;
+import com.dialogapp.dialog.ui.common.ReplyActivity;
 import com.dialogapp.dialog.ui.common.RequestViewModel;
 import com.dialogapp.dialog.ui.conversation.ConversationActivity;
 import com.dialogapp.dialog.ui.imageviewer.ImageViewerActivity;
@@ -76,22 +75,6 @@ public abstract class BaseListFragment extends Fragment implements Injectable, I
         }
     };
 
-    private final Observer<Event<Resource<Boolean>>> replyRequestObserver = booleanResource -> {
-        if (booleanResource.getContentIfNotHandled() != null) {
-            if (booleanResource.peekContent().data) {
-                Toast.makeText(getActivity(), "Refresh view", Toast.LENGTH_SHORT).show();
-            } else {
-                Snackbar snackbar = Snackbar.make(((ViewGroup) getActivity().findViewById(android.R.id.content)).getChildAt(0),
-                        "Could not send reply", Snackbar.LENGTH_LONG);
-                snackbar.setAction(R.string.retry_reply, view -> {
-                    requestViewModel.retryReply();
-                    snackbar.dismiss();
-                });
-                snackbar.show();
-            }
-        }
-    };
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -131,9 +114,6 @@ public abstract class BaseListFragment extends Fragment implements Injectable, I
         requestViewModel = ViewModelProviders.of(this, viewModelFactory).get(RequestViewModel.class);
         requestViewModel.getResponseFavorite().removeObserver(requestObserver);
         requestViewModel.getResponseFavorite().observe(this, requestObserver);
-
-        requestViewModel.getResponseReply().removeObserver(replyRequestObserver);
-        requestViewModel.getResponseReply().observe(this, replyRequestObserver);
     }
 
     @Override
@@ -164,13 +144,10 @@ public abstract class BaseListFragment extends Fragment implements Injectable, I
 
     @Override
     public void onReplyButtonClicked(String postId, String username) {
-        ReplyBottomSheetDialogFragment bottom = ReplyBottomSheetDialogFragment.newInstance(postId, username);
-        bottom.setCancelable(false);
-        bottom.setSendButtonListener(text -> {
-            Toast.makeText(getActivity(), "Sending...", Toast.LENGTH_SHORT).show();
-            requestViewModel.sendReply(postId, text);
-        });
-        bottom.show(getFragmentManager(), "ReplyBottomSheetFragment");
+        Intent intent = new Intent(getActivity(), ReplyActivity.class);
+        intent.putExtra(ReplyActivity.EXTRA_POSTID, postId);
+        intent.putExtra(ReplyActivity.EXTRA_USERNAME, username);
+        startActivity(intent);
     }
 
     @Override

@@ -46,6 +46,11 @@
             android:name=".ui.settings.AboutActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Settings" />
+        <activity
+            android:name=".ui.common.ReplyActivity"
+            android:label="Reply"
+            android:theme="@style/AppTheme.Translucent"
+            android:windowSoftInputMode="adjustResize|stateVisible" />
     </application>
 
 </manifest>
