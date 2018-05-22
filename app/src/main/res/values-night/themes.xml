@@ -7,10 +7,6 @@
         <item name="colorPrimary">@color/grey800</item>
         <item name="colorPrimaryDark">@color/grey900</item>
         <item name="colorAccent">@color/grey400</item>
-        <item name="colorCardBackground">@color/grey800</item>
-        <item name="colorNavDrawer">@color/grey850</item>
-        <item name="colorDivider">@color/whitea12</item>
-        <item name="colorDrawerIcons">@android:color/white</item>
         <item name="bottomSheetDialogTheme">@style/Theme.Design.BottomSheetDialog</item>
         <item name="android:statusBarColor">@android:color/black</item>
         <item name="android:textColorPrimary">@color/grey50</item>
@@ -28,6 +24,4 @@
         <item name="android:textColorSecondary">@color/whitea70</item>
         <item name="android:windowBackground">@color/grey850</item>
     </style>
-
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 </resources>

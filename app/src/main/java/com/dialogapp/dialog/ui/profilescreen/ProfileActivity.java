@@ -2,6 +2,7 @@ package com.dialogapp.dialog.ui.profilescreen;
 
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
@@ -9,7 +10,6 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.TooltipCompat;
-import android.util.TypedValue;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
@@ -115,13 +115,14 @@ public class ProfileActivity extends BaseInjectableActivity implements BaseListF
     @Override
     public void onUserDataLoadSuccess(UserInfo userInfo) {
         if (userInfo != null) {
-            TypedValue outValue = new TypedValue();
-            getTheme().resolveAttribute(R.attr.colorCardBackground, outValue, true);
+            TypedArray a = getTheme().obtainStyledAttributes(new int[]{android.R.attr.windowBackground});
+            int resId = a.getResourceId(0, 0);
             Glide.with(this)
                     .load(userInfo.author_author_avatar_url)
-                    .apply(RequestOptions.placeholderOf(outValue.resourceId))
+                    .apply(RequestOptions.placeholderOf(resId))
                     .apply(RequestOptions.noAnimation())
                     .into(avatar);
+            a.recycle();
             fullname.setText(userInfo.author_author_name);
             if (!userInfo.author_author_url.isEmpty())
                 website.setText(userInfo.author_author_url);

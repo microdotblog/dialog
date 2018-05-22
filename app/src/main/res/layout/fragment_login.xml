@@ -29,7 +29,6 @@
         android:layout_marginBottom="72dp"
         android:layout_marginEnd="24dp"
         android:layout_marginStart="24dp"
-        app:cardBackgroundColor="?attr/colorCardBackground"
         app:cardElevation="5dp"
         app:layout_constraintBottom_toTopOf="@+id/text_login_about"
         app:layout_constraintEnd_toEndOf="parent"
