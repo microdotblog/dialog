@@ -171,7 +171,7 @@ public abstract class BaseListFragment extends Fragment implements Injectable, I
     }
 
     @Override
-    public void onImageClick(String imageUrl) {
+    public void onImageClicked(String imageUrl) {
         Intent intent = new Intent(getActivity(), ImageViewerActivity.class);
         intent.putExtra(ImageViewerActivity.EXTRA_IMAGE_URL, imageUrl);
         startActivity(intent);

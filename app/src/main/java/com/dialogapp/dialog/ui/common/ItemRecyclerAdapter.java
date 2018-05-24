@@ -21,7 +21,6 @@ import android.text.style.ImageSpan;
 import android.text.style.QuoteSpan;
 import android.text.style.URLSpan;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -32,9 +31,9 @@ import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
 import com.dialogapp.dialog.R;
 import com.dialogapp.dialog.model.Item;
+import com.dialogapp.dialog.util.CustomQuoteSpan;
 import com.dialogapp.dialog.util.GlideImageGetter;
 import com.dialogapp.dialog.util.Objects;
-import com.dialogapp.dialog.util.CustomQuoteSpan;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
@@ -117,7 +116,7 @@ public class ItemRecyclerAdapter extends ListAdapter<Item, ItemRecyclerAdapter.P
     public PostViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         final View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.post_item, parent, false);
-        return new PostViewHolder(view);
+        return new PostViewHolder(view, glide, this);
     }
 
     @Override
@@ -229,10 +228,10 @@ public class ItemRecyclerAdapter extends ListAdapter<Item, ItemRecyclerAdapter.P
 
         void onLinkClicked(boolean isInternalLink, String text);
 
-        void onImageClick(String imageUrl);
+        void onImageClicked(String imageUrl);
     }
 
-    public class PostViewHolder extends RecyclerView.ViewHolder implements PopupMenu.OnMenuItemClickListener {
+    public static class PostViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.image_thumbnail)
         CircleImageView thumbnail;
 
@@ -257,40 +256,42 @@ public class ItemRecyclerAdapter extends ListAdapter<Item, ItemRecyclerAdapter.P
         @BindView(R.id.button_post_options)
         ImageButton optionsButtons;
 
-        public PostViewHolder(View itemView) {
+        private RequestManager glide;
+        private ItemRecyclerAdapter adapter;
+
+        public PostViewHolder(View itemView, RequestManager glide, ItemRecyclerAdapter adapter) {
             super(itemView);
+            this.glide = glide;
+            this.adapter = adapter;
             ButterKnife.bind(this, itemView);
 
             favoriteButton.setOnClickListener(v -> {
-                listener.onFavoriteButtonClicked(getItem(getAdapterPosition()).id,
-                        !getItem(getAdapterPosition()).microblog.isFavorite);
+                adapter.listener.onFavoriteButtonClicked(adapter.getItem(getAdapterPosition()).id,
+                        !adapter.getItem(getAdapterPosition()).microblog.isFavorite);
             });
 
             conversationButton.setOnClickListener(v -> {
-                listener.onConversationButtonClicked(getItem(getAdapterPosition()).id);
+                adapter.listener.onConversationButtonClicked(adapter.getItem(getAdapterPosition()).id);
             });
 
             replyButton.setOnClickListener(v -> {
-                listener.onReplyButtonClicked(getItem(getAdapterPosition()).id,
-                        getItem(getAdapterPosition()).author.microblog.username);
+                adapter.listener.onReplyButtonClicked(adapter.getItem(getAdapterPosition()).id,
+                        adapter.getItem(getAdapterPosition()).author.microblog.username);
             });
 
             thumbnail.setOnClickListener(view -> {
-                listener.onAvatarClicked(getItem(getAdapterPosition()).author.microblog.username);
+                adapter.listener.onAvatarClicked(adapter.getItem(getAdapterPosition()).author.microblog.username);
             });
 
             optionsButtons.setOnClickListener(v -> {
-                PopupMenu popupMenu = new PopupMenu(context, v);
-                popupMenu.setOnMenuItemClickListener(this);
+                PopupMenu popupMenu = new PopupMenu(v.getContext(), v);
+                popupMenu.setOnMenuItemClickListener(item -> {
+                    adapter.listener.onMenuItemClicked(item.getItemId(), adapter.getItem(getAdapterPosition()));
+                    return true;
+                });
                 popupMenu.inflate(R.menu.post_options_popup);
                 popupMenu.show();
             });
-        }
-
-
-        @Override
-        public boolean onMenuItemClick(MenuItem menuItem) {
-            return listener.onMenuItemClicked(menuItem.getItemId(), getItem(getAdapterPosition()));
         }
 
         void bindHtmlContent(String contentHtml) {
@@ -317,7 +318,7 @@ public class ItemRecyclerAdapter extends ListAdapter<Item, ItemRecyclerAdapter.P
                 text.setSpan(new ClickableSpan() {
                     @Override
                     public void onClick(View widget) {
-                        listener.onImageClick(span.getSource());
+                        adapter.listener.onImageClicked(span.getSource());
                     }
                 }, start, end, flags);
             }
@@ -331,9 +332,9 @@ public class ItemRecyclerAdapter extends ListAdapter<Item, ItemRecyclerAdapter.P
                     @Override
                     public void onClick(View view) {
                         if (text.charAt(start) == '@')
-                            listener.onLinkClicked(true, text.subSequence(start + 1, end).toString());
+                            adapter.listener.onLinkClicked(true, text.subSequence(start + 1, end).toString());
                         else
-                            listener.onLinkClicked(false, span.getURL());
+                            adapter.listener.onLinkClicked(false, span.getURL());
                     }
                 }, start, end, flags);
 
@@ -347,14 +348,14 @@ public class ItemRecyclerAdapter extends ListAdapter<Item, ItemRecyclerAdapter.P
                         }
                     }, start, end, 0);
 
-                    if (isNight())
+                    if (adapter.isNight())
                         text.setSpan(new ForegroundColorSpan(Color.WHITE), start, end, flags);
                     else
-                        text.setSpan(new ForegroundColorSpan(ContextCompat.getColor(context, R.color.primary_text_default_material_light)), start, end, flags);
+                        text.setSpan(new ForegroundColorSpan(ContextCompat.getColor(adapter.context, R.color.primary_text_default_material_light)), start, end, flags);
                 }
             }
 
-            int primaryColor = ResourcesCompat.getColor(context.getResources(), R.color.reda200, null);
+            int primaryColor = ResourcesCompat.getColor(adapter.context.getResources(), R.color.reda200, null);
 
             for(QuoteSpan span : text.getSpans(0, text.length(), QuoteSpan.class)) {
                 CustomQuoteSpan quoteSpan = new CustomQuoteSpan(primaryColor, 4, 8);
