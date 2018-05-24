@@ -20,6 +20,7 @@ import com.bumptech.glide.Glide;
 import com.dialogapp.dialog.R;
 import com.dialogapp.dialog.di.Injectable;
 import com.dialogapp.dialog.model.AccountInfo;
+import com.dialogapp.dialog.ui.base.BaseNetworkWatcherActivity;
 import com.dialogapp.dialog.util.Resource;
 import com.dialogapp.dialog.util.Status;
 
@@ -97,6 +98,14 @@ public class FollowingFragment extends Fragment implements Injectable {
             swipeRefreshLayout.setRefreshing(true);
             viewModel.refreshFollowingData();
         });
+
+        ((BaseNetworkWatcherActivity) getActivity()).connectionViewModel.getConnectionStatus()
+                .observe(getActivity(), isConnected -> {
+                    if (isConnected != null && isConnected)
+                        swipeRefreshLayout.setEnabled(true);
+                    else
+                        swipeRefreshLayout.setEnabled(false);
+                });
     }
 
     @Override

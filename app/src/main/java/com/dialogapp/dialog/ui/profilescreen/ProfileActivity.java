@@ -5,7 +5,6 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
@@ -15,13 +14,11 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.dialogapp.dialog.R;
 import com.dialogapp.dialog.model.UserInfo;
-import com.dialogapp.dialog.ui.base.BaseInjectableActivity;
-import com.dialogapp.dialog.ui.base.BaseListFragment;
+import com.dialogapp.dialog.ui.base.BaseListActivity;
 import com.dialogapp.dialog.ui.common.RequestViewModel;
 import com.dialogapp.dialog.util.SharedPrefUtil;
 
@@ -31,8 +28,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class ProfileActivity extends BaseInjectableActivity implements BaseListFragment.FragmentEventListener,
-        ProfileFragment.UserDataEventListener {
+public class ProfileActivity extends BaseListActivity implements ProfileFragment.UserDataEventListener {
     public static final String EXTRA_USERNAME = ProfileActivity.class.getName() + ".EXTRA_USERNAME";
 
     @Inject
@@ -80,6 +76,7 @@ public class ProfileActivity extends BaseInjectableActivity implements BaseListF
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setErrorBar(coordinatorLayout);
 
         toolbar.setTitle(getIntent().getStringExtra(EXTRA_USERNAME));
         initFavButton();
@@ -137,19 +134,6 @@ public class ProfileActivity extends BaseInjectableActivity implements BaseListF
     @Override
     public void onUserDataLoading() {
         followButton.setEnabled(false);
-    }
-
-    @Override
-    public void onLoadError(String message) {
-        Snackbar errorBar = Snackbar.make(coordinatorLayout, R.string.connection_error, Snackbar.LENGTH_LONG);
-        errorBar.setAction("Show error", view -> {
-            new MaterialDialog.Builder(this)
-                    .title("Connection Error")
-                    .content(message)
-                    .positiveText(R.string.dialog_dismiss)
-                    .show();
-        });
-        errorBar.show();
     }
 
     private void setupViewpager() {

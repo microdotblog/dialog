@@ -104,6 +104,14 @@ public abstract class BaseListFragment extends Fragment implements Injectable, I
 
         swipeRefreshLayout.setOnRefreshListener(this::refresh);
 
+        ((BaseNetworkWatcherActivity) getActivity()).connectionViewModel
+                .getConnectionStatus().observe(getActivity(), isConnected -> {
+            if (isConnected != null && isConnected)
+                swipeRefreshLayout.setEnabled(true);
+            else
+                swipeRefreshLayout.setEnabled(false);
+        });
+
         adapter = new ItemRecyclerAdapter(this.getActivity(), Glide.with(this));
         adapter.setListener(this);
 
@@ -213,8 +221,7 @@ public abstract class BaseListFragment extends Fragment implements Injectable, I
     }
 
     public interface FragmentEventListener {
-        default void onLoadSuccess(Object data) {
-        }
+        void onLoadSuccess(Object data);
 
         void onLoadError(String message);
     }

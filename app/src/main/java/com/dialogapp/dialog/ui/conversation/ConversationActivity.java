@@ -3,20 +3,16 @@ package com.dialogapp.dialog.ui.conversation;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.dialogapp.dialog.R;
-import com.dialogapp.dialog.ui.base.BaseInjectableActivity;
-import com.dialogapp.dialog.ui.base.BaseListFragment;
+import com.dialogapp.dialog.ui.base.BaseListActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ConversationActivity extends BaseInjectableActivity implements BaseListFragment.FragmentEventListener {
+public class ConversationActivity extends BaseListActivity {
     public static final String EXTRA_POST_ID = ConversationActivity.class.getName() + ".EXTRA_POST_ID";
-    private Snackbar errorBar;
 
     @BindView(R.id.toolbar_container)
     Toolbar toolbar;
@@ -29,8 +25,7 @@ public class ConversationActivity extends BaseInjectableActivity implements Base
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_container);
         ButterKnife.bind(this);
-
-        errorBar = Snackbar.make(coordinatorLayout, R.string.connection_error, Snackbar.LENGTH_LONG);
+        setErrorBar(coordinatorLayout);
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -42,20 +37,6 @@ public class ConversationActivity extends BaseInjectableActivity implements Base
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.frame_container, ConversationFragment.newInstance(postId))
                     .commit();
-        }
-    }
-
-    @Override
-    public void onLoadError(String message) {
-        if (!errorBar.isShownOrQueued()) {
-            errorBar.setAction("Show error", view -> {
-                new MaterialDialog.Builder(this)
-                        .title("Connection Error")
-                        .content(message)
-                        .positiveText(R.string.dialog_dismiss)
-                        .show();
-            });
-            errorBar.show();
         }
     }
 }

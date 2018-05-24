@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
@@ -23,8 +22,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.dialogapp.dialog.R;
-import com.dialogapp.dialog.ui.base.BaseInjectableActivity;
-import com.dialogapp.dialog.ui.base.BaseListFragment;
+import com.dialogapp.dialog.ui.base.BaseListActivity;
 import com.dialogapp.dialog.ui.favorites.FavoritesActivity;
 import com.dialogapp.dialog.ui.loginscreen.LoginActivity;
 import com.dialogapp.dialog.ui.mainscreen.DiscoverFragment;
@@ -38,13 +36,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class MainActivity extends BaseInjectableActivity implements BaseListFragment.FragmentEventListener,
-        NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends BaseListActivity implements NavigationView.OnNavigationItemSelectedListener {
     private String[] category = {"Recent", "Books", "Music", "Podcasts"};
 
     private ViewPager viewPager;
-    private Snackbar errorBar;
-    private boolean errorHasBeenShown;
 
     @Inject
     SharedPrefUtil sharedPrefUtil;
@@ -74,8 +69,7 @@ public class MainActivity extends BaseInjectableActivity implements BaseListFrag
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu_white_24px);
-
-        errorBar = Snackbar.make(coordinatorLayout, R.string.connection_error, Snackbar.LENGTH_LONG);
+        setErrorBar(coordinatorLayout);
 
         navigationView.setNavigationItemSelectedListener(this);
         setSpinnerDiscover();
@@ -96,21 +90,6 @@ public class MainActivity extends BaseInjectableActivity implements BaseListFrag
         });
 
         setupViewpager();
-    }
-
-    @Override
-    public void onLoadError(String message) {
-        if (!errorHasBeenShown && !errorBar.isShownOrQueued()) {
-            errorBar.setAction("Show error", view -> {
-                new MaterialDialog.Builder(this)
-                        .title("Connection Error")
-                        .content(message)
-                        .positiveText(R.string.dialog_dismiss)
-                        .show();
-            });
-            errorBar.show();
-            errorHasBeenShown = true;
-        }
     }
 
     @Override
