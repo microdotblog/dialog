@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 ext {
     versionMajor = 1
-    versionMinor = 0
+    versionMinor = 1
     versionPatch = 0
     minimumSdkVersion = 21
 
