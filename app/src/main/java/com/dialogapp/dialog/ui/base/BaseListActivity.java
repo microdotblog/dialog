@@ -13,6 +13,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.dialogapp.dialog.R;
 import com.dialogapp.dialog.ui.common.RequestViewModel;
 import com.dialogapp.dialog.util.NetworkUtil;
+import com.dialogapp.dialog.util.SharedPrefUtil;
 
 import javax.inject.Inject;
 
@@ -21,6 +22,9 @@ public abstract class BaseListActivity extends BaseNetworkWatcherActivity implem
 
     @Inject
     protected ViewModelProvider.Factory viewModelFactory;
+
+    @Inject
+    protected SharedPrefUtil sharedPrefUtil;
 
     protected RequestViewModel requestViewModel;
 
@@ -80,5 +84,21 @@ public abstract class BaseListActivity extends BaseNetworkWatcherActivity implem
 
     protected void setErrorBar(CoordinatorLayout coordinatorLayout) {
         errorBar = Snackbar.make(coordinatorLayout, R.string.connection_error, Snackbar.LENGTH_LONG);
+    }
+
+    protected boolean isUserSelf(String username) {
+        return getSavedUsername().equals(username);
+    }
+
+    protected String getSavedUsername() {
+        return sharedPrefUtil.getStringPreference(getString(R.string.pref_username), "");
+    }
+
+    protected String getSavedAvatarUrl() {
+        return sharedPrefUtil.getStringPreference(getString(R.string.pref_avatar_url), "");
+    }
+
+    protected String getSavedFullname() {
+        return sharedPrefUtil.getStringPreference(getString(R.string.pref_fullname), "");
     }
 }

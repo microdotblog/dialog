@@ -28,9 +28,6 @@ import com.dialogapp.dialog.ui.loginscreen.LoginActivity;
 import com.dialogapp.dialog.ui.mainscreen.DiscoverFragment;
 import com.dialogapp.dialog.ui.profilescreen.ProfileActivity;
 import com.dialogapp.dialog.ui.settings.SettingsActivity;
-import com.dialogapp.dialog.util.SharedPrefUtil;
-
-import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -40,9 +37,6 @@ public class MainActivity extends BaseListActivity implements NavigationView.OnN
     private String[] category = {"Recent", "Books", "Music", "Podcasts"};
 
     private ViewPager viewPager;
-
-    @Inject
-    SharedPrefUtil sharedPrefUtil;
 
     @BindView(R.id.nav_view)
     NavigationView navigationView;
@@ -80,11 +74,11 @@ public class MainActivity extends BaseListActivity implements NavigationView.OnN
         ImageView logout = navigationView.getHeaderView(0).findViewById(R.id.image_logout);
 
         Glide.with(this)
-                .load(sharedPrefUtil.getStringPreference(getString(R.string.pref_avatar_url), ""))
+                .load(getSavedAvatarUrl())
                 .apply(RequestOptions.noAnimation())
                 .into(imageView);
-        username.setText(sharedPrefUtil.getStringPreference(getString(R.string.pref_username), ""));
-        fullname.setText(sharedPrefUtil.getStringPreference(getString(R.string.pref_fullname), ""));
+        username.setText(getSavedUsername());
+        fullname.setText(getSavedFullname());
         logout.setOnClickListener(view -> {
             showLogoutDialog();
         });
@@ -119,7 +113,7 @@ public class MainActivity extends BaseListActivity implements NavigationView.OnN
         switch (id) {
             case R.id.menu_item_profile:
                 intent = new Intent(this, ProfileActivity.class);
-                intent.putExtra(ProfileActivity.EXTRA_USERNAME, sharedPrefUtil.getStringPreference(getString(R.string.pref_username), ""));
+                intent.putExtra(ProfileActivity.EXTRA_USERNAME, getSavedUsername());
                 break;
             case R.id.menu_item_fav:
                 intent = new Intent(this, FavoritesActivity.class);

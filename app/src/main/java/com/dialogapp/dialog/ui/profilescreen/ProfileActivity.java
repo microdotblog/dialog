@@ -19,9 +19,6 @@ import com.dialogapp.dialog.R;
 import com.dialogapp.dialog.model.UserInfo;
 import com.dialogapp.dialog.ui.base.BaseListActivity;
 import com.dialogapp.dialog.ui.common.RequestViewModel;
-import com.dialogapp.dialog.util.SharedPrefUtil;
-
-import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -29,9 +26,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ProfileActivity extends BaseListActivity implements ProfileFragment.UserDataEventListener {
     public static final String EXTRA_USERNAME = ProfileActivity.class.getName() + ".EXTRA_USERNAME";
-
-    @Inject
-    SharedPrefUtil sharedPrefUtil;
 
     private ProfileFragmentPagerAdapter adapter;
     private RequestViewModel viewModel;
@@ -91,8 +85,7 @@ public class ProfileActivity extends BaseListActivity implements ProfileFragment
             }
         });
 
-        if (sharedPrefUtil.getStringPreference(getString(R.string.pref_username), "")
-                .equals(username)) {
+        if (isUserSelf(username)) {
             findViewById(R.id.frame_profile).setVisibility(View.GONE);
             setupViewpager(username);
         } else {
