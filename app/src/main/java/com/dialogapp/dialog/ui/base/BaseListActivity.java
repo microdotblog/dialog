@@ -82,6 +82,11 @@ public abstract class BaseListActivity extends BaseNetworkWatcherActivity implem
         return connectionViewModel.getConnectionStatus();
     }
 
+    @Override
+    public boolean shouldColorUsernameLinks() {
+        return sharedPrefUtil.getBooleanPreference(getString(R.string.pref_color_username_links), false);
+    }
+
     protected void setErrorBar(CoordinatorLayout coordinatorLayout) {
         errorBar = Snackbar.make(coordinatorLayout, R.string.connection_error, Snackbar.LENGTH_LONG);
     }

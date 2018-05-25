@@ -101,11 +101,13 @@ public class ItemRecyclerAdapter extends ListAdapter<Item, ItemRecyclerAdapter.P
     PostItemOptionClickedListener listener;
     private RequestManager glide;
     private int currentNightMode;
+    private boolean shouldColorUsernameLinks;
 
-    public ItemRecyclerAdapter(Context context, RequestManager glide) {
+    public ItemRecyclerAdapter(Context context, RequestManager glide, boolean shouldColorUsernameLinks) {
         super(DIFF_CALLBACK);
         this.context = context;
         this.glide = glide;
+        this.shouldColorUsernameLinks = shouldColorUsernameLinks;
 
         currentNightMode = context.getResources().getConfiguration().uiMode
                 & Configuration.UI_MODE_NIGHT_MASK;
@@ -348,10 +350,12 @@ public class ItemRecyclerAdapter extends ListAdapter<Item, ItemRecyclerAdapter.P
                         }
                     }, start, end, 0);
 
-                    if (adapter.isNight())
-                        text.setSpan(new ForegroundColorSpan(Color.WHITE), start, end, flags);
-                    else
-                        text.setSpan(new ForegroundColorSpan(ContextCompat.getColor(adapter.context, R.color.primary_text_default_material_light)), start, end, flags);
+                    if (!adapter.shouldColorUsernameLinks) {
+                        if (adapter.isNight())
+                            text.setSpan(new ForegroundColorSpan(Color.WHITE), start, end, flags);
+                        else
+                            text.setSpan(new ForegroundColorSpan(ContextCompat.getColor(adapter.context, R.color.primary_text_default_material_light)), start, end, flags);
+                    }
                 }
                 text.removeSpan(span);
             }

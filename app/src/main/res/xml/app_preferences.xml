@@ -9,6 +9,12 @@
             android:defaultValue="1"
             android:summary="%s"
             android:title="Theme mode" />
+
+        <android.support.v7.preference.CheckBoxPreference
+            android:defaultValue="false"
+            android:key="@string/pref_color_username_links"
+            android:summary="Color username links with Accent color"
+            android:title="Colored username links" />
     </android.support.v7.preference.PreferenceCategory>
 
     <android.support.v7.preference.PreferenceCategory android:title="General">

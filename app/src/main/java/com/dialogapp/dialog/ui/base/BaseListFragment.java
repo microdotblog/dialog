@@ -86,7 +86,7 @@ public abstract class BaseListFragment extends Fragment implements Injectable, I
                 swipeRefreshLayout.setEnabled(false);
         });
 
-        adapter = new ItemRecyclerAdapter(this.getActivity(), Glide.with(this));
+        adapter = new ItemRecyclerAdapter(this.getActivity(), Glide.with(this), listener.shouldColorUsernameLinks());
         adapter.setListener(this);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity(), LinearLayoutManager.VERTICAL, false));
@@ -203,5 +203,7 @@ public abstract class BaseListFragment extends Fragment implements Injectable, I
         ViewModelProvider.Factory getViewModelFactory();
 
         LiveData<Boolean> getConnection();
+
+        boolean shouldColorUsernameLinks();
     }
 }
