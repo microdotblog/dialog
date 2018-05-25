@@ -7,4 +7,5 @@
     <string translatable="false" name="pref_nightMode">nightmode</string>
     <string translatable="false" name="pref_preloadImages">preloadimages</string>
     <string translatable="false" name="pref_color_username_links">colorusernamelinks</string>
+    <string translatable="false" name="pref_latest_release">latestrelease</string>
 </resources>

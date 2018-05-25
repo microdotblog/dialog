@@ -1,9 +1,15 @@
 package com.dialogapp.dialog.util;
 
 import android.app.Application;
+import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
+
+import com.dialogapp.dialog.BuildConfig;
+import com.dialogapp.dialog.R;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -11,6 +17,7 @@ import javax.inject.Singleton;
 @Singleton
 public class SharedPrefUtil {
     private static SharedPreferences preferences;
+    private static Boolean releaseNotesSeen;
 
     @Inject
     public SharedPrefUtil(Application app) {
@@ -112,5 +119,29 @@ public class SharedPrefUtil {
             return true;
         }
         return false;
+    }
+
+    public boolean isReleaseNotesSeen(Context context) {
+        if (releaseNotesSeen == null) {
+            PackageInfo info = null;
+            try {
+                info = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
+            } catch (PackageManager.NameNotFoundException e) {
+                // no op
+            }
+            // considered seen if first time install or last seen release is up to date
+            if (info != null && info.firstInstallTime == info.lastUpdateTime) {
+                setReleaseNotesSeen(context);
+            } else {
+                releaseNotesSeen = getIntegerPreference(context.getString(R.string.pref_latest_release), 0)
+                        >= BuildConfig.VERSION_CODE;
+            }
+        }
+        return releaseNotesSeen;
+    }
+
+    public void setReleaseNotesSeen(Context context) {
+        releaseNotesSeen = true;
+        setIntegerPreference(context.getString(R.string.pref_latest_release), BuildConfig.VERSION_CODE);
     }
 }

@@ -1,10 +1,12 @@
 package com.dialogapp.dialog.ui;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
@@ -23,6 +25,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.dialogapp.dialog.R;
 import com.dialogapp.dialog.ui.base.BaseListActivity;
+import com.dialogapp.dialog.ui.common.ChangelogDialog;
 import com.dialogapp.dialog.ui.favorites.FavoritesActivity;
 import com.dialogapp.dialog.ui.loginscreen.LoginActivity;
 import com.dialogapp.dialog.ui.mainscreen.DiscoverFragment;
@@ -84,6 +87,24 @@ public class MainActivity extends BaseListActivity implements NavigationView.OnN
         });
 
         setupViewpager();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (!sharedPrefUtil.isReleaseNotesSeen(this)) {
+            Snackbar snackbar = Snackbar.make(coordinatorLayout, "Dialog has been updated!",
+                    Snackbar.LENGTH_INDEFINITE);
+            snackbar.setAction("What's new",
+                    v -> {
+                        snackbar.dismiss();
+                        sharedPrefUtil.setReleaseNotesSeen(this);
+                        ChangelogDialog.create((getResources().getConfiguration().uiMode
+                                & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES)
+                                .show(getSupportFragmentManager(), "changelogdialog");
+                    })
+                    .show();
+        }
     }
 
     @Override

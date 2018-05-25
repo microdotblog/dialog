@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="release_notes" translatable="false">
+        <![CDATA[
+        <html>
+            <head>
+                <style type="text/css">
+                    * {
+                    word-wrap: break-word;
+                    }
+                    {style-placeholder}
+                    a {
+                    color: #{link-color};
+                    }
+                    ol {
+                    list-style-position: inside;
+                    padding-left: 0;
+                    padding-right: 0;
+                    }
+                    li:not(:first-child) {
+                    padding-top: 8px;
+                    }
+                </style>
+            </head>
+            <body>
+                <h5>1.1.0</h5>
+                <ul>
+                    <li>Improved reply feature</li>
+                    <li>UI tweaks and improvements, including:</li>
+                        <ul>
+                            <li>A better look for Blockquotes</li>
+                            <li>Option to change username link color</li>
+                        </ul>
+                    <li>Minor bug fixes</li>
+                </ul>
+            </body>
+        </html>
+        ]]>
+    </string>
+</resources>
