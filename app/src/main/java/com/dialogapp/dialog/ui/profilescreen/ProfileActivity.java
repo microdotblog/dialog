@@ -1,6 +1,5 @@
 package com.dialogapp.dialog.ui.profilescreen;
 
-import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.res.TypedArray;
 import android.os.Bundle;
@@ -30,9 +29,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ProfileActivity extends BaseListActivity implements ProfileFragment.UserDataEventListener {
     public static final String EXTRA_USERNAME = ProfileActivity.class.getName() + ".EXTRA_USERNAME";
-
-    @Inject
-    ViewModelProvider.Factory viewModelFactory;
 
     @Inject
     SharedPrefUtil sharedPrefUtil;
@@ -78,7 +74,8 @@ public class ProfileActivity extends BaseListActivity implements ProfileFragment
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setErrorBar(coordinatorLayout);
 
-        toolbar.setTitle(getIntent().getStringExtra(EXTRA_USERNAME));
+        String username = getIntent().getStringExtra(EXTRA_USERNAME);
+        toolbar.setTitle(username);
         initFavButton();
 
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(RequestViewModel.class);
@@ -93,7 +90,21 @@ public class ProfileActivity extends BaseListActivity implements ProfileFragment
                 }
             }
         });
-        setupViewpager();
+
+        if (sharedPrefUtil.getStringPreference(getString(R.string.pref_username), "")
+                .equals(username)) {
+            findViewById(R.id.frame_profile).setVisibility(View.GONE);
+            setupViewpager(username);
+        } else {
+            findViewById(R.id.view_pager_profile).setVisibility(View.GONE);
+            findViewById(R.id.frame_profile).setVisibility(View.VISIBLE);
+            tabLayout.addTab(tabLayout.newTab().setText("POSTS"));
+            if (savedInstanceState == null) {
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.frame_profile, ProfileFragment.newInstance(username))
+                        .commit();
+            }
+        }
     }
 
     @Override
@@ -136,13 +147,8 @@ public class ProfileActivity extends BaseListActivity implements ProfileFragment
         followButton.setEnabled(false);
     }
 
-    private void setupViewpager() {
-        adapter = new ProfileFragmentPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(ProfileFragment.newInstance(getIntent().getStringExtra(EXTRA_USERNAME)));
-        if (sharedPrefUtil.getStringPreference(getString(R.string.pref_username), "")
-                .equals(getIntent().getStringExtra(EXTRA_USERNAME))) {
-            adapter.addFragment(FollowingFragment.newInstance(getIntent().getStringExtra(EXTRA_USERNAME)));
-        }
+    private void setupViewpager(String username) {
+        adapter = new ProfileFragmentPagerAdapter(getSupportFragmentManager(), username);
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
     }

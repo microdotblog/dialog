@@ -3,33 +3,33 @@ package com.dialogapp.dialog.ui.profilescreen;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.app.FragmentPagerAdapter;
 
-import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-
-public class ProfileFragmentPagerAdapter extends FragmentStatePagerAdapter {
+public class ProfileFragmentPagerAdapter extends FragmentPagerAdapter {
 
     private final String[] TAB_TITLES = new String[]{"POSTS", "FOLLOWING"};
-    private ArrayList<WeakReference<Fragment>> fragments = new ArrayList<>();
+    private String username;
 
-    public ProfileFragmentPagerAdapter(FragmentManager fm) {
+    ProfileFragmentPagerAdapter(FragmentManager fm, String username) {
         super(fm);
-    }
-
-    public void addFragment(Fragment fragment) {
-        fragments.add(new WeakReference<>(fragment));
-        notifyDataSetChanged();
+        this.username = username;
     }
 
     @Override
     public Fragment getItem(int position) {
-        return fragments.get(position).get();
+        switch (position) {
+            case 0:
+                return ProfileFragment.newInstance(username);
+            case 1:
+                return FollowingFragment.newInstance(username);
+            default:
+                return null;
+        }
     }
 
     @Override
     public int getCount() {
-        return fragments.size();
+        return TAB_TITLES.length;
     }
 
     @Nullable
