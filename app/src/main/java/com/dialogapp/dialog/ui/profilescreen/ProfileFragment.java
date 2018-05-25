@@ -50,7 +50,7 @@ public class ProfileFragment extends BaseListFragment {
         super.onActivityCreated(savedInstanceState);
 
         swipeRefreshLayout.setRefreshing(true);
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(ProfileViewModel.class);
+        viewModel = ViewModelProviders.of(this, getViewModelFactory()).get(ProfileViewModel.class);
         viewModel.setUsername(username);
         viewModel.getUserInfo().observe(this, userInfoResource -> {
             if (userInfoResource != null && userInfoResource.data != null) {

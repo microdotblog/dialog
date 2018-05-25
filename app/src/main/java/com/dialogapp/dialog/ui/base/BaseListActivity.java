@@ -1,16 +1,44 @@
 package com.dialogapp.dialog.ui.base;
 
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.ViewModelProvider;
+import android.arch.lifecycle.ViewModelProviders;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.dialogapp.dialog.R;
+import com.dialogapp.dialog.ui.common.RequestViewModel;
 import com.dialogapp.dialog.util.NetworkUtil;
+
+import javax.inject.Inject;
 
 public abstract class BaseListActivity extends BaseNetworkWatcherActivity implements
         BaseListFragment.FragmentEventListener {
 
+    @Inject
+    protected ViewModelProvider.Factory viewModelFactory;
+
+    protected RequestViewModel requestViewModel;
+
     private Snackbar errorBar;
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        requestViewModel = ViewModelProviders.of(this, viewModelFactory).get(RequestViewModel.class);
+        requestViewModel.getResponseFavorite().observe(this, booleanResource -> {
+            if (booleanResource.getContentIfNotHandled() != null) {
+                if (!booleanResource.peekContent().data) {
+                    Toast.makeText(this, R.string.request_unsuccessful, Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
 
     @Override
     public void onLoadSuccess(Object data) {
@@ -33,6 +61,21 @@ public abstract class BaseListActivity extends BaseNetworkWatcherActivity implem
             }
             errorBar.show();
         }
+    }
+
+    @Override
+    public void onFavoriteButtonClicked(String postId, boolean state) {
+        requestViewModel.setFavoriteState(postId, state);
+    }
+
+    @Override
+    public ViewModelProvider.Factory getViewModelFactory() {
+        return viewModelFactory;
+    }
+
+    @Override
+    public LiveData<Boolean> getConnection() {
+        return connectionViewModel.getConnectionStatus();
     }
 
     protected void setErrorBar(CoordinatorLayout coordinatorLayout) {

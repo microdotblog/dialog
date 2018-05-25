@@ -50,7 +50,7 @@ public class ListFragment extends BaseListFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(ListViewModel.class);
+        viewModel = ViewModelProviders.of(this, getViewModelFactory()).get(ListViewModel.class);
         viewModel.setView(fragment);
         viewModel.getPosts().removeObserver(observer);
         viewModel.getPosts().observe(this, observer);

@@ -32,7 +32,7 @@ public class ConversationFragment extends BaseListFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(ConversationViewModel.class);
+        viewModel = ViewModelProviders.of(this, getViewModelFactory()).get(ConversationViewModel.class);
         viewModel.setPostId(postId);
         viewModel.getPosts().observe(this, listResource -> {
             if (listResource != null) {

@@ -13,7 +13,7 @@ public class FavoritesFragment extends BaseListFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(FavoritesViewModel.class);
+        viewModel = ViewModelProviders.of(this, getViewModelFactory()).get(FavoritesViewModel.class);
         viewModel.initView();
         viewModel.getPosts().observe(this, listResource -> {
             if (listResource != null) {

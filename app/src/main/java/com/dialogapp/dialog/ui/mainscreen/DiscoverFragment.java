@@ -23,7 +23,7 @@ public class DiscoverFragment extends BaseListFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(DiscoverViewModel.class);
+        viewModel = ViewModelProviders.of(this, getViewModelFactory()).get(DiscoverViewModel.class);
         viewModel.getPosts().removeObserver(observer);
         viewModel.getPosts().observe(this, observer);
     }

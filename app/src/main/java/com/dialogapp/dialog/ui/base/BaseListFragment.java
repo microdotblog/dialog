@@ -1,9 +1,7 @@
 package com.dialogapp.dialog.ui.base;
 
-import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModelProvider;
-import android.arch.lifecycle.ViewModelProviders;
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -18,7 +16,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.dialogapp.dialog.R;
@@ -26,17 +23,12 @@ import com.dialogapp.dialog.di.Injectable;
 import com.dialogapp.dialog.model.Item;
 import com.dialogapp.dialog.ui.common.ItemRecyclerAdapter;
 import com.dialogapp.dialog.ui.common.ReplyActivity;
-import com.dialogapp.dialog.ui.common.RequestViewModel;
 import com.dialogapp.dialog.ui.conversation.ConversationActivity;
 import com.dialogapp.dialog.ui.imageviewer.ImageViewerActivity;
 import com.dialogapp.dialog.ui.profilescreen.ProfileActivity;
-import com.dialogapp.dialog.util.Event;
-import com.dialogapp.dialog.util.Resource;
 import com.dialogapp.dialog.util.Status;
 
 import java.util.List;
-
-import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -47,10 +39,6 @@ import butterknife.Unbinder;
  */
 
 public abstract class BaseListFragment extends Fragment implements Injectable, ItemRecyclerAdapter.PostItemOptionClickedListener {
-    protected Unbinder unbinder;
-    protected FragmentEventListener listener;
-    protected ItemRecyclerAdapter adapter;
-
     @BindView(R.id.recycler_list)
     protected RecyclerView recyclerView;
 
@@ -60,27 +48,14 @@ public abstract class BaseListFragment extends Fragment implements Injectable, I
     @BindView(R.id.empty_list)
     protected TextView emptyPlaceholder;
 
-    @Inject
-    protected ViewModelProvider.Factory viewModelFactory;
-
-    protected RequestViewModel requestViewModel;
-
-    private final Observer<Event<Resource<Boolean>>> requestObserver = booleanResource -> {
-        if (booleanResource.getContentIfNotHandled() != null) {
-            if (booleanResource.peekContent().data) {
-                Toast.makeText(getActivity(), R.string.request_successful, Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(getActivity(), R.string.request_unsuccessful, Toast.LENGTH_SHORT).show();
-            }
-        }
-    };
+    private FragmentEventListener listener;
+    private Unbinder unbinder;
+    private ItemRecyclerAdapter adapter;
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-        // This makes sure that the container activity has implemented
-        // the callback interface. If not, it throws an exception
         try {
             listener = (FragmentEventListener) getActivity();
         } catch (ClassCastException e) {
@@ -104,8 +79,7 @@ public abstract class BaseListFragment extends Fragment implements Injectable, I
 
         swipeRefreshLayout.setOnRefreshListener(this::refresh);
 
-        ((BaseNetworkWatcherActivity) getActivity()).connectionViewModel
-                .getConnectionStatus().observe(getActivity(), isConnected -> {
+        listener.getConnection().observe(getActivity(), isConnected -> {
             if (isConnected != null && isConnected)
                 swipeRefreshLayout.setEnabled(true);
             else
@@ -118,10 +92,6 @@ public abstract class BaseListFragment extends Fragment implements Injectable, I
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity(), LinearLayoutManager.VERTICAL, false));
         recyclerView.addItemDecoration(new DividerItemDecoration(this.getActivity(), DividerItemDecoration.VERTICAL));
         recyclerView.setAdapter(adapter);
-
-        requestViewModel = ViewModelProviders.of(this, viewModelFactory).get(RequestViewModel.class);
-        requestViewModel.getResponseFavorite().removeObserver(requestObserver);
-        requestViewModel.getResponseFavorite().observe(this, requestObserver);
     }
 
     @Override
@@ -139,8 +109,7 @@ public abstract class BaseListFragment extends Fragment implements Injectable, I
 
     @Override
     public void onFavoriteButtonClicked(String postId, boolean state) {
-        Toast.makeText(getActivity(), "Requesting...", Toast.LENGTH_SHORT).show();
-        requestViewModel.setFavoriteState(postId, state);
+        listener.onFavoriteButtonClicked(postId, state);
     }
 
     @Override
@@ -220,9 +189,19 @@ public abstract class BaseListFragment extends Fragment implements Injectable, I
         swipeRefreshLayout.setRefreshing(true);
     }
 
+    protected ViewModelProvider.Factory getViewModelFactory() {
+        return listener.getViewModelFactory();
+    }
+
     public interface FragmentEventListener {
         void onLoadSuccess(Object data);
 
         void onLoadError(String message);
+
+        void onFavoriteButtonClicked(String postId, boolean state);
+
+        ViewModelProvider.Factory getViewModelFactory();
+
+        LiveData<Boolean> getConnection();
     }
 }
