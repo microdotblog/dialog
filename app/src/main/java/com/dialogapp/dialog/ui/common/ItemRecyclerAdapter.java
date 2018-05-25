@@ -353,6 +353,7 @@ public class ItemRecyclerAdapter extends ListAdapter<Item, ItemRecyclerAdapter.P
                     else
                         text.setSpan(new ForegroundColorSpan(ContextCompat.getColor(adapter.context, R.color.primary_text_default_material_light)), start, end, flags);
                 }
+                text.removeSpan(span);
             }
 
             int primaryColor = ResourcesCompat.getColor(adapter.context.getResources(), R.color.reda200, null);
