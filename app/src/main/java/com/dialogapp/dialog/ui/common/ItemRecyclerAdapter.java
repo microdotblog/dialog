@@ -36,6 +36,7 @@ import com.dialogapp.dialog.util.GlideImageGetter;
 import com.dialogapp.dialog.util.Objects;
 
 import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
@@ -298,13 +299,18 @@ public class ItemRecyclerAdapter extends ListAdapter<Item, ItemRecyclerAdapter.P
 
         void bindHtmlContent(String contentHtml) {
             SpannableString spannedText;
-            Elements images = Jsoup.parse(contentHtml).select("img");
+            Document document = Jsoup.parse(contentHtml);
+            Elements images = document.select("img");
             GlideImageGetter imageGetter = null;
             if (!images.isEmpty()) {
+                // Add para tags to ensure that there is a gap between each image span
+                for (Element span : images) {
+                    span.wrap("<p></p>");
+                }
                 Queue<Boolean> imagesQueue = getImages(images);
                 imageGetter = new GlideImageGetter(glide, content, imagesQueue);
             }
-            spannedText = getSpanned(contentHtml, imageGetter);
+            spannedText = getSpanned(document.html(), imageGetter);
 
             setSpans(spannedText);
             content.setText(trimTrailingWhitespace(spannedText));
