@@ -56,7 +56,7 @@ public class AboutActivity extends AppCompatActivity {
 
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.frame_about, new AboutFragment())
+                    .add(R.id.frame_about, new AboutFragment())
                     .commit();
         }
     }

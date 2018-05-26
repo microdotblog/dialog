@@ -29,7 +29,7 @@ public class FavoritesActivity extends BaseListActivity {
 
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.frame_container, new FavoritesFragment())
+                    .add(R.id.frame_container, new FavoritesFragment())
                     .commit();
         }
     }

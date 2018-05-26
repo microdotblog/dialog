@@ -118,7 +118,7 @@ public class ReplyActivity extends BaseInjectableActivity implements ReplyFragme
 
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.reply_fragment_container, ReplyFragment.newInstance(postId, username), "ReplyFragment")
+                    .add(R.id.reply_fragment_container, ReplyFragment.newInstance(postId, username), "ReplyFragment")
                     .commit();
         } else {
             failed = savedInstanceState.getBoolean("RequestStatus", false);

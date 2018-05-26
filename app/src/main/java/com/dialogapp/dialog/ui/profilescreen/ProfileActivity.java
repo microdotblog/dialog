@@ -94,7 +94,7 @@ public class ProfileActivity extends BaseListActivity implements ProfileFragment
             tabLayout.addTab(tabLayout.newTab().setText("POSTS"));
             if (savedInstanceState == null) {
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.frame_profile, ProfileFragment.newInstance(username))
+                        .add(R.id.frame_profile, ProfileFragment.newInstance(username))
                         .commit();
             }
         }

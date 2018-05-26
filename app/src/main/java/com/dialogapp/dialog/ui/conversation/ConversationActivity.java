@@ -35,7 +35,7 @@ public class ConversationActivity extends BaseListActivity {
 
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.frame_container, ConversationFragment.newInstance(postId))
+                    .add(R.id.frame_container, ConversationFragment.newInstance(postId))
                     .commit();
         }
     }

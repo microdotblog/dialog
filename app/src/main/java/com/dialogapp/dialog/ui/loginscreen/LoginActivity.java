@@ -30,7 +30,7 @@ public class LoginActivity extends BaseInjectableActivity implements LoginFragme
 
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.container_blank, new LoginFragment())
+                    .add(R.id.container_blank, new LoginFragment())
                     .commit();
         }
     }

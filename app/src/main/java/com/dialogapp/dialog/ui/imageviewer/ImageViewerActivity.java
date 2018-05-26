@@ -20,7 +20,7 @@ public class ImageViewerActivity extends BaseInjectableActivity {
 
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.container_blank, ImageViewerFragment.newInstance(url))
+                    .add(R.id.container_blank, ImageViewerFragment.newInstance(url))
                     .commit();
         }
     }
