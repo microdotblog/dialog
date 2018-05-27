@@ -80,10 +80,12 @@ public abstract class BaseListFragment extends Fragment implements Injectable, I
         swipeRefreshLayout.setOnRefreshListener(this::refresh);
 
         listener.getConnection().observe(getActivity(), isConnected -> {
-            if (isConnected != null && isConnected)
-                swipeRefreshLayout.setEnabled(true);
-            else
-                swipeRefreshLayout.setEnabled(false);
+            if (swipeRefreshLayout != null) {
+                if (isConnected != null && isConnected)
+                    swipeRefreshLayout.setEnabled(true);
+                else
+                    swipeRefreshLayout.setEnabled(false);
+            }
         });
 
         adapter = new ItemRecyclerAdapter(this.getActivity(), Glide.with(this), listener.shouldColorUsernameLinks());

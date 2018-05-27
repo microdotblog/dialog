@@ -1,4 +1,4 @@
-package com.dialogapp.dialog.ui.favorites;
+package com.dialogapp.dialog.ui.profilescreen.favorites;
 
 import android.arch.core.executor.testing.InstantTaskExecutorRule;
 import android.arch.lifecycle.MutableLiveData;

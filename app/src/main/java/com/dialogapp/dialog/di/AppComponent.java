@@ -4,7 +4,6 @@ import android.app.Application;
 
 import com.dialogapp.dialog.MicroblogApp;
 import com.dialogapp.dialog.di.viewmodule.ConversationActivityModule;
-import com.dialogapp.dialog.di.viewmodule.FavoritesActivityModule;
 import com.dialogapp.dialog.di.viewmodule.ImageViewerActivityModule;
 import com.dialogapp.dialog.di.viewmodule.LauncherActivityModule;
 import com.dialogapp.dialog.di.viewmodule.LoginActivityModule;
@@ -23,7 +22,6 @@ import dagger.android.support.AndroidSupportInjectionModule;
         AndroidSupportInjectionModule.class,
         AppModule.class,
         LoginActivityModule.class,
-        FavoritesActivityModule.class,
         ProfileActivityModule.class,
         ImageViewerActivityModule.class,
         ConversationActivityModule.class,

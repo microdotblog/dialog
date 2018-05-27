@@ -27,9 +27,6 @@
             android:name=".ui.loginscreen.LoginActivity"
             android:screenOrientation="portrait" />
         <activity android:name=".ui.MainActivity" />
-        <activity
-            android:name=".ui.favorites.FavoritesActivity"
-            android:label="@string/activity_favorites" />
         <activity android:name=".ui.profilescreen.ProfileActivity" />
         <activity
             android:name=".ui.imageviewer.ImageViewerActivity"

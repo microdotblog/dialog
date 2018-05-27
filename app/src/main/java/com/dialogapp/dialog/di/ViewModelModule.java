@@ -5,7 +5,7 @@ import android.arch.lifecycle.ViewModelProvider;
 
 import com.dialogapp.dialog.ui.common.RequestViewModel;
 import com.dialogapp.dialog.ui.conversation.ConversationViewModel;
-import com.dialogapp.dialog.ui.favorites.FavoritesViewModel;
+import com.dialogapp.dialog.ui.profilescreen.favorites.FavoritesViewModel;
 import com.dialogapp.dialog.ui.loginscreen.LoginViewModel;
 import com.dialogapp.dialog.ui.mainscreen.DiscoverViewModel;
 import com.dialogapp.dialog.ui.mainscreen.ListViewModel;

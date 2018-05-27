@@ -1,4 +1,4 @@
-package com.dialogapp.dialog.ui.favorites;
+package com.dialogapp.dialog.ui.profilescreen.favorites;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;

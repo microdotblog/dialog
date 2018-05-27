@@ -26,7 +26,6 @@ import com.bumptech.glide.request.RequestOptions;
 import com.dialogapp.dialog.R;
 import com.dialogapp.dialog.ui.base.BaseListActivity;
 import com.dialogapp.dialog.ui.common.ChangelogDialog;
-import com.dialogapp.dialog.ui.favorites.FavoritesActivity;
 import com.dialogapp.dialog.ui.loginscreen.LoginActivity;
 import com.dialogapp.dialog.ui.mainscreen.DiscoverFragment;
 import com.dialogapp.dialog.ui.profilescreen.ProfileActivity;
@@ -135,9 +134,6 @@ public class MainActivity extends BaseListActivity implements NavigationView.OnN
             case R.id.menu_item_profile:
                 intent = new Intent(this, ProfileActivity.class);
                 intent.putExtra(ProfileActivity.EXTRA_USERNAME, getSavedUsername());
-                break;
-            case R.id.menu_item_fav:
-                intent = new Intent(this, FavoritesActivity.class);
                 break;
             case R.id.menu_item_settings:
                 intent = new Intent(this, SettingsActivity.class);

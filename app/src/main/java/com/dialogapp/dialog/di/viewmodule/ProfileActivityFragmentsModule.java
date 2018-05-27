@@ -1,5 +1,6 @@
 package com.dialogapp.dialog.di.viewmodule;
 
+import com.dialogapp.dialog.ui.profilescreen.favorites.FavoritesFragment;
 import com.dialogapp.dialog.ui.profilescreen.FollowingFragment;
 import com.dialogapp.dialog.ui.profilescreen.ProfileFragment;
 
@@ -10,6 +11,9 @@ import dagger.android.ContributesAndroidInjector;
 abstract class ProfileActivityFragmentsModule {
     @ContributesAndroidInjector
     abstract ProfileFragment contributesProfileFragment();
+
+    @ContributesAndroidInjector
+    abstract FavoritesFragment contributesFavoritesFragment();
 
     @ContributesAndroidInjector
     abstract FollowingFragment contributesFollowingFragment();
