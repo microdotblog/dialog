@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import com.dialogapp.dialog.ui.profilescreen.favorites.FavoritesFragment;
+import com.dialogapp.dialog.ui.profilescreen.following.FollowingFragment;
 
 public class ProfileFragmentPagerAdapter extends FragmentPagerAdapter {
 

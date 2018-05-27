@@ -125,8 +125,8 @@ public class MainActivity extends BaseListActivity {
     private void showLogoutDialog() {
         new MaterialDialog.Builder(this)
                 .content("Do you want to log out?")
-                .positiveText(R.string.dialog_ok)
-                .negativeText(R.string.dialog_cancel)
+                .positiveText(android.R.string.ok)
+                .negativeText(android.R.string.cancel)
                 .onPositive((dialog, which) -> {
                     startLoginActivity();
                 })

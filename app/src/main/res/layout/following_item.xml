@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -12,8 +11,6 @@
         android:layout_width="48dp"
         android:layout_height="@dimen/post_image_profile"
         android:layout_marginEnd="16dp"
-        app:civ_border_color="@color/grey400"
-        app:civ_border_width="2dp"
         tools:src="@tools:sample/avatars" />
 
     <TextView
@@ -33,6 +30,6 @@
         android:layout_toEndOf="@id/image_following_avatar"
         android:autoLink="web"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        android:textColorLink="@color/reda200"
+        android:textColorLink="?attr/colorAccent"
         tools:text="@tools:sample/lorem" />
 </RelativeLayout>

@@ -38,7 +38,7 @@ import butterknife.Unbinder;
  * Base Fragment class for displaying lists
  */
 
-public abstract class BaseListFragment extends Fragment implements Injectable, ItemRecyclerAdapter.PostItemOptionClickedListener {
+public abstract class BaseListFragment extends Fragment implements Injectable, ItemRecyclerAdapter.PostOptionClickedListener {
     @BindView(R.id.recycler_list)
     protected RecyclerView recyclerView;
 
@@ -88,8 +88,8 @@ public abstract class BaseListFragment extends Fragment implements Injectable, I
             }
         });
 
-        adapter = new ItemRecyclerAdapter(this.getActivity(), Glide.with(this), listener.shouldColorUsernameLinks());
-        adapter.setListener(this);
+        adapter = new ItemRecyclerAdapter(this.getActivity(), this,
+                Glide.with(this), listener.shouldColorUsernameLinks());
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity(), LinearLayoutManager.VERTICAL, false));
         recyclerView.addItemDecoration(new DividerItemDecoration(this.getActivity(), DividerItemDecoration.VERTICAL));

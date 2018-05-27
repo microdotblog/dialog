@@ -99,14 +99,16 @@ public class ItemRecyclerAdapter extends ListAdapter<Item, ItemRecyclerAdapter.P
             };
 
     Context context;
-    PostItemOptionClickedListener listener;
+    PostOptionClickedListener postOptionClickedListener;
     private RequestManager glide;
     private int currentNightMode;
     private boolean shouldColorUsernameLinks;
 
-    public ItemRecyclerAdapter(Context context, RequestManager glide, boolean shouldColorUsernameLinks) {
+    public ItemRecyclerAdapter(Context context, PostOptionClickedListener postOptionClickedListener,
+                               RequestManager glide, boolean shouldColorUsernameLinks) {
         super(DIFF_CALLBACK);
         this.context = context;
+        this.postOptionClickedListener = postOptionClickedListener;
         this.glide = glide;
         this.shouldColorUsernameLinks = shouldColorUsernameLinks;
 
@@ -138,12 +140,10 @@ public class ItemRecyclerAdapter extends ListAdapter<Item, ItemRecyclerAdapter.P
                     case "FAV":
                         if (diffBundle.getBoolean("FAV")) {
                             holder.favoriteButton.setImageResource(R.drawable.ic_star_black_24dp);
-                            holder.favoriteButton.setImageAlpha(255);
                             holder.favoriteButton.setColorFilter(ContextCompat.getColor(context, R.color.reda200));
                         } else {
                             holder.favoriteButton.setImageResource(R.drawable.ic_star_border_black_24dp);
-                            holder.favoriteButton.setColorFilter(isNight() ? Color.WHITE : Color.BLACK);
-                            setIconAlpha(holder.favoriteButton);
+                            holder.favoriteButton.clearColorFilter();
                         }
                         break;
                     case "DATE":
@@ -170,22 +170,15 @@ public class ItemRecyclerAdapter extends ListAdapter<Item, ItemRecyclerAdapter.P
     public void onBindViewHolder(@NonNull PostViewHolder holder, int position) {
         Item item = getItem(position);
 
-        setIconAlpha(holder.conversationButton);
-        holder.conversationButton.setColorFilter(isNight() ? Color.WHITE : Color.BLACK);
         holder.conversationButton.setVisibility(getItem(position).microblog.isConversation ?
                 View.VISIBLE : View.GONE);
 
-        holder.replyButton.setColorFilter(isNight() ? Color.WHITE : Color.BLACK);
-        setIconAlpha(holder.replyButton);
-
         if (item.microblog.isFavorite) {
             holder.favoriteButton.setImageResource(R.drawable.ic_star_black_24dp);
-            holder.favoriteButton.setImageAlpha(255);
             holder.favoriteButton.setColorFilter(ContextCompat.getColor(context, R.color.reda200));
         } else {
             holder.favoriteButton.setImageResource(R.drawable.ic_star_border_black_24dp);
-            holder.favoriteButton.setColorFilter(isNight() ? Color.WHITE : Color.BLACK);
-            setIconAlpha(holder.favoriteButton);
+            holder.favoriteButton.clearColorFilter();
         }
 
         glide.load(item.author.avatar)
@@ -203,22 +196,11 @@ public class ItemRecyclerAdapter extends ListAdapter<Item, ItemRecyclerAdapter.P
         super.onViewRecycled(holder);
     }
 
-    public void setListener(PostItemOptionClickedListener listener) {
-        this.listener = listener;
-    }
-
-    private void setIconAlpha(ImageButton button) {
-        if (isNight())
-            button.setImageAlpha(255);
-        else
-            button.setImageAlpha(138);
-    }
-
     private boolean isNight() {
         return currentNightMode == Configuration.UI_MODE_NIGHT_YES;
     }
 
-    public interface PostItemOptionClickedListener {
+    public interface PostOptionClickedListener {
         void onAvatarClicked(String username);
 
         void onFavoriteButtonClicked(String postId, boolean state);
@@ -269,27 +251,27 @@ public class ItemRecyclerAdapter extends ListAdapter<Item, ItemRecyclerAdapter.P
             ButterKnife.bind(this, itemView);
 
             favoriteButton.setOnClickListener(v -> {
-                adapter.listener.onFavoriteButtonClicked(adapter.getItem(getAdapterPosition()).id,
+                adapter.postOptionClickedListener.onFavoriteButtonClicked(adapter.getItem(getAdapterPosition()).id,
                         !adapter.getItem(getAdapterPosition()).microblog.isFavorite);
             });
 
             conversationButton.setOnClickListener(v -> {
-                adapter.listener.onConversationButtonClicked(adapter.getItem(getAdapterPosition()).id);
+                adapter.postOptionClickedListener.onConversationButtonClicked(adapter.getItem(getAdapterPosition()).id);
             });
 
             replyButton.setOnClickListener(v -> {
-                adapter.listener.onReplyButtonClicked(adapter.getItem(getAdapterPosition()).id,
+                adapter.postOptionClickedListener.onReplyButtonClicked(adapter.getItem(getAdapterPosition()).id,
                         adapter.getItem(getAdapterPosition()).author.microblog.username);
             });
 
             thumbnail.setOnClickListener(view -> {
-                adapter.listener.onAvatarClicked(adapter.getItem(getAdapterPosition()).author.microblog.username);
+                adapter.postOptionClickedListener.onAvatarClicked(adapter.getItem(getAdapterPosition()).author.microblog.username);
             });
 
             optionsButtons.setOnClickListener(v -> {
                 PopupMenu popupMenu = new PopupMenu(v.getContext(), v);
                 popupMenu.setOnMenuItemClickListener(item -> {
-                    adapter.listener.onMenuItemClicked(item.getItemId(), adapter.getItem(getAdapterPosition()));
+                    adapter.postOptionClickedListener.onMenuItemClicked(item.getItemId(), adapter.getItem(getAdapterPosition()));
                     return true;
                 });
                 popupMenu.inflate(R.menu.post_options_popup);
@@ -326,7 +308,7 @@ public class ItemRecyclerAdapter extends ListAdapter<Item, ItemRecyclerAdapter.P
                 text.setSpan(new ClickableSpan() {
                     @Override
                     public void onClick(View widget) {
-                        adapter.listener.onImageClicked(span.getSource());
+                        adapter.postOptionClickedListener.onImageClicked(span.getSource());
                     }
                 }, start, end, flags);
             }
@@ -340,9 +322,9 @@ public class ItemRecyclerAdapter extends ListAdapter<Item, ItemRecyclerAdapter.P
                     @Override
                     public void onClick(View view) {
                         if (text.charAt(start) == '@')
-                            adapter.listener.onLinkClicked(true, text.subSequence(start + 1, end).toString());
+                            adapter.postOptionClickedListener.onLinkClicked(true, text.subSequence(start + 1, end).toString());
                         else
-                            adapter.listener.onLinkClicked(false, span.getURL());
+                            adapter.postOptionClickedListener.onLinkClicked(false, span.getURL());
                     }
                 }, start, end, flags);
 

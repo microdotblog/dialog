@@ -1,4 +1,4 @@
-package com.dialogapp.dialog.ui.profilescreen;
+package com.dialogapp.dialog.ui.profilescreen.following;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
@@ -21,6 +21,7 @@ import com.dialogapp.dialog.R;
 import com.dialogapp.dialog.di.Injectable;
 import com.dialogapp.dialog.model.AccountInfo;
 import com.dialogapp.dialog.ui.base.BaseListActivity;
+import com.dialogapp.dialog.ui.profilescreen.ProfileViewModel;
 import com.dialogapp.dialog.util.Resource;
 import com.dialogapp.dialog.util.Status;
 
@@ -101,10 +102,12 @@ public class FollowingFragment extends Fragment implements Injectable {
 
         ((BaseListActivity) getActivity()).getConnection()
                 .observe(getActivity(), isConnected -> {
-                    if (isConnected != null && isConnected)
-                        swipeRefreshLayout.setEnabled(true);
-                    else
-                        swipeRefreshLayout.setEnabled(false);
+                    if (swipeRefreshLayout != null) {
+                        if (isConnected != null && isConnected)
+                            swipeRefreshLayout.setEnabled(true);
+                        else
+                            swipeRefreshLayout.setEnabled(false);
+                    }
                 });
     }
 

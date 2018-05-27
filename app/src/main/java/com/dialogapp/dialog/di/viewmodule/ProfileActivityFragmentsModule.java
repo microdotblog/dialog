@@ -1,7 +1,7 @@
 package com.dialogapp.dialog.di.viewmodule;
 
 import com.dialogapp.dialog.ui.profilescreen.favorites.FavoritesFragment;
-import com.dialogapp.dialog.ui.profilescreen.FollowingFragment;
+import com.dialogapp.dialog.ui.profilescreen.following.FollowingFragment;
 import com.dialogapp.dialog.ui.profilescreen.ProfileFragment;
 
 import dagger.Module;

@@ -36,7 +36,7 @@ public class SettingsActivity extends AppCompatActivity {
                         .title("Allow access to location?")
                         .content(R.string.location_permission_message)
                         .positiveText(R.string.dialog_allow)
-                        .negativeText(R.string.dialog_cancel)
+                        .negativeText(android.R.string.cancel)
                         .onPositive((dialog, which) -> {
                             ActivityCompat.requestPermissions(this,
                                     new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},

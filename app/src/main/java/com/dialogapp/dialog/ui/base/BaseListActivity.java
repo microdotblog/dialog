@@ -53,15 +53,16 @@ public abstract class BaseListActivity extends BaseNetworkWatcherActivity implem
     public void onLoadError(String message) {
         if (errorBar != null) {
             if (NetworkUtil.getConnectivityStatus(this) == NetworkUtil.TYPE_NOT_CONNECTED) {
-                errorBar.setText("You are currently offline");
+                errorBar.setText("You are currently offline").setAction("", null);
             } else {
-                errorBar.setAction("Show error", view -> {
-                    new MaterialDialog.Builder(this)
-                            .title("Connection Error")
-                            .content(message)
-                            .positiveText(R.string.dialog_dismiss)
-                            .show();
-                });
+                errorBar.setText(R.string.connection_error)
+                        .setAction("Show error", view -> {
+                            new MaterialDialog.Builder(this)
+                                    .title("Connection Error")
+                                    .content(message)
+                                    .positiveText(R.string.dialog_dismiss)
+                                    .show();
+                        });
             }
             errorBar.show();
         }

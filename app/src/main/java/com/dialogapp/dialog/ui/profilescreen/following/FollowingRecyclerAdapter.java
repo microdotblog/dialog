@@ -1,4 +1,4 @@
-package com.dialogapp.dialog.ui.profilescreen;
+package com.dialogapp.dialog.ui.profilescreen.following;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -14,6 +14,7 @@ import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
 import com.dialogapp.dialog.R;
 import com.dialogapp.dialog.model.AccountInfo;
+import com.dialogapp.dialog.ui.profilescreen.ProfileActivity;
 import com.dialogapp.dialog.util.Objects;
 
 import butterknife.BindView;
