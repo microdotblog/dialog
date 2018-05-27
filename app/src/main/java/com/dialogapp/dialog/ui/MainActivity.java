@@ -3,26 +3,20 @@ package com.dialogapp.dialog.ui;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.Spinner;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.dialogapp.dialog.R;
 import com.dialogapp.dialog.ui.base.BaseListActivity;
 import com.dialogapp.dialog.ui.common.ChangelogDialog;
@@ -33,27 +27,21 @@ import com.dialogapp.dialog.ui.settings.SettingsActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import de.hdodenhof.circleimageview.CircleImageView;
 
-public class MainActivity extends BaseListActivity implements NavigationView.OnNavigationItemSelectedListener {
-    private String[] category = {"Recent", "Books", "Music", "Podcasts"};
-
-    private ViewPager viewPager;
-
-    @BindView(R.id.nav_view)
-    NavigationView navigationView;
-
+public class MainActivity extends BaseListActivity {
     @BindView(R.id.toolbar)
     Toolbar toolbar;
 
     @BindView(R.id.coord_layout_main)
     CoordinatorLayout coordinatorLayout;
 
-    @BindView(R.id.drawer_layout)
-    DrawerLayout drawerLayout;
-
     @BindView(R.id.spinner_discover)
     Spinner spinnerDiscover;
+
+    private static final int TIME_INTERVAL = 2000;
+    private String[] category = {"Recent", "Books", "Music", "Podcasts"};
+    private ViewPager viewPager;
+    private long mBackPressed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,27 +52,10 @@ public class MainActivity extends BaseListActivity implements NavigationView.OnN
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu_white_24px);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_outline_account_circle_32dp);
         setErrorBar(coordinatorLayout);
 
-        navigationView.setNavigationItemSelectedListener(this);
         setSpinnerDiscover();
-
-        CircleImageView imageView = navigationView.getHeaderView(0).findViewById(R.id.image_profile);
-        TextView username = navigationView.getHeaderView(0).findViewById(R.id.text_username);
-        TextView fullname = navigationView.getHeaderView(0).findViewById(R.id.text_fullname);
-        ImageView logout = navigationView.getHeaderView(0).findViewById(R.id.image_logout);
-
-        Glide.with(this)
-                .load(getSavedAvatarUrl())
-                .apply(RequestOptions.noAnimation())
-                .into(imageView);
-        username.setText(getSavedUsername());
-        fullname.setText(getSavedFullname());
-        logout.setOnClickListener(view -> {
-            showLogoutDialog();
-        });
-
         setupViewpager();
     }
 
@@ -108,41 +79,40 @@ public class MainActivity extends BaseListActivity implements NavigationView.OnN
 
     @Override
     public void onBackPressed() {
-        if (drawerLayout.isDrawerVisible(GravityCompat.START)) {
-            drawerLayout.closeDrawer(GravityCompat.START);
-        } else {
+        if (mBackPressed + TIME_INTERVAL > System.currentTimeMillis()) {
             super.onBackPressed();
+            return;
+        } else {
+            Toast.makeText(this, "Press BACK again to exit", Toast.LENGTH_SHORT).show();
         }
+        mBackPressed = System.currentTimeMillis();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_options_menu, menu);
+        return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        Intent intent;
         switch (item.getItemId()) {
             case android.R.id.home:
-                drawerLayout.openDrawer(GravityCompat.START);
+                intent = new Intent(this, ProfileActivity.class);
+                intent.putExtra(ProfileActivity.EXTRA_USERNAME, getSavedUsername());
+                startActivity(intent);
+                return true;
+            case R.id.main_options_settings:
+                intent = new Intent(this, SettingsActivity.class);
+                intent.putExtra(ProfileActivity.EXTRA_USERNAME, getSavedUsername());
+                startActivity(intent);
+                return true;
+            case R.id.main_options_logout:
+                showLogoutDialog();
                 return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        int id = item.getItemId();
-
-        Intent intent = null;
-        switch (id) {
-            case R.id.menu_item_profile:
-                intent = new Intent(this, ProfileActivity.class);
-                intent.putExtra(ProfileActivity.EXTRA_USERNAME, getSavedUsername());
-                break;
-            case R.id.menu_item_settings:
-                intent = new Intent(this, SettingsActivity.class);
-        }
-
-        startActivity(intent);
-
-        drawerLayout.closeDrawer(GravityCompat.START);
-        return false;
     }
 
     private void startLoginActivity() {
