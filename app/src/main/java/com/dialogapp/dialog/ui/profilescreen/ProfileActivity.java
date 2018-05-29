@@ -5,6 +5,7 @@ import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.TooltipCompat;
@@ -18,6 +19,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.dialogapp.dialog.R;
 import com.dialogapp.dialog.model.UserInfo;
 import com.dialogapp.dialog.ui.base.BaseListActivity;
+import com.dialogapp.dialog.ui.base.BaseListFragment;
 import com.dialogapp.dialog.ui.common.RequestViewModel;
 
 import butterknife.BindView;
@@ -94,10 +96,28 @@ public class ProfileActivity extends BaseListActivity implements ProfileFragment
             tabLayout.addTab(tabLayout.newTab().setText("POSTS"));
             if (savedInstanceState == null) {
                 getSupportFragmentManager().beginTransaction()
-                        .add(R.id.frame_profile, ProfileFragment.newInstance(username))
+                        .add(R.id.frame_profile, ProfileFragment.newInstance(username), "profilefragment")
                         .commit();
             }
         }
+
+        tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(viewPager) {
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+                if (isUserSelf(username)) {
+                    Fragment fragment = getSupportFragmentManager()
+                            .findFragmentByTag(getViewpagerFragmentByTag(viewPager.getId(), tab.getPosition()));
+                    if (fragment != null && fragment instanceof BaseListFragment) {
+                        ((BaseListFragment) fragment).scrollListToTop();
+                    }
+                } else {
+                    ProfileFragment fragment = (ProfileFragment) getSupportFragmentManager().findFragmentByTag("profilefragment");
+                    if (fragment != null) {
+                        fragment.scrollListToTop();
+                    }
+                }
+            }
+        });
     }
 
     @Override

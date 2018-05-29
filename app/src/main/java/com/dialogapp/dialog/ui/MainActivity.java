@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.dialogapp.dialog.R;
 import com.dialogapp.dialog.ui.base.BaseListActivity;
+import com.dialogapp.dialog.ui.base.BaseListFragment;
 import com.dialogapp.dialog.ui.common.ChangelogDialog;
 import com.dialogapp.dialog.ui.loginscreen.LoginActivity;
 import com.dialogapp.dialog.ui.mainscreen.DiscoverFragment;
@@ -140,7 +141,8 @@ public class MainActivity extends BaseListActivity {
         spinnerDiscover.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
-                ((DiscoverFragment) getSupportFragmentManager().findFragmentByTag(getFragmentTag(viewPager.getId())))
+                ((DiscoverFragment) getSupportFragmentManager()
+                        .findFragmentByTag(getViewpagerFragmentByTag(viewPager.getId(), 2)))
                         .setTopic(adapter.getItem(position));
             }
 
@@ -149,10 +151,6 @@ public class MainActivity extends BaseListActivity {
 
             }
         });
-    }
-
-    private String getFragmentTag(int viewPagerId) {
-        return "android:switcher:" + viewPagerId + ":" + 2;
     }
 
     private void setupViewpager() {
@@ -168,6 +166,16 @@ public class MainActivity extends BaseListActivity {
 
         tabLayout.getTabAt(1).getIcon().setAlpha(178);
         tabLayout.getTabAt(2).getIcon().setAlpha(178);
+        tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(viewPager) {
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+                BaseListFragment fragment = (BaseListFragment) getSupportFragmentManager()
+                        .findFragmentByTag(getViewpagerFragmentByTag(viewPager.getId(), tab.getPosition()));
+                if (fragment != null) {
+                    fragment.scrollListToTop();
+                }
+            }
+        });
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
