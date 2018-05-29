@@ -100,10 +100,6 @@ public abstract class BaseListActivity extends BaseNetworkWatcherActivity implem
         return sharedPrefUtil.getStringPreference(getString(R.string.pref_username), "");
     }
 
-    protected String getSavedAvatarUrl() {
-        return sharedPrefUtil.getStringPreference(getString(R.string.pref_avatar_url), "");
-    }
-
     protected String getSavedFullname() {
         return sharedPrefUtil.getStringPreference(getString(R.string.pref_fullname), "");
     }

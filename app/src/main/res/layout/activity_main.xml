@@ -16,9 +16,9 @@
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="?android:attr/actionBarSize"
             android:background="?attr/colorPrimaryDark"
-            android:minHeight="?attr/actionBarSize"
+            app:navigationIcon="@drawable/ic_outline_account_circle_32dp"
             app:popupTheme="?android:spinnerItemStyle"
             app:layout_scrollFlags="scroll|enterAlwaysCollapsed|snap">
 

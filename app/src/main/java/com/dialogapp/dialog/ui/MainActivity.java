@@ -52,7 +52,7 @@ public class MainActivity extends BaseListActivity {
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_outline_account_circle_32dp);
+        getSupportActionBar().setTitle(getSavedFullname());
         setErrorBar(coordinatorLayout);
 
         setSpinnerDiscover();
@@ -182,18 +182,21 @@ public class MainActivity extends BaseListActivity {
                         tabLayout.getTabAt(1).getIcon().setAlpha(178);
                         tabLayout.getTabAt(2).getIcon().setAlpha(178);
                         spinnerDiscover.setVisibility(View.GONE);
+                        getSupportActionBar().setDisplayShowTitleEnabled(true);
                         break;
                     case 1:
                         tabLayout.getTabAt(0).getIcon().setAlpha(178);
                         tabLayout.getTabAt(1).getIcon().setAlpha(255);
                         tabLayout.getTabAt(2).getIcon().setAlpha(178);
                         spinnerDiscover.setVisibility(View.GONE);
+                        getSupportActionBar().setDisplayShowTitleEnabled(true);
                         break;
                     case 2:
                         tabLayout.getTabAt(0).getIcon().setAlpha(178);
                         tabLayout.getTabAt(1).getIcon().setAlpha(178);
                         tabLayout.getTabAt(2).getIcon().setAlpha(255);
                         spinnerDiscover.setVisibility(View.VISIBLE);
+                        getSupportActionBar().setDisplayShowTitleEnabled(false);
                         break;
                 }
             }
