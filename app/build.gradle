@@ -1,20 +1,10 @@
 apply plugin: 'com.android.application'
 
-ext {
-    versionMajor = 1
-    versionMinor = 1
-    versionPatch = 0
-    minimumSdkVersion = 21
-
-    supportLibsVersion = '27.1.1'
-    retrofitVersion = '2.3.0'
-}
-
 android {
     compileSdkVersion 27
     defaultConfig {
         applicationId "com.dialogapp.dialog"
-        minSdkVersion project.ext.minimumSdkVersion
+        minSdkVersion minimumSdkVersion
         targetSdkVersion 26
         versionCode generateVersionCode()
         versionName generateVersionName()
@@ -48,11 +38,11 @@ android {
 }
 
 private Integer generateVersionCode() {
-    return ext.minimumSdkVersion * 10000000 + ext.versionMajor * 10000 + ext.versionMinor * 100 + ext.versionPatch
+    return minimumSdkVersion * 10000000 + versionMajor * 10000 + versionMinor * 100 + versionPatch
 }
 
 private String generateVersionName() {
-    return "${ext.versionMajor}.${ext.versionMinor}.${ext.versionPatch}"
+    return "${versionMajor}.${versionMinor}.${versionPatch}"
 }
 
 dependencies {
@@ -63,16 +53,17 @@ dependencies {
     implementation "com.android.support:cardview-v7:$supportLibsVersion"
     implementation "com.android.support:design:$supportLibsVersion"
     implementation "com.android.support:recyclerview-v7:$supportLibsVersion"
-    implementation 'com.android.support.constraint:constraint-layout:1.1.0'
+    implementation "com.android.support:support-annotations:$supportLibsVersion"
+    implementation 'com.android.support.constraint:constraint-layout:1.1.1'
 
     // Architecture components
     // ViewModel and LiveData
-    implementation 'android.arch.lifecycle:extensions:1.1.1'
+    implementation "android.arch.lifecycle:extensions:$lifecycle_version"
     // Java8 support for Lifecycles
-    implementation 'android.arch.lifecycle:common-java8:1.1.1'
+    implementation "android.arch.lifecycle:common-java8:$lifecycle_version"
     // Room
-    implementation 'android.arch.persistence.room:runtime:1.0.0'
-    annotationProcessor "android.arch.persistence.room:compiler:1.0.0"
+    implementation "android.arch.persistence.room:runtime:$room"
+    annotationProcessor "android.arch.persistence.room:compiler:$room"
 
     // Retrofit
     implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
@@ -82,29 +73,26 @@ dependencies {
     implementation 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
 
-    // Timber
-    implementation 'com.jakewharton.timber:timber:4.7.0'
-
     // LeakCanary
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.5.4'
     releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
 
     // Glide
-    implementation 'com.github.bumptech.glide:glide:4.6.1'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.6.1'
-
-    // PhotoView
-    implementation 'com.github.chrisbanes:PhotoView:2.1.3'
+    implementation "com.github.bumptech.glide:glide:$glide"
+    annotationProcessor "com.github.bumptech.glide:compiler:$glide"
 
     // Dagger
-    implementation 'com.google.dagger:dagger:2.15'
-    annotationProcessor 'com.google.dagger:dagger-compiler:2.14.1'
-    implementation 'com.google.dagger:dagger-android:2.15'
-    implementation 'com.google.dagger:dagger-android-support:2.15'
-    annotationProcessor 'com.google.dagger:dagger-android-processor:2.14.1'
+    implementation "com.google.dagger:dagger:$dagger"
+    annotationProcessor "com.google.dagger:dagger-compiler:$dagger"
+    implementation "com.google.dagger:dagger-android:$dagger"
+    implementation "com.google.dagger:dagger-android-support:$dagger"
+    annotationProcessor "com.google.dagger:dagger-android-processor:$dagger"
 
-    // Jsoup
+    implementation 'com.jakewharton.timber:timber:4.7.0'
+
     implementation 'org.jsoup:jsoup:1.11.3'
+
+    implementation 'com.github.chrisbanes:PhotoView:2.1.3'
 
     implementation 'com.takisoft.fix:preference-v7:27.1.1.0'
 
@@ -117,16 +105,18 @@ dependencies {
     debugImplementation 'com.facebook.stetho:stetho-okhttp3:1.5.0'
 
     testImplementation 'junit:junit:4.12'
-    testImplementation 'org.mockito:mockito-core:2.15.0'
+    testImplementation "org.mockito:mockito-core:$mockito"
     testImplementation 'com.squareup.okhttp3:mockwebserver:3.9.1'
-    testImplementation 'android.arch.core:core-testing:1.1.1'
-    testImplementation "android.arch.persistence.room:testing:1.0.0"
+    testImplementation "android.arch.core:core-testing:$lifecycle_version"
+    testImplementation "android.arch.persistence.room:testing:$room"
 
     androidTestImplementation "com.android.support:support-annotations:$supportLibsVersion"
-    androidTestImplementation 'com.android.support.test:runner:1.0.1'
-    androidTestImplementation 'com.android.support.test:rules:1.0.1'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-intents:3.0.1'
+    androidTestImplementation "com.android.support.test:runner:$android_testing"
+    androidTestImplementation "com.android.support.test:rules:$android_testing"
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:$espresso', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    androidTestImplementation "com.android.support.test.espresso:espresso-intents:$espresso"
     androidTestImplementation 'org.hamcrest:hamcrest-library:1.3'
-    androidTestImplementation 'org.mockito:mockito-android:2.15.0'
+    androidTestImplementation "org.mockito:mockito-android:$mockito"
 }
