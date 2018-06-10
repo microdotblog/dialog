@@ -164,7 +164,7 @@ public abstract class BaseListFragment extends Fragment implements Injectable, I
     }
 
     public void scrollListToTop() {
-        recyclerView.smoothScrollToPosition(0);
+        recyclerView.scrollToPosition(0);
     }
 
     protected void setData(Status status, List<Item> data, String message) {

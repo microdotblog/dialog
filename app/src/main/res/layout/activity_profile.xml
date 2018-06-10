@@ -19,7 +19,7 @@
             android:elevation="4dp"
             android:theme="@style/AppTheme.AppBarOverlay"
             app:layout_collapseMode="pin"
-            app:layout_scrollFlags="scroll">
+            app:layout_scrollFlags="scroll|enterAlwaysCollapsed">
 
             <ImageButton
                 android:id="@+id/button_follow"

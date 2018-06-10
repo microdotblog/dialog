@@ -185,8 +185,10 @@ public class ItemRecyclerAdapter extends ListAdapter<Item, ItemRecyclerAdapter.P
                 .apply(RequestOptions.placeholderOf(R.color.grey400))
                 .apply(RequestOptions.noAnimation())
                 .into(holder.thumbnail);
-        holder.username.setText(item.author.microblog.username);
-        holder.time.setText(item.microblog.dateRelative);
+        holder.fullname.setText(item.author.name);
+        holder.username.setText(context.getString(R.string.post_username, item.author.microblog.username));
+        holder.time.setText(context.getString(R.string.post_time, item.microblog.dateRelative));
+        holder.time.requestLayout(); // fix for text view not re-measuring
         holder.bindHtmlContent(item.contentHtml);
     }
 
@@ -219,6 +221,9 @@ public class ItemRecyclerAdapter extends ListAdapter<Item, ItemRecyclerAdapter.P
     public static class PostViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.image_thumbnail)
         CircleImageView thumbnail;
+
+        @BindView(R.id.text_fullname)
+        TextView fullname;
 
         @BindView(R.id.text_username)
         TextView username;
@@ -405,6 +410,7 @@ public class ItemRecyclerAdapter extends ListAdapter<Item, ItemRecyclerAdapter.P
 
         public void clearView() {
             glide.clear(thumbnail);
+            fullname.setText(null);
             username.setText(null);
             time.setText(null);
             GlideImageGetter.clear(content);

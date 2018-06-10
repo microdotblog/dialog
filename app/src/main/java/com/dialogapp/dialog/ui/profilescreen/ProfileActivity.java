@@ -3,6 +3,7 @@ package com.dialogapp.dialog.ui.profilescreen;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.res.TypedArray;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -31,6 +32,9 @@ public class ProfileActivity extends BaseListActivity implements ProfileFragment
 
     private ProfileFragmentPagerAdapter adapter;
     private RequestViewModel viewModel;
+
+    @BindView(R.id.appBar_profile)
+    AppBarLayout appBarLayout;
 
     @BindView(R.id.toolbar_profile)
     Toolbar toolbar;
@@ -116,6 +120,7 @@ public class ProfileActivity extends BaseListActivity implements ProfileFragment
                         fragment.scrollListToTop();
                     }
                 }
+                appBarLayout.setExpanded(true, true);
             }
         });
     }

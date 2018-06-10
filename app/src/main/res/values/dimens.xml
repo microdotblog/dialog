@@ -12,5 +12,5 @@
     <dimen name="navdrawer_profile_image">56dp</dimen>
 
     <!-- Post item -->
-    <dimen name="post_image_profile">48dp</dimen>
+    <dimen name="post_image_profile">42dp</dimen>
 </resources>

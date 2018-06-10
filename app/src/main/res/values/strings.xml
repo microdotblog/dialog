@@ -30,4 +30,7 @@
     <string name="location_permission_message">Location access is required for the accurate calculation of sunrise and sunset times. \n\nDefault sunrise time : 6AM \nDefault sunset time : 10PM</string>
     <string name="dialog_allow">Allow</string>
     <string name="dialog_dismiss">Dismiss</string>
+
+    <string name="post_username">\@%1$s</string>
+    <string name="post_time">\u2022 %1$s</string>
 </resources>

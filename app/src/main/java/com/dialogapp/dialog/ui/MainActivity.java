@@ -3,6 +3,7 @@ package com.dialogapp.dialog.ui;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
@@ -30,6 +31,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MainActivity extends BaseListActivity {
+    @BindView(R.id.appbar_main)
+    AppBarLayout appBarLayout;
+
     @BindView(R.id.toolbar)
     Toolbar toolbar;
 
@@ -174,6 +178,7 @@ public class MainActivity extends BaseListActivity {
                 if (fragment != null) {
                     fragment.scrollListToTop();
                 }
+                appBarLayout.setExpanded(true, true);
             }
         });
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {

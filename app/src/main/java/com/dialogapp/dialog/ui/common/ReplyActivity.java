@@ -124,9 +124,10 @@ public class ReplyActivity extends BaseInjectableActivity implements ReplyFragme
             failed = savedInstanceState.getBoolean("RequestStatus", false);
             requestInProgress = savedInstanceState.getBoolean("RequestInProgress", false);
             lastState = savedInstanceState.getInt("BottomSheetState", BottomSheetBehavior.STATE_COLLAPSED);
-            bottomSheet.setState(lastState);
             replyButton.setEnabled(!requestInProgress);
         }
+
+        setSheetState(lastState, true);
     }
 
     @Override
@@ -171,7 +172,7 @@ public class ReplyActivity extends BaseInjectableActivity implements ReplyFragme
     private void shouldFinish() {
         if (requestInProgress) {
             if (bottomSheet.getState() == BottomSheetBehavior.STATE_HIDDEN)
-                bottomSheet.setState(lastState);
+                setSheetState(lastState, false);
             return;
         }
         ReplyFragment fragment = (ReplyFragment) getSupportFragmentManager().findFragmentByTag("ReplyFragment");
@@ -186,7 +187,7 @@ public class ReplyActivity extends BaseInjectableActivity implements ReplyFragme
                             finish();
                         })
                         .onNegative((dialog, which) -> {
-                            bottomSheet.setState(lastState);
+                            setSheetState(lastState, false);
                         })
                         .canceledOnTouchOutside(false)
                         .show();
@@ -211,5 +212,23 @@ public class ReplyActivity extends BaseInjectableActivity implements ReplyFragme
     private boolean isNight() {
         return (getResources().getConfiguration().uiMode
                 & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES;
+    }
+
+    private void setSheetState(int state, boolean checkOrientation) {
+        if (checkOrientation) {
+            if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)
+                bottomSheet.setState(BottomSheetBehavior.STATE_EXPANDED);
+            else
+                bottomSheet.setState(state);
+        } else {
+            bottomSheet.setState(state);
+        }
+
+        lastState = bottomSheet.getState();
+        if (lastState == BottomSheetBehavior.STATE_EXPANDED) {
+            setStatusBarDim(false);
+        } else {
+            setStatusBarDim(true);
+        }
     }
 }

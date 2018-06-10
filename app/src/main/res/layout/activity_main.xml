@@ -8,6 +8,7 @@
     tools:context="com.dialogapp.dialog.ui.MainActivity">
 
     <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbar_main"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:elevation="4dp"
@@ -20,7 +21,7 @@
             android:background="?attr/colorPrimaryDark"
             app:navigationIcon="@drawable/ic_outline_account_circle_32dp"
             app:popupTheme="?android:spinnerItemStyle"
-            app:layout_scrollFlags="scroll|enterAlwaysCollapsed|snap">
+            app:layout_scrollFlags="scroll|enterAlwaysCollapsed">
 
             <Spinner
                 android:id="@+id/spinner_discover"
@@ -38,6 +39,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/tab_height"
             android:background="?attr/colorPrimaryDark"
+            app:layout_scrollFlags="scroll|snap|enterAlways"
             app:tabGravity="fill"
             app:tabMode="fixed" />
 

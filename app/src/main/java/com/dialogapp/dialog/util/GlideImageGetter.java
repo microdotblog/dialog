@@ -45,7 +45,7 @@ public class GlideImageGetter implements Html.ImageGetter, Drawable.Callback {
     private static final int DEFAULT_IMAGE_HEIGHT_DP = 192;
 
     // values from post_item layout
-    private static final int CONTENT_MARGIN_START_DP = 80;
+    private static final int CONTENT_MARGIN_START_DP = 66;
     private static final int CONTENT_MARGIN_END_DP = 16;
 
     private final RequestManager manager;
