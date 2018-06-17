@@ -19,9 +19,36 @@
             android:layout_width="match_parent"
             android:layout_height="?android:attr/actionBarSize"
             android:background="?attr/colorPrimaryDark"
-            app:navigationIcon="@drawable/ic_outline_account_circle_32dp"
-            app:popupTheme="?android:spinnerItemStyle"
-            app:layout_scrollFlags="scroll|enterAlwaysCollapsed">
+            app:contentInsetStart="0dp"
+            app:layout_scrollFlags="scroll|enterAlwaysCollapsed"
+            app:popupTheme="?android:spinnerItemStyle">
+
+            <RelativeLayout
+                android:id="@+id/profile"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="start"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:focusable="true">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/image_main_avatar"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginStart="16dp"
+                    tools:src="@tools:sample/avatars" />
+
+                <TextView
+                    android:id="@+id/title"
+                    style="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toEndOf="@id/image_main_avatar" />
+            </RelativeLayout>
 
             <Spinner
                 android:id="@+id/spinner_discover"

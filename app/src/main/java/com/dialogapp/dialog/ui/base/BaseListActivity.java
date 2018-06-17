@@ -104,6 +104,10 @@ public abstract class BaseListActivity extends BaseNetworkWatcherActivity implem
         return sharedPrefUtil.getStringPreference(getString(R.string.pref_fullname), "");
     }
 
+    protected String getSavedAvatarUrl() {
+        return sharedPrefUtil.getStringPreference(getString(R.string.pref_avatar_url), "");
+    }
+
     protected String getViewpagerFragmentByTag(int viewPagerId, int tabPosition) {
         return "android:switcher:" + viewPagerId + ":" + tabPosition;
     }

@@ -52,8 +52,7 @@ public class LoginActivity extends BaseInjectableActivity implements LoginFragme
         sharedPrefUtil.setStringPreference(getString(R.string.pref_token), token);
         sharedPrefUtil.setStringPreference(getString(R.string.pref_username), username);
         sharedPrefUtil.setStringPreference(getString(R.string.pref_fullname), fullName);
-
-        sharedPrefUtil.remove(getString(R.string.pref_avatar_url));
+        sharedPrefUtil.setStringPreference(getString(R.string.pref_avatar_url), avatarUrl);
 
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);

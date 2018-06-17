@@ -9,15 +9,20 @@ import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.TooltipCompat;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.dialogapp.dialog.R;
 import com.dialogapp.dialog.ui.base.BaseListActivity;
 import com.dialogapp.dialog.ui.base.BaseListFragment;
@@ -29,6 +34,7 @@ import com.dialogapp.dialog.ui.settings.SettingsActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends BaseListActivity {
     @BindView(R.id.appbar_main)
@@ -36,6 +42,15 @@ public class MainActivity extends BaseListActivity {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+
+    @BindView(R.id.title)
+    TextView title;
+
+    @BindView(R.id.image_main_avatar)
+    CircleImageView avatar;
+
+    @BindView(R.id.profile)
+    RelativeLayout profile;
 
     @BindView(R.id.coord_layout_main)
     CoordinatorLayout coordinatorLayout;
@@ -56,8 +71,18 @@ public class MainActivity extends BaseListActivity {
         ButterKnife.bind(this);
 
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle(getSavedFullname());
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        title.setText(getSavedFullname());
+        profile.setOnClickListener(view -> {
+            Intent intent = new Intent(this, ProfileActivity.class);
+            intent.putExtra(ProfileActivity.EXTRA_USERNAME, getSavedUsername());
+            startActivity(intent);
+        });
+        TooltipCompat.setTooltipText(profile, "View Profile");
+        Glide.with(this)
+                .load(getSavedAvatarUrl())
+                .apply(RequestOptions.placeholderOf(R.color.grey400))
+                .into(avatar);
         setErrorBar(coordinatorLayout);
 
         setSpinnerDiscover();
@@ -103,11 +128,6 @@ public class MainActivity extends BaseListActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         Intent intent;
         switch (item.getItemId()) {
-            case android.R.id.home:
-                intent = new Intent(this, ProfileActivity.class);
-                intent.putExtra(ProfileActivity.EXTRA_USERNAME, getSavedUsername());
-                startActivity(intent);
-                return true;
             case R.id.main_options_settings:
                 intent = new Intent(this, SettingsActivity.class);
                 intent.putExtra(ProfileActivity.EXTRA_USERNAME, getSavedUsername());
@@ -195,21 +215,21 @@ public class MainActivity extends BaseListActivity {
                         tabLayout.getTabAt(1).getIcon().setAlpha(178);
                         tabLayout.getTabAt(2).getIcon().setAlpha(178);
                         spinnerDiscover.setVisibility(View.GONE);
-                        getSupportActionBar().setDisplayShowTitleEnabled(true);
+                        title.setVisibility(View.VISIBLE);
                         break;
                     case 1:
                         tabLayout.getTabAt(0).getIcon().setAlpha(178);
                         tabLayout.getTabAt(1).getIcon().setAlpha(255);
                         tabLayout.getTabAt(2).getIcon().setAlpha(178);
                         spinnerDiscover.setVisibility(View.GONE);
-                        getSupportActionBar().setDisplayShowTitleEnabled(true);
+                        title.setVisibility(View.VISIBLE);
                         break;
                     case 2:
                         tabLayout.getTabAt(0).getIcon().setAlpha(178);
                         tabLayout.getTabAt(1).getIcon().setAlpha(178);
                         tabLayout.getTabAt(2).getIcon().setAlpha(255);
                         spinnerDiscover.setVisibility(View.VISIBLE);
-                        getSupportActionBar().setDisplayShowTitleEnabled(false);
+                        title.setVisibility(View.GONE);
                         break;
                 }
             }
