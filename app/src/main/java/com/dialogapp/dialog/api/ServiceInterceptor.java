@@ -31,7 +31,7 @@ public class ServiceInterceptor implements Interceptor {
 
     public String getAuthToken() {
         if (authToken == null || authToken.isEmpty())
-            authToken = sharedPrefUtil.getStringPreference("token", "");
+            authToken = sharedPrefUtil.getStringPreference("token", "", false);
         return authToken;
     }
 

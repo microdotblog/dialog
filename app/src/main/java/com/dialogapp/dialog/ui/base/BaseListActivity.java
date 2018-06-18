@@ -85,7 +85,7 @@ public abstract class BaseListActivity extends BaseNetworkWatcherActivity implem
 
     @Override
     public boolean shouldColorUsernameLinks() {
-        return sharedPrefUtil.getBooleanPreference(getString(R.string.pref_color_username_links), false);
+        return sharedPrefUtil.getBooleanPreference(getString(R.string.pref_color_username_links), false, true);
     }
 
     protected void setErrorBar(CoordinatorLayout coordinatorLayout) {
@@ -97,15 +97,15 @@ public abstract class BaseListActivity extends BaseNetworkWatcherActivity implem
     }
 
     protected String getSavedUsername() {
-        return sharedPrefUtil.getStringPreference(getString(R.string.pref_username), "");
+        return sharedPrefUtil.getStringPreference(getString(R.string.pref_username), "", false);
     }
 
     protected String getSavedFullname() {
-        return sharedPrefUtil.getStringPreference(getString(R.string.pref_fullname), "");
+        return sharedPrefUtil.getStringPreference(getString(R.string.pref_fullname), "", false);
     }
 
     protected String getSavedAvatarUrl() {
-        return sharedPrefUtil.getStringPreference(getString(R.string.pref_avatar_url), "");
+        return sharedPrefUtil.getStringPreference(getString(R.string.pref_avatar_url), "", false);
     }
 
     protected String getViewpagerFragmentByTag(int viewPagerId, int tabPosition) {

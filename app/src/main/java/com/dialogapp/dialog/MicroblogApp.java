@@ -29,7 +29,7 @@ public class MicroblogApp extends Application implements HasActivityInjector {
         AppInjector.init(this);
 
         String nightMode = sharedPrefUtil.getStringPreference(getString(R.string.pref_nightMode),
-                String.valueOf(AppCompatDelegate.MODE_NIGHT_NO));
+                String.valueOf(AppCompatDelegate.MODE_NIGHT_NO), true);
         AppCompatDelegate.setDefaultNightMode(Integer.parseInt(nightMode));
 
         if (LeakCanary.isInAnalyzerProcess(this)) {

@@ -141,7 +141,7 @@ public class MainActivity extends BaseListActivity {
     }
 
     private void startLoginActivity() {
-        sharedPrefUtil.remove(getString(R.string.pref_token));
+        sharedPrefUtil.removeUserPref(getString(R.string.pref_token));
         Intent loginIntent = new Intent(this, LoginActivity.class);
         startActivity(loginIntent);
         finish();

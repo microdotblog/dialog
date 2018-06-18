@@ -19,7 +19,7 @@ public class LauncherActivity extends BaseInjectableActivity {
         super.onCreate(savedInstanceState);
 
         Intent intent;
-        if (sharedPrefUtil.getStringPreference(getString(R.string.pref_token), null) == null)
+        if (sharedPrefUtil.getStringPreference(getString(R.string.pref_token), null, false) == null)
             intent = new Intent(this, LoginActivity.class);
         else {
             intent = new Intent(this, MainActivity.class);

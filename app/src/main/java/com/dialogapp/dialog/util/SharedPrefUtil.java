@@ -16,86 +16,58 @@ import javax.inject.Singleton;
 
 @Singleton
 public class SharedPrefUtil {
-    private static SharedPreferences preferences;
+    private static final String KEY_USER_PREFS = "com.dialogapp.dialog.USER_PREFS";
+    private static SharedPreferences defaultPrefs;
+    private static SharedPreferences userPrefs;
     private static Boolean releaseNotesSeen;
 
     @Inject
     public SharedPrefUtil(Application app) {
-        preferences = PreferenceManager.getDefaultSharedPreferences(app);
+        defaultPrefs = PreferenceManager.getDefaultSharedPreferences(app);
+        userPrefs = app.getSharedPreferences(KEY_USER_PREFS, Context.MODE_PRIVATE);
+
+        migratePreferences();
     }
 
-    public void remove(String key) {
-        if (preferences != null && !TextUtils.isEmpty(key)) {
-            SharedPreferences.Editor editor = preferences.edit();
+    public void removeUserPref(String key) {
+        if (userPrefs != null && !TextUtils.isEmpty(key)) {
+            SharedPreferences.Editor editor = userPrefs.edit();
             editor.remove(key);
             editor.apply();
         }
     }
 
-    public String getStringPreference(String key, String defaultValue) {
-        String value = null;
-
-        if (preferences != null) {
-            value = preferences.getString(key, defaultValue);
+    public String getStringPreference(String key, String defaultValue, boolean isAppPref) {
+        String value;
+        if (isAppPref) {
+            value = defaultPrefs.getString(key, defaultValue);
+        } else {
+            value = userPrefs.getString(key, defaultValue);
         }
         return value;
     }
 
     public void setStringPreference(String key, String value) {
-        if (preferences != null && !TextUtils.isEmpty(key)) {
-            SharedPreferences.Editor editor = preferences.edit();
+        if (userPrefs != null && !TextUtils.isEmpty(key)) {
+            SharedPreferences.Editor editor = userPrefs.edit();
             editor.putString(key, value);
             editor.apply();
         }
     }
 
-    public float getFloatPreference(String key, float defaultValue) {
-        float value = defaultValue;
-        if (preferences != null) {
-            value = preferences.getFloat(key, defaultValue);
-        }
-        return value;
-    }
-
-    public boolean setFloatPreference(String key, float value) {
-        if (preferences != null) {
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.putFloat(key, value);
-            editor.apply();
-            return true;
-        }
-        return false;
-    }
-
-    public long getLongPreference(String key, long defaultValue) {
-        long value = defaultValue;
-        if (preferences != null) {
-            value = preferences.getLong(key, defaultValue);
-        }
-        return value;
-    }
-
-    public boolean setLongPreference(String key, long value) {
-        if (preferences != null) {
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.putLong(key, value);
-            editor.apply();
-            return true;
-        }
-        return false;
-    }
-
-    public int getIntegerPreference(String key, int defaultValue) {
-        int value = defaultValue;
-        if (preferences != null) {
-            value = preferences.getInt(key, defaultValue);
+    public int getIntegerPreference(String key, int defaultValue, boolean isAppPref) {
+        int value;
+        if (isAppPref) {
+            value = defaultPrefs.getInt(key, defaultValue);
+        } else {
+            value = userPrefs.getInt(key, defaultValue);
         }
         return value;
     }
 
     public boolean setIntegerPreference(String key, int value) {
-        if (preferences != null) {
-            SharedPreferences.Editor editor = preferences.edit();
+        if (userPrefs != null) {
+            SharedPreferences.Editor editor = userPrefs.edit();
             editor.putInt(key, value);
             editor.apply();
             return true;
@@ -103,17 +75,19 @@ public class SharedPrefUtil {
         return false;
     }
 
-    public boolean getBooleanPreference(String key, boolean defaultValue) {
-        boolean value = defaultValue;
-        if (preferences != null) {
-            value = preferences.getBoolean(key, defaultValue);
+    public boolean getBooleanPreference(String key, boolean defaultValue, boolean isAppPref) {
+        boolean value;
+        if (isAppPref) {
+            value = defaultPrefs.getBoolean(key, defaultValue);
+        } else {
+            value = userPrefs.getBoolean(key, defaultValue);
         }
         return value;
     }
 
     public boolean setBooleanPreference(String key, boolean value) {
-        if (preferences != null) {
-            SharedPreferences.Editor editor = preferences.edit();
+        if (userPrefs != null) {
+            SharedPreferences.Editor editor = userPrefs.edit();
             editor.putBoolean(key, value);
             editor.apply();
             return true;
@@ -133,7 +107,7 @@ public class SharedPrefUtil {
             if (info != null && info.firstInstallTime == info.lastUpdateTime) {
                 setReleaseNotesSeen(context);
             } else {
-                releaseNotesSeen = getIntegerPreference(context.getString(R.string.pref_latest_release), 0)
+                releaseNotesSeen = getIntegerPreference(context.getString(R.string.pref_latest_release), 0, true)
                         >= BuildConfig.VERSION_CODE;
             }
         }
@@ -142,6 +116,19 @@ public class SharedPrefUtil {
 
     public void setReleaseNotesSeen(Context context) {
         releaseNotesSeen = true;
-        setIntegerPreference(context.getString(R.string.pref_latest_release), BuildConfig.VERSION_CODE);
+        defaultPrefs.edit()
+                .putInt(context.getString(R.string.pref_latest_release), BuildConfig.VERSION_CODE)
+                .apply();
+    }
+
+    private void migratePreferences() {
+        String[] prefs = new String[] {"token", "username", "avatarurl", "fullname"};
+
+        for (String pref : prefs) {
+            if (defaultPrefs.contains(pref)) {
+                setStringPreference(pref, defaultPrefs.getString(pref, ""));
+                defaultPrefs.edit().remove(pref).apply();
+            }
+        }
     }
 }
