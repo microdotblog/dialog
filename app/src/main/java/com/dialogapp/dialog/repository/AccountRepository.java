@@ -8,7 +8,7 @@ import com.dialogapp.dialog.AppExecutors;
 import com.dialogapp.dialog.api.ApiResponse;
 import com.dialogapp.dialog.api.MicroblogService;
 import com.dialogapp.dialog.db.AccountDao;
-import com.dialogapp.dialog.model.AccountInfo;
+import com.dialogapp.dialog.model.FollowingAccountInfo;
 import com.dialogapp.dialog.model.AccountResponse;
 import com.dialogapp.dialog.model.VerifiedAccount;
 import com.dialogapp.dialog.util.Resource;
@@ -94,34 +94,34 @@ public class AccountRepository {
         }.asLiveData();
     }
 
-    public LiveData<Resource<List<AccountInfo>>> loadFollowingData(String username) {
-        return new NetworkBoundResource<List<AccountInfo>, List<AccountInfo>>(appExecutors) {
-            List<AccountInfo> accountInfos;
+    public LiveData<Resource<List<FollowingAccountInfo>>> loadFollowingData(String username) {
+        return new NetworkBoundResource<List<FollowingAccountInfo>, List<FollowingAccountInfo>>(appExecutors) {
+            List<FollowingAccountInfo> followingAccountInfo;
 
             @Override
-            protected boolean shouldFetch(@Nullable List<AccountInfo> dbData) {
-                return accountInfos == null;
+            protected boolean shouldFetch(@Nullable List<FollowingAccountInfo> dbData) {
+                return followingAccountInfo == null;
             }
 
             @NonNull
             @Override
-            protected LiveData<ApiResponse<List<AccountInfo>>> createCall() {
+            protected LiveData<ApiResponse<List<FollowingAccountInfo>>> createCall() {
                 return microblogService.getFollowing(username);
             }
 
             @Override
-            protected void saveCallResult(@NonNull List<AccountInfo> item) {
-                accountInfos = item;
+            protected void saveCallResult(@NonNull List<FollowingAccountInfo> item) {
+                followingAccountInfo = item;
             }
 
             @NonNull
             @Override
-            protected LiveData<List<AccountInfo>> loadFromDb() {
-                return new LiveData<List<AccountInfo>>() {
+            protected LiveData<List<FollowingAccountInfo>> loadFromDb() {
+                return new LiveData<List<FollowingAccountInfo>>() {
                     @Override
                     protected void onActive() {
                         super.onActive();
-                        setValue(accountInfos);
+                        setValue(followingAccountInfo);
                     }
                 };
             }

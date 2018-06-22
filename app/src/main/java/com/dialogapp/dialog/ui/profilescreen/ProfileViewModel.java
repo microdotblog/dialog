@@ -5,7 +5,7 @@ import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Transformations;
 import android.arch.lifecycle.ViewModel;
 
-import com.dialogapp.dialog.model.AccountInfo;
+import com.dialogapp.dialog.model.FollowingAccountInfo;
 import com.dialogapp.dialog.model.Item;
 import com.dialogapp.dialog.repository.AccountRepository;
 import com.dialogapp.dialog.repository.PostsRepository;
@@ -22,7 +22,7 @@ public class ProfileViewModel extends ViewModel {
     private final LiveData<Resource<UserInfo>> userInfo;
     private final LiveData<Resource<List<Item>>> userPosts;
     private final MutableLiveData<String> self = new MutableLiveData<>();
-    private final LiveData<Resource<List<AccountInfo>>> followingData;
+    private final LiveData<Resource<List<FollowingAccountInfo>>> followingData;
 
     @Inject
     public ProfileViewModel(PostsRepository postsRepository, AccountRepository accountRepository) {
@@ -57,7 +57,7 @@ public class ProfileViewModel extends ViewModel {
         return userPosts;
     }
 
-    public LiveData<Resource<List<AccountInfo>>> getFollowingData() {
+    public LiveData<Resource<List<FollowingAccountInfo>>> getFollowingData() {
         return followingData;
     }
 

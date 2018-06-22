@@ -19,7 +19,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.dialogapp.dialog.R;
 import com.dialogapp.dialog.di.Injectable;
-import com.dialogapp.dialog.model.AccountInfo;
+import com.dialogapp.dialog.model.FollowingAccountInfo;
 import com.dialogapp.dialog.ui.base.BaseListActivity;
 import com.dialogapp.dialog.ui.profilescreen.ProfileViewModel;
 import com.dialogapp.dialog.util.Resource;
@@ -51,7 +51,7 @@ public class FollowingFragment extends Fragment implements Injectable {
     private Unbinder unbinder;
     private FollowingRecyclerAdapter adapter;
     private String username;
-    private final Observer<Resource<List<AccountInfo>>> observer = listResource -> {
+    private final Observer<Resource<List<FollowingAccountInfo>>> observer = listResource -> {
         if (listResource != null)
             setData(listResource.status, listResource.data, listResource.message);
     };
@@ -117,7 +117,7 @@ public class FollowingFragment extends Fragment implements Injectable {
         unbinder.unbind();
     }
 
-    protected void setData(Status status, List<AccountInfo> data, String message) {
+    protected void setData(Status status, List<FollowingAccountInfo> data, String message) {
         // Set data ignoring the status
         if (data != null) {
             if (data.isEmpty()) {

@@ -13,7 +13,7 @@ import android.widget.TextView;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
 import com.dialogapp.dialog.R;
-import com.dialogapp.dialog.model.AccountInfo;
+import com.dialogapp.dialog.model.FollowingAccountInfo;
 import com.dialogapp.dialog.ui.profilescreen.ProfileActivity;
 import com.dialogapp.dialog.util.Objects;
 
@@ -21,18 +21,18 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class FollowingRecyclerAdapter extends ListAdapter<AccountInfo, FollowingRecyclerAdapter.AccountInfoViewHolder> {
-    private static final DiffUtil.ItemCallback<AccountInfo> DIFF_CALLBACK =
-            new DiffUtil.ItemCallback<AccountInfo>() {
+public class FollowingRecyclerAdapter extends ListAdapter<FollowingAccountInfo, FollowingRecyclerAdapter.AccountInfoViewHolder> {
+    private static final DiffUtil.ItemCallback<FollowingAccountInfo> DIFF_CALLBACK =
+            new DiffUtil.ItemCallback<FollowingAccountInfo>() {
                 @Override
                 public boolean areItemsTheSame(
-                        @NonNull AccountInfo oldItem, @NonNull AccountInfo newItem) {
+                        @NonNull FollowingAccountInfo oldItem, @NonNull FollowingAccountInfo newItem) {
                     return Objects.equals(oldItem.name, newItem.name);
                 }
 
                 @Override
                 public boolean areContentsTheSame(
-                        @NonNull AccountInfo oldItem, @NonNull AccountInfo newItem) {
+                        @NonNull FollowingAccountInfo oldItem, @NonNull FollowingAccountInfo newItem) {
                     return Objects.equals(oldItem.username, newItem.username) &&
                             Objects.equals(oldItem.isFollowing, newItem.isFollowing) &&
                             Objects.equals(oldItem.avatar, oldItem.avatar);

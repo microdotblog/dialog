@@ -2,7 +2,7 @@ package com.dialogapp.dialog.api;
 
 import android.arch.lifecycle.LiveData;
 
-import com.dialogapp.dialog.model.AccountInfo;
+import com.dialogapp.dialog.model.FollowingAccountInfo;
 import com.dialogapp.dialog.model.AccountResponse;
 import com.dialogapp.dialog.model.MediaEndPoint;
 import com.dialogapp.dialog.model.MicroBlogResponse;
@@ -57,7 +57,7 @@ public interface MicroblogService {
     Call<MicroBlogResponse> getNewPostsSince(@Query("since_id") long since_id);
 
     @GET("users/following/{username}")
-    LiveData<ApiResponse<List<AccountInfo>>> getFollowing(@Path("username") String username);
+    LiveData<ApiResponse<List<FollowingAccountInfo>>> getFollowing(@Path("username") String username);
 
     // POST
 

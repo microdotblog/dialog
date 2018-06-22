@@ -2,7 +2,7 @@ package com.dialogapp.dialog.model;
 
 import com.squareup.moshi.Json;
 
-public class AccountInfo {
+public class FollowingAccountInfo {
     @Json(name = "name")
     public final String name;
     @Json(name = "url")
@@ -16,7 +16,8 @@ public class AccountInfo {
     @Json(name = "is_you")
     public final boolean isYou;
 
-    public AccountInfo(String name, String url, String avatar, String username, boolean isFollowing, boolean isYou) {
+    public FollowingAccountInfo(String name, String url, String avatar, String username,
+                                boolean isFollowing, boolean isYou) {
         this.name = name;
         this.url = url;
         this.avatar = avatar;
