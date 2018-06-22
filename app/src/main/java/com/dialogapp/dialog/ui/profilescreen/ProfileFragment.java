@@ -6,7 +6,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
-import com.dialogapp.dialog.model.UserInfo;
 import com.dialogapp.dialog.ui.base.BaseListFragment;
 import com.dialogapp.dialog.util.Status;
 

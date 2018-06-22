@@ -7,7 +7,6 @@ import android.arch.lifecycle.Observer;
 import com.dialogapp.dialog.TestUtil;
 import com.dialogapp.dialog.model.Item;
 import com.dialogapp.dialog.model.MicroBlogResponse;
-import com.dialogapp.dialog.model.UserInfo;
 import com.dialogapp.dialog.repository.PostsRepository;
 import com.dialogapp.dialog.util.Resource;
 

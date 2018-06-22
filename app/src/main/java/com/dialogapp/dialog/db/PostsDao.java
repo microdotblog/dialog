@@ -9,7 +9,7 @@ import android.arch.persistence.room.Transaction;
 
 import com.dialogapp.dialog.model.Item;
 import com.dialogapp.dialog.model.MicroBlogResponse;
-import com.dialogapp.dialog.model.UserInfo;
+import com.dialogapp.dialog.ui.profilescreen.UserInfo;
 
 import java.util.List;
 

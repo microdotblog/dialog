@@ -1,4 +1,4 @@
-package com.dialogapp.dialog.model;
+package com.dialogapp.dialog.ui.profilescreen;
 
 public class UserInfo {
     public final String microblog_bio;

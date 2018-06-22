@@ -7,7 +7,6 @@ import android.arch.lifecycle.ViewModel;
 
 import com.dialogapp.dialog.model.AccountInfo;
 import com.dialogapp.dialog.model.Item;
-import com.dialogapp.dialog.model.UserInfo;
 import com.dialogapp.dialog.repository.AccountRepository;
 import com.dialogapp.dialog.repository.PostsRepository;
 import com.dialogapp.dialog.util.AbsentLiveData;

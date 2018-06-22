@@ -12,7 +12,7 @@ import com.dialogapp.dialog.db.MicroBlogDb;
 import com.dialogapp.dialog.db.PostsDao;
 import com.dialogapp.dialog.model.Item;
 import com.dialogapp.dialog.model.MicroBlogResponse;
-import com.dialogapp.dialog.model.UserInfo;
+import com.dialogapp.dialog.ui.profilescreen.UserInfo;
 import com.dialogapp.dialog.util.InstantAppExecutors;
 import com.dialogapp.dialog.util.Resource;
 
