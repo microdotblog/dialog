@@ -11,7 +11,8 @@ import com.dialogapp.dialog.model.AccountResponse;
 import com.dialogapp.dialog.model.Item;
 import com.dialogapp.dialog.model.MicroBlogResponse;
 
-@Database(entities = {AccountResponse.class, Item.class, MicroBlogResponse.class}, version = 1)
+@Database(entities = {AccountResponse.class, Item.class, MicroBlogResponse.class}, version = 1,
+        exportSchema = false)
 public abstract class MicroBlogDb extends RoomDatabase {
     public abstract AccountDao accountDao();
 

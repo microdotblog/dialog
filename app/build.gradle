@@ -11,12 +11,6 @@ android {
         versionCode generateVersionCode()
         versionName generateVersionName()
         testInstrumentationRunner "com.dialogapp.dialog.util.CustomTestRunner"
-
-        javaCompileOptions {
-            annotationProcessorOptions {
-                arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
-            }
-        }
     }
     buildTypes {
         debug {
