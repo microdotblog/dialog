@@ -33,6 +33,7 @@ public abstract class MicroBlogDb extends RoomDatabase {
 
     private static MicroBlogDb buildDatabase(Context context) {
         return Room.databaseBuilder(context, MicroBlogDb.class, "microblog.db")
+                .fallbackToDestructiveMigration()
                 .addCallback(new Callback() {
                     @Override
                     public void onOpen(@NonNull SupportSQLiteDatabase db) {
