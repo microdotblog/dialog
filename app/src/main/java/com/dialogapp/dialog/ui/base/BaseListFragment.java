@@ -77,9 +77,12 @@ public abstract class BaseListFragment extends Fragment implements Injectable, I
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        swipeRefreshLayout.setOnRefreshListener(this::refresh);
+        swipeRefreshLayout.setOnRefreshListener(() -> {
+            swipeRefreshLayout.setRefreshing(true);
+            onRefresh();
+        });
 
-        listener.getConnection().observe(getActivity(), isConnected -> {
+        listener.getConnection().observe(requireActivity(), isConnected -> {
             if (swipeRefreshLayout != null) {
                 if (isConnected != null && isConnected)
                     swipeRefreshLayout.setEnabled(true);
@@ -88,12 +91,7 @@ public abstract class BaseListFragment extends Fragment implements Injectable, I
             }
         });
 
-        adapter = new ItemRecyclerAdapter(this.getActivity(), this,
-                Glide.with(this), listener.shouldColorUsernameLinks());
-
-        recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity(), LinearLayoutManager.VERTICAL, false));
-        recyclerView.addItemDecoration(new DividerItemDecoration(this.getActivity(), DividerItemDecoration.VERTICAL));
-        recyclerView.setAdapter(adapter);
+        setupRecyclerView();
     }
 
     @Override
@@ -191,8 +189,15 @@ public abstract class BaseListFragment extends Fragment implements Injectable, I
             swipeRefreshLayout.setRefreshing(false);
     }
 
-    protected void refresh() {
-        swipeRefreshLayout.setRefreshing(true);
+    protected void onRefresh() {}
+
+    protected void setupRecyclerView() {
+        adapter = new ItemRecyclerAdapter(requireContext(), this,
+                Glide.with(this), listener.shouldColorUsernameLinks());
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false));
+        recyclerView.addItemDecoration(new DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL));
+        recyclerView.setAdapter(adapter);
     }
 
     protected ViewModelProvider.Factory getViewModelFactory() {

@@ -57,8 +57,7 @@ public class ListFragment extends BaseListFragment {
     }
 
     @Override
-    protected void refresh() {
-        super.refresh();
+    protected void onRefresh() {
         viewModel.refresh();
     }
 
