@@ -135,7 +135,9 @@ public abstract class BaseListFragment extends Fragment implements Injectable, I
             startActivity(intent);
         } else {
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(text));
-            startActivity(intent);
+            if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
+                startActivity(intent);
+            }
         }
     }
 
