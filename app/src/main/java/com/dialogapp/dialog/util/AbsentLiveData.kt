@@ -14,16 +14,22 @@
  * limitations under the License.
  */
 
-package com.dialogapp.dialog.util;
+package com.dialogapp.dialog.util
+
+import androidx.lifecycle.LiveData
 
 /**
- * Status of a resource that is provided to the UI.
- * <p>
- * These are usually created by the Repository classes where they return
- * {@code LiveData<Resource<T>>} to pass back the latest data to the UI with its fetch status.
+ * A LiveData class that has `null` value.
  */
-public enum Status {
-    SUCCESS,
-    ERROR,
-    LOADING
+class AbsentLiveData<T : Any?> private constructor() : LiveData<T>() {
+    init {
+        // use post instead of set since this can be created on any thread
+        postValue(null)
+    }
+
+    companion object {
+        fun <T> create(): LiveData<T> {
+            return AbsentLiveData()
+        }
+    }
 }

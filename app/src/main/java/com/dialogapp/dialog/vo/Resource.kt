@@ -14,16 +14,26 @@
  * limitations under the License.
  */
 
-package com.dialogapp.dialog.util;
+package com.dialogapp.dialog.vo
 
-public class Objects {
-    public static boolean equals(Object o1, Object o2) {
-        if (o1 == null) {
-            return o2 == null;
+import com.dialogapp.dialog.vo.Status.*
+
+/**
+ * A generic class that holds a value with its loading status.
+ * @param <T>
+</T> */
+data class Resource<out T>(val status: Status, val data: T?, val message: String?) {
+    companion object {
+        fun <T> success(data: T?): Resource<T> {
+            return Resource(SUCCESS, data, null)
         }
-        if (o2 == null) {
-            return false;
+
+        fun <T> error(msg: String, data: T?): Resource<T> {
+            return Resource(ERROR, data, msg)
         }
-        return o1.equals(o2);
+
+        fun <T> loading(data: T?): Resource<T> {
+            return Resource(LOADING, data, null)
+        }
     }
 }
