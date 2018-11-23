@@ -1,6 +1,6 @@
 package com.dialogapp.dialog.model;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 import com.squareup.moshi.Json;
 

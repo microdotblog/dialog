@@ -1,6 +1,6 @@
 package com.dialogapp.dialog.api;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.dialogapp.dialog.util.SharedPrefUtil;
 

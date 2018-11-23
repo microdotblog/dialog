@@ -16,8 +16,8 @@
 
 package com.dialogapp.dialog.util;
 
-import android.arch.lifecycle.ViewModel;
-import android.arch.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
 
 /**
  * Creates a one off view model factory for the given view model instance.

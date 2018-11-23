@@ -1,9 +1,8 @@
 package com.dialogapp.dialog.ui;
 
-import android.arch.lifecycle.MutableLiveData;
-import android.support.test.runner.AndroidJUnit4;
+import androidx.lifecycle.MutableLiveData;
+import androidx.test.runner.AndroidJUnit4;
 
-import com.dialogapp.dialog.model.AccountResponse;
 import com.dialogapp.dialog.model.VerifiedAccount;
 import com.dialogapp.dialog.ui.loginscreen.LoginViewModel;
 import com.dialogapp.dialog.util.Resource;

@@ -1,6 +1,6 @@
 package com.dialogapp.dialog.db;
 
-import android.arch.persistence.room.TypeConverter;
+import androidx.room.TypeConverter;
 
 import com.dialogapp.dialog.model.AccountResponse;
 import com.squareup.moshi.JsonAdapter;

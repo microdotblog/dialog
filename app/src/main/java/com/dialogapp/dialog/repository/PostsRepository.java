@@ -1,8 +1,8 @@
 package com.dialogapp.dialog.repository;
 
-import android.arch.lifecycle.LiveData;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.lifecycle.LiveData;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.dialogapp.dialog.AppExecutors;
 import com.dialogapp.dialog.api.ApiResponse;

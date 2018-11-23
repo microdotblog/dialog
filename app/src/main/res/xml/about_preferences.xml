@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <android.support.v7.preference.PreferenceCategory android:title="Credits">
+    <androidx.preference.PreferenceCategory android:title="Credits">
         <Preference
             android:layout="@layout/partial_about_info"
             android:persistent="false"
             android:selectable="false" />
-    </android.support.v7.preference.PreferenceCategory>
+    </androidx.preference.PreferenceCategory>
 
     <Preference
         android:persistent="false"
@@ -23,4 +23,4 @@
             android:action="android.intent.action.VIEW"
             android:data="https://dialog.micro.blog/licenses" />
     </Preference>
-</android.support.v7.preference.PreferenceScreen>
+</androidx.preference.PreferenceScreen>

@@ -2,7 +2,7 @@ package com.dialogapp.dialog;
 
 import android.app.Activity;
 import android.app.Application;
-import android.support.v7.app.AppCompatDelegate;
+import androidx.appcompat.app.AppCompatDelegate;
 
 import com.dialogapp.dialog.di.AppInjector;
 import com.dialogapp.dialog.util.SharedPrefUtil;

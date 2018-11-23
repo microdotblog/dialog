@@ -1,7 +1,7 @@
 package com.dialogapp.dialog.util;
 
-import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MutableLiveData;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import com.dialogapp.dialog.api.ApiResponse;
 

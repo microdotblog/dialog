@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <android.support.v7.preference.PreferenceCategory android:title="Appearance">
+    <androidx.preference.PreferenceCategory android:title="Appearance">
         <android.support.v7.preference.ListPreference
             android:entries="@array/modes"
             android:entryValues="@array/nightModes"
@@ -15,9 +15,9 @@
             android:key="@string/pref_color_username_links"
             android:summary="Color username links with Accent color"
             android:title="Colored username links" />
-    </android.support.v7.preference.PreferenceCategory>
+    </androidx.preference.PreferenceCategory>
 
-    <android.support.v7.preference.PreferenceCategory android:title="General">
+    <androidx.preference.PreferenceCategory android:title="General">
 
         <android.support.v7.preference.ListPreference
             android:entries="@array/preloadImages"
@@ -27,9 +27,9 @@
             android:summary="%s"
             android:title="Preload large images" />
 
-    </android.support.v7.preference.PreferenceCategory>
+    </androidx.preference.PreferenceCategory>
 
-    <android.support.v7.preference.PreferenceCategory android:title="Other">
+    <androidx.preference.PreferenceCategory android:title="Other">
 
         <android.support.v7.preference.PreferenceScreen
             android:key="button_voicemail_setting_key"
@@ -40,6 +40,6 @@
                 android:targetPackage="com.dialogapp.dialog" />
         </android.support.v7.preference.PreferenceScreen>
 
-    </android.support.v7.preference.PreferenceCategory>
+    </androidx.preference.PreferenceCategory>
 
-</android.support.v7.preference.PreferenceScreen>
+</androidx.preference.PreferenceScreen>

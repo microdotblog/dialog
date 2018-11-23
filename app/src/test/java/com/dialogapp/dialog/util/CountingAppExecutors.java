@@ -16,7 +16,7 @@
 
 package com.dialogapp.dialog.util;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.dialogapp.dialog.AppExecutors;
 

@@ -1,6 +1,6 @@
 package com.dialogapp.dialog.db;
 
-import android.support.test.runner.AndroidJUnit4;
+import androidx.test.runner.AndroidJUnit4;
 
 import com.dialogapp.dialog.model.Item;
 import com.dialogapp.dialog.repository.Endpoints;
@@ -20,7 +20,7 @@ import java.util.List;
 import okio.BufferedSource;
 import okio.Okio;
 
-import static android.support.test.InstrumentationRegistry.getInstrumentation;
+import static androidx.test.InstrumentationRegistry.getInstrumentation;
 import static com.dialogapp.dialog.LiveDataTestUtil.getValue;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;

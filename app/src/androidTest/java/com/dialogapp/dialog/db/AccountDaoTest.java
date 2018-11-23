@@ -1,6 +1,6 @@
 package com.dialogapp.dialog.db;
 
-import android.support.test.runner.AndroidJUnit4;
+import androidx.test.runner.AndroidJUnit4;
 
 import com.dialogapp.dialog.TestUtil;
 import com.dialogapp.dialog.model.AccountResponse;

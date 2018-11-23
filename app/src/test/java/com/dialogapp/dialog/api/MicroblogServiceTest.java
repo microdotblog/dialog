@@ -1,6 +1,6 @@
 package com.dialogapp.dialog.api;
 
-import android.arch.core.executor.testing.InstantTaskExecutorRule;
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 
 import com.dialogapp.dialog.model.AccountResponse;
 import com.dialogapp.dialog.model.Item;

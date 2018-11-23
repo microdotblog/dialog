@@ -1,6 +1,6 @@
 package com.dialogapp.dialog.api;
 
-import android.arch.lifecycle.LiveData;
+import androidx.lifecycle.LiveData;
 
 import com.dialogapp.dialog.model.FollowingAccountInfo;
 import com.dialogapp.dialog.model.AccountResponse;
