@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/bottom_nav_timeline"
+        android:title="Timeline" />
+    <item
+        android:id="@+id/bottom_nav_mentions"
+        android:title="Mentions" />
+    <item
+        android:id="@+id/bottom_nav_discover"
+        android:title="Discover" />
+    <item
+        android:id="@+id/bottom_nav_more"
+        android:title="More" />
+</menu>
