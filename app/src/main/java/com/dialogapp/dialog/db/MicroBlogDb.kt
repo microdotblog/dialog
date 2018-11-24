@@ -14,8 +14,6 @@ import com.dialogapp.dialog.model.Post
 abstract class MicroBlogDb : RoomDatabase() {
     abstract fun accountDao(): AccountDao
 
-    abstract fun postsDao(): PostsDao
-
     companion object {
 
         private var INSTANCE: MicroBlogDb? = null
@@ -42,8 +40,6 @@ abstract class MicroBlogDb : RoomDatabase() {
                                 val microBlogDb = getInstance(context)
                                 microBlogDb!!.beginTransaction()
                                 try {
-                                    microBlogDb.postsDao().pruneUserData()
-                                    microBlogDb.postsDao().prunePosts()
                                     microBlogDb.setTransactionSuccessful()
                                 } finally {
                                     microBlogDb.endTransaction()

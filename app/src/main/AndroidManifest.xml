@@ -14,40 +14,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
-        <activity
-            android:name=".LauncherActivity"
-            android:theme="@android:style/Theme.NoDisplay">
+        <activity android:name=".ui.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".ui.loginscreen.LoginActivity"
-            android:screenOrientation="portrait" />
-        <activity android:name=".ui.MainActivity" />
-        <activity android:name=".ui.profilescreen.ProfileActivity" />
-        <activity
-            android:name=".ui.imageviewer.ImageViewerActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".ui.conversation.ConversationActivity"
-            android:label="Conversation" />
-        <activity
-            android:name=".ui.settings.SettingsActivity"
-            android:label="Settings"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.Settings" />
-        <activity
-            android:name=".ui.settings.AboutActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.Settings" />
-        <activity
-            android:name=".ui.common.ReplyActivity"
-            android:label="Reply"
-            android:theme="@style/AppTheme.Translucent"
-            android:windowSoftInputMode="adjustResize|stateVisible" />
     </application>
 
 </manifest>
