@@ -1,15 +1,14 @@
 package com.dialogapp.dialog.api;
 
-import androidx.lifecycle.LiveData;
-
 import com.dialogapp.dialog.model.FollowingAccountInfo;
-import com.dialogapp.dialog.model.AccountResponse;
 import com.dialogapp.dialog.model.MediaEndPoint;
 import com.dialogapp.dialog.model.MicroBlogResponse;
-import com.dialogapp.dialog.model.VerifiedAccount;
+import com.dialogapp.dialog.vo.VerifiedAccount;
 
 import java.util.List;
 
+import androidx.lifecycle.LiveData;
+import kotlinx.coroutines.Deferred;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Response;
@@ -28,9 +27,6 @@ import retrofit2.http.Query;
 public interface MicroblogService {
 
     // GET
-
-    @GET("account/info")
-    LiveData<ApiResponse<AccountResponse>> getAccountData();
 
     @GET("posts/all")
     LiveData<ApiResponse<MicroBlogResponse>> getTimeLine(@Query("since_id") String id);
@@ -64,7 +60,7 @@ public interface MicroblogService {
     @FormUrlEncoded
     @Headers("NO-AUTH: true")
     @POST("account/verify")
-    LiveData<ApiResponse<VerifiedAccount>> verifyToken(@Field("token") String token);
+    Deferred<ApiResponse<VerifiedAccount>> verifyToken(@Field("token") String token);
 
     @FormUrlEncoded
     @POST("posts/favorites")
