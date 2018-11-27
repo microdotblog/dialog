@@ -60,7 +60,7 @@ public interface MicroblogService {
     @FormUrlEncoded
     @Headers("NO-AUTH: true")
     @POST("account/verify")
-    Deferred<ApiResponse<VerifiedAccount>> verifyToken(@Field("token") String token);
+    Deferred<Response<VerifiedAccount>> verifyToken(@Field("token") String token);
 
     @FormUrlEncoded
     @POST("posts/favorites")
