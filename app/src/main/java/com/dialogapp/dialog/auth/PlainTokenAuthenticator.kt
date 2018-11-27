@@ -7,7 +7,9 @@ import com.dialogapp.dialog.api.MicroblogService
 import com.dialogapp.dialog.model.LoggedInUser
 import com.dialogapp.dialog.vo.Resource
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class PlainTokenAuthenticator @Inject constructor(private val microblogService: MicroblogService) {
 
     suspend fun authenticate(inputToken: String): Resource<LoggedInUser> {

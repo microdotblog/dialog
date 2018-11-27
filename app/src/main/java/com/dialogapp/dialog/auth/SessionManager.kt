@@ -6,7 +6,9 @@ import com.dialogapp.dialog.model.LoggedInUser
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class SessionManager @Inject constructor(private val accountDao: AccountDao,
                                          private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider) {
 
