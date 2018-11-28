@@ -5,6 +5,7 @@ import com.dialogapp.dialog.db.AccountDao
 import com.dialogapp.dialog.model.LoggedInUser
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -18,13 +19,17 @@ class SessionManager @Inject constructor(private val accountDao: AccountDao,
         private set
 
     val isLoggedIn: Boolean
-        get() = user != null
-
-    init {
-        scope.launch {
-            user = accountDao.loadAccount()
+        get() {
+            return if (user == null) {
+                runBlocking {
+                    scope.launch {
+                        user = accountDao.loadAccount()
+                    }.join()
+                }
+                user != null
+            } else
+                true
         }
-    }
 
     fun setLoggedInUser(user: LoggedInUser) {
         scope.launch {

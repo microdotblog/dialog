@@ -2,8 +2,7 @@ package com.dialogapp.dialog.di
 
 import android.app.Application
 import com.dialogapp.dialog.di.modules.AppModule
-import com.dialogapp.dialog.ui.MainActivity
-import com.dialogapp.dialog.ui.login.LoginFragment
+import com.dialogapp.dialog.ui.home.HomeFragment
 import dagger.BindsInstance
 import dagger.Component
 import javax.inject.Singleton
@@ -18,4 +17,6 @@ interface AppComponent {
 
         fun build(): AppComponent
     }
+
+    fun inject(homeFragment: HomeFragment)
 }
