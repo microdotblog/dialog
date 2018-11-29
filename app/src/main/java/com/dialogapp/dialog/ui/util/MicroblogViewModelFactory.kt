@@ -1,4 +1,4 @@
-package com.dialogapp.dialog.util
+package com.dialogapp.dialog.ui.util
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
