@@ -115,6 +115,8 @@ dependencies {
 
     testImplementation 'junit:junit:4.12'
     testImplementation "org.mockito:mockito-core:$mockito"
+    testImplementation "org.mockito:mockito-inline:$mockito"
+    testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:2.0.0"
     testImplementation 'com.squareup.okhttp3:mockwebserver:3.11.0'
     testImplementation "androidx.arch.core:core-testing:$lifecycle_version"
     testImplementation "androidx.room:room-testing:$room"

@@ -48,7 +48,7 @@ class LoginViewModel @Inject constructor(private val sessionManager: SessionMana
             withContext(coroutinesDispatcherProvider.main) {
                 if (user.status == Status.SUCCESS) {
                     sessionManager.setLoggedInUser(user.data!!)
-                    emitUiState(showSuccess = Event(false))
+                    emitUiState(showSuccess = Event(true))
                 } else if (user.status == Status.ERROR) {
                     emitUiState(showProgress = false, showError = Event(user.message!!), enableLoginButton = true)
                 }
