@@ -1,6 +1,7 @@
 package com.dialogapp.dialog.api
 
 import androidx.annotation.NonNull
+import com.dialogapp.dialog.testing.OpenForTesting
 import okhttp3.Interceptor
 import okhttp3.Response
 import java.io.IOException
@@ -12,6 +13,7 @@ import javax.inject.Singleton
  * the dummy header "NO-AUTH".
  */
 @Singleton
+@OpenForTesting
 class ServiceInterceptor @Inject constructor() : Interceptor {
     var authToken: String = ""
 

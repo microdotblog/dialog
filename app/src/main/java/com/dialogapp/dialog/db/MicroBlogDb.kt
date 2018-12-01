@@ -5,14 +5,12 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
-import com.dialogapp.dialog.model.LoggedInUser
 import com.dialogapp.dialog.model.MicroBlogResponse
 import com.dialogapp.dialog.model.Post
 
-@Database(entities = [LoggedInUser::class, Post::class, MicroBlogResponse::class],
+@Database(entities = [Post::class, MicroBlogResponse::class],
         version = 1, exportSchema = false)
 abstract class MicroBlogDb : RoomDatabase() {
-    abstract fun accountDao(): AccountDao
 
     companion object {
 

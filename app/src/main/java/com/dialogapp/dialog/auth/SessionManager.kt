@@ -1,21 +1,15 @@
 package com.dialogapp.dialog.auth
 
-import com.dialogapp.dialog.CoroutinesDispatcherProvider
+import android.content.SharedPreferences
+import androidx.core.content.edit
 import com.dialogapp.dialog.api.ServiceInterceptor
-import com.dialogapp.dialog.db.AccountDao
 import com.dialogapp.dialog.model.LoggedInUser
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class SessionManager @Inject constructor(private val accountDao: AccountDao,
-                                         private val serviceInterceptor: ServiceInterceptor,
-                                         private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider) {
-
-    private val scope = CoroutineScope(coroutinesDispatcherProvider.io)
+class SessionManager @Inject constructor(private val prefs: SharedPreferences,
+                                         private val serviceInterceptor: ServiceInterceptor) {
 
     var user: LoggedInUser? = null
         private set(value) {
@@ -24,30 +18,43 @@ class SessionManager @Inject constructor(private val accountDao: AccountDao,
         }
 
     val isLoggedIn: Boolean
-        get() {
-            return if (user == null) {
-                runBlocking {
-                    scope.launch {
-                        user = accountDao.loadAccount()
-                    }.join()
-                }
-                user != null
-            } else
-                true
+        get() = user != null
+
+    init {
+        val token = prefs.getString(KEY_USER_TOKEN, null)
+        if (token != null) {
+            user = LoggedInUser(token, prefs.getString(KEY_USER_FULLNAME, "")!!,
+                    prefs.getString(KEY_USER_USERNAME, "")!!, prefs.getString(KEY_USER_AVATAR, "")!!,
+                    prefs.getBoolean(KEY_USER_HASSITE, false), prefs.getBoolean(KEY_USER_FULLACCESS, false),
+                    prefs.getString(KEY_USER_DEFAULTSITE, "")!!)
         }
+    }
 
     fun setLoggedInUser(user: LoggedInUser) {
-        scope.launch {
-            accountDao.insert(user)
-        }
         this.user = user
+        prefs.edit {
+            putString(KEY_USER_TOKEN, user.token)
+            putString(KEY_USER_FULLNAME, user.fullName)
+            putString(KEY_USER_USERNAME, user.username)
+            putString(KEY_USER_AVATAR, user.gravatarUrl)
+            putBoolean(KEY_USER_HASSITE, user.hasSite)
+            putBoolean(KEY_USER_FULLACCESS, user.isFullaccess)
+            putString(KEY_USER_DEFAULTSITE, user.defaultSite)
+        }
     }
 
     fun logout() {
+        prefs.edit().clear().apply()
         user = null
+    }
 
-        scope.launch {
-            accountDao.deleteAccount()
-        }
+    companion object {
+        private const val KEY_USER_TOKEN = "KEY_USER_TOKEN"
+        private const val KEY_USER_FULLNAME = "KEY_USER_FULLNAME"
+        private const val KEY_USER_USERNAME = "KEY_USER_USERNAME"
+        private const val KEY_USER_AVATAR = "KEY_USER_AVATAR"
+        private const val KEY_USER_HASSITE = "KEY_USER_HASSITE"
+        private const val KEY_USER_FULLACCESS = "KEY_USER_FULLACCESS"
+        private const val KEY_USER_DEFAULTSITE = "KEY_USER_DEFAULTSITE"
     }
 }

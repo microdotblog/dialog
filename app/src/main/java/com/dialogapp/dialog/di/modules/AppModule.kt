@@ -1,11 +1,12 @@
 package com.dialogapp.dialog.di.modules
 
 import android.app.Application
+import android.content.Context
+import android.content.SharedPreferences
 import com.dialogapp.dialog.CoroutinesDispatcherProvider
 import com.dialogapp.dialog.StethoImplementation
 import com.dialogapp.dialog.api.MicroblogService
 import com.dialogapp.dialog.api.ServiceInterceptor
-import com.dialogapp.dialog.db.AccountDao
 import com.dialogapp.dialog.db.MicroBlogDb
 import com.dialogapp.dialog.util.LiveDataCallAdapterFactory
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
@@ -49,8 +50,8 @@ class AppModule {
 
     @Singleton
     @Provides
-    fun provideAccountDao(db: MicroBlogDb): AccountDao {
-        return db.accountDao()
+    fun provideSharedPref(app: Application): SharedPreferences {
+        return app.getSharedPreferences("USER_PREFS", Context.MODE_PRIVATE)
     }
 
     @Singleton
