@@ -83,6 +83,8 @@ dependencies {
     // Navigation
     implementation "android.arch.navigation:navigation-fragment-ktx:$nav_version"
     implementation "android.arch.navigation:navigation-ui-ktx:$nav_version"
+    //Paging
+    implementation "androidx.paging:paging-runtime-ktx:$paging_version"
 
     // Retrofit
     implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
@@ -124,7 +126,7 @@ dependencies {
     testImplementation "org.mockito:mockito-core:$mockito"
     testImplementation "org.mockito:mockito-inline:$mockito"
     testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:2.0.0"
-    testImplementation 'com.squareup.okhttp3:mockwebserver:3.11.0'
+    testImplementation "com.squareup.retrofit2:retrofit-mock:$retrofitVersion"
     testImplementation "androidx.room:room-testing:$room"
 
     androidTestImplementation "androidx.arch.core:core-testing:$lifecycle_version"

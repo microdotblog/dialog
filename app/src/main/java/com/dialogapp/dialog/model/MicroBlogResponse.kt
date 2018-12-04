@@ -22,7 +22,9 @@ data class MicroBlogResponse(@field:Json(name = "title")
                              @field:Nullable
                              @field:Json(name = "author")
                              @field:Embedded(prefix = "author_")
-                             val author: Author) {
+                             val author: Author,
+                             @field:Json(name = "items")
+                             val posts: List<Post>) {
 
     data class Microblog(@param:Nullable
                          @field:Nullable

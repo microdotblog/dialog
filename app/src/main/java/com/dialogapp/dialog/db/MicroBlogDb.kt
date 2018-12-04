@@ -47,4 +47,6 @@ abstract class MicroBlogDb : RoomDatabase() {
                     }).build()
         }
     }
+
+    abstract fun posts(): PostsDao
 }
