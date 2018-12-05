@@ -12,6 +12,8 @@ data class EndpointData(val endpoint: String,
                         @Embedded(prefix = "author_")
                         val author: Author?) {
 
+    var lastFetched: Long = -1
+
     data class Microblog(val id: String?,
                          val username: String?,
                          val bio: String?,

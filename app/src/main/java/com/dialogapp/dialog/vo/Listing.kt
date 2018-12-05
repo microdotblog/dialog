@@ -18,6 +18,7 @@ package com.dialogapp.dialog.vo
 
 import androidx.lifecycle.LiveData
 import androidx.paging.PagedList
+import com.dialogapp.dialog.model.EndpointData
 import com.dialogapp.dialog.repository.NetworkState
 
 /**
@@ -26,6 +27,8 @@ import com.dialogapp.dialog.repository.NetworkState
 data class Listing<T>(
         // the LiveData of paged lists for the UI to observe
         val pagedList: LiveData<PagedList<T>>,
+        // the LiveData of endpoint data for the UI to observe
+        val endpointData: LiveData<EndpointData>,
         // represents the network request status to show to the user
         val networkState: LiveData<NetworkState>,
         // represents the refresh status to show to the user. Separate from networkState, this

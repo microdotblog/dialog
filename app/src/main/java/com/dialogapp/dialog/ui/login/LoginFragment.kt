@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.dialogapp.dialog.R
+import com.dialogapp.dialog.auth.SessionManager
 import com.dialogapp.dialog.databinding.FragmentLoginBinding
 import com.dialogapp.dialog.di.Injector
 import com.dialogapp.dialog.ui.util.autoCleared
@@ -23,6 +24,9 @@ class LoginFragment : Fragment() {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
+    @Inject
+    lateinit var sessionManager: SessionManager
+
     private var binding by autoCleared<FragmentLoginBinding>()
 
     private lateinit var viewModel: LoginViewModel
@@ -31,6 +35,15 @@ class LoginFragment : Fragment() {
     override fun onAttach(context: Context?) {
         Injector.get().inject(this)
         super.onAttach(context)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        if (sessionManager.isLoggedIn) {
+            findNavController().popBackStack()
+            findNavController().navigate(R.id.home_dest)
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,

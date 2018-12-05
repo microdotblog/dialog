@@ -2,7 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graph_main"
-    app:startDestination="@id/home_dest">
+    app:startDestination="@id/login_dest">
 
     <fragment
         android:id="@+id/login_dest"

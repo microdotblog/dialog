@@ -50,8 +50,11 @@ class PostsPagingRepository @Inject constructor(private val microBlogDb: MicroBl
                 pageSize = networkPageSize,
                 boundaryCallback = boundaryCallback)
 
+        val liveEndpointData = microBlogDb.posts().loadEndpointData(endpoint)
+
         return Listing(
                 pagedList = livePagedList,
+                endpointData = liveEndpointData,
                 networkState = boundaryCallback.networkState,
                 retry = {
                     boundaryCallback.helper.retryAllFailed()
@@ -67,6 +70,7 @@ class PostsPagingRepository @Inject constructor(private val microBlogDb: MicroBl
         microBlogResponse!!.let { data ->
             microBlogDb.runInTransaction {
                 val endpointData = EndpointData(endpoint, data.microblog, data.author)
+                endpointData.lastFetched = System.currentTimeMillis()
                 microBlogDb.posts().insertEndpointData(endpointData)
 
                 data.posts.let { posts ->
