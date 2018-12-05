@@ -5,10 +5,10 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
-import com.dialogapp.dialog.model.MicroBlogResponse
+import com.dialogapp.dialog.model.EndpointData
 import com.dialogapp.dialog.model.Post
 
-@Database(entities = [Post::class, MicroBlogResponse::class],
+@Database(entities = [Post::class, EndpointData::class],
         version = 1, exportSchema = false)
 abstract class MicroBlogDb : RoomDatabase() {
 

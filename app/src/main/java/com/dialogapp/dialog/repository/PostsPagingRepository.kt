@@ -8,9 +8,10 @@ import androidx.paging.toLiveData
 import com.dialogapp.dialog.AppExecutors
 import com.dialogapp.dialog.api.MicroblogService
 import com.dialogapp.dialog.db.MicroBlogDb
-import com.dialogapp.dialog.model.MicroBlogResponse
+import com.dialogapp.dialog.model.EndpointData
 import com.dialogapp.dialog.model.Post
 import com.dialogapp.dialog.vo.Listing
+import com.dialogapp.dialog.vo.MicroBlogResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -63,13 +64,18 @@ class PostsPagingRepository @Inject constructor(private val microBlogDb: MicroBl
     }
 
     private fun insertPostsIntoDb(endpoint: String, microBlogResponse: MicroBlogResponse?) {
-        microBlogResponse!!.posts.let { posts ->
+        microBlogResponse!!.let { data ->
             microBlogDb.runInTransaction {
-                posts.map {
-                    it.endpoint = endpoint
-                    it
+                val endpointData = EndpointData(endpoint, data.microblog, data.author)
+                microBlogDb.posts().insertEndpointData(endpointData)
+
+                data.posts.let { posts ->
+                    posts.map {
+                        it.belongsToEndpoint = endpoint
+                        it
+                    }
+                    microBlogDb.posts().insertPosts(posts)
                 }
-                microBlogDb.posts().insertPosts(posts)
             }
         }
     }

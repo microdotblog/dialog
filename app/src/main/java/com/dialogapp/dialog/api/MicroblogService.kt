@@ -1,6 +1,6 @@
 package com.dialogapp.dialog.api
 
-import com.dialogapp.dialog.model.MicroBlogResponse
+import com.dialogapp.dialog.vo.MicroBlogResponse
 import com.dialogapp.dialog.vo.VerifiedAccount
 import kotlinx.coroutines.Deferred
 import retrofit2.Call

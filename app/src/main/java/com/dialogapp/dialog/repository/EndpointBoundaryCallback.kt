@@ -3,7 +3,7 @@ package com.dialogapp.dialog.repository
 import androidx.annotation.MainThread
 import androidx.paging.PagedList
 import com.dialogapp.dialog.api.MicroblogService
-import com.dialogapp.dialog.model.MicroBlogResponse
+import com.dialogapp.dialog.vo.MicroBlogResponse
 import com.dialogapp.dialog.model.Post
 import com.dialogapp.dialog.util.PagingRequestHelper
 import com.dialogapp.dialog.util.createStatusLiveData
