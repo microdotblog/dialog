@@ -2,10 +2,14 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graph_home"
-    app:startDestination="@id/listFragment">
+    app:startDestination="@id/timeline_destination">
 
     <fragment
-        android:id="@+id/listFragment"
-        android:name="com.dialogapp.dialog.ui.home.ListFragment"
-        android:label="ListFragment" />
+        android:id="@+id/timeline_destination"
+        android:name="com.dialogapp.dialog.ui.home.TimelineFragment"
+        android:label="TimelineFragment" />
+    <fragment
+        android:id="@+id/mentions_destination"
+        android:name="com.dialogapp.dialog.ui.home.MentionsFragment"
+        android:label="MentionsFragment" />
 </navigation>

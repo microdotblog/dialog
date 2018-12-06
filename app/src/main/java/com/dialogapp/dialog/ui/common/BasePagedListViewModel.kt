@@ -1,4 +1,4 @@
-package com.dialogapp.dialog.ui.home
+package com.dialogapp.dialog.ui.common
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations.map
@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import com.dialogapp.dialog.repository.PostsPagingRepository
 import javax.inject.Inject
 
-class ListViewModel @Inject constructor(private val postsPagingRepository: PostsPagingRepository)
+class BasePagedListViewModel @Inject constructor(private val postsPagingRepository: PostsPagingRepository)
     : ViewModel() {
 
     private val endpoint = MutableLiveData<String>()

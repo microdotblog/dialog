@@ -1,6 +1,5 @@
-package com.dialogapp.dialog.ui.home
+package com.dialogapp.dialog.ui.common
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,24 +13,21 @@ import androidx.paging.PagedList
 import com.dialogapp.dialog.GlideApp
 import com.dialogapp.dialog.R
 import com.dialogapp.dialog.databinding.FragmentListBinding
-import com.dialogapp.dialog.di.Injector
 import com.dialogapp.dialog.model.Post
 import com.dialogapp.dialog.repository.NetworkState
-import com.dialogapp.dialog.ui.common.PostsAdapter
 import com.dialogapp.dialog.ui.util.autoCleared
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-class ListFragment : Fragment() {
+abstract class BasePagedListFragment : Fragment() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
-    private var binding by autoCleared<FragmentListBinding>()
+    lateinit var basePagedListViewModel: BasePagedListViewModel
 
-    private val viewModel: ListViewModel
-            by lazy { ViewModelProviders.of(this, viewModelFactory).get(ListViewModel::class.java) }
+    private var binding by autoCleared<FragmentListBinding>()
 
     companion object {
         private val TIMEOUT: Long = TimeUnit.MINUTES.toMillis(15)
@@ -40,11 +36,6 @@ class ListFragment : Fragment() {
             val now = System.currentTimeMillis()
             return (now - lastFetchTimestamp > TIMEOUT)
         }
-    }
-
-    override fun onAttach(context: Context?) {
-        Injector.get().inject(this)
-        super.onAttach(context)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -57,36 +48,37 @@ class ListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.setLifecycleOwner(viewLifecycleOwner)
+        basePagedListViewModel = ViewModelProviders.of(this, viewModelFactory).get(BasePagedListViewModel::class.java)
+
         initAdapter()
         initSwipeToRefresh()
-        viewModel.showEndpoint("all")
     }
 
     private fun initSwipeToRefresh() {
-        viewModel.refreshState.observe(this, Observer {
+        basePagedListViewModel.refreshState.observe(this, Observer {
             binding.swipeRefresh.isRefreshing = it == NetworkState.LOADING
         })
         binding.swipeRefresh.setOnRefreshListener {
-            viewModel.refresh()
+            basePagedListViewModel.refresh()
         }
     }
 
     private fun initAdapter() {
         val glide = GlideApp.with(this)
         val adapter = PostsAdapter(glide) {
-            viewModel.retry()
+            basePagedListViewModel.retry()
         }
         binding.recyclerPosts.adapter = adapter
-        viewModel.posts.observe(viewLifecycleOwner, Observer<PagedList<Post>> {
+        basePagedListViewModel.posts.observe(viewLifecycleOwner, Observer<PagedList<Post>> {
             adapter.submitList(it)
         })
-        viewModel.endpointData.observe(viewLifecycleOwner, Observer {
-            if (it != null && shouldRefresh(it.lastFetched)) {
-                Timber.i("Stale data, refreshing endpoint automatically - %s", viewModel.currentEndpoint())
-                viewModel.refresh()
+        basePagedListViewModel.endpointData.observe(viewLifecycleOwner, Observer {
+            if (it != null && BasePagedListFragment.shouldRefresh(it.lastFetched)) {
+                Timber.i("Stale data, refreshing endpoint automatically - %s", basePagedListViewModel.currentEndpoint())
+                basePagedListViewModel.refresh()
             }
         })
-        viewModel.networkState.observe(viewLifecycleOwner, Observer {
+        basePagedListViewModel.networkState.observe(viewLifecycleOwner, Observer {
             adapter.setNetworkState(it)
         })
     }

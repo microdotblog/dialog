@@ -2,7 +2,8 @@ package com.dialogapp.dialog.di
 
 import android.app.Application
 import com.dialogapp.dialog.di.modules.AppModule
-import com.dialogapp.dialog.ui.home.ListFragment
+import com.dialogapp.dialog.ui.home.MentionsFragment
+import com.dialogapp.dialog.ui.home.TimelineFragment
 import com.dialogapp.dialog.ui.login.LoginFragment
 import dagger.BindsInstance
 import dagger.Component
@@ -20,5 +21,6 @@ interface AppComponent {
     }
 
     fun inject(loginFragment: LoginFragment)
-    fun inject(listFragment: ListFragment)
+    fun inject(timelineFragment: TimelineFragment)
+    fun inject(mentionsFragment: MentionsFragment)
 }

@@ -2,10 +2,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/bottom_nav_timeline"
+        android:id="@+id/timeline_destination"
         android:title="Timeline" />
     <item
-        android:id="@+id/bottom_nav_mentions"
+        android:id="@+id/mentions_destination"
         android:title="Mentions" />
     <item
         android:id="@+id/bottom_nav_discover"
