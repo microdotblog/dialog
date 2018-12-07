@@ -2,15 +2,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/timeline_destination"
+        android:id="@+id/timeline_dest"
         android:title="Timeline" />
     <item
-        android:id="@+id/mentions_destination"
+        android:id="@+id/mentions_dest"
         android:title="Mentions" />
     <item
-        android:id="@+id/bottom_nav_discover"
+        android:id="@+id/discover_dest"
         android:title="Discover" />
-    <item
-        android:id="@+id/bottom_nav_more"
-        android:title="More" />
 </menu>

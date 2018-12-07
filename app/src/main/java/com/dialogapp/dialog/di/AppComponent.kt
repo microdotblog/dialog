@@ -2,6 +2,7 @@ package com.dialogapp.dialog.di
 
 import android.app.Application
 import com.dialogapp.dialog.di.modules.AppModule
+import com.dialogapp.dialog.ui.home.HomeFragment
 import com.dialogapp.dialog.ui.home.MentionsFragment
 import com.dialogapp.dialog.ui.home.TimelineFragment
 import com.dialogapp.dialog.ui.login.LoginFragment
@@ -21,6 +22,7 @@ interface AppComponent {
     }
 
     fun inject(loginFragment: LoginFragment)
+    fun inject(homeFragment: HomeFragment)
     fun inject(timelineFragment: TimelineFragment)
     fun inject(mentionsFragment: MentionsFragment)
 }
