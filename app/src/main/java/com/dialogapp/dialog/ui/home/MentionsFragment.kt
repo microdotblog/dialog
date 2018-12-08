@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import com.dialogapp.dialog.di.Injector
 import com.dialogapp.dialog.ui.common.BasePagedListFragment
+import com.dialogapp.dialog.vo.MENTIONS
 
 class MentionsFragment : BasePagedListFragment() {
 
@@ -15,6 +16,6 @@ class MentionsFragment : BasePagedListFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        basePagedListViewModel.showEndpoint("mentions")
+        basePagedListViewModel.showEndpoint(MENTIONS)
     }
 }

@@ -1,5 +1,6 @@
 package com.dialogapp.dialog.api
 
+import androidx.lifecycle.LiveData
 import com.dialogapp.dialog.vo.MicroBlogResponse
 import com.dialogapp.dialog.vo.VerifiedAccount
 import kotlinx.coroutines.Deferred
@@ -18,6 +19,12 @@ interface MicroblogService {
     fun getEndpoint(@Path("endpoint") endpoint: String,
                     @Query("before_id") beforeId: String?,
                     @Query("count") count: Int): Call<MicroBlogResponse>
+
+    @GET("posts/discover")
+    fun getFeaturedPosts(): LiveData<ApiResponse<MicroBlogResponse>>
+
+    @GET("posts/discover/{topic}")
+    fun getFeaturedPosts(@Path("topic") topic: String): LiveData<ApiResponse<MicroBlogResponse>>
 
     // POST
 

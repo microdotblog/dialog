@@ -65,7 +65,7 @@ abstract class BasePagedListFragment : Fragment() {
 
     private fun initAdapter() {
         val glide = GlideApp.with(this)
-        val adapter = PostsAdapter(glide) {
+        val adapter = PagedPostsAdapter(glide) {
             basePagedListViewModel.retry()
         }
         binding.recyclerPosts.adapter = adapter

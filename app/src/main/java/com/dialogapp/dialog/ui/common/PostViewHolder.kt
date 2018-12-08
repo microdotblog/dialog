@@ -1,5 +1,6 @@
 package com.dialogapp.dialog.ui.common
 
+import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.dialogapp.dialog.GlideRequests
@@ -14,5 +15,20 @@ class PostViewHolder(view: View, private val binding: PostItemBinding, private v
         binding.textUsername.text = post?.author?.microblog?.username
         binding.textContent.text = post?.contentHtml
         glide.load(post?.author?.avatar).into(binding.imageThumbnail)
+    }
+
+    fun updatePost(payloads: MutableList<Any>) {
+        val diffBundle = payloads[0] as Bundle
+
+        for (key in diffBundle.keySet()) {
+//            when (key) {
+//                CONVERSATION ->
+//                FAVORITE ->
+//                DATE ->
+//                AVATAR ->
+//                USERNAME ->
+//                CONTENT ->
+//            }
+        }
     }
 }

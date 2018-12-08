@@ -10,7 +10,7 @@ import com.dialogapp.dialog.api.MicroblogService
 import com.dialogapp.dialog.db.MicroBlogDb
 import com.dialogapp.dialog.model.EndpointData
 import com.dialogapp.dialog.model.Post
-import com.dialogapp.dialog.vo.Listing
+import com.dialogapp.dialog.vo.PagedListing
 import com.dialogapp.dialog.vo.MicroBlogResponse
 import retrofit2.Call
 import retrofit2.Callback
@@ -26,7 +26,7 @@ class PostsPagingRepository @Inject constructor(private val microBlogDb: MicroBl
 
     private var networkPageSize: Int = DEFAULT_NETWORK_PAGE_SIZE
 
-    fun postsOfEndpoint(endpoint: String, networkPageSize: Int = DEFAULT_NETWORK_PAGE_SIZE): Listing<Post> {
+    fun postsOfEndpoint(endpoint: String, networkPageSize: Int = DEFAULT_NETWORK_PAGE_SIZE): PagedListing<Post> {
         this.networkPageSize = networkPageSize
         // create a boundary callback which will observe when the user reaches to the edges of
         // the list and update the database with extra data.
@@ -52,7 +52,7 @@ class PostsPagingRepository @Inject constructor(private val microBlogDb: MicroBl
 
         val liveEndpointData = microBlogDb.posts().loadEndpointData(endpoint)
 
-        return Listing(
+        return PagedListing(
                 pagedList = livePagedList,
                 endpointData = liveEndpointData,
                 networkState = boundaryCallback.networkState,
