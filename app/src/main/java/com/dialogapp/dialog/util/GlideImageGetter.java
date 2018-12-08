@@ -171,7 +171,7 @@ public class GlideImageGetter implements Html.ImageGetter, Drawable.Callback {
             layerDrawable = new LayerDrawable(drawables);
             wrapper.setWrappedDrawable(layerDrawable);
             progressDrawable.setStyle(CircularProgressDrawable.DEFAULT);
-            progressDrawable.setColorSchemeColors(ContextCompat.getColor(context, R.color.reda200));
+//            progressDrawable.setColorSchemeColors(ContextCompat.getColor(context, R.color.reda200));
         }
 
         public Drawable getLazyDrawable() {

@@ -5,8 +5,7 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/constraint_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/indigo500">
+        android:layout_height="match_parent">
 
         <ImageView
             android:id="@+id/image_login_logo"
@@ -100,12 +99,9 @@
             android:layout_width="match_parent"
             android:layout_height="100dp"
             android:layout_marginTop="8dp"
-            android:background="@color/indigo700"
             android:gravity="center_vertical"
             android:text="@string/login_about"
             android:textAlignment="center"
-            android:textColor="@android:color/white"
-            android:textColorLink="@color/reda200"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
