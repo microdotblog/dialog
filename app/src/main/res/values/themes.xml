@@ -4,6 +4,7 @@
     <style name="AppTheme.Light" parent="Theme.MaterialComponents.Light.NoActionBar" >
         <item name="android:colorBackground">@color/grey300</item>
         <item name="colorPrimaryDark">@color/design_default_color_primary_variant</item>
+        <item name="colorPrimaryVariant">@color/purple200</item>
         <item name="colorSecondary">@color/amberA400</item>
     </style>
 

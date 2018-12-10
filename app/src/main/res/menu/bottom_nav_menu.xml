@@ -3,11 +3,14 @@
 
     <item
         android:id="@+id/timeline_dest"
+        android:icon="@drawable/ic_round_timeline_24px"
         android:title="Timeline" />
     <item
         android:id="@+id/mentions_dest"
+        android:icon="@drawable/ic_round_announcement_24px"
         android:title="Mentions" />
     <item
         android:id="@+id/discover_dest"
+        android:icon="@drawable/ic_round_explore_24px"
         android:title="Discover" />
 </menu>

@@ -26,4 +26,8 @@
     <style name="TextAppearance.Empty" parent="TextAppearance.AppCompat.Headline">
         <item name="android:textColor">?android:attr/textColorSecondary</item>
     </style>
+
+    <style name="RippleStyle" parent="ThemeOverlay.MaterialComponents">
+        <item name="colorControlHighlight">?attr/colorPrimaryVariant</item>
+    </style>
 </resources>

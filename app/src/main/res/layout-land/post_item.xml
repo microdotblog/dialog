@@ -6,9 +6,9 @@
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
+        android:layout_marginStart="36dp"
         android:layout_marginTop="4dp"
-        android:layout_marginEnd="4dp"
+        android:layout_marginEnd="36dp"
         app:cardElevation="0dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -27,11 +27,15 @@
 
             <TextView
                 android:id="@+id/text_fullname"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="16dp"
+                android:layout_marginEnd="8dp"
+                android:ellipsize="end"
+                android:maxLines="1"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                app:layout_constraintEnd_toStartOf="@+id/text_time"
                 app:layout_constraintStart_toEndOf="@+id/image_thumbnail"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="@tools:sample/full_names" />
@@ -115,12 +119,15 @@
                 android:layout_width="48dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:src="@drawable/ic_round_forum_24px"
                 android:theme="@style/RippleStyle"
                 android:tint="@android:color/darker_gray"
                 android:visibility="invisible"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/button_overflow"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toEndOf="@+id/button_fav"
                 app:layout_constraintTop_toBottomOf="@+id/divider" />
 
