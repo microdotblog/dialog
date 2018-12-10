@@ -66,6 +66,13 @@ class PagedPostsAdapter(
         return super.getItemCount() + if (hasExtraRow()) 1 else 0
     }
 
+    override fun onViewRecycled(holder: RecyclerView.ViewHolder) {
+        if(holder is PostViewHolder) {
+            holder.recycle()
+        }
+        super.onViewRecycled(holder)
+    }
+
     fun setNetworkState(newNetworkState: NetworkState?) {
         val previousState = this.networkState
         val hadExtraRow = hasExtraRow()

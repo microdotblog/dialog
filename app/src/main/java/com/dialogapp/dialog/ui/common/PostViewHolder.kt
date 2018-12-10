@@ -6,14 +6,17 @@ import androidx.recyclerview.widget.RecyclerView
 import com.dialogapp.dialog.GlideRequests
 import com.dialogapp.dialog.databinding.PostItemBinding
 import com.dialogapp.dialog.model.Post
+import com.dialogapp.dialog.ui.util.GlideImageGetter
+import com.dialogapp.dialog.ui.util.HtmlTextHelper
 
-class PostViewHolder(view: View, private val binding: PostItemBinding, private val glide: GlideRequests)
+class PostViewHolder(view: View, val binding: PostItemBinding, private val glide: GlideRequests)
     : RecyclerView.ViewHolder(view) {
 
     fun bind(post: Post?) {
         binding.textFullname.text = post?.author?.name
         binding.textUsername.text = post?.author?.microblog?.username
-        binding.textContent.text = post?.contentHtml
+        binding.textTime.text = post?.microblog?.dateRelative
+        HtmlTextHelper(glide, post?.contentHtml).setHtmlContent(binding.textContent)
         glide.load(post?.author?.avatar).into(binding.imageThumbnail)
     }
 
@@ -30,5 +33,10 @@ class PostViewHolder(view: View, private val binding: PostItemBinding, private v
 //                CONTENT ->
 //            }
         }
+    }
+
+    fun recycle() {
+        glide.clear(binding.imageThumbnail)
+        GlideImageGetter.clear(binding.textContent)
     }
 }
