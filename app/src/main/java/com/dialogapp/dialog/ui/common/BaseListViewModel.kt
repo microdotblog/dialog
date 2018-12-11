@@ -8,6 +8,7 @@ import com.dialogapp.dialog.model.Post
 import com.dialogapp.dialog.repository.PostsRepository
 import com.dialogapp.dialog.util.AbsentLiveData
 import com.dialogapp.dialog.vo.DISCOVER
+import com.dialogapp.dialog.vo.FAVORITES
 import com.dialogapp.dialog.vo.Listing
 import com.dialogapp.dialog.vo.Resource
 import javax.inject.Inject
@@ -20,10 +21,13 @@ class BaseListViewModel @Inject constructor(private val postsRepository: PostsRe
         get() = _endpoint
     val endpointResult: LiveData<Resource<Listing<Post>>> = Transformations
             .switchMap(_endpoint) { endpointArgs ->
-                if (endpointArgs.endpoint == DISCOVER)
-                    postsRepository.loadDiscover(endpointArgs.discoverTopic)
-                else
-                    AbsentLiveData.create()
+                when {
+                    endpointArgs.endpoint == DISCOVER ->
+                        postsRepository.loadDiscover(endpointArgs.discoverTopic)
+                    endpointArgs.endpoint == FAVORITES ->
+                        AbsentLiveData.create()
+                    else -> postsRepository.loadPostsByUsername(endpointArgs.endpoint)
+                }
             }
 
     fun showEndpoint(endpointArgs: EndpointArgs) {
