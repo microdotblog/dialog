@@ -2,11 +2,9 @@ package com.dialogapp.dialog.di
 
 import android.app.Application
 import com.dialogapp.dialog.di.modules.AppModule
-import com.dialogapp.dialog.ui.home.HomeFragment
-import com.dialogapp.dialog.ui.home.DiscoverFragment
-import com.dialogapp.dialog.ui.home.MentionsFragment
-import com.dialogapp.dialog.ui.home.TimelineFragment
+import com.dialogapp.dialog.ui.home.*
 import com.dialogapp.dialog.ui.login.LoginFragment
+import com.dialogapp.dialog.ui.profile.ProfilePostsFragment
 import dagger.BindsInstance
 import dagger.Component
 import javax.inject.Singleton
@@ -27,4 +25,6 @@ interface AppComponent {
     fun inject(timelineFragment: TimelineFragment)
     fun inject(mentionsFragment: MentionsFragment)
     fun inject(discoverFragment: DiscoverFragment)
+    fun inject(moreFragment: MoreFragment)
+    fun inject(profilePostsFragment: ProfilePostsFragment)
 }

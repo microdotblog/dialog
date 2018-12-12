@@ -19,5 +19,32 @@
     <fragment
         android:id="@+id/more_dest"
         android:name="com.dialogapp.dialog.ui.home.MoreFragment"
-        android:label="MoreFragment" />
+        android:label="MoreFragment">
+        <action
+            android:id="@+id/action_more_dest_to_profile_dest"
+            app:destination="@id/profile_dest"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+    </fragment>
+    <fragment
+        android:id="@+id/profile_dest"
+        android:name="com.dialogapp.dialog.ui.profile.ProfileFragment"
+        android:label="ProfileFragment">
+        <argument
+            android:name="username"
+            app:argType="string" />
+        <argument
+            android:name="isSelf"
+            android:defaultValue="false"
+            app:argType="boolean" />
+        <action
+            android:id="@+id/action_profile_dest_self"
+            app:destination="@id/profile_dest"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+    </fragment>
 </navigation>
