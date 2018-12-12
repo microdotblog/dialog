@@ -16,4 +16,8 @@
         android:id="@+id/discover_dest"
         android:name="com.dialogapp.dialog.ui.home.DiscoverFragment"
         android:label="DiscoverFragment" />
+    <fragment
+        android:id="@+id/more_dest"
+        android:name="com.dialogapp.dialog.ui.home.MoreFragment"
+        android:label="MoreFragment" />
 </navigation>
