@@ -47,4 +47,15 @@
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
+    <fragment
+        android:id="@+id/conversation_dest"
+        android:name="com.dialogapp.dialog.ui.conversation.ConversationFragment"
+        android:label="Conversation">
+        <action
+            android:id="@+id/action_conversation_dest_self"
+            app:destination="@id/conversation_dest" />
+        <argument
+            android:name="convId"
+            app:argType="string" />
+    </fragment>
 </navigation>

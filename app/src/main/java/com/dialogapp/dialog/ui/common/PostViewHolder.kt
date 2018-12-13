@@ -30,6 +30,17 @@ class PostViewHolder(view: View, val binding: PostItemBinding, private val glide
         HtmlTextHelper(glide, post?.contentHtml).setHtmlContent(binding.textContent)
         glide.load(post?.author?.avatar).into(binding.imageThumbnail)
 
+        binding.buttonConv.visibility = if (post?.microblog?.isConversation!!) {
+            binding.buttonConv.setOnClickListener {
+                val argBundle = bundleOf("convId" to post?.id)
+                binding.imageThumbnail.findNavController().navigate(R.id.conversation_dest, argBundle,
+                        navOptions)
+            }
+            View.VISIBLE
+        } else {
+            View.INVISIBLE
+        }
+
         binding.imageThumbnail.setOnClickListener {
             val argBundle = bundleOf("username" to post?.author?.microblog?.username)
             binding.imageThumbnail.findNavController().navigate(R.id.profile_dest, argBundle,

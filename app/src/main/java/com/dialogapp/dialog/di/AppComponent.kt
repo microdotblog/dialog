@@ -2,6 +2,7 @@ package com.dialogapp.dialog.di
 
 import android.app.Application
 import com.dialogapp.dialog.di.modules.AppModule
+import com.dialogapp.dialog.ui.conversation.ConversationListFragment
 import com.dialogapp.dialog.ui.home.*
 import com.dialogapp.dialog.ui.login.LoginFragment
 import com.dialogapp.dialog.ui.profile.ProfilePostsFragment
@@ -27,4 +28,5 @@ interface AppComponent {
     fun inject(discoverFragment: DiscoverFragment)
     fun inject(moreFragment: MoreFragment)
     fun inject(profilePostsFragment: ProfilePostsFragment)
+    fun inject(conversationListFragment: ConversationListFragment)
 }

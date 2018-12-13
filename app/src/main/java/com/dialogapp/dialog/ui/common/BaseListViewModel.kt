@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import com.dialogapp.dialog.model.Post
 import com.dialogapp.dialog.repository.PostsRepository
 import com.dialogapp.dialog.util.AbsentLiveData
+import com.dialogapp.dialog.vo.CONVERSATION
 import com.dialogapp.dialog.vo.DISCOVER
 import com.dialogapp.dialog.vo.FAVORITES
 import com.dialogapp.dialog.vo.Listing
@@ -23,9 +24,11 @@ class BaseListViewModel @Inject constructor(private val postsRepository: PostsRe
             .switchMap(_endpoint) { endpointArgs ->
                 when {
                     endpointArgs.endpoint == DISCOVER ->
-                        postsRepository.loadDiscover(endpointArgs.discoverTopic)
+                        postsRepository.loadDiscover(endpointArgs.extraArg)
                     endpointArgs.endpoint == FAVORITES ->
                         AbsentLiveData.create()
+                    endpointArgs.endpoint == CONVERSATION ->
+                        postsRepository.loadConversation(endpointArgs.extraArg ?: "")
                     else -> postsRepository.loadPostsByUsername(endpointArgs.endpoint)
                 }
             }
@@ -45,5 +48,5 @@ class BaseListViewModel @Inject constructor(private val postsRepository: PostsRe
 
 data class EndpointArgs(
         val endpoint: String,
-        val discoverTopic: String? = null
+        val extraArg: String? = null
 )

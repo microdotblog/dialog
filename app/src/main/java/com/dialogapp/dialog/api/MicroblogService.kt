@@ -29,6 +29,9 @@ interface MicroblogService {
     @GET("posts/{username}")
     fun getPostsByUsername(@Path("username") username: String): LiveData<ApiResponse<MicroBlogResponse>>
 
+    @GET("posts/conversation")
+    fun getConversation(@Query("id") id: String): LiveData<ApiResponse<MicroBlogResponse>>
+
     // POST
 
     @FormUrlEncoded

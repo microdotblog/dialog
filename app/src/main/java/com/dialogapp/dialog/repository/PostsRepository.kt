@@ -92,4 +92,37 @@ class PostsRepository @Inject constructor(private val appExecutors: AppExecutors
             }
         }.asLiveData()
     }
+
+    fun loadConversation(convId: String): LiveData<Resource<Listing<Post>>> {
+        return object : NetworkBoundResource<Listing<Post>, MicroBlogResponse>(appExecutors) {
+            override fun shouldFetch(data: Listing<Post>?): Boolean {
+                return data?.postData == null || data.postData.isEmpty() ||
+                        endpointRateLimit.shouldFetch(convId)
+            }
+
+            override fun createCall(): LiveData<ApiResponse<MicroBlogResponse>> {
+                return microblogService.getConversation(convId)
+            }
+
+            override fun saveCallResult(item: MicroBlogResponse) {
+                endpointData[convId] = EndpointData(endpoint = convId,
+                        microblog = item.microblog, author = item.author)
+                listings[convId] = item.posts
+            }
+
+            override fun loadFromDb(): LiveData<Listing<Post>> {
+                return object : LiveData<Listing<Post>>() {
+                    override fun onActive() {
+                        super.onActive()
+                        value = Listing(endpointData = endpointData[convId],
+                                postData = listings[convId])
+                    }
+                }
+            }
+
+            override fun onFetchFailed() {
+                endpointRateLimit.reset(convId)
+            }
+        }.asLiveData()
+    }
 }
