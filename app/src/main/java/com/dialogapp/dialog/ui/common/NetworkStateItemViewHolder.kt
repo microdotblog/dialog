@@ -1,7 +1,9 @@
 package com.dialogapp.dialog.ui.common
 
+import android.util.TypedValue
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
+import com.dialogapp.dialog.R
 import com.dialogapp.dialog.databinding.NetworkStateItemBinding
 import com.dialogapp.dialog.repository.NetworkState
 import com.dialogapp.dialog.repository.PagingStatus
@@ -22,6 +24,10 @@ class NetworkStateItemViewHolder(view: View,
     }
 
     fun bind(networkState: NetworkState?) {
+        val typedValue = TypedValue()
+        if (networkState?.status == PagingStatus.FAILED)
+            binding.root.context.theme?.resolveAttribute(R.attr.colorError, typedValue, true)
+        binding.layoutNetworkState.setBackgroundColor(typedValue.data)
         binding.progressBar.visibility = toVisibility(networkState?.status == PagingStatus.RUNNING)
         binding.retryButton.visibility = toVisibility(networkState?.status == PagingStatus.FAILED)
         binding.errorMsg.visibility = toVisibility(networkState?.msg != null)

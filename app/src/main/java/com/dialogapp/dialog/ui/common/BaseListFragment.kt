@@ -1,6 +1,7 @@
 package com.dialogapp.dialog.ui.common
 
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,6 +16,7 @@ import com.dialogapp.dialog.databinding.FragmentListBinding
 import com.dialogapp.dialog.ui.util.autoCleared
 import com.dialogapp.dialog.vo.Status
 import javax.inject.Inject
+
 
 abstract class BaseListFragment : Fragment() {
 
@@ -42,6 +44,9 @@ abstract class BaseListFragment : Fragment() {
     }
 
     private fun initSwipeToRefresh() {
+        val typedValue = TypedValue()
+        context?.theme?.resolveAttribute(R.attr.colorSecondary, typedValue, true)
+        binding.swipeRefresh.setColorSchemeColors(typedValue.data)
         binding.swipeRefresh.setOnRefreshListener {
             baseListViewModel.refresh()
         }
