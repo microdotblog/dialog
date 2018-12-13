@@ -26,6 +26,7 @@ import com.dialogapp.dialog.api.ApiErrorResponse
 import com.dialogapp.dialog.api.ApiResponse
 import com.dialogapp.dialog.api.ApiSuccessResponse
 import com.dialogapp.dialog.vo.Resource
+import timber.log.Timber
 
 /**
  * A generic class that can provide a resource backed by both the sqlite database and the network.
@@ -88,6 +89,7 @@ abstract class NetworkBoundResource<ResultType, RequestType>
                     }
                 }
                 is ApiEmptyResponse -> {
+                    Timber.e("Received empty response")
                     appExecutors.mainThread().execute {
                         // reload from disk whatever we had
                         result.addSource(loadFromDb()) { newData ->
@@ -96,9 +98,15 @@ abstract class NetworkBoundResource<ResultType, RequestType>
                     }
                 }
                 is ApiErrorResponse -> {
+                    Timber.e("Received malformed response: %s", response.errorMessage)
                     onFetchFailed()
                     result.addSource(dbSource) { newData ->
-                        setValue(Resource.error(response.errorMessage, newData))
+                        setValue(Resource.error(response.errorMessage.let {
+                            if (it.length >= 100)
+                                "Received malformed response"
+                            else
+                                it
+                        }, newData))
                     }
                 }
             }

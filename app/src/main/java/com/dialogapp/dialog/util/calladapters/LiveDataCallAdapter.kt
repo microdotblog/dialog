@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.dialogapp.dialog.util
+package com.dialogapp.dialog.util.calladapters
 
 
 import androidx.lifecycle.LiveData

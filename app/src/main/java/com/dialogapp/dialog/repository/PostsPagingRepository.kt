@@ -6,15 +6,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.paging.toLiveData
 import com.dialogapp.dialog.AppExecutors
-import com.dialogapp.dialog.api.MicroblogService
+import com.dialogapp.dialog.api.*
 import com.dialogapp.dialog.db.MicroBlogDb
 import com.dialogapp.dialog.model.EndpointData
 import com.dialogapp.dialog.model.Post
-import com.dialogapp.dialog.vo.PagedListing
+import com.dialogapp.dialog.util.calladapters.ApiResponseCallback
 import com.dialogapp.dialog.vo.MicroBlogResponse
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import com.dialogapp.dialog.vo.PagedListing
+import timber.log.Timber
 import javax.inject.Inject
 
 class PostsPagingRepository @Inject constructor(private val microBlogDb: MicroBlogDb,
@@ -66,8 +65,8 @@ class PostsPagingRepository @Inject constructor(private val microBlogDb: MicroBl
         )
     }
 
-    private fun insertPostsIntoDb(endpoint: String, microBlogResponse: MicroBlogResponse?) {
-        microBlogResponse!!.let { data ->
+    private fun insertPostsIntoDb(endpoint: String, microBlogResponse: MicroBlogResponse) {
+        microBlogResponse.let { data ->
             microBlogDb.runInTransaction {
                 val endpointData = EndpointData(endpoint, data.microblog, data.author)
                 endpointData.lastFetched = System.currentTimeMillis()
@@ -96,22 +95,31 @@ class PostsPagingRepository @Inject constructor(private val microBlogDb: MicroBl
         val networkState = MutableLiveData<NetworkState>()
         networkState.value = NetworkState.LOADING
         microblogService.getEndpoint(endpoint, null, this.networkPageSize).enqueue(
-                object : Callback<MicroBlogResponse> {
-                    override fun onFailure(call: Call<MicroBlogResponse>, t: Throwable) {
-                        // retrofit calls this on main thread so safe to call set value
-                        networkState.value = NetworkState.error(t.message)
+                object : ApiResponseCallback<MicroBlogResponse> {
+                    override fun onSuccess(response: ApiResponse<MicroBlogResponse>) {
+                        when (response) {
+                            is ApiSuccessResponse -> appExecutors.diskIO().execute {
+                                microBlogDb.runInTransaction {
+                                    microBlogDb.posts().deletePostsByEndpoint(endpoint)
+                                    insertPostsIntoDb(endpoint, response.body)
+                                }
+                                networkState.postValue(NetworkState.LOADED)
+                            }
+                            is ApiEmptyResponse -> {
+                                Timber.e("Received empty response for endpoint: %s", endpoint)
+                                networkState.postValue(NetworkState.error("Received empty response"))
+                            }
+                            is ApiErrorResponse -> {
+                                Timber.e("Received malformed response for: %s, message: %s",
+                                        endpoint, response.errorMessage)
+                                networkState.postValue(NetworkState.error("Received malformed response"))
+                            }
+                        }
                     }
 
-                    override fun onResponse(call: Call<MicroBlogResponse>,
-                                            response: Response<MicroBlogResponse>) {
-                        appExecutors.diskIO().execute {
-                            microBlogDb.runInTransaction {
-                                microBlogDb.posts().deletePostsByEndpoint(endpoint)
-                                insertPostsIntoDb(endpoint, response.body())
-                            }
-                            // since we are in bg thread now, post the result.
-                            networkState.postValue(NetworkState.LOADED)
-                        }
+                    override fun onFailure(response: ApiErrorResponse<MicroBlogResponse>) {
+                        Timber.d("Request failed: %s", response.errorMessage)
+                        networkState.postValue(NetworkState.error(response.errorMessage))
                     }
                 }
         )

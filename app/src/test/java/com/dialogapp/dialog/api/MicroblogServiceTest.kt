@@ -1,6 +1,6 @@
 package com.dialogapp.dialog.api
 
-import com.dialogapp.dialog.util.LiveDataCallAdapterFactory
+import com.dialogapp.dialog.util.calladapters.LiveDataCallAdapterFactory
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import kotlinx.coroutines.runBlocking
 import okhttp3.mockwebserver.MockResponse

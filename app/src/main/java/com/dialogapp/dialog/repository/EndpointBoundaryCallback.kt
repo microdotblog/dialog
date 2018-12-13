@@ -2,14 +2,13 @@ package com.dialogapp.dialog.repository
 
 import androidx.annotation.MainThread
 import androidx.paging.PagedList
-import com.dialogapp.dialog.api.MicroblogService
-import com.dialogapp.dialog.vo.MicroBlogResponse
+import com.dialogapp.dialog.api.*
 import com.dialogapp.dialog.model.Post
+import com.dialogapp.dialog.util.calladapters.ApiResponseCallback
 import com.dialogapp.dialog.util.PagingRequestHelper
 import com.dialogapp.dialog.util.createStatusLiveData
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import com.dialogapp.dialog.vo.MicroBlogResponse
+import timber.log.Timber
 import java.util.concurrent.Executor
 
 /**
@@ -22,7 +21,7 @@ import java.util.concurrent.Executor
 class EndpointBoundaryCallback(
         private val webservice: MicroblogService,
         private val endpoint: String,
-        private val handleResponse: (String, MicroBlogResponse?) -> Unit,
+        private val handleResponse: (String, MicroBlogResponse) -> Unit,
         private val ioExecutor: Executor,
         private val networkPageSize: Int)
     : PagedList.BoundaryCallback<Post>() {
@@ -64,10 +63,10 @@ class EndpointBoundaryCallback(
      * paging library takes care of refreshing the list if necessary.
      */
     private fun insertItemsIntoDb(
-            response: Response<MicroBlogResponse>,
+            response: MicroBlogResponse,
             it: PagingRequestHelper.Request.Callback) {
         ioExecutor.execute {
-            handleResponse(endpoint, response.body())
+            handleResponse(endpoint, response)
             it.recordSuccess()
         }
     }
@@ -77,18 +76,26 @@ class EndpointBoundaryCallback(
     }
 
     private fun createWebserviceCallback(it: PagingRequestHelper.Request.Callback)
-            : Callback<MicroBlogResponse> {
-        return object : Callback<MicroBlogResponse> {
-            override fun onFailure(
-                    call: Call<MicroBlogResponse>,
-                    t: Throwable) {
-                it.recordFailure(t)
+            : ApiResponseCallback<MicroBlogResponse> {
+        return object : ApiResponseCallback<MicroBlogResponse> {
+            override fun onSuccess(response: ApiResponse<MicroBlogResponse>) {
+                when (response) {
+                    is ApiSuccessResponse -> insertItemsIntoDb(response.body, it)
+                    is ApiEmptyResponse -> {
+                        Timber.e("Received empty response for endpoint: %s", endpoint)
+                        it.recordFailure(Throwable("Received empty response"))
+                    }
+                    is ApiErrorResponse -> {
+                        Timber.e("Received malformed response for: %s, message: %s",
+                                endpoint, response.errorMessage)
+                        it.recordFailure(Throwable("Received malformed response"))
+                    }
+                }
             }
 
-            override fun onResponse(
-                    call: Call<MicroBlogResponse>,
-                    response: Response<MicroBlogResponse>) {
-                insertItemsIntoDb(response, it)
+            override fun onFailure(response: ApiErrorResponse<MicroBlogResponse>) {
+                Timber.d("Request failed: %s", response.errorMessage)
+                it.recordFailure(Throwable(response.errorMessage))
             }
         }
     }

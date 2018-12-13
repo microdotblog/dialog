@@ -8,7 +8,8 @@ import com.dialogapp.dialog.StethoImplementation
 import com.dialogapp.dialog.api.MicroblogService
 import com.dialogapp.dialog.api.ServiceInterceptor
 import com.dialogapp.dialog.db.MicroBlogDb
-import com.dialogapp.dialog.util.LiveDataCallAdapterFactory
+import com.dialogapp.dialog.util.calladapters.ApiResponseCallAdapterFactory
+import com.dialogapp.dialog.util.calladapters.LiveDataCallAdapterFactory
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import dagger.Module
 import dagger.Provides
@@ -26,6 +27,7 @@ class AppModule {
         return Retrofit.Builder()
                 .baseUrl("https://micro.blog/")
                 .addConverterFactory(MoshiConverterFactory.create())
+                .addCallAdapterFactory(ApiResponseCallAdapterFactory())
                 .addCallAdapterFactory(CoroutineCallAdapterFactory())
                 .addCallAdapterFactory(LiveDataCallAdapterFactory())
                 .client(okHttpClient)

@@ -1,10 +1,10 @@
 package com.dialogapp.dialog.api
 
 import androidx.lifecycle.LiveData
+import com.dialogapp.dialog.util.calladapters.ApiResponseCall
 import com.dialogapp.dialog.vo.MicroBlogResponse
 import com.dialogapp.dialog.vo.VerifiedAccount
 import kotlinx.coroutines.Deferred
-import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -18,7 +18,7 @@ interface MicroblogService {
     @GET("posts/{endpoint}")
     fun getEndpoint(@Path("endpoint") endpoint: String,
                     @Query("before_id") beforeId: String?,
-                    @Query("count") count: Int): Call<MicroBlogResponse>
+                    @Query("count") count: Int): ApiResponseCall<MicroBlogResponse>
 
     @GET("posts/discover")
     fun getFeaturedPosts(): LiveData<ApiResponse<MicroBlogResponse>>
