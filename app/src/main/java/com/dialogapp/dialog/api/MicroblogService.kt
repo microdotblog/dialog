@@ -18,7 +18,7 @@ interface MicroblogService {
     @GET("posts/{endpoint}")
     fun getEndpoint(@Path("endpoint") endpoint: String,
                     @Query("before_id") beforeId: String?,
-                    @Query("count") count: Int): ApiResponseCall<MicroBlogResponse>
+                    @Query("count") count: Int?): ApiResponseCall<MicroBlogResponse>
 
     @GET("posts/discover")
     fun getFeaturedPosts(): LiveData<ApiResponse<MicroBlogResponse>>

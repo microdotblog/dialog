@@ -7,6 +7,7 @@ import com.dialogapp.dialog.model.Post
 import com.dialogapp.dialog.util.calladapters.ApiResponseCallback
 import com.dialogapp.dialog.util.PagingRequestHelper
 import com.dialogapp.dialog.util.createStatusLiveData
+import com.dialogapp.dialog.vo.MENTIONS
 import com.dialogapp.dialog.vo.MicroBlogResponse
 import timber.log.Timber
 import java.util.concurrent.Executor
@@ -39,7 +40,7 @@ class EndpointBoundaryCallback(
             webservice.getEndpoint(
                     endpoint = endpoint,
                     beforeId = null,
-                    count = networkPageSize)
+                    count = if (endpoint == MENTIONS) null else networkPageSize) //TODO: Remove check after api support
                     .enqueue(createWebserviceCallback(it))
         }
     }
@@ -53,7 +54,7 @@ class EndpointBoundaryCallback(
             webservice.getEndpoint(
                     endpoint = endpoint,
                     beforeId = itemAtEnd.id,
-                    count = networkPageSize)
+                    count = if (endpoint == MENTIONS) null else networkPageSize) //TODO: Remove check after api support
                     .enqueue(createWebserviceCallback(it))
         }
     }
