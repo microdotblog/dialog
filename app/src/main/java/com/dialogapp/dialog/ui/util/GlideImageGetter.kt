@@ -8,6 +8,7 @@ import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.LayerDrawable
 import android.text.Html
+import android.util.TypedValue
 import android.view.Gravity
 import android.widget.TextView
 import androidx.annotation.NonNull
@@ -32,6 +33,7 @@ import java.util.*
  */
 class GlideImageGetter(private val glide: GlideRequests,
                        private val targetView: TextView,
+                       private val imageSize: ImageSize,
                        private val emojiList: Queue<Boolean>) : Html.ImageGetter, Drawable.Callback {
     private var request: RequestBuilder<Drawable>
     private val context = targetView.context.applicationContext
@@ -40,14 +42,15 @@ class GlideImageGetter(private val glide: GlideRequests,
     companion object {
         private const val DEFAULT_WIDTH_PX = 48
         private const val DEFAULT_HEIGHT_PX = 48
-        private const val DEFAULT_IMAGE_HEIGHT_DP = 96
 
-        // values from post_item layout
-        private const val CONTENT_MARGIN_START_DP = 66
-        private const val CONTENT_MARGIN_END_DP = 16
+        private const val IMAGE_SMALL_HEIGHT_DP = 96
+        private const val IMAGE_SMALL_WIDTH_DP = 96
 
-        private var calculatedWidthPx: Int = 0
-        private var calculatedHeightPx: Int = 0
+        private const val IMAGE_MEDIUM_HEIGHT_DP = 178
+        private const val IMAGE_MEDIUM_WIDTH_DP = 178
+
+        private const val IMAGE_LARGE_HEIGHT_DP = 256
+        private const val IMAGE_LARGE_WIDTH_DP = 256
 
         fun clear(view: TextView) {
             view.text = null
@@ -62,12 +65,6 @@ class GlideImageGetter(private val glide: GlideRequests,
     init {
         request = createGlideRequest(glide)
         targetView.tag = this
-
-        if (calculatedWidthPx == 0) {
-            calculatedHeightPx = dpToPx(DEFAULT_IMAGE_HEIGHT_DP)
-            val diffPx = dpToPx(CONTENT_MARGIN_START_DP + CONTENT_MARGIN_END_DP)
-            calculatedWidthPx = Resources.getSystem().displayMetrics.widthPixels - diffPx
-        }
     }
 
     override fun getDrawable(url: String): Drawable {
@@ -79,8 +76,20 @@ class GlideImageGetter(private val glide: GlideRequests,
             drawableWidth = DEFAULT_WIDTH_PX
             drawableHeight = DEFAULT_HEIGHT_PX
         } else {
-            drawableWidth = calculatedWidthPx
-            drawableHeight = calculatedHeightPx
+            when (imageSize) {
+                ImageSize.SMALL -> {
+                    drawableWidth = dpToPx(IMAGE_SMALL_WIDTH_DP)
+                    drawableHeight = dpToPx(IMAGE_SMALL_HEIGHT_DP)
+                }
+                ImageSize.MEDIUM -> {
+                    drawableWidth = dpToPx(IMAGE_MEDIUM_WIDTH_DP)
+                    drawableHeight = dpToPx(IMAGE_MEDIUM_HEIGHT_DP)
+                }
+                ImageSize.LARGE -> {
+                    drawableWidth = dpToPx(IMAGE_LARGE_WIDTH_DP)
+                    drawableHeight = dpToPx(IMAGE_LARGE_HEIGHT_DP)
+                }
+            }
         }
         // set up target for this Image inside the TextView
         val imageTarget = WrapperTarget(drawableWidth, drawableHeight)
@@ -146,6 +155,9 @@ class GlideImageGetter(private val glide: GlideRequests,
             layerDrawable = LayerDrawable(drawables)
             wrapper.wrappedDrawable = layerDrawable
             progressDrawable.setStyle(CircularProgressDrawable.DEFAULT)
+            val typedValue = TypedValue()
+            targetView.context?.theme?.resolveAttribute(R.attr.colorSecondary, typedValue, true)
+            progressDrawable.setColorSchemeColors(typedValue.data)
         }
 
         override fun onLoadStarted(placeholder: Drawable?) {
@@ -191,5 +203,11 @@ class GlideImageGetter(private val glide: GlideRequests,
             Gravity.apply(gravity, w, h, container, bounds)
             return bounds
         }
+    }
+
+    enum class ImageSize {
+        LARGE,
+        MEDIUM,
+        SMALL
     }
 }

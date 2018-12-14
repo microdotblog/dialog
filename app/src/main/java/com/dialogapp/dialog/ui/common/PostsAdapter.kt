@@ -9,13 +9,13 @@ import com.dialogapp.dialog.R
 import com.dialogapp.dialog.databinding.PostItemBinding
 import com.dialogapp.dialog.model.Post
 
-class PostsAdapter(private val glide: GlideRequests)
+class PostsAdapter(private val glide: GlideRequests, private val postClickedListener: PostClickedListener)
     : ListAdapter<Post, PostViewHolder>(POST_COMPARATOR) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
         val binding = DataBindingUtil.inflate<PostItemBinding>(LayoutInflater.from(parent.context),
                 R.layout.post_item, parent, false)
-        return PostViewHolder(binding.root, binding, glide)
+        return PostViewHolder(binding.root, binding, glide, postClickedListener)
     }
 
     override fun onBindViewHolder(

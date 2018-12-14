@@ -14,6 +14,7 @@ import com.dialogapp.dialog.repository.NetworkState
 
 class PagedPostsAdapter(
         private val glide: GlideRequests,
+        private val postClickedListener: PostClickedListener,
         private val retryCallback: () -> Unit)
     : PagedListAdapter<Post, RecyclerView.ViewHolder>(POST_COMPARATOR) {
 
@@ -24,7 +25,7 @@ class PagedPostsAdapter(
             R.layout.post_item -> {
                 val binding = DataBindingUtil.inflate<PostItemBinding>(LayoutInflater.from(parent.context),
                         R.layout.post_item, parent, false)
-                PostViewHolder(binding.root, binding, glide)
+                PostViewHolder(binding.root, binding, glide, postClickedListener)
             }
             R.layout.network_state_item -> {
                 val binding = DataBindingUtil.inflate<NetworkStateItemBinding>(LayoutInflater.from(parent.context),

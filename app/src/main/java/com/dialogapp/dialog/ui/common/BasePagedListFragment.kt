@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
@@ -21,7 +20,7 @@ import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-abstract class BasePagedListFragment : Fragment() {
+abstract class BasePagedListFragment : BasePostFragment() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -69,7 +68,7 @@ abstract class BasePagedListFragment : Fragment() {
 
     private fun initAdapter() {
         val glide = GlideApp.with(this)
-        val adapter = PagedPostsAdapter(glide) {
+        val adapter = PagedPostsAdapter(glide, this) {
             basePagedListViewModel.retry()
         }
         binding.recyclerPosts.adapter = adapter

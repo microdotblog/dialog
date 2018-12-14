@@ -2,39 +2,27 @@ package com.dialogapp.dialog.ui.common
 
 import android.os.Bundle
 import android.view.View
-import androidx.core.os.bundleOf
-import androidx.navigation.NavOptions
-import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.dialogapp.dialog.GlideRequests
-import com.dialogapp.dialog.R
 import com.dialogapp.dialog.databinding.PostItemBinding
 import com.dialogapp.dialog.model.Post
 import com.dialogapp.dialog.ui.util.GlideImageGetter
 import com.dialogapp.dialog.ui.util.HtmlTextHelper
 
-class PostViewHolder(view: View, val binding: PostItemBinding, private val glide: GlideRequests)
+class PostViewHolder(view: View, val binding: PostItemBinding, private val glide: GlideRequests,
+                     private val postClickedListener: PostClickedListener)
     : RecyclerView.ViewHolder(view) {
-
-    val navOptions: NavOptions = NavOptions.Builder()
-            .setEnterAnim(R.anim.nav_default_enter_anim)
-            .setExitAnim(R.anim.nav_default_exit_anim)
-            .setPopEnterAnim(R.anim.nav_default_pop_enter_anim)
-            .setPopExitAnim(R.anim.nav_default_pop_exit_anim)
-            .build()
 
     fun bind(post: Post?) {
         binding.textFullname.text = post?.author?.name
         binding.textUsername.text = post?.author?.microblog?.username
         binding.textTime.text = post?.microblog?.dateRelative
-        HtmlTextHelper(glide, post?.contentHtml).setHtmlContent(binding.textContent)
+        HtmlTextHelper(glide, postClickedListener, post?.contentHtml).setHtmlContent(binding.textContent)
         glide.load(post?.author?.avatar).into(binding.imageThumbnail)
 
         binding.buttonConv.visibility = if (post?.microblog?.isConversation!!) {
             binding.buttonConv.setOnClickListener {
-                val argBundle = bundleOf("convId" to post?.id)
-                binding.imageThumbnail.findNavController().navigate(R.id.conversation_dest, argBundle,
-                        navOptions)
+                postClickedListener.onConversationButtonClicked(post?.id)
             }
             View.VISIBLE
         } else {
@@ -42,9 +30,7 @@ class PostViewHolder(view: View, val binding: PostItemBinding, private val glide
         }
 
         binding.imageThumbnail.setOnClickListener {
-            val argBundle = bundleOf("username" to post?.author?.microblog?.username)
-            binding.imageThumbnail.findNavController().navigate(R.id.profile_dest, argBundle,
-                    navOptions)
+            postClickedListener.onAvatarClicked(post?.author?.microblog?.username)
         }
     }
 
@@ -52,14 +38,31 @@ class PostViewHolder(view: View, val binding: PostItemBinding, private val glide
         val diffBundle = payloads[0] as Bundle
 
         for (key in diffBundle.keySet()) {
-//            when (key) {
-//                CONVERSATION ->
-//                FAVORITE ->
-//                DATE ->
-//                AVATAR ->
-//                USERNAME ->
-//                CONTENT ->
-//            }
+            when (key) {
+                PK_CONVERSATION -> {
+                    binding.buttonConv.visibility = if (diffBundle.getBoolean(PK_CONVERSATION))
+                        View.VISIBLE
+                    else
+                        View.GONE
+                }
+                PK_FAVORITE -> {
+
+                }
+                PK_DATE -> {
+                    binding.textTime.text = diffBundle.getString(PK_DATE)
+                }
+                PK_AVATAR -> {
+                    glide.load(diffBundle.getString(PK_AVATAR))
+                            .into(binding.imageThumbnail)
+                }
+                PK_USERNAME -> {
+                    binding.textUsername.text = diffBundle.getString(PK_USERNAME)
+                }
+                PK_CONTENT -> {
+                    HtmlTextHelper(glide, postClickedListener, diffBundle.getString(PK_CONTENT))
+                            .setHtmlContent(binding.textContent)
+                }
+            }
         }
     }
 
