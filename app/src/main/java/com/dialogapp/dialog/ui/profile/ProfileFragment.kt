@@ -51,15 +51,28 @@ class ProfileFragment : Fragment() {
         if (endpointData != null) {
             binding.includePartialProfile.progressBar.visibility = View.GONE
             binding.includePartialProfile.textProfileFullname.visibility = View.VISIBLE
-            binding.includePartialProfile.textProfileWebsite.visibility = View.VISIBLE
-            binding.includePartialProfile.textProfileAbout.visibility = View.VISIBLE
 
             GlideApp.with(this)
                     .load(endpointData.author?.avatar)
+                    .dontAnimate()
                     .into(binding.includePartialProfile.imageAvatar)
             binding.includePartialProfile.textProfileFullname.text = endpointData.author?.name
-            binding.includePartialProfile.textProfileWebsite.text = endpointData.author?.url
-            binding.includePartialProfile.textProfileAbout.text = endpointData.microblog?.bio
+            endpointData.author?.url.let {
+                if (it != null && !it.isEmpty()) {
+                    binding.includePartialProfile.textProfileWebsite.visibility = View.VISIBLE
+                    binding.includePartialProfile.textProfileWebsite.text = it
+                } else {
+                    binding.includePartialProfile.textProfileWebsite.visibility = View.GONE
+                }
+            }
+            endpointData.microblog?.bio.let {
+                if (it != null && !it.isEmpty()) {
+                    binding.includePartialProfile.textProfileAbout.visibility = View.VISIBLE
+                    binding.includePartialProfile.textProfileAbout.text = it
+                } else {
+                    binding.includePartialProfile.textProfileAbout.visibility = View.GONE
+                }
+            }
         }
     }
 }

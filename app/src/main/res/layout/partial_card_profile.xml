@@ -16,9 +16,7 @@
             android:layout_gravity="start"
             android:layout_marginStart="32dp"
             android:elevation="4dp"
-            android:src="?attr/colorPrimary"
-            app:civ_border_color="?attr/colorPrimary"
-            app:civ_border_width="3dp"
+            android:src="?android:attr/colorBackground"
             tools:src="@tools:sample/avatars" />
 
         <com.google.android.material.card.MaterialCardView
@@ -60,11 +58,12 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <TextView
+                <com.dialogapp.dialog.ui.util.ExpandableTextView
                     android:id="@+id/text_profile_about"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
+                    android:maxLines="5"
                     android:textAlignment="textStart"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                     android:visibility="invisible"

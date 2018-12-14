@@ -6,20 +6,16 @@
 
     <fragment
         android:id="@+id/timeline_dest"
-        android:name="com.dialogapp.dialog.ui.home.TimelineFragment"
-        android:label="TimelineFragment" />
+        android:name="com.dialogapp.dialog.ui.home.TimelineFragment" />
     <fragment
         android:id="@+id/mentions_dest"
-        android:name="com.dialogapp.dialog.ui.home.MentionsFragment"
-        android:label="MentionsFragment" />
+        android:name="com.dialogapp.dialog.ui.home.MentionsFragment" />
     <fragment
         android:id="@+id/discover_dest"
-        android:name="com.dialogapp.dialog.ui.home.DiscoverFragment"
-        android:label="DiscoverFragment" />
+        android:name="com.dialogapp.dialog.ui.home.DiscoverFragment" />
     <fragment
         android:id="@+id/more_dest"
-        android:name="com.dialogapp.dialog.ui.home.MoreFragment"
-        android:label="MoreFragment">
+        android:name="com.dialogapp.dialog.ui.home.MoreFragment">
         <action
             android:id="@+id/action_more_dest_to_profile_dest"
             app:destination="@id/profile_dest"
@@ -30,8 +26,7 @@
     </fragment>
     <fragment
         android:id="@+id/profile_dest"
-        android:name="com.dialogapp.dialog.ui.profile.ProfileFragment"
-        android:label="ProfileFragment">
+        android:name="com.dialogapp.dialog.ui.profile.ProfileFragment">
         <argument
             android:name="username"
             app:argType="string" />

@@ -17,7 +17,7 @@ abstract class PostsDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract fun insertEndpointData(endpointData: EndpointData)
 
-    @Query("SELECT * FROM posts WHERE belongsToEndpoint = :endpoint ORDER BY datePublished DESC")
+    @Query("SELECT * FROM posts WHERE belongsToEndpoint = :endpoint ORDER BY datetime(datePublished) DESC")
     abstract fun loadPostsByEndpoint(endpoint: String): DataSource.Factory<Int, Post>
 
     @Query("SELECT * FROM endpointData WHERE endpoint = :endpoint")

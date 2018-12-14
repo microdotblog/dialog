@@ -14,10 +14,10 @@
 
             <com.google.android.material.appbar.CollapsingToolbarLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:contentScrim="?attr/colorPrimary"
-                app:expandedTitleGravity="top"
-                app:layout_scrollFlags="scroll|enterAlwaysCollapsed">
+                android:layout_height="wrap_content"
+                app:contentScrim="?attr/colorPrimaryDark"
+                app:layout_scrollFlags="scroll|enterAlwaysCollapsed"
+                app:titleEnabled="false">
 
                 <include
                     android:id="@+id/include_partial_profile"
@@ -31,6 +31,7 @@
                 <androidx.appcompat.widget.Toolbar
                     android:id="@+id/toolbar_profile"
                     style="@style/Widget.MaterialComponents.Toolbar.Primary"
+                    app:layout_collapseMode="pin"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
             </com.google.android.material.appbar.CollapsingToolbarLayout>

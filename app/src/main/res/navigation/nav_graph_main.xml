@@ -6,8 +6,7 @@
 
     <fragment
         android:id="@+id/login_dest"
-        android:name="com.dialogapp.dialog.ui.login.LoginFragment"
-        android:label="LoginFragment" >
+        android:name="com.dialogapp.dialog.ui.login.LoginFragment">
 
         <action
             android:id="@+id/action_login_dest_to_home_dest"
@@ -15,8 +14,7 @@
     </fragment>
     <fragment
         android:id="@+id/home_dest"
-        android:name="com.dialogapp.dialog.ui.home.HomeFragment"
-        android:label="HomeFragment" >
+        android:name="com.dialogapp.dialog.ui.home.HomeFragment">
 
         <action
             android:id="@+id/action_home_dest_to_login_dest"
