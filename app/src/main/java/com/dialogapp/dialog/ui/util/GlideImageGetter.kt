@@ -34,7 +34,7 @@ import java.util.*
 class GlideImageGetter(private val glide: GlideRequests,
                        private val targetView: TextView,
                        private val imageSize: ImageSize,
-                       private val emojiList: Queue<Boolean>) : Html.ImageGetter, Drawable.Callback {
+                       private val imageTypes: Queue<ImageType>) : Html.ImageGetter, Drawable.Callback {
     private var request: RequestBuilder<Drawable>
     private val context = targetView.context.applicationContext
     private val imageTargets = ArrayList<Target<*>>()
@@ -67,16 +67,17 @@ class GlideImageGetter(private val glide: GlideRequests,
         targetView.tag = this
     }
 
-    override fun getDrawable(url: String): Drawable {
+    override fun getDrawable(url: String?): Drawable {
         val drawableWidth: Int
         val drawableHeight: Int
 
-        val isEmoji = emojiList.remove()
-        if (isEmoji) {
-            drawableWidth = DEFAULT_WIDTH_PX
-            drawableHeight = DEFAULT_HEIGHT_PX
-        } else {
-            when (imageSize) {
+        val type = imageTypes.remove()
+        when (type) {
+            ImageType.EMOJI -> {
+                drawableWidth = DEFAULT_WIDTH_PX
+                drawableHeight = DEFAULT_HEIGHT_PX
+            }
+            else -> when (imageSize) {
                 ImageSize.SMALL -> {
                     drawableWidth = dpToPx(IMAGE_SMALL_WIDTH_DP)
                     drawableHeight = dpToPx(IMAGE_SMALL_HEIGHT_DP)
@@ -203,11 +204,5 @@ class GlideImageGetter(private val glide: GlideRequests,
             Gravity.apply(gravity, w, h, container, bounds)
             return bounds
         }
-    }
-
-    enum class ImageSize {
-        LARGE,
-        MEDIUM,
-        SMALL
     }
 }

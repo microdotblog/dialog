@@ -34,7 +34,7 @@ class HtmlTextHelper(private val glide: GlideRequests,
             val imageGetter: GlideImageGetter?
             val spannedText: SpannableString
             if (!images.isEmpty()) {
-                imageGetter = GlideImageGetter(glide, textView, GlideImageGetter.ImageSize.LARGE, parseImages(images))
+                imageGetter = GlideImageGetter(glide, textView, ImageSize.LARGE, parseImages(images))
                 spannedText = getHtmlString(document.html(), imageGetter)
             } else {
                 spannedText = getHtmlString(document.html(), null)
@@ -107,33 +107,32 @@ class HtmlTextHelper(private val glide: GlideRequests,
         }
     }
 
-    private fun parseImages(images: Elements): Queue<Boolean> {
-        val emojiList = LinkedList<Boolean>()
+    private fun parseImages(images: Elements): Queue<ImageType> {
+        val imageTypes = LinkedList<ImageType>()
         for (img in images) {
             Timber.i(img.outerHtml())
             var width = -1
             var height = -1
-            var hasAttribs = false
             if (img.hasAttr("width") && img.hasAttr("height")) {
                 try {
                     width = Integer.parseInt(img.attributes().get("width"))
                     height = Integer.parseInt(img.attributes().get("height"))
-                    hasAttribs = true
                 } catch (e: NumberFormatException) {
-                    hasAttribs = false
                 }
             }
 
-            if (img.hasClass("wp-smiley") || img.hasClass("mini_thumbnail") ||
-                    (hasAttribs && (width in 1..100) && (height in 1..100)))
-                emojiList.add(true)
-            else
-                emojiList.add(false)
+            if (img.hasClass("wp-smiley") || img.hasClass("emoji") ||
+                    img.hasClass("mini_thumbnail") || (width in 1..100) && (height in 1..100)
+                    || !img.hasAttr("src"))
+                imageTypes.add(ImageType.EMOJI)
+            else {
+                imageTypes.add(ImageType.IMAGE)
+            }
 
             // Add para tags to ensure that there is a gap between each image span
             img.wrap("<p></p>")
         }
-        return emojiList
+        return imageTypes
     }
 
     /**
