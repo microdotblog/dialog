@@ -3,13 +3,13 @@ package com.dialogapp.dialog.ui.common
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.dialogapp.dialog.R
 import com.dialogapp.dialog.model.Post
+import timber.log.Timber
 
 abstract class BasePostFragment : Fragment(), PostClickedListener {
 
@@ -62,6 +62,12 @@ abstract class BasePostFragment : Fragment(), PostClickedListener {
     }
 
     override fun onImageClicked(imageUrl: String?) {
-        Toast.makeText(activity, imageUrl, Toast.LENGTH_SHORT).show()
+        Timber.i(imageUrl)
+        val navOptions = NavOptions.Builder()
+                .setEnterAnim(R.anim.slide_in_bottom)
+                .setPopExitAnim(R.anim.slide_out_bottom)
+                .build()
+        findNavController().navigate(R.id.image_viewer_dest, bundleOf("imageUrl" to imageUrl),
+                navOptions)
     }
 }

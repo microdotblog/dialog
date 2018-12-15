@@ -53,4 +53,12 @@
             android:name="convId"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/image_viewer_dest"
+        android:name="com.dialogapp.dialog.ui.common.ImageViewerFragment" >
+        <argument
+            android:name="imageUrl"
+            app:nullable="true"
+            app:argType="string" />
+    </fragment>
 </navigation>
