@@ -24,12 +24,12 @@ class BaseListViewModel @Inject constructor(private val postsRepository: PostsRe
             .switchMap(_endpoint) { endpointArgs ->
                 when {
                     endpointArgs.endpoint == DISCOVER ->
-                        postsRepository.loadDiscover(endpointArgs.extraArg)
+                        postsRepository.loadDiscover(endpointArgs.extraArg, endpointArgs.refresh)
                     endpointArgs.endpoint == FAVORITES ->
                         AbsentLiveData.create()
                     endpointArgs.endpoint == CONVERSATION ->
-                        postsRepository.loadConversation(endpointArgs.extraArg ?: "")
-                    else -> postsRepository.loadPostsByUsername(endpointArgs.endpoint)
+                        postsRepository.loadConversation(endpointArgs.extraArg ?: "", endpointArgs.refresh)
+                    else -> postsRepository.loadPostsByUsername(endpointArgs.endpoint, endpointArgs.refresh)
                 }
             }
 
@@ -41,6 +41,7 @@ class BaseListViewModel @Inject constructor(private val postsRepository: PostsRe
 
     fun refresh() {
         _endpoint.value?.let {
+            it.refresh = true
             _endpoint.value = it
         }
     }
@@ -48,5 +49,6 @@ class BaseListViewModel @Inject constructor(private val postsRepository: PostsRe
 
 data class EndpointArgs(
         val endpoint: String,
-        val extraArg: String? = null
+        val extraArg: String? = null,
+        var refresh: Boolean = false
 )

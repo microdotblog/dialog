@@ -24,11 +24,11 @@ class PostsRepository @Inject constructor(private val appExecutors: AppExecutors
     private val listings = ArrayMap<String, List<Post>>()
     private var endpointData = ArrayMap<String, EndpointData>()
 
-    fun loadDiscover(topic: String?): LiveData<Resource<Listing<Post>>> {
+    fun loadDiscover(topic: String?, refresh: Boolean): LiveData<Resource<Listing<Post>>> {
         return object : NetworkBoundResource<Listing<Post>, MicroBlogResponse>(appExecutors) {
             override fun shouldFetch(data: Listing<Post>?): Boolean {
                 return data?.postData == null || data.postData.isEmpty() ||
-                        endpointRateLimit.shouldFetch(topic ?: DISCOVER)
+                        (endpointRateLimit.shouldFetch(topic ?: DISCOVER) && refresh)
             }
 
             override fun createCall(): LiveData<ApiResponse<MicroBlogResponse>> {
@@ -60,11 +60,11 @@ class PostsRepository @Inject constructor(private val appExecutors: AppExecutors
         }.asLiveData()
     }
 
-    fun loadPostsByUsername(username: String): LiveData<Resource<Listing<Post>>> {
+    fun loadPostsByUsername(username: String, refresh: Boolean): LiveData<Resource<Listing<Post>>> {
         return object : NetworkBoundResource<Listing<Post>, MicroBlogResponse>(appExecutors) {
             override fun shouldFetch(data: Listing<Post>?): Boolean {
                 return data?.postData == null || data.postData.isEmpty() ||
-                        endpointRateLimit.shouldFetch(username)
+                        (endpointRateLimit.shouldFetch(username) && refresh)
             }
 
             override fun createCall(): LiveData<ApiResponse<MicroBlogResponse>> {
@@ -93,11 +93,11 @@ class PostsRepository @Inject constructor(private val appExecutors: AppExecutors
         }.asLiveData()
     }
 
-    fun loadConversation(convId: String): LiveData<Resource<Listing<Post>>> {
+    fun loadConversation(convId: String, refresh: Boolean): LiveData<Resource<Listing<Post>>> {
         return object : NetworkBoundResource<Listing<Post>, MicroBlogResponse>(appExecutors) {
             override fun shouldFetch(data: Listing<Post>?): Boolean {
                 return data?.postData == null || data.postData.isEmpty() ||
-                        endpointRateLimit.shouldFetch(convId)
+                        (endpointRateLimit.shouldFetch(convId) && refresh)
             }
 
             override fun createCall(): LiveData<ApiResponse<MicroBlogResponse>> {
