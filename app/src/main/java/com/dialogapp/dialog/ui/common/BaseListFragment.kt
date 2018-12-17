@@ -14,12 +14,10 @@ import com.dialogapp.dialog.R
 import com.dialogapp.dialog.databinding.FragmentListBinding
 import com.dialogapp.dialog.ui.util.autoCleared
 import com.dialogapp.dialog.vo.Status
-import javax.inject.Inject
 
 
 abstract class BaseListFragment : BasePostFragment() {
 
-    @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
     lateinit var baseListViewModel: BaseListViewModel

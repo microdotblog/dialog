@@ -10,7 +10,7 @@ import com.dialogapp.dialog.vo.MENTIONS
 class MentionsFragment : BasePagedListFragment() {
 
     override fun onAttach(context: Context?) {
-        Injector.get().inject(this)
+        viewModelFactory = Injector.get().viewModelFactory()
         super.onAttach(context)
     }
 

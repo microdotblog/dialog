@@ -16,11 +16,9 @@ import com.dialogapp.dialog.databinding.FragmentLoginBinding
 import com.dialogapp.dialog.di.Injector
 import com.dialogapp.dialog.ui.util.autoCleared
 import com.google.android.material.snackbar.Snackbar
-import javax.inject.Inject
 
 class LoginFragment : Fragment() {
 
-    @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
     private var binding by autoCleared<FragmentLoginBinding>()
@@ -29,7 +27,7 @@ class LoginFragment : Fragment() {
     private lateinit var navController: NavController
 
     override fun onAttach(context: Context?) {
-        Injector.get().inject(this)
+        viewModelFactory = Injector.get().viewModelFactory()
         super.onAttach(context)
     }
 

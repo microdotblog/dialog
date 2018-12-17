@@ -11,7 +11,7 @@ import com.dialogapp.dialog.vo.DISCOVER
 class DiscoverFragment: BaseListFragment() {
 
     override fun onAttach(context: Context?) {
-        Injector.get().inject(this)
+        viewModelFactory = Injector.get().viewModelFactory()
         super.onAttach(context)
     }
 

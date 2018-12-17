@@ -8,7 +8,6 @@ import androidx.lifecycle.Observer
 import com.dialogapp.dialog.di.Injector
 import com.dialogapp.dialog.ui.common.BaseListFragment
 import com.dialogapp.dialog.ui.common.EndpointArgs
-import com.dialogapp.dialog.vo.Status
 
 class ProfilePostsFragment : BaseListFragment() {
 
@@ -23,7 +22,7 @@ class ProfilePostsFragment : BaseListFragment() {
     }
 
     override fun onAttach(context: Context?) {
-        Injector.get().inject(this)
+        viewModelFactory = Injector.get().viewModelFactory()
         super.onAttach(context)
     }
 

@@ -15,17 +15,15 @@ import com.dialogapp.dialog.auth.SessionManager
 import com.dialogapp.dialog.databinding.FragmentHomeBinding
 import com.dialogapp.dialog.di.Injector
 import com.dialogapp.dialog.ui.util.autoCleared
-import javax.inject.Inject
 
 class HomeFragment : Fragment() {
 
-    @Inject
     lateinit var sessionManager: SessionManager
 
     private var binding by autoCleared<FragmentHomeBinding>()
 
     override fun onAttach(context: Context?) {
-        Injector.get().inject(this)
+        sessionManager = Injector.get().sessionManager()
         super.onAttach(context)
     }
 
