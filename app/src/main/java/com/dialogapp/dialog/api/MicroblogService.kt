@@ -32,6 +32,9 @@ interface MicroblogService {
     @GET("posts/conversation")
     fun getConversation(@Query("id") id: String): LiveData<ApiResponse<MicroBlogResponse>>
 
+    @GET("posts/favorites")
+    fun getFavorites(): LiveData<ApiResponse<MicroBlogResponse>>
+
     // POST
 
     @FormUrlEncoded

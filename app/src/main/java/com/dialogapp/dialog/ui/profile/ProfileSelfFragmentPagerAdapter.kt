@@ -7,7 +7,7 @@ import androidx.fragment.app.FragmentPagerAdapter
 class ProfileSelfFragmentPagerAdapter (fm: FragmentManager, private val username: String)
     : FragmentPagerAdapter(fm) {
 
-    private val TAB_TITLES = arrayOf("POSTS")
+    private val TAB_TITLES = arrayOf("POSTS", "FAVORITES")
 
     override fun getCount(): Int {
         return TAB_TITLES.size
@@ -16,6 +16,7 @@ class ProfileSelfFragmentPagerAdapter (fm: FragmentManager, private val username
     override fun getItem(position: Int): Fragment? {
         return when (position) {
             0 -> ProfilePostsFragment.newInstance(username)
+            1 -> FavoritesFragment()
             else -> null
         }
     }

@@ -26,7 +26,7 @@ class BaseListViewModel @Inject constructor(private val postsRepository: PostsRe
                     endpointArgs.endpoint == DISCOVER ->
                         postsRepository.loadDiscover(endpointArgs.extraArg, endpointArgs.refresh)
                     endpointArgs.endpoint == FAVORITES ->
-                        AbsentLiveData.create()
+                        postsRepository.loadFavorites(endpointArgs.refresh)
                     endpointArgs.endpoint == CONVERSATION ->
                         postsRepository.loadConversation(endpointArgs.extraArg ?: "", endpointArgs.refresh)
                     else -> postsRepository.loadPostsByUsername(endpointArgs.endpoint, endpointArgs.refresh)

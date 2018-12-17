@@ -7,10 +7,7 @@ import com.dialogapp.dialog.api.ApiResponse
 import com.dialogapp.dialog.api.MicroblogService
 import com.dialogapp.dialog.model.EndpointData
 import com.dialogapp.dialog.model.Post
-import com.dialogapp.dialog.vo.DISCOVER
-import com.dialogapp.dialog.vo.Listing
-import com.dialogapp.dialog.vo.MicroBlogResponse
-import com.dialogapp.dialog.vo.Resource
+import com.dialogapp.dialog.vo.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -122,6 +119,39 @@ class PostsRepository @Inject constructor(private val appExecutors: AppExecutors
 
             override fun onFetchFailed() {
                 endpointRateLimit.reset(convId)
+            }
+        }.asLiveData()
+    }
+
+    fun loadFavorites(refresh: Boolean): LiveData<Resource<Listing<Post>>> {
+        return object : NetworkBoundResource<Listing<Post>, MicroBlogResponse>(appExecutors) {
+            override fun shouldFetch(data: Listing<Post>?): Boolean {
+                return data?.postData == null || data.postData.isEmpty() ||
+                        (endpointRateLimit.shouldFetch(FAVORITES) && refresh)
+            }
+
+            override fun createCall(): LiveData<ApiResponse<MicroBlogResponse>> {
+                return microblogService.getFavorites()
+            }
+
+            override fun saveCallResult(item: MicroBlogResponse) {
+                endpointData[FAVORITES] = EndpointData(endpoint = FAVORITES,
+                        microblog = item.microblog, author = item.author)
+                listings[FAVORITES] = item.posts
+            }
+
+            override fun loadFromDb(): LiveData<Listing<Post>> {
+                return object : LiveData<Listing<Post>>() {
+                    override fun onActive() {
+                        super.onActive()
+                        value = Listing(endpointData = endpointData[FAVORITES],
+                                postData = listings[FAVORITES])
+                    }
+                }
+            }
+
+            override fun onFetchFailed() {
+                endpointRateLimit.reset(FAVORITES)
             }
         }.asLiveData()
     }
