@@ -6,6 +6,7 @@ import com.dialogapp.dialog.di.ViewModelKey
 import com.dialogapp.dialog.ui.common.BaseListViewModel
 import com.dialogapp.dialog.ui.common.BasePagedListViewModel
 import com.dialogapp.dialog.ui.login.LoginViewModel
+import com.dialogapp.dialog.ui.profile.FollowingViewModel
 import com.dialogapp.dialog.ui.util.MicroblogViewModelFactory
 import dagger.Binds
 import dagger.Module
@@ -28,6 +29,11 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(BaseListViewModel::class)
     abstract fun bindBaseListViewModel(baseListViewModel: BaseListViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(FollowingViewModel::class)
+    abstract fun bindFollowingViewModel(followingViewModel: FollowingViewModel): ViewModel
 
     @Binds
     abstract fun bindViewModelFactory(factory: MicroblogViewModelFactory): ViewModelProvider.Factory

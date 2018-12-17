@@ -16,4 +16,6 @@ interface PostClickedListener {
     fun onLinkClicked(isInternalLink: Boolean, text: String)
 
     fun onImageClicked(imageUrl: String?)
+
+    fun onFollowingItemClicked(username: String)
 }

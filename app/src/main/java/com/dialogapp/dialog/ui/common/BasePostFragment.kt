@@ -70,4 +70,9 @@ abstract class BasePostFragment : Fragment(), PostClickedListener {
         findNavController().navigate(R.id.image_viewer_dest, bundleOf("imageUrl" to imageUrl),
                 navOptions)
     }
+
+    override fun onFollowingItemClicked(username: String) {
+        val argBundle = bundleOf("username" to username)
+        findNavController().navigate(R.id.profile_dest, argBundle, navOptions)
+    }
 }

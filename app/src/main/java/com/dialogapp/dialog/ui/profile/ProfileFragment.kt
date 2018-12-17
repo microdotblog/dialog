@@ -44,6 +44,7 @@ class ProfileFragment : Fragment() {
             ProfileFragmentPagerAdapter(childFragmentManager, username)
         }
         binding.viewPagerProfile.adapter = adapter
+        binding.viewPagerProfile.offscreenPageLimit = 2
         binding.tabLayoutProfile.setupWithViewPager(binding.viewPagerProfile)
     }
 

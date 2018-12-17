@@ -1,6 +1,7 @@
 package com.dialogapp.dialog.api
 
 import androidx.lifecycle.LiveData
+import com.dialogapp.dialog.model.FollowingAccount
 import com.dialogapp.dialog.util.calladapters.ApiResponseCall
 import com.dialogapp.dialog.vo.MicroBlogResponse
 import com.dialogapp.dialog.vo.VerifiedAccount
@@ -34,6 +35,12 @@ interface MicroblogService {
 
     @GET("posts/favorites")
     fun getFavorites(): LiveData<ApiResponse<MicroBlogResponse>>
+
+    @GET("users/following/{username}")
+    fun getFollowingSelf(@Path("username") username: String): LiveData<ApiResponse<List<FollowingAccount>>>
+
+    @GET("users/discover/{username}")
+    fun getFollowing(@Path("username") username: String): LiveData<ApiResponse<List<FollowingAccount>>>
 
     // POST
 

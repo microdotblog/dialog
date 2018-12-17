@@ -6,6 +6,7 @@ import com.dialogapp.dialog.AppExecutors
 import com.dialogapp.dialog.api.ApiResponse
 import com.dialogapp.dialog.api.MicroblogService
 import com.dialogapp.dialog.model.EndpointData
+import com.dialogapp.dialog.model.FollowingAccount
 import com.dialogapp.dialog.model.Post
 import com.dialogapp.dialog.vo.*
 import java.util.concurrent.TimeUnit
@@ -20,6 +21,7 @@ class PostsRepository @Inject constructor(private val appExecutors: AppExecutors
     private val endpointRateLimit = RateLimiter<String>(2, TimeUnit.MINUTES)
     private val listings = ArrayMap<String, List<Post>>()
     private var endpointData = ArrayMap<String, EndpointData>()
+    private var followingData = ArrayMap<String, List<FollowingAccount>>()
 
     fun loadDiscover(topic: String?, refresh: Boolean): LiveData<Resource<Listing<Post>>> {
         return object : NetworkBoundResource<Listing<Post>, MicroBlogResponse>(appExecutors) {
@@ -152,6 +154,40 @@ class PostsRepository @Inject constructor(private val appExecutors: AppExecutors
 
             override fun onFetchFailed() {
                 endpointRateLimit.reset(FAVORITES)
+            }
+        }.asLiveData()
+    }
+
+    fun loadFollowing(username: String, isSelf: Boolean, refresh: Boolean): LiveData<Resource<List<FollowingAccount>>> {
+        val endpoint = FOLLOWING + "_$username"
+        return object : NetworkBoundResource<List<FollowingAccount>, List<FollowingAccount>>(appExecutors) {
+            override fun shouldFetch(data: List<FollowingAccount>?): Boolean {
+                return data == null || data.isEmpty() ||
+                        (endpointRateLimit.shouldFetch(endpoint) && refresh)
+            }
+
+            override fun createCall(): LiveData<ApiResponse<List<FollowingAccount>>> {
+                return if (isSelf)
+                    microblogService.getFollowingSelf(username)
+                else
+                    microblogService.getFollowing(username)
+            }
+
+            override fun saveCallResult(item: List<FollowingAccount>) {
+                followingData[endpoint] = item
+            }
+
+            override fun loadFromDb(): LiveData<List<FollowingAccount>> {
+                return object : LiveData<List<FollowingAccount>>() {
+                    override fun onActive() {
+                        super.onActive()
+                        value = followingData[endpoint]
+                    }
+                }
+            }
+
+            override fun onFetchFailed() {
+                endpointRateLimit.reset(endpoint)
             }
         }.asLiveData()
     }
