@@ -2,14 +2,22 @@ package com.dialogapp.dialog.auth
 
 import android.content.SharedPreferences
 import androidx.core.content.edit
+import com.dialogapp.dialog.CoroutinesDispatcherProvider
 import com.dialogapp.dialog.api.ServiceInterceptor
+import com.dialogapp.dialog.db.MicroBlogDb
 import com.dialogapp.dialog.model.LoggedInUser
+import com.dialogapp.dialog.repository.PostsRepository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class SessionManager @Inject constructor(private val prefs: SharedPreferences,
-                                         private val serviceInterceptor: ServiceInterceptor) {
+                                         private val db: MicroBlogDb,
+                                         private val postsRepository: PostsRepository,
+                                         private val serviceInterceptor: ServiceInterceptor,
+                                         dispatchers: CoroutinesDispatcherProvider) {
 
     var user: LoggedInUser? = null
         private set(value) {
@@ -19,6 +27,8 @@ class SessionManager @Inject constructor(private val prefs: SharedPreferences,
 
     val isLoggedIn: Boolean
         get() = user != null
+
+    private val scope = CoroutineScope(dispatchers.io)
 
     init {
         val token = prefs.getString(KEY_USER_TOKEN, null)
@@ -45,6 +55,10 @@ class SessionManager @Inject constructor(private val prefs: SharedPreferences,
 
     fun logout() {
         prefs.edit().clear().apply()
+        scope.launch {
+            db.posts().clearAll()
+            postsRepository.clearFavorites()
+        }
         user = null
     }
 

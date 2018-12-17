@@ -7,7 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
+import com.afollestad.materialdialogs.MaterialDialog
 import com.dialogapp.dialog.GlideApp
 import com.dialogapp.dialog.R
 import com.dialogapp.dialog.auth.SessionManager
@@ -36,6 +38,19 @@ class MoreFragment : Fragment() {
                 ?: "").setIsSelf(true)
         binding.buttonProfile.setOnClickListener {
             findNavController().navigate(action)
+        }
+        val dialog = MaterialDialog(this.requireContext())
+                .message(R.string.dialog_logout_message)
+        binding.buttonLogout.setOnClickListener {
+            dialog.show {
+                positiveButton(android.R.string.ok) { dialog ->
+                    dialog.dismiss()
+                    sessionManager.logout()
+                    val mainNavController = activity?.findNavController(R.id.nav_host_main)
+                    mainNavController?.navigate(R.id.action_home_dest_to_login_dest)
+                }
+                negativeButton(android.R.string.cancel)
+            }
         }
         return binding.root
     }

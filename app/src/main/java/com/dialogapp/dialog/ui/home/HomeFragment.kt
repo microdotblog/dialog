@@ -31,8 +31,7 @@ class HomeFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         if (!sessionManager.isLoggedIn) {
-            findNavController().popBackStack()
-            findNavController().navigate(R.id.login_dest)
+            findNavController().navigate(R.id.action_home_dest_to_login_dest_no_transition)
         }
     }
 

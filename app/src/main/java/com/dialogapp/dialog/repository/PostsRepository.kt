@@ -155,4 +155,9 @@ class PostsRepository @Inject constructor(private val appExecutors: AppExecutors
             }
         }.asLiveData()
     }
+
+    fun clearFavorites() {
+        endpointData.remove(FAVORITES)
+        listings.remove(FAVORITES)
+    }
 }

@@ -33,4 +33,6 @@
 
     <string name="post_username">\@%1$s</string>
     <string name="post_time">\u2022 %1$s</string>
+
+    <string name="dialog_logout_message">Do you want to logout?</string>
 </resources>

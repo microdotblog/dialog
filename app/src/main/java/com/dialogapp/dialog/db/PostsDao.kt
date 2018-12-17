@@ -2,10 +2,7 @@ package com.dialogapp.dialog.db
 
 import androidx.lifecycle.LiveData
 import androidx.paging.DataSource
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import com.dialogapp.dialog.model.EndpointData
 import com.dialogapp.dialog.model.Post
 
@@ -25,4 +22,16 @@ abstract class PostsDao {
 
     @Query("DELETE FROM posts WHERE belongsToEndpoint = :endpoint")
     abstract fun deletePostsByEndpoint(endpoint: String)
+
+    @Query("DELETE FROM posts")
+    abstract fun clearPosts()
+
+    @Query("DELETE FROM endpointData")
+    abstract fun clearEndpointData()
+
+    @Transaction
+    open fun clearAll() {
+        clearPosts()
+        clearEndpointData()
+    }
 }

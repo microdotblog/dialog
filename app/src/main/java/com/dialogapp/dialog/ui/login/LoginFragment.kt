@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
-import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.dialogapp.dialog.R
 import com.dialogapp.dialog.databinding.FragmentLoginBinding
@@ -24,7 +23,6 @@ class LoginFragment : Fragment() {
     private var binding by autoCleared<FragmentLoginBinding>()
 
     private lateinit var viewModel: LoginViewModel
-    private lateinit var navController: NavController
 
     override fun onAttach(context: Context?) {
         viewModelFactory = Injector.get().viewModelFactory()
@@ -39,8 +37,6 @@ class LoginFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        navController = findNavController()
 
         binding.buttonLogin.setOnClickListener {
             viewModel.login(binding.editTextLogin.text.toString())
@@ -62,8 +58,7 @@ class LoginFragment : Fragment() {
 
             if (uiModel.showSuccess != null && !uiModel.showSuccess.hasBeenHandled) {
                 uiModel.showSuccess.getContentIfNotHandled().let {
-                    navController.popBackStack()
-                    navController.navigate(R.id.home_dest)
+                    findNavController().navigate(R.id.action_login_dest_to_home_dest)
                 }
             }
         })
