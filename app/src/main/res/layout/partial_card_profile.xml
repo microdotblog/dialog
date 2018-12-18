@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <FrameLayout
+        android:id="@+id/frame_layout_card_profile"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="8dp"
@@ -22,7 +23,7 @@
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/card_profile_info"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="32dp"
             android:layout_marginEnd="16dp"
@@ -31,6 +32,7 @@
             app:elevation="5dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraint_layout_profile"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:paddingStart="16dp"
@@ -39,12 +41,17 @@
 
                 <TextView
                     android:id="@+id/text_profile_fullname"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="32dp"
+                    android:layout_marginEnd="8dp"
+                    android:ellipsize="end"
+                    android:maxLines="1"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body2"
                     android:visibility="invisible"
+                    app:layout_constraintEnd_toStartOf="@+id/button_follow"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/button_follow"
+                    app:layout_constraintTop_toTopOf="parent"
                     tools:text="@tools:sample/full_names" />
 
                 <com.google.android.material.button.MaterialButton
@@ -58,12 +65,13 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <com.dialogapp.dialog.ui.util.ExpandableTextView
+                <TextView
                     android:id="@+id/text_profile_about"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:maxLines="5"
+                    android:maxLines="2"
+                    android:ellipsize="end"
                     android:textAlignment="textStart"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                     android:visibility="invisible"
@@ -76,7 +84,6 @@
                     android:id="@+id/text_profile_website"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/text_profile_about"
                     android:layout_marginTop="8dp"
                     android:autoLink="web"
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"

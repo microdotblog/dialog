@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
+import com.afollestad.materialdialogs.MaterialDialog
 import com.dialogapp.dialog.GlideApp
 import com.dialogapp.dialog.R
 import com.dialogapp.dialog.databinding.FragmentProfileBinding
@@ -18,6 +19,7 @@ import com.dialogapp.dialog.ui.util.autoCleared
 class ProfileFragment : Fragment() {
 
     private var binding by autoCleared<FragmentProfileBinding>()
+    private lateinit var dialog: MaterialDialog
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -28,6 +30,7 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        dialog = MaterialDialog(this.requireContext())
         val appBarConfiguration = AppBarConfiguration(setOf(R.id.timeline_dest, R.id.mentions_dest,
                 R.id.discover_dest, R.id.more_dest))
         binding.toolbarProfile.setupWithNavController(findNavController(), appBarConfiguration)
@@ -70,6 +73,12 @@ class ProfileFragment : Fragment() {
                 if (it != null && !it.isEmpty()) {
                     binding.includePartialProfile.textProfileAbout.visibility = View.VISIBLE
                     binding.includePartialProfile.textProfileAbout.text = it
+                    val text = it
+                    binding.includePartialProfile.textProfileAbout.setOnClickListener {
+                        dialog.message(text = text).show {
+                            positiveButton(text = "Dismiss")
+                        }
+                    }
                 } else {
                     binding.includePartialProfile.textProfileAbout.visibility = View.GONE
                 }
