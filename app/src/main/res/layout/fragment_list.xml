@@ -16,6 +16,7 @@
                 android:id="@+id/recycler_posts"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:background="?android:attr/windowBackground"
                 android:clipToPadding="false"
                 android:paddingBottom="4dp"
                 android:scrollbars="vertical"

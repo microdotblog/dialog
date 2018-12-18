@@ -6,6 +6,8 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AlphaAnimation
+import android.view.animation.Animation
 import androidx.core.os.bundleOf
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -46,6 +48,15 @@ class FollowingFragment : BasePostFragment() {
                               savedInstanceState: Bundle?): View? {
         binding = FragmentListBinding.inflate(inflater, container, false)
         return binding.root
+    }
+
+    // https://stackoverflow.com/a/22673871
+    override fun onCreateAnimation(transit: Int, enter: Boolean, nextAnim: Int): Animation? {
+        return if (!enter && parentFragment != null) {
+            val dummyAnimation = AlphaAnimation(1f, 1f)
+            dummyAnimation.duration = android.R.integer.config_mediumAnimTime.toLong()
+            dummyAnimation
+        } else super.onCreateAnimation(transit, enter, nextAnim)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
