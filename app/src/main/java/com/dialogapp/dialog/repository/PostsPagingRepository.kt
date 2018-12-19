@@ -11,11 +11,15 @@ import com.dialogapp.dialog.db.MicroBlogDb
 import com.dialogapp.dialog.model.EndpointData
 import com.dialogapp.dialog.model.Post
 import com.dialogapp.dialog.util.calladapters.ApiResponseCallback
+import com.dialogapp.dialog.vo.MENTIONS
 import com.dialogapp.dialog.vo.MicroBlogResponse
 import com.dialogapp.dialog.vo.PagedListing
 import timber.log.Timber
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class PostsPagingRepository @Inject constructor(private val microBlogDb: MicroBlogDb,
                                                 private val microblogService: MicroblogService,
                                                 private val appExecutors: AppExecutors) {
@@ -24,6 +28,7 @@ class PostsPagingRepository @Inject constructor(private val microBlogDb: MicroBl
     }
 
     private var networkPageSize: Int = DEFAULT_NETWORK_PAGE_SIZE
+    private val endpointRateLimit = RateLimiter<String>(2, TimeUnit.MINUTES)
 
     fun postsOfEndpoint(endpoint: String, networkPageSize: Int = DEFAULT_NETWORK_PAGE_SIZE): PagedListing<Post> {
         this.networkPageSize = networkPageSize
@@ -65,11 +70,15 @@ class PostsPagingRepository @Inject constructor(private val microBlogDb: MicroBl
         )
     }
 
-    private fun insertPostsIntoDb(endpoint: String, microBlogResponse: MicroBlogResponse) {
+    private fun insertPostsIntoDb(endpoint: String, microBlogResponse: MicroBlogResponse,
+                                  setTimeStamp: Boolean) {
         microBlogResponse.let { data ->
             microBlogDb.runInTransaction {
                 val endpointData = EndpointData(endpoint, data.microblog, data.author)
-                endpointData.lastFetched = System.currentTimeMillis()
+                endpointData.lastFetched = when {
+                    setTimeStamp -> System.currentTimeMillis()
+                    else -> microBlogDb.posts().fetchLastTimestamp(endpoint)
+                }
                 microBlogDb.posts().insertEndpointData(endpointData)
 
                 data.posts.let { posts ->
@@ -94,35 +103,47 @@ class PostsPagingRepository @Inject constructor(private val microBlogDb: MicroBl
     private fun refresh(endpoint: String): LiveData<NetworkState> {
         val networkState = MutableLiveData<NetworkState>()
         networkState.value = NetworkState.LOADING
-        microblogService.getEndpoint(endpoint, null, this.networkPageSize).enqueue(
-                object : ApiResponseCallback<MicroBlogResponse> {
-                    override fun onSuccess(response: ApiResponse<MicroBlogResponse>) {
-                        when (response) {
-                            is ApiSuccessResponse -> appExecutors.diskIO().execute {
-                                microBlogDb.runInTransaction {
-                                    microBlogDb.posts().deletePostsByEndpoint(endpoint)
-                                    insertPostsIntoDb(endpoint, response.body)
+        //TODO: Remove check after api support
+        val networkPageSize = when (endpoint) {
+            MENTIONS -> null
+            else -> this.networkPageSize
+        }
+        if (endpointRateLimit.shouldFetch(endpoint)) {
+            microblogService.getEndpoint(endpoint, null, networkPageSize).enqueue(
+                    object : ApiResponseCallback<MicroBlogResponse> {
+                        override fun onSuccess(response: ApiResponse<MicroBlogResponse>) {
+                            when (response) {
+                                is ApiSuccessResponse -> appExecutors.diskIO().execute {
+                                    microBlogDb.runInTransaction {
+                                        microBlogDb.posts().deletePostsByEndpoint(endpoint)
+                                        insertPostsIntoDb(endpoint, response.body, true)
+                                    }
+                                    networkState.postValue(NetworkState.LOADED)
                                 }
-                                networkState.postValue(NetworkState.LOADED)
-                            }
-                            is ApiEmptyResponse -> {
-                                Timber.e("Received empty response for endpoint: %s", endpoint)
-                                networkState.postValue(NetworkState.error("Received empty response"))
-                            }
-                            is ApiErrorResponse -> {
-                                Timber.e("Received malformed response for: %s, message: %s",
-                                        endpoint, response.errorMessage)
-                                networkState.postValue(NetworkState.error("Received malformed response"))
+                                is ApiEmptyResponse -> {
+                                    Timber.e("Received empty response for endpoint: %s", endpoint)
+                                    endpointRateLimit.reset(endpoint)
+                                    networkState.postValue(NetworkState.error("Received empty response"))
+                                }
+                                is ApiErrorResponse -> {
+                                    Timber.e("Received malformed response for: %s, message: %s",
+                                            endpoint, response.errorMessage)
+                                    endpointRateLimit.reset(endpoint)
+                                    networkState.postValue(NetworkState.error("Received malformed response"))
+                                }
                             }
                         }
-                    }
 
-                    override fun onFailure(response: ApiErrorResponse<MicroBlogResponse>) {
-                        Timber.d("Request failed: %s", response.errorMessage)
-                        networkState.postValue(NetworkState.error(response.errorMessage))
+                        override fun onFailure(response: ApiErrorResponse<MicroBlogResponse>) {
+                            Timber.d("Request failed: %s", response.errorMessage)
+                            endpointRateLimit.reset(endpoint)
+                            networkState.postValue(NetworkState.error(response.errorMessage))
+                        }
                     }
-                }
-        )
+            )
+        } else {
+            networkState.value = NetworkState.LOADED
+        }
         return networkState
     }
 }

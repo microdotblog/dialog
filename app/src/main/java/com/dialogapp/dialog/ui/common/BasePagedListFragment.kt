@@ -30,11 +30,10 @@ abstract class BasePagedListFragment : BasePostFragment() {
     private var binding by autoCleared<FragmentListBinding>()
 
     companion object {
-        private val TIMEOUT: Long = TimeUnit.MINUTES.toMillis(15)
+        private val TIMEOUT: Long = TimeUnit.MINUTES.toMillis(15L)
 
-        fun shouldRefresh(lastFetchTimestamp: Long): Boolean {
-            val now = System.currentTimeMillis()
-            return (now - lastFetchTimestamp > TIMEOUT)
+        fun shouldRefresh(lastTimestamp: Long): Boolean {
+            return (System.currentTimeMillis() - lastTimestamp > TIMEOUT)
         }
     }
 
@@ -49,6 +48,15 @@ abstract class BasePagedListFragment : BasePostFragment() {
 
         binding.setLifecycleOwner(viewLifecycleOwner)
         basePagedListViewModel = ViewModelProviders.of(this, viewModelFactory).get(BasePagedListViewModel::class.java)
+        basePagedListViewModel.endpointData.observe(viewLifecycleOwner, Observer {
+            val endpointData = it ?: return@Observer
+
+            if (shouldRefresh(endpointData.lastFetched)) {
+                Timber.d("Refreshing - %s, Timestamp - %s", endpointData.endpoint,
+                        endpointData.lastFetched)
+                basePagedListViewModel.refresh()
+            }
+        })
 
         initAdapter()
         initSwipeToRefresh()
@@ -74,12 +82,6 @@ abstract class BasePagedListFragment : BasePostFragment() {
         binding.recyclerPosts.adapter = adapter
         basePagedListViewModel.posts.observe(viewLifecycleOwner, Observer<PagedList<Post>> {
             adapter.submitList(it)
-        })
-        basePagedListViewModel.endpointData.observe(viewLifecycleOwner, Observer {
-            if (it != null && BasePagedListFragment.shouldRefresh(it.lastFetched)) {
-                Timber.i("Stale data, refreshing endpoint automatically - %s", basePagedListViewModel.currentEndpoint())
-                basePagedListViewModel.refresh()
-            }
         })
         basePagedListViewModel.networkState.observe(viewLifecycleOwner, Observer {
             adapter.setNetworkState(it)

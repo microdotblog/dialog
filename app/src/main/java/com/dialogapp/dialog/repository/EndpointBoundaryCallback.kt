@@ -4,8 +4,8 @@ import androidx.annotation.MainThread
 import androidx.paging.PagedList
 import com.dialogapp.dialog.api.*
 import com.dialogapp.dialog.model.Post
-import com.dialogapp.dialog.util.calladapters.ApiResponseCallback
 import com.dialogapp.dialog.util.PagingRequestHelper
+import com.dialogapp.dialog.util.calladapters.ApiResponseCallback
 import com.dialogapp.dialog.util.createStatusLiveData
 import com.dialogapp.dialog.vo.MENTIONS
 import com.dialogapp.dialog.vo.MicroBlogResponse
@@ -22,7 +22,7 @@ import java.util.concurrent.Executor
 class EndpointBoundaryCallback(
         private val webservice: MicroblogService,
         private val endpoint: String,
-        private val handleResponse: (String, MicroBlogResponse) -> Unit,
+        private val handleResponse: (String, MicroBlogResponse, Boolean) -> Unit,
         private val ioExecutor: Executor,
         private val networkPageSize: Int)
     : PagedList.BoundaryCallback<Post>() {
@@ -41,7 +41,7 @@ class EndpointBoundaryCallback(
                     endpoint = endpoint,
                     beforeId = null,
                     count = if (endpoint == MENTIONS) null else networkPageSize) //TODO: Remove check after api support
-                    .enqueue(createWebserviceCallback(it))
+                    .enqueue(createWebserviceCallback(it, true))
         }
     }
 
@@ -65,9 +65,10 @@ class EndpointBoundaryCallback(
      */
     private fun insertItemsIntoDb(
             response: MicroBlogResponse,
-            it: PagingRequestHelper.Request.Callback) {
+            it: PagingRequestHelper.Request.Callback,
+            setTimeStamp: Boolean) {
         ioExecutor.execute {
-            handleResponse(endpoint, response)
+            handleResponse(endpoint, response, setTimeStamp)
             it.recordSuccess()
         }
     }
@@ -76,12 +77,13 @@ class EndpointBoundaryCallback(
         // ignored, since we only ever append to what's in the DB
     }
 
-    private fun createWebserviceCallback(it: PagingRequestHelper.Request.Callback)
+    private fun createWebserviceCallback(it: PagingRequestHelper.Request.Callback,
+                                         setTimeStamp: Boolean = false)
             : ApiResponseCallback<MicroBlogResponse> {
         return object : ApiResponseCallback<MicroBlogResponse> {
             override fun onSuccess(response: ApiResponse<MicroBlogResponse>) {
                 when (response) {
-                    is ApiSuccessResponse -> insertItemsIntoDb(response.body, it)
+                    is ApiSuccessResponse -> insertItemsIntoDb(response.body, it, setTimeStamp)
                     is ApiEmptyResponse -> {
                         Timber.e("Received empty response for endpoint: %s", endpoint)
                         it.recordFailure(Throwable("Received empty response"))

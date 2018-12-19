@@ -34,4 +34,7 @@ abstract class PostsDao {
         clearPosts()
         clearEndpointData()
     }
+
+    @Query("SELECt lastFetched FROM endpointData WHERE endpoint = :endpoint")
+    abstract fun fetchLastTimestamp(endpoint: String): Long
 }
