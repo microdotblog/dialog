@@ -80,9 +80,10 @@ class HtmlTextHelper(private val glide: GlideRequests,
             text.setSpan(object : ClickableSpan() {
                 override fun onClick(view: View) {
                     if (text[start] == '@')
-                        postClickedListener.onLinkClicked(true, text.subSequence(start + 1, end).toString())
+                        postClickedListener.onProfileClicked(text.subSequence(start + 1, end).toString(),
+                                postClickedListener)
                     else
-                        postClickedListener.onLinkClicked(false, span.url)
+                        postClickedListener.onLinkClicked(span.url)
                 }
             }, start, end, flags)
 

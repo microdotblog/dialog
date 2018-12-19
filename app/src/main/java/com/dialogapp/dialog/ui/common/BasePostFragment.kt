@@ -5,9 +5,11 @@ import android.net.Uri
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavOptions
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.dialogapp.dialog.R
 import com.dialogapp.dialog.model.Post
+import com.dialogapp.dialog.ui.profile.ProfileFragment
 import timber.log.Timber
 
 
@@ -34,7 +36,14 @@ abstract class BasePostFragment : Fragment(), PostClickedListener {
             .setPopExitAnim(R.anim.slide_out_bottom)
             .build()
 
-    override fun onAvatarClicked(username: String) {
+    override fun onProfileClicked(username: String, postClickedListener: PostClickedListener) {
+        if ((postClickedListener as Fragment).parentFragment is ProfileFragment) {
+            val profileFragment = postClickedListener.parentFragment as ProfileFragment
+            if (profileFragment.isUserCurrentProfile(username)) {
+                Timber.d("Profile requested is currently on top of stack")
+                return
+            }
+        }
         val argBundle = bundleOf("username" to username)
         findNavController().navigate(R.id.profile_dest, argBundle, profileNavOptions)
     }
@@ -56,16 +65,11 @@ abstract class BasePostFragment : Fragment(), PostClickedListener {
 
     }
 
-    override fun onLinkClicked(isInternalLink: Boolean, text: String) {
-        if (isInternalLink) {
-            val argBundle = bundleOf("username" to text)
-            findNavController().navigate(R.id.profile_dest, argBundle, profileNavOptions)
-        } else {
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(text))
-            val packMan = activity?.packageManager
-            if (packMan != null && intent.resolveActivity(packMan) != null) {
-                startActivity(intent)
-            }
+    override fun onLinkClicked(text: String) {
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(text))
+        val packMan = activity?.packageManager
+        if (packMan != null && intent.resolveActivity(packMan) != null) {
+            startActivity(intent)
         }
     }
 
@@ -73,10 +77,5 @@ abstract class BasePostFragment : Fragment(), PostClickedListener {
         Timber.i(imageUrl)
         findNavController().navigate(R.id.image_viewer_dest, bundleOf("imageUrl" to imageUrl),
                 imageNavOptions)
-    }
-
-    override fun onFollowingItemClicked(username: String) {
-        val argBundle = bundleOf("username" to username)
-        findNavController().navigate(R.id.profile_dest, argBundle, profileNavOptions)
     }
 }

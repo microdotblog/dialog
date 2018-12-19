@@ -30,7 +30,8 @@ class PostViewHolder(view: View, val binding: PostItemBinding, private val glide
         }
 
         binding.imageThumbnail.setOnClickListener {
-            postClickedListener.onAvatarClicked(post?.author?.microblog?.username)
+            postClickedListener.onProfileClicked(post?.author?.microblog?.username,
+                    postClickedListener)
         }
     }
 

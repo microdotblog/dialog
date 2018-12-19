@@ -35,7 +35,7 @@ class MoreFragment : Fragment() {
                 .load(sessionManager.user?.gravatarUrl)
                 .into(binding.imageAvatar)
         val action = MoreFragmentDirections.actionMoreDestToProfileDest(sessionManager.user?.username
-                ?: "").setIsSelf(true)
+                ?: "")
         binding.buttonProfile.setOnClickListener {
             findNavController().navigate(action)
         }

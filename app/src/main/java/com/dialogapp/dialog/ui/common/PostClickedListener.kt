@@ -3,7 +3,7 @@ package com.dialogapp.dialog.ui.common
 import com.dialogapp.dialog.model.Post
 
 interface PostClickedListener {
-    fun onAvatarClicked(username: String)
+    fun onProfileClicked(username: String, postClickedListener: PostClickedListener)
 
     fun onFavoriteButtonClicked(postId: String)
 
@@ -13,9 +13,7 @@ interface PostClickedListener {
 
     fun onReplyClicked(id: String, username: String)
 
-    fun onLinkClicked(isInternalLink: Boolean, text: String)
+    fun onLinkClicked(text: String)
 
     fun onImageClicked(imageUrl: String?)
-
-    fun onFollowingItemClicked(username: String)
 }

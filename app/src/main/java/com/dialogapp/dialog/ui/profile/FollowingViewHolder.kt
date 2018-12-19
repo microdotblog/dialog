@@ -19,7 +19,7 @@ class FollowingViewHolder(view: View, val binding: FollowingItemBinding,
         binding.textFullname.text = followingAccount.name
         binding.textUsername.text = followingAccount.username
         binding.cardFollowing.setOnClickListener {
-            postClickedListener.onFollowingItemClicked(followingAccount.username)
+            postClickedListener.onProfileClicked(followingAccount.username, postClickedListener)
         }
     }
 

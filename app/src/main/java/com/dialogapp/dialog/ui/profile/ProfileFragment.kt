@@ -1,5 +1,6 @@
 package com.dialogapp.dialog.ui.profile
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,14 +13,23 @@ import androidx.navigation.ui.setupWithNavController
 import com.afollestad.materialdialogs.MaterialDialog
 import com.dialogapp.dialog.GlideApp
 import com.dialogapp.dialog.R
+import com.dialogapp.dialog.auth.SessionManager
 import com.dialogapp.dialog.databinding.FragmentProfileBinding
+import com.dialogapp.dialog.di.Injector
 import com.dialogapp.dialog.model.EndpointData
 import com.dialogapp.dialog.ui.util.autoCleared
 
 class ProfileFragment : Fragment() {
 
+    lateinit var sessionManager: SessionManager
+
     private var binding by autoCleared<FragmentProfileBinding>()
     private lateinit var dialog: MaterialDialog
+
+    override fun onAttach(context: Context?) {
+        sessionManager = Injector.get().sessionManager()
+        super.onAttach(context)
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -35,7 +45,7 @@ class ProfileFragment : Fragment() {
                 R.id.discover_dest, R.id.more_dest))
         binding.toolbarProfile.setupWithNavController(findNavController(), appBarConfiguration)
         val username = ProfileFragmentArgs.fromBundle(arguments).username
-        val isSelf = ProfileFragmentArgs.fromBundle(arguments).isSelf
+        val isSelf = username.equals(sessionManager.user?.username, ignoreCase = true)
         binding.toolbarProfile.title = username
         setupViewpager(username, isSelf)
     }
@@ -84,5 +94,9 @@ class ProfileFragment : Fragment() {
                 }
             }
         }
+    }
+
+    fun isUserCurrentProfile(username: String): Boolean {
+        return username.equals(ProfileFragmentArgs.fromBundle(arguments).username, ignoreCase = true)
     }
 }
