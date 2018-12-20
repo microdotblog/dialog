@@ -9,6 +9,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.dialogapp.dialog.GlideApp
 import com.dialogapp.dialog.R
 import com.dialogapp.dialog.databinding.FragmentListBinding
@@ -24,6 +26,19 @@ abstract class BaseListFragment : BasePostFragment() {
 
     private var binding by autoCleared<FragmentListBinding>()
 
+    private val scrollListener = object : RecyclerView.OnScrollListener() {
+        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+            super.onScrolled(recyclerView, dx, dy)
+
+            val layoutManager = binding.recyclerPosts.layoutManager as LinearLayoutManager
+            if (layoutManager.findFirstVisibleItemPosition() > 0) {
+                binding.chipNotification.visibility = View.VISIBLE
+            } else {
+                binding.chipNotification.visibility = View.INVISIBLE
+            }
+        }
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_list, container, false)
@@ -34,10 +49,23 @@ abstract class BaseListFragment : BasePostFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.setLifecycleOwner(viewLifecycleOwner)
+        binding.chipNotification.setOnClickListener {
+            binding.recyclerPosts.smoothScrollToPosition(0)
+        }
         baseListViewModel = ViewModelProviders.of(this, viewModelFactory).get(BaseListViewModel::class.java)
 
         initAdapter()
         initSwipeToRefresh()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.recyclerPosts.addOnScrollListener(scrollListener)
+    }
+
+    override fun onStop() {
+        binding.recyclerPosts.removeOnScrollListener(scrollListener)
+        super.onStop()
     }
 
     private fun initSwipeToRefresh() {
