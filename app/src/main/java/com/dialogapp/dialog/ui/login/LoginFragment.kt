@@ -49,15 +49,15 @@ class LoginFragment : Fragment() {
             binding.progressBarLogin.visibility = if (uiModel.showProgress) View.VISIBLE else View.INVISIBLE
             binding.buttonLogin.isEnabled = uiModel.enableLoginButton
 
-            if (uiModel.showError != null && !uiModel.showError.hasBeenHandled) {
-                uiModel.showError.getContentIfNotHandled()?.let {
-                    Snackbar.make(binding.constraintLayout, uiModel.showError.peekContent(), Snackbar.LENGTH_SHORT).show()
+            if (uiModel.showError != null && !uiModel.showError.consumed) {
+                uiModel.showError.consume()?.let {
+                    Snackbar.make(binding.constraintLayout, uiModel.showError.peek(), Snackbar.LENGTH_SHORT).show()
                     binding.editTextLogin.requestFocus()
                 }
             }
 
-            if (uiModel.showSuccess != null && !uiModel.showSuccess.hasBeenHandled) {
-                uiModel.showSuccess.getContentIfNotHandled().let {
+            if (uiModel.showSuccess != null && !uiModel.showSuccess.consumed) {
+                uiModel.showSuccess.consume().let {
                     findNavController().navigate(R.id.action_login_dest_to_home_dest)
                 }
             }
