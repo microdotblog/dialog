@@ -1,7 +1,5 @@
 package com.dialogapp.dialog.ui.common
 
-import com.dialogapp.dialog.model.Post
-
 interface PostClickedListener {
     fun onProfileClicked(username: String, postClickedListener: PostClickedListener)
 
@@ -9,7 +7,7 @@ interface PostClickedListener {
 
     fun onConversationButtonClicked(postId: String)
 
-    fun onMenuItemClicked(menuItemId: Int, item: Post): Boolean
+    fun onOverflowMenuClicked(postId: String, postUrl: String, isDeletable: Boolean)
 
     fun onReplyClicked(id: String, username: String)
 

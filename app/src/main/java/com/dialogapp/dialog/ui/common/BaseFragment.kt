@@ -7,7 +7,6 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.dialogapp.dialog.R
-import com.dialogapp.dialog.model.Post
 import timber.log.Timber
 
 
@@ -48,8 +47,9 @@ abstract class BaseFragment : Fragment(), PostClickedListener {
         findNavController().navigate(R.id.conversation_dest, argBundle, convNavOptions)
     }
 
-    override fun onMenuItemClicked(menuItemId: Int, item: Post): Boolean {
-        return false
+    override fun onOverflowMenuClicked(postId: String, postUrl: String, isDeletable: Boolean) {
+        val bottomSheetPost = BottomSheetPost.newInstance(postId, postUrl, isDeletable)
+        bottomSheetPost.show(fragmentManager, "bottom_sheet_post")
     }
 
     override fun onReplyClicked(id: String, username: String) {

@@ -39,6 +39,12 @@ class PostViewHolder(private val view: View, val binding: PostItemBinding, priva
             postClickedListener.onProfileClicked(post?.author?.microblog?.username!!,
                     postClickedListener)
         }
+
+        binding.buttonOverflow.setOnClickListener {
+            if (post != null) {
+                postClickedListener.onOverflowMenuClicked(post.id, post.url, post.microblog.isDeletable)
+            }
+        }
     }
 
     fun updatePost(payloads: MutableList<Any>) {
