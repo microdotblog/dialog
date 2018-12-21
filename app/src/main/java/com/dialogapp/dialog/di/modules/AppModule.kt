@@ -7,6 +7,7 @@ import com.dialogapp.dialog.CoroutinesDispatcherProvider
 import com.dialogapp.dialog.StethoImplementation
 import com.dialogapp.dialog.api.MicroblogService
 import com.dialogapp.dialog.api.ServiceInterceptor
+import com.dialogapp.dialog.db.InMemoryDb
 import com.dialogapp.dialog.db.MicroBlogDb
 import com.dialogapp.dialog.util.calladapters.ApiResponseCallAdapterFactory
 import com.dialogapp.dialog.util.calladapters.LiveDataCallAdapterFactory
@@ -48,6 +49,12 @@ class AppModule {
     @Provides
     fun provideDb(app: Application): MicroBlogDb {
         return MicroBlogDb.getInstance(app)!!
+    }
+
+    @Singleton
+    @Provides
+    fun provideInMemoryDb(app: Application): InMemoryDb {
+        return InMemoryDb.getInstance(app)!!
     }
 
     @Singleton
