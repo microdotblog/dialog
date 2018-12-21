@@ -45,5 +45,5 @@ data class Post(@field:Json(name = "id")
                               val isFavorite: Boolean,
                               @field:Json(name = "is_conversation")
                               @Json(name = "is_conversation")
-                              val isConversation: Boolean?)
+                              val isConversation: Boolean)
 }

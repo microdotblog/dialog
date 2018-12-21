@@ -5,15 +5,13 @@ import android.net.Uri
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavOptions
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.dialogapp.dialog.R
 import com.dialogapp.dialog.model.Post
-import com.dialogapp.dialog.ui.profile.ProfileFragment
 import timber.log.Timber
 
 
-abstract class BasePostFragment : Fragment(), PostClickedListener {
+abstract class BaseFragment : Fragment(), PostClickedListener {
 
     val profileNavOptions = NavOptions.Builder()
             .setEnterAnim(R.anim.slide_in_left)
@@ -37,13 +35,6 @@ abstract class BasePostFragment : Fragment(), PostClickedListener {
             .build()
 
     override fun onProfileClicked(username: String, postClickedListener: PostClickedListener) {
-        if ((postClickedListener as Fragment).parentFragment is ProfileFragment) {
-            val profileFragment = postClickedListener.parentFragment as ProfileFragment
-            if (profileFragment.isUserCurrentProfile(username)) {
-                Timber.d("Profile requested is currently on top of stack")
-                return
-            }
-        }
         val argBundle = bundleOf("username" to username)
         findNavController().navigate(R.id.profile_dest, argBundle, profileNavOptions)
     }

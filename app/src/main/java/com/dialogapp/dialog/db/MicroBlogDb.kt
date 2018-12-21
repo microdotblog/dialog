@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import androidx.sqlite.db.SupportSQLiteDatabase
 import com.dialogapp.dialog.model.EndpointData
 import com.dialogapp.dialog.model.Post
 
@@ -14,37 +13,19 @@ abstract class MicroBlogDb : RoomDatabase() {
 
     companion object {
 
+        @Volatile
         private var INSTANCE: MicroBlogDb? = null
 
         fun getInstance(context: Context): MicroBlogDb? {
-            if (INSTANCE == null) {
-                synchronized(MicroBlogDb::class.java) {
-                    if (INSTANCE == null) {
-                        INSTANCE = buildDatabase(context)
-                    }
-                }
+            return INSTANCE ?: synchronized(this) {
+                INSTANCE ?: buildDatabase(context).also { INSTANCE = it }
             }
-            return INSTANCE
         }
 
         private fun buildDatabase(context: Context): MicroBlogDb {
             return Room.databaseBuilder(context, MicroBlogDb::class.java, "microblog.db")
                     .fallbackToDestructiveMigration()
-                    .addCallback(object : RoomDatabase.Callback() {
-                        override fun onOpen(db: SupportSQLiteDatabase) {
-                            super.onOpen(db)
-
-                            Thread {
-                                val microBlogDb = getInstance(context)
-                                microBlogDb!!.beginTransaction()
-                                try {
-                                    microBlogDb.setTransactionSuccessful()
-                                } finally {
-                                    microBlogDb.endTransaction()
-                                }
-                            }.start()
-                        }
-                    }).build()
+                    .build()
         }
     }
 

@@ -6,18 +6,20 @@ import android.view.View
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
 import androidx.core.os.bundleOf
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import com.dialogapp.dialog.R
 import com.dialogapp.dialog.di.Injector
 import com.dialogapp.dialog.ui.common.BaseListFragment
 import com.dialogapp.dialog.ui.common.EndpointArgs
+import com.dialogapp.dialog.ui.common.PostClickedListener
+import timber.log.Timber
 
 class ProfilePostsFragment : BaseListFragment() {
 
     companion object {
         private const val USERNAME = "username"
 
-        fun newInstance(username: String) : ProfilePostsFragment {
+        fun newInstance(username: String): ProfilePostsFragment {
             val profilePostsFragment = ProfilePostsFragment()
             profilePostsFragment.arguments = bundleOf(USERNAME to username)
             return profilePostsFragment
@@ -53,5 +55,15 @@ class ProfilePostsFragment : BaseListFragment() {
 
             profileFragment.setEndpointData(result.data?.endpointData)
         })
+    }
+
+    override fun onProfileClicked(username: String, postClickedListener: PostClickedListener) {
+        with((postClickedListener as Fragment).parentFragment as ProfileFragment) {
+            if (this.isUserCurrentProfile(username)) {
+                Timber.d("Profile requested is currently on top of stack")
+                return
+            }
+            super.onProfileClicked(username, postClickedListener)
+        }
     }
 }

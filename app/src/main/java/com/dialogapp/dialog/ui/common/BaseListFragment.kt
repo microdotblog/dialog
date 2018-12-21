@@ -5,7 +5,6 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
@@ -18,7 +17,7 @@ import com.dialogapp.dialog.ui.util.autoCleared
 import com.dialogapp.dialog.vo.Status
 
 
-abstract class BaseListFragment : BasePostFragment() {
+abstract class BaseListFragment : BaseFragment() {
 
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
@@ -41,7 +40,7 @@ abstract class BaseListFragment : BasePostFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_list, container, false)
+        binding = FragmentListBinding.inflate(inflater, container, false)
         return binding.root
     }
 

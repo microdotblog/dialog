@@ -5,10 +5,13 @@ import android.os.Bundle
 import android.view.View
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
+import androidx.fragment.app.Fragment
 import com.dialogapp.dialog.di.Injector
 import com.dialogapp.dialog.ui.common.BaseListFragment
 import com.dialogapp.dialog.ui.common.EndpointArgs
+import com.dialogapp.dialog.ui.common.PostClickedListener
 import com.dialogapp.dialog.vo.FAVORITES
+import timber.log.Timber
 
 class FavoritesFragment : BaseListFragment() {
 
@@ -29,5 +32,15 @@ class FavoritesFragment : BaseListFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         baseListViewModel.showEndpoint(EndpointArgs(FAVORITES))
+    }
+
+    override fun onProfileClicked(username: String, postClickedListener: PostClickedListener) {
+        with((postClickedListener as Fragment).parentFragment as ProfileFragment) {
+            if (this.isUserCurrentProfile(username)) {
+                Timber.d("Profile requested is currently on top of stack")
+                return
+            }
+            super.onProfileClicked(username, postClickedListener)
+        }
     }
 }

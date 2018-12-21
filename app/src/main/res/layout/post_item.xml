@@ -57,7 +57,6 @@
                 android:layout_height="wrap_content"
                 android:layout_alignBaseline="@id/text_username"
                 android:layout_marginEnd="16dp"
-                android:text="@string/post_time"
                 android:textAlignment="textEnd"
                 android:textAppearance="@style/TextAppearance.AppCompat.Caption"
                 app:layout_constraintBaseline_toBaselineOf="@id/text_fullname"

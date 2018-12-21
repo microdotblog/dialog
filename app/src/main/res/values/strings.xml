@@ -1,8 +1,6 @@
 <resources>
     <string name="app_name">Dialog</string>
 
-    <string name="activity_favorites">Favorites</string>
-
     <!-- Login Screen -->
     <string name="login_message">Enter the Micro.blog app token on your Account page</string>
     <string name="login_field">app token</string>
@@ -11,14 +9,6 @@
     <string name="login_invalid_token">Invalid Token</string>
     <string name="login_msg_verification">Verifying Token</string>
     <string name="login_verification_failed">Could not verify token</string>
-
-    <!-- Navigation drawer -->
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="drawer_item_profile">Profile</string>
-    <string name="drawer_item_favorites">Favorites</string>
-    <string name="drawer_item_discover">Discover</string>
-    <string name="drawer_item_settings">Settings</string>
 
     <string name="empty_list">It\'s quiet in here</string>
     <string name="connection_error">Could not connect to Microblog.</string>

@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
 import androidx.core.os.bundleOf
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
@@ -16,11 +17,13 @@ import com.dialogapp.dialog.GlideApp
 import com.dialogapp.dialog.R
 import com.dialogapp.dialog.databinding.FragmentListBinding
 import com.dialogapp.dialog.di.Injector
-import com.dialogapp.dialog.ui.common.BasePostFragment
+import com.dialogapp.dialog.ui.common.BaseFragment
+import com.dialogapp.dialog.ui.common.PostClickedListener
 import com.dialogapp.dialog.ui.util.autoCleared
 import com.dialogapp.dialog.vo.Status
+import timber.log.Timber
 
-class FollowingFragment : BasePostFragment() {
+class FollowingFragment : BaseFragment() {
 
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
@@ -69,6 +72,16 @@ class FollowingFragment : BasePostFragment() {
         val username = arguments?.getString(USERNAME)!!
         val isSelf = arguments?.getBoolean(IS_SELF)!!
         viewModel.showEndpoint(FollowingEndpointArgs(username, isSelf))
+    }
+
+    override fun onProfileClicked(username: String, postClickedListener: PostClickedListener) {
+        with((postClickedListener as Fragment).parentFragment as ProfileFragment) {
+            if (this.isUserCurrentProfile(username)) {
+                Timber.d("Profile requested is currently on top of stack")
+                return
+            }
+            super.onProfileClicked(username, postClickedListener)
+        }
     }
 
     private fun initSwipeToRefresh() {

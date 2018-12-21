@@ -14,11 +14,11 @@ data class EndpointData(val endpoint: String,
 
     var lastFetched: Long = -1
 
-    data class Microblog(val id: String?,
-                         val username: String?,
-                         val bio: String?,
-                         val is_following: Boolean?,
-                         val is_you: Boolean?,
+    data class Microblog(val id: String,
+                         val username: String,
+                         val bio: String,
+                         val is_following: Boolean,
+                         val is_you: Boolean,
                          val following_count: Int,
                          val discover_count: Int)
 }

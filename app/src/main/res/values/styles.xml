@@ -1,16 +1,5 @@
 <resources>
 
-    <!-- Custom TabLayout style -->
-    <style name="TabLayoutStyle" parent="Widget.Design.TabLayout">
-        <item name="tabTextAppearance">@style/TabTextAppearance</item>
-    </style>
-
-    <style name="TabTextAppearance" parent="TextAppearance.Design.Tab">
-        <item name="textAllCaps">false</item>
-        <item name="android:paddingTop">10dp</item>
-        <item name="android:paddingBottom">16dp</item>
-    </style>
-
     <!-- Empty Text style -->
     <style name="textEmptyStyle">
         <item name="android:textAppearance">@style/TextAppearance.Empty</item>

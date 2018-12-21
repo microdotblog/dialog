@@ -4,33 +4,39 @@ import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.dialogapp.dialog.GlideRequests
+import com.dialogapp.dialog.R
 import com.dialogapp.dialog.databinding.PostItemBinding
 import com.dialogapp.dialog.model.Post
 import com.dialogapp.dialog.ui.util.GlideImageGetter
 import com.dialogapp.dialog.ui.util.HtmlTextHelper
 
-class PostViewHolder(view: View, val binding: PostItemBinding, private val glide: GlideRequests,
+class PostViewHolder(private val view: View, val binding: PostItemBinding, private val glide: GlideRequests,
                      private val postClickedListener: PostClickedListener)
     : RecyclerView.ViewHolder(view) {
 
     fun bind(post: Post?) {
         binding.textFullname.text = post?.author?.name
-        binding.textUsername.text = post?.author?.microblog?.username
-        binding.textTime.text = post?.microblog?.dateRelative
+        binding.textUsername.text = String.format(view.resources.getString(R.string.post_username),
+                post?.author?.microblog?.username)
+        binding.textTime.text = String.format(view.resources.getString(R.string.post_time),
+                post?.microblog?.dateRelative)
         HtmlTextHelper(glide, postClickedListener, post?.contentHtml).setHtmlContent(binding.textContent)
         glide.load(post?.author?.avatar).into(binding.imageThumbnail)
 
-        binding.buttonConv.visibility = if (post?.microblog?.isConversation!!) {
-            binding.buttonConv.setOnClickListener {
-                postClickedListener.onConversationButtonClicked(post?.id)
+        binding.buttonConv.visibility = when (post?.microblog?.isConversation) {
+            true -> {
+                binding.buttonConv.setOnClickListener {
+                    postClickedListener.onConversationButtonClicked(post.id)
+                }
+                View.VISIBLE
             }
-            View.VISIBLE
-        } else {
-            View.INVISIBLE
+            else -> {
+                View.INVISIBLE
+            }
         }
 
         binding.imageThumbnail.setOnClickListener {
-            postClickedListener.onProfileClicked(post?.author?.microblog?.username,
+            postClickedListener.onProfileClicked(post?.author?.microblog?.username!!,
                     postClickedListener)
         }
     }
@@ -68,6 +74,11 @@ class PostViewHolder(view: View, val binding: PostItemBinding, private val glide
     }
 
     fun recycle() {
+        binding.textFullname.text = null
+        binding.textUsername.text = null
+        binding.textTime.text = null
+        binding.textContent.text = null
+
         glide.clear(binding.imageThumbnail)
         GlideImageGetter.clear(binding.textContent)
     }

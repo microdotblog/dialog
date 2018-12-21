@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
@@ -13,16 +12,16 @@ import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
-import com.dialogapp.dialog.R
 import com.dialogapp.dialog.databinding.FragmentImageBinding
+import com.dialogapp.dialog.ui.util.autoCleared
 import com.google.android.material.snackbar.Snackbar
 
 class ImageViewerFragment : Fragment() {
 
-    lateinit var binding: FragmentImageBinding
+    private var binding by autoCleared<FragmentImageBinding>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_image, container, false)
+        binding = FragmentImageBinding.inflate(inflater, container, false)
         return binding.root
     }
 
