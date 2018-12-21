@@ -6,6 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
@@ -47,6 +49,12 @@ class ProfileFragment : Fragment() {
         val isSelf = username.equals(sessionManager.user?.username, ignoreCase = true)
         binding.toolbarProfile.title = username
         setupViewpager(username, isSelf)
+
+        val profileSharedViewModel = ViewModelProviders.of(this).get(ProfileSharedViewModel::class.java)
+        profileSharedViewModel.currentProfile = username
+        profileSharedViewModel.getEndpointData().observe(viewLifecycleOwner, Observer {
+            setEndpointData(it)
+        })
     }
 
     private fun setupViewpager(username: String, isSelf: Boolean) {
@@ -56,11 +64,10 @@ class ProfileFragment : Fragment() {
             ProfileFragmentPagerAdapter(childFragmentManager, username)
         }
         binding.viewPagerProfile.adapter = adapter
-        binding.viewPagerProfile.offscreenPageLimit = 2
         binding.tabLayoutProfile.setupWithViewPager(binding.viewPagerProfile)
     }
 
-    fun setEndpointData(endpointData: EndpointData?) {
+    private fun setEndpointData(endpointData: EndpointData?) {
         if (endpointData != null) {
             binding.includePartialProfile.progressBar.visibility = View.GONE
             binding.includePartialProfile.textProfileFullname.visibility = View.VISIBLE
@@ -93,9 +100,5 @@ class ProfileFragment : Fragment() {
                 }
             }
         }
-    }
-
-    fun isUserCurrentProfile(username: String): Boolean {
-        return username.equals(ProfileFragmentArgs.fromBundle(arguments).username, ignoreCase = true)
     }
 }

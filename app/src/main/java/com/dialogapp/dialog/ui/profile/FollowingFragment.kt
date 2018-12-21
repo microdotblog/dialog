@@ -6,10 +6,7 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AlphaAnimation
-import android.view.animation.Animation
 import androidx.core.os.bundleOf
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
@@ -18,7 +15,6 @@ import com.dialogapp.dialog.R
 import com.dialogapp.dialog.databinding.FragmentListBinding
 import com.dialogapp.dialog.di.Injector
 import com.dialogapp.dialog.ui.common.BaseFragment
-import com.dialogapp.dialog.ui.common.PostClickedListener
 import com.dialogapp.dialog.ui.util.autoCleared
 import com.dialogapp.dialog.vo.Status
 import timber.log.Timber
@@ -30,6 +26,10 @@ class FollowingFragment : BaseFragment() {
     lateinit var viewModel: FollowingViewModel
 
     private var binding by autoCleared<FragmentListBinding>()
+
+    private val profileSharedViewModel: ProfileSharedViewModel by lazy {
+        ViewModelProviders.of(parentFragment!!).get(ProfileSharedViewModel::class.java)
+    }
 
     companion object {
         private const val USERNAME = "username"
@@ -53,15 +53,6 @@ class FollowingFragment : BaseFragment() {
         return binding.root
     }
 
-    // https://stackoverflow.com/a/22673871
-    override fun onCreateAnimation(transit: Int, enter: Boolean, nextAnim: Int): Animation? {
-        return if (!enter && parentFragment != null) {
-            val dummyAnimation = AlphaAnimation(1f, 1f)
-            dummyAnimation.duration = android.R.integer.config_mediumAnimTime.toLong()
-            dummyAnimation
-        } else super.onCreateAnimation(transit, enter, nextAnim)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -74,14 +65,12 @@ class FollowingFragment : BaseFragment() {
         viewModel.showEndpoint(FollowingEndpointArgs(username, isSelf))
     }
 
-    override fun onProfileClicked(username: String, postClickedListener: PostClickedListener) {
-        with((postClickedListener as Fragment).parentFragment as ProfileFragment) {
-            if (this.isUserCurrentProfile(username)) {
-                Timber.d("Profile requested is currently on top of stack")
-                return
-            }
-            super.onProfileClicked(username, postClickedListener)
+    override fun onProfileClicked(username: String) {
+        if (profileSharedViewModel.isProfileCurrentlyShown(username)) {
+            Timber.d("Profile requested is currently on top of stack")
+            return
         }
+        super.onProfileClicked(username)
     }
 
     private fun initSwipeToRefresh() {

@@ -16,14 +16,14 @@ abstract class BaseFragment : Fragment(), PostClickedListener {
             .setEnterAnim(R.anim.slide_in_left)
             .setExitAnim(R.anim.nav_default_exit_anim)
             .setPopEnterAnim(R.anim.nav_default_pop_enter_anim)
-            .setPopExitAnim(R.anim.slide_out_left)
+            .setPopExitAnim(R.anim.nav_default_pop_exit_anim)
             .build()
 
     val convNavOptions = NavOptions.Builder()
             .setEnterAnim(R.anim.slide_in_right)
             .setExitAnim(R.anim.nav_default_exit_anim)
             .setPopEnterAnim(R.anim.nav_default_pop_enter_anim)
-            .setPopExitAnim(R.anim.slide_out_right)
+            .setPopExitAnim(R.anim.nav_default_pop_exit_anim)
             .build()
 
     val imageNavOptions = NavOptions.Builder()
@@ -33,7 +33,7 @@ abstract class BaseFragment : Fragment(), PostClickedListener {
             .setPopExitAnim(R.anim.slide_out_bottom)
             .build()
 
-    override fun onProfileClicked(username: String, postClickedListener: PostClickedListener) {
+    override fun onProfileClicked(username: String) {
         val argBundle = bundleOf("username" to username)
         findNavController().navigate(R.id.profile_dest, argBundle, profileNavOptions)
     }

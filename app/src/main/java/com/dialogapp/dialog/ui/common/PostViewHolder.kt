@@ -36,8 +36,7 @@ class PostViewHolder(private val view: View, val binding: PostItemBinding, priva
         }
 
         binding.imageThumbnail.setOnClickListener {
-            postClickedListener.onProfileClicked(post?.author?.microblog?.username!!,
-                    postClickedListener)
+            postClickedListener.onProfileClicked(post?.author?.microblog?.username!!)
         }
 
         binding.buttonOverflow.setOnClickListener {
