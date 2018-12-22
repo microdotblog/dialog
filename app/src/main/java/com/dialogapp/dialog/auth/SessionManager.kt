@@ -56,7 +56,10 @@ class SessionManager @Inject constructor(private val prefs: SharedPreferences,
     fun logout() {
         prefs.edit().clear().apply()
         scope.launch {
-            db.posts().clearAll()
+            db.runInTransaction {
+                db.posts().clear()
+                db.endpointData().clear()
+            }
             postsRepository.clearFavorites()
         }
         user = null

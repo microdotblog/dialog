@@ -1,11 +1,9 @@
 package com.dialogapp.dialog.model
 
 import androidx.room.ColumnInfo
-import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.squareup.moshi.Json
 
-@Entity(tableName = "logged_in_user")
 data class LoggedInUser(
         @ColumnInfo(name = "token")
         @Json(name = "token")

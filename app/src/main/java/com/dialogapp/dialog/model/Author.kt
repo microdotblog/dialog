@@ -15,7 +15,7 @@ data class Author(@field:Json(name = "name")
                   @field:Json(name = "_microblog")
                   @Json(name = "_microblog")
                   @field:Embedded(prefix = "author_info_")
-                  val microblog: AuthorInfo) {
+                  val microblog: AuthorInfo?) {
 
     data class AuthorInfo(@field:Json(name = "username")
                           @Json(name = "username")

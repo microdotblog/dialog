@@ -5,9 +5,10 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.dialogapp.dialog.model.EndpointData
+import com.dialogapp.dialog.model.FollowingAccount
 import com.dialogapp.dialog.model.Post
 
-@Database(entities = [Post::class, EndpointData::class],
+@Database(entities = [Post::class, EndpointData::class, FollowingAccount::class],
         version = 1, exportSchema = false)
 abstract class InMemoryDb : RoomDatabase() {
 
@@ -30,4 +31,6 @@ abstract class InMemoryDb : RoomDatabase() {
     }
 
     abstract fun posts(): PostsDao
+    abstract fun endpointData(): EndpointDao
+    abstract fun followingData(): FollowingDao
 }

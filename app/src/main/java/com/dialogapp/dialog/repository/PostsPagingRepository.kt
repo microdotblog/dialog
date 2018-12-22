@@ -54,7 +54,7 @@ class PostsPagingRepository @Inject constructor(private val microBlogDb: MicroBl
                 pageSize = networkPageSize,
                 boundaryCallback = boundaryCallback)
 
-        val liveEndpointData = microBlogDb.posts().loadEndpointData(endpoint)
+        val liveEndpointData = microBlogDb.endpointData().loadEndpointData(endpoint)
 
         return PagedListing(
                 pagedList = livePagedList,
@@ -77,9 +77,9 @@ class PostsPagingRepository @Inject constructor(private val microBlogDb: MicroBl
                 val endpointData = EndpointData(endpoint, data.microblog, data.author)
                 endpointData.lastFetched = when {
                     setTimeStamp -> System.currentTimeMillis()
-                    else -> microBlogDb.posts().fetchLastTimestamp(endpoint)
+                    else -> microBlogDb.endpointData().loadLastTimestamp(endpoint)
                 }
-                microBlogDb.posts().insertEndpointData(endpointData)
+                microBlogDb.endpointData().insertEndpointData(endpointData)
 
                 data.posts.let { posts ->
                     posts.map {
