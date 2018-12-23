@@ -2,10 +2,7 @@ package com.dialogapp.dialog.db
 
 import androidx.lifecycle.LiveData
 import androidx.paging.DataSource
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import com.dialogapp.dialog.model.Post
 
 @Dao
@@ -24,4 +21,10 @@ abstract class PostsDao {
 
     @Query("DELETE FROM posts")
     abstract fun clear()
+
+    @Query("UPDATE posts SET post_property_isFavorite = :state WHERE id = :postId")
+    abstract fun updateFavoriteState(postId: String, state: Boolean)
+
+    @Query("SELECT post_property_isFavorite FROM posts WHERE id = :postId AND belongsToEndpoint = :endpoint")
+    abstract fun getFavoriteState(endpoint: String, postId: String): Boolean
 }

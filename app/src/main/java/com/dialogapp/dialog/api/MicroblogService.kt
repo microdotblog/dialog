@@ -6,6 +6,8 @@ import com.dialogapp.dialog.util.calladapters.ApiResponseCall
 import com.dialogapp.dialog.vo.MicroBlogResponse
 import com.dialogapp.dialog.vo.VerifiedAccount
 import kotlinx.coroutines.Deferred
+import okhttp3.ResponseBody
+import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -48,4 +50,13 @@ interface MicroblogService {
     @Headers("NO-AUTH: true")
     @POST("account/verify")
     fun verifyToken(@Field("token") token: String): Deferred<Response<VerifiedAccount>>
+
+    @FormUrlEncoded
+    @POST("posts/favorites")
+    fun favoritePost(@Field("id") id: String): Deferred<Response<ResponseBody>>
+
+    // DELETE
+
+    @DELETE("posts/favorites/{id}")
+    fun unfavoritePost(@Path("id") id: String): Deferred<Response<ResponseBody>>
 }

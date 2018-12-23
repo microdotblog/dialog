@@ -3,7 +3,7 @@ package com.dialogapp.dialog.ui.common
 interface PostClickedListener {
     fun onProfileClicked(username: String)
 
-    fun onFavoriteButtonClicked(postId: String)
+    fun onFavoriteButtonClicked(postId: String?, belongsToEndpoint: String?)
 
     fun onConversationButtonClicked(postId: String)
 

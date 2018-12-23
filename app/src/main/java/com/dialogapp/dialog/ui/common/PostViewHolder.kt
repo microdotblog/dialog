@@ -35,6 +35,14 @@ class PostViewHolder(private val view: View, val binding: PostItemBinding, priva
             }
         }
 
+        when (post?.microblog?.isFavorite) {
+            true -> binding.buttonFav.setImageResource(R.drawable.ic_round_favorite_24px)
+            else -> binding.buttonFav.setImageResource(R.drawable.ic_round_favorite_border_24px)
+        }
+        binding.buttonFav.setOnClickListener {
+            postClickedListener.onFavoriteButtonClicked(post?.id, post?.belongsToEndpoint)
+        }
+
         binding.imageThumbnail.setOnClickListener {
             postClickedListener.onProfileClicked(post?.author?.microblog?.username!!)
         }
@@ -58,7 +66,10 @@ class PostViewHolder(private val view: View, val binding: PostItemBinding, priva
                         View.GONE
                 }
                 PK_FAVORITE -> {
-
+                    when (diffBundle.getBoolean(PK_FAVORITE)) {
+                        true -> binding.buttonFav.setImageResource(R.drawable.ic_round_favorite_24px)
+                        else -> binding.buttonFav.setImageResource(R.drawable.ic_round_favorite_border_24px)
+                    }
                 }
                 PK_DATE -> {
                     binding.textTime.text = diffBundle.getString(PK_DATE)
