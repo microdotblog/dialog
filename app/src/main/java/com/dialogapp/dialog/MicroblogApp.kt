@@ -1,11 +1,11 @@
 package com.dialogapp.dialog
 
 import android.app.Application
+import androidx.work.Configuration
+import androidx.work.WorkManager
 import com.dialogapp.dialog.di.AppComponent
 import com.dialogapp.dialog.di.DaggerAppComponent
-
 import com.squareup.leakcanary.LeakCanary
-
 import timber.log.Timber
 
 open class MicroblogApp : Application() {
@@ -34,5 +34,15 @@ open class MicroblogApp : Application() {
 
         INSTANCE = this
         appComponent = DaggerAppComponent.builder().application(this).build()
+
+        configureWorkManager()
+    }
+
+    private fun configureWorkManager() {
+        val config = Configuration.Builder()
+                .setWorkerFactory(appComponent.workerFactory())
+                .build()
+
+        WorkManager.initialize(this, config)
     }
 }

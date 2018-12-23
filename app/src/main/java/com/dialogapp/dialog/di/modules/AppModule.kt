@@ -3,12 +3,14 @@ package com.dialogapp.dialog.di.modules
 import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.work.WorkerFactory
 import com.dialogapp.dialog.CoroutinesDispatcherProvider
 import com.dialogapp.dialog.StethoImplementation
 import com.dialogapp.dialog.api.MicroblogService
 import com.dialogapp.dialog.api.ServiceInterceptor
 import com.dialogapp.dialog.db.InMemoryDb
 import com.dialogapp.dialog.db.MicroBlogDb
+import com.dialogapp.dialog.util.DaggerWorkerFactory
 import com.dialogapp.dialog.util.calladapters.ApiResponseCallAdapterFactory
 import com.dialogapp.dialog.util.calladapters.LiveDataCallAdapterFactory
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
@@ -70,4 +72,12 @@ class AppModule {
             Dispatchers.Default,
             Dispatchers.IO
     )
+
+    @Provides
+    @Singleton
+    fun provideWorkerFactory(microblogService: MicroblogService,
+                             diskDb: MicroBlogDb,
+                             inMemDb: InMemoryDb): WorkerFactory {
+        return DaggerWorkerFactory(microblogService, diskDb, inMemDb)
+    }
 }

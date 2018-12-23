@@ -15,6 +15,7 @@ buildscript {
         room = '2.1.0-alpha02'
         nav_version = "1.0.0-alpha07"
         paging_version = "2.1.0-beta01"
+        work_version = "1.0.0-beta01"
 
         retrofitVersion = '2.4.0'
         glide = '4.8.0'

@@ -85,6 +85,8 @@ dependencies {
     implementation "android.arch.navigation:navigation-ui-ktx:$nav_version"
     //Paging
     implementation "androidx.paging:paging-runtime-ktx:$paging_version"
+    // Work Manager
+    implementation "android.arch.work:work-runtime-ktx:$work_version"
 
     // Retrofit
     implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"

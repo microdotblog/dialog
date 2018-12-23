@@ -2,6 +2,7 @@ package com.dialogapp.dialog.di
 
 import android.app.Application
 import androidx.lifecycle.ViewModelProvider
+import androidx.work.WorkerFactory
 import com.dialogapp.dialog.auth.SessionManager
 import com.dialogapp.dialog.di.modules.AppModule
 import dagger.BindsInstance
@@ -21,4 +22,5 @@ interface AppComponent {
 
     fun sessionManager(): SessionManager
     fun viewModelFactory(): ViewModelProvider.Factory
+    fun workerFactory(): WorkerFactory
 }
