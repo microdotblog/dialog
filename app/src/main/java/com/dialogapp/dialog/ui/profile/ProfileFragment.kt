@@ -11,6 +11,9 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
+import androidx.work.ExistingWorkPolicy
+import androidx.work.OneTimeWorkRequest
+import androidx.work.WorkManager
 import com.afollestad.materialdialogs.MaterialDialog
 import com.dialogapp.dialog.GlideApp
 import com.dialogapp.dialog.R
@@ -19,6 +22,7 @@ import com.dialogapp.dialog.databinding.FragmentProfileBinding
 import com.dialogapp.dialog.di.Injector
 import com.dialogapp.dialog.model.EndpointData
 import com.dialogapp.dialog.ui.util.autoCleared
+import com.dialogapp.dialog.workers.FollowWorker
 
 class ProfileFragment : Fragment() {
 
@@ -26,6 +30,7 @@ class ProfileFragment : Fragment() {
 
     private var binding by autoCleared<FragmentProfileBinding>()
     private lateinit var dialog: MaterialDialog
+    private var isSelf: Boolean = false
 
     override fun onAttach(context: Context?) {
         sessionManager = Injector.get().sessionManager()
@@ -46,7 +51,7 @@ class ProfileFragment : Fragment() {
                 R.id.discover_dest, R.id.more_dest))
         binding.toolbarProfile.setupWithNavController(findNavController(), appBarConfiguration)
         val username = ProfileFragmentArgs.fromBundle(arguments).username
-        val isSelf = username.equals(sessionManager.user?.username, ignoreCase = true)
+        isSelf = username.equals(sessionManager.user?.username, ignoreCase = true)
         binding.toolbarProfile.title = username
         setupViewpager(username, isSelf)
 
@@ -99,6 +104,49 @@ class ProfileFragment : Fragment() {
                     binding.includePartialProfile.textProfileAbout.visibility = View.GONE
                 }
             }
+
+            if (isSelf)
+                binding.includePartialProfile.buttonFollowing.visibility = View.INVISIBLE
+            else {
+                endpointData.microblog?.is_following.let {
+                    when (it) {
+                        true -> {
+                            hideFollowButton()
+                        }
+                        false -> {
+                            hideFollowingButton()
+                        }
+                    }
+                }
+
+                binding.includePartialProfile.buttonFollow.setOnClickListener {
+                    enqueueFollowWorker(endpointData.microblog?.is_following!!)
+                }
+
+                binding.includePartialProfile.buttonFollowing.setOnClickListener {
+                    enqueueFollowWorker(endpointData.microblog?.is_following!!)
+                }
+            }
         }
+    }
+
+    private fun enqueueFollowWorker(isFollowing: Boolean) {
+        val username = ProfileFragmentArgs.fromBundle(arguments).username
+        val tag = "FOL_$username"
+        val followRequest = OneTimeWorkRequest.Builder(FollowWorker::class.java)
+                .setInputData(FollowWorker.createInputData(username, isFollowing))
+                .addTag(tag)
+                .build()
+        WorkManager.getInstance().enqueueUniqueWork(tag, ExistingWorkPolicy.KEEP, followRequest)
+    }
+
+    private fun hideFollowButton() {
+        binding.includePartialProfile.buttonFollow.visibility = View.INVISIBLE
+        binding.includePartialProfile.buttonFollowing.visibility = View.VISIBLE
+    }
+
+    private fun hideFollowingButton() {
+        binding.includePartialProfile.buttonFollowing.visibility = View.INVISIBLE
+        binding.includePartialProfile.buttonFollow.visibility = View.VISIBLE
     }
 }

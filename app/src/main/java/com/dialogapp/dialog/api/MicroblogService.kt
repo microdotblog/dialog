@@ -55,6 +55,14 @@ interface MicroblogService {
     @POST("posts/favorites")
     fun favoritePost(@Field("id") id: String): Deferred<Response<ResponseBody>>
 
+    @FormUrlEncoded
+    @POST("users/follow")
+    fun followUser(@Field("username") user: String): Deferred<Response<ResponseBody>>
+
+    @FormUrlEncoded
+    @POST("users/unfollow")
+    fun unfollowUser(@Field("username") user: String): Deferred<Response<ResponseBody>>
+
     // DELETE
 
     @DELETE("posts/favorites/{id}")

@@ -17,4 +17,7 @@ abstract class FollowingDao {
 
     @Query("DELETE FROM following")
     abstract fun clear()
+
+    @Query("DELETE FROM following WHERE username = :username")
+    abstract fun removeAccount(username: String)
 }

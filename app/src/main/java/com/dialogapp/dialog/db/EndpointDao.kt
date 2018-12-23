@@ -20,4 +20,7 @@ abstract class EndpointDao {
 
     @Query("SELECT lastFetched FROM endpointData WHERE endpoint = :endpoint")
     abstract fun loadLastTimestamp(endpoint: String): Long
+
+    @Query("UPDATE endpointData SET microblog_is_following = :state WHERE endpoint = :username")
+    abstract fun updateFollowingState(username: String, state: Boolean)
 }

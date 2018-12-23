@@ -9,6 +9,7 @@ import com.dialogapp.dialog.api.MicroblogService
 import com.dialogapp.dialog.db.InMemoryDb
 import com.dialogapp.dialog.db.MicroBlogDb
 import com.dialogapp.dialog.workers.FavoriteWorker
+import com.dialogapp.dialog.workers.FollowWorker
 
 class DaggerWorkerFactory(private val microblogService: MicroblogService,
                           private val diskDb: MicroBlogDb,
@@ -23,6 +24,11 @@ class DaggerWorkerFactory(private val microblogService: MicroblogService,
 
         when (instance) {
             is FavoriteWorker -> {
+                instance.microblogService = microblogService
+                instance.diskDb = diskDb
+                instance.inMemDb = inMemDb
+            }
+            is FollowWorker -> {
                 instance.microblogService = microblogService
                 instance.diskDb = diskDb
                 instance.inMemDb = inMemDb
