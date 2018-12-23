@@ -50,7 +50,7 @@ class PostsPagingRepository @Inject constructor(private val microBlogDb: MicroBl
         }
 
         // We use toLiveData Kotlin extension function here, you could also use LivePagedListBuilder
-        val livePagedList = microBlogDb.posts().loadPostsByEndpoint(endpoint).toLiveData(
+        val livePagedList = microBlogDb.posts().loadPostsByEndpointAsDataSource(endpoint).toLiveData(
                 pageSize = networkPageSize,
                 boundaryCallback = boundaryCallback)
 

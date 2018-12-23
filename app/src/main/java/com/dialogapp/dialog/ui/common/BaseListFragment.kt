@@ -15,6 +15,7 @@ import com.dialogapp.dialog.R
 import com.dialogapp.dialog.databinding.FragmentListBinding
 import com.dialogapp.dialog.ui.util.autoCleared
 import com.dialogapp.dialog.vo.Status
+import timber.log.Timber
 
 
 abstract class BaseListFragment : BaseFragment() {
@@ -87,7 +88,13 @@ abstract class BaseListFragment : BaseFragment() {
             val result = it ?: return@Observer
 
             binding.swipeRefresh.isRefreshing = result.status == Status.LOADING
-            basePostsAdapter.submitList(result.data?.postData)
+            Timber.d("Status=%s Endpoint=%s PostsEmptyOrNull=%s", result.status,
+                    result.data?.endpointData?.endpoint, result.data?.postData.isNullOrEmpty())
+            if (result.data?.postData != null) {
+                basePostsAdapter.submitList(result.data.postData)
+            } else if (result.status == Status.ERROR) {
+                basePostsAdapter.submitList(emptyList())
+            }
         })
     }
 

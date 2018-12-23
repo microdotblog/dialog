@@ -56,7 +56,11 @@ class FollowingFragment : BaseListFragment() {
             val result = it ?: return@Observer
 
             binding.swipeRefresh.isRefreshing = result.status == Status.LOADING
-            followingAdapter.submitList(result.data)
+            if (result.data != null) {
+                followingAdapter.submitList(result.data)
+            } else if (result.status == Status.ERROR) {
+                followingAdapter.submitList(emptyList())
+            }
         })
     }
 

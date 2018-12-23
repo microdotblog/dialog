@@ -1,5 +1,6 @@
 package com.dialogapp.dialog.db
 
+import androidx.lifecycle.LiveData
 import androidx.paging.DataSource
 import androidx.room.Dao
 import androidx.room.Insert
@@ -13,7 +14,10 @@ abstract class PostsDao {
     abstract fun insertPosts(posts: List<Post>)
 
     @Query("SELECT * FROM posts WHERE belongsToEndpoint = :endpoint ORDER BY datetime(datePublished) DESC")
-    abstract fun loadPostsByEndpoint(endpoint: String): DataSource.Factory<Int, Post>
+    abstract fun loadPostsByEndpointAsDataSource(endpoint: String): DataSource.Factory<Int, Post>
+
+    @Query("SELECT * FROM posts WHERE belongsToEndpoint = :endpoint ORDER BY datetime(datePublished) DESC")
+    abstract fun loadPostsByEndpointAsLiveData(endpoint: String): LiveData<List<Post>>
 
     @Query("DELETE FROM posts WHERE belongsToEndpoint = :endpoint")
     abstract fun deletePostsByEndpoint(endpoint: String)

@@ -4,9 +4,9 @@ import android.content.SharedPreferences
 import androidx.core.content.edit
 import com.dialogapp.dialog.CoroutinesDispatcherProvider
 import com.dialogapp.dialog.api.ServiceInterceptor
+import com.dialogapp.dialog.db.InMemoryDb
 import com.dialogapp.dialog.db.MicroBlogDb
 import com.dialogapp.dialog.model.LoggedInUser
-import com.dialogapp.dialog.repository.PostsRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -15,7 +15,7 @@ import javax.inject.Singleton
 @Singleton
 class SessionManager @Inject constructor(private val prefs: SharedPreferences,
                                          private val db: MicroBlogDb,
-                                         private val postsRepository: PostsRepository,
+                                         private val inMemoryDb: InMemoryDb,
                                          private val serviceInterceptor: ServiceInterceptor,
                                          dispatchers: CoroutinesDispatcherProvider) {
 
@@ -58,9 +58,14 @@ class SessionManager @Inject constructor(private val prefs: SharedPreferences,
         scope.launch {
             db.runInTransaction {
                 db.posts().clear()
+                db.followingData().clear()
                 db.endpointData().clear()
             }
-            postsRepository.clearFavorites()
+            inMemoryDb.runInTransaction {
+                inMemoryDb.posts().clear()
+                inMemoryDb.followingData().clear()
+                inMemoryDb.endpointData().clear()
+            }
         }
         user = null
     }
