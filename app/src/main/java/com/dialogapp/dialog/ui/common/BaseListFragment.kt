@@ -20,10 +20,11 @@ import com.dialogapp.dialog.vo.Status
 abstract class BaseListFragment : BaseFragment() {
 
     lateinit var viewModelFactory: ViewModelProvider.Factory
-
     lateinit var baseListViewModel: BaseListViewModel
 
-    private var binding by autoCleared<FragmentListBinding>()
+    var binding by autoCleared<FragmentListBinding>()
+
+    private lateinit var basePostsAdapter: PostsAdapter
 
     private val scrollListener = object : RecyclerView.OnScrollListener() {
         override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -47,14 +48,14 @@ abstract class BaseListFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.setLifecycleOwner(viewLifecycleOwner)
         binding.chipNotification.setOnClickListener {
             binding.recyclerPosts.smoothScrollToPosition(0)
         }
-        baseListViewModel = ViewModelProviders.of(this, viewModelFactory).get(BaseListViewModel::class.java)
 
-        initAdapter()
+        initViewModel()
         initSwipeToRefresh()
+        initRecyclerAdapter()
+        observe()
     }
 
     override fun onResume() {
@@ -67,24 +68,35 @@ abstract class BaseListFragment : BaseFragment() {
         super.onStop()
     }
 
+    open fun initViewModel() {
+        baseListViewModel = ViewModelProviders.of(this, viewModelFactory).get(BaseListViewModel::class.java)
+    }
+
+    open fun onSwipeRefresh() {
+        baseListViewModel.refresh()
+    }
+
+    open fun initRecyclerAdapter() {
+        val glide = GlideApp.with(this)
+        basePostsAdapter = PostsAdapter(glide, this)
+        binding.recyclerPosts.adapter = basePostsAdapter
+    }
+
+    open fun observe() {
+        baseListViewModel.endpointResult.observe(viewLifecycleOwner, Observer {
+            val result = it ?: return@Observer
+
+            binding.swipeRefresh.isRefreshing = result.status == Status.LOADING
+            basePostsAdapter.submitList(result.data?.postData)
+        })
+    }
+
     private fun initSwipeToRefresh() {
         val typedValue = TypedValue()
         context?.theme?.resolveAttribute(R.attr.colorSecondary, typedValue, true)
         binding.swipeRefresh.setColorSchemeColors(typedValue.data)
         binding.swipeRefresh.setOnRefreshListener {
-            baseListViewModel.refresh()
+            onSwipeRefresh()
         }
-    }
-
-    private fun initAdapter() {
-        val glide = GlideApp.with(this)
-        val adapter = PostsAdapter(glide, this)
-        binding.recyclerPosts.adapter = adapter
-        baseListViewModel.endpointResult.observe(viewLifecycleOwner, Observer {
-            val result = it ?: return@Observer
-
-            binding.swipeRefresh.isRefreshing = result.status == Status.LOADING
-            adapter.submitList(result.data?.postData)
-        })
     }
 }
