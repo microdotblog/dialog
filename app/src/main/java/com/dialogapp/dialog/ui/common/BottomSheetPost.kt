@@ -7,10 +7,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
+import androidx.work.ExistingWorkPolicy
+import androidx.work.OneTimeWorkRequest
+import androidx.work.WorkManager
 import com.afollestad.materialdialogs.MaterialDialog
 import com.dialogapp.dialog.R
 import com.dialogapp.dialog.databinding.FragmentBottomSheetPostBinding
 import com.dialogapp.dialog.ui.util.autoCleared
+import com.dialogapp.dialog.workers.DeletePostWorker
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class BottomSheetPost : BottomSheetDialogFragment() {
@@ -57,11 +61,24 @@ class BottomSheetPost : BottomSheetDialogFragment() {
                         .show {
                             positiveButton(android.R.string.yes) { dialog ->
                                 dialog.dismiss()
+                                deletePost()
                             }
                             negativeButton(android.R.string.no)
                         }
                 this.dismiss()
             }
+        }
+    }
+
+    private fun deletePost() {
+        val postId = arguments?.getString(ID)
+        if (postId != null) {
+            val tag = "DEL_$postId"
+            val deletePostRequest = OneTimeWorkRequest.Builder(DeletePostWorker::class.java)
+                    .setInputData(DeletePostWorker.createInputData(postId))
+                    .addTag(tag)
+                    .build()
+            WorkManager.getInstance().enqueueUniqueWork(tag, ExistingWorkPolicy.KEEP, deletePostRequest)
         }
     }
 }

@@ -66,4 +66,6 @@ abstract class PostsDao {
             "datePublished = :datePublished AND belongsToEndpoint = :endpoint")
     protected abstract fun removeFromFavoritesGiven(username: String, datePublished: String,
                                                     endpoint: String)
+    @Query("DELETE FROM posts WHERE id = :postId")
+    abstract fun deletePost(postId: String)
 }

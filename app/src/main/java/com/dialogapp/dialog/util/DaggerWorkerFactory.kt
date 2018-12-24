@@ -8,6 +8,7 @@ import androidx.work.WorkerParameters
 import com.dialogapp.dialog.api.MicroblogService
 import com.dialogapp.dialog.db.InMemoryDb
 import com.dialogapp.dialog.db.MicroBlogDb
+import com.dialogapp.dialog.workers.DeletePostWorker
 import com.dialogapp.dialog.workers.FavoriteWorker
 import com.dialogapp.dialog.workers.FollowWorker
 
@@ -29,6 +30,11 @@ class DaggerWorkerFactory(private val microblogService: MicroblogService,
                 instance.inMemDb = inMemDb
             }
             is FollowWorker -> {
+                instance.microblogService = microblogService
+                instance.diskDb = diskDb
+                instance.inMemDb = inMemDb
+            }
+            is DeletePostWorker -> {
                 instance.microblogService = microblogService
                 instance.diskDb = diskDb
                 instance.inMemDb = inMemDb

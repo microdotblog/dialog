@@ -67,4 +67,7 @@ interface MicroblogService {
 
     @DELETE("posts/favorites/{id}")
     fun unfavoritePost(@Path("id") id: String): Deferred<Response<ResponseBody>>
+
+    @DELETE("posts/{id}")
+    fun deletePost(@Path("id") id: String): Deferred<Response<ResponseBody>>
 }
