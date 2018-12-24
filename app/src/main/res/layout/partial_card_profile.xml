@@ -3,124 +3,122 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <FrameLayout
-        android:id="@+id/frame_layout_card_profile"
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/card_profile_info"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="8dp"
-        android:paddingBottom="8dp">
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="16dp"
+        app:cardUseCompatPadding="true"
+        app:contentPadding="4dp"
+        app:elevation="5dp">
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/image_avatar"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:layout_gravity="start"
-            android:layout_marginStart="32dp"
-            android:elevation="4dp"
-            android:src="?android:attr/colorBackground"
-            tools:src="@tools:sample/avatars" />
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/card_profile_info"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraint_layout_profile"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="32dp"
-            android:layout_marginEnd="16dp"
-            app:cardUseCompatPadding="true"
-            app:contentPadding="4dp"
-            app:elevation="5dp">
+            android:layout_height="match_parent"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="16dp">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/constraint_layout_profile"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                android:paddingBottom="16dp">
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/image_avatar"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_marginTop="8dp"
+                android:src="?android:attr/colorBackground"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@tools:sample/avatars" />
 
-                <TextView
-                    android:id="@+id/text_profile_fullname"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="32dp"
-                    android:layout_marginEnd="8dp"
-                    android:ellipsize="end"
-                    android:maxLines="1"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                    android:visibility="invisible"
-                    app:layout_constraintEnd_toStartOf="@+id/button_following"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:text="@tools:sample/full_names" />
+            <TextView
+                android:id="@+id/text_profile_fullname"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                android:visibility="invisible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/image_avatar"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="@tools:sample/full_names" />
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/button_follow"
-                    style="@style/Widget.MaterialComponents.Button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:text="Follow"
-                    android:visibility="invisible"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/button_follow"
+                style="@style/Widget.MaterialComponents.Button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Follow"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/text_profile_about" />
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/button_following"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:text="Following"
-                    android:visibility="invisible"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/button_following"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Following"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/text_profile_about" />
 
-                <TextView
-                    android:id="@+id/text_profile_about"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:ellipsize="end"
-                    android:maxLines="2"
-                    android:textAlignment="textStart"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                    android:visibility="invisible"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/text_profile_website"
-                    tools:text="@tools:sample/lorem" />
+            <TextView
+                android:id="@+id/text_profile_about"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:textAlignment="textStart"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:visibility="invisible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/image_avatar"
+                tools:text="@tools:sample/lorem" />
 
-                <TextView
-                    android:id="@+id/text_profile_website"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:autoLink="web"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                    android:visibility="invisible"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/text_profile_fullname"
-                    tools:text="@tools:sample/lorem" />
+            <TextView
+                android:id="@+id/text_profile_website"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:autoLink="web"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:visibility="invisible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/image_avatar"
+                app:layout_constraintTop_toBottomOf="@+id/text_profile_fullname"
+                tools:text="@tools:sample/lorem" />
 
-                <ProgressBar
-                    android:id="@+id/progressBar"
-                    style="?android:attr/progressBarStyleHorizontal"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginBottom="8dp"
-                    android:indeterminate="true"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/button_follow" />
+            <ProgressBar
+                android:id="@+id/progressBar"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:indeterminate="true"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </com.google.android.material.card.MaterialCardView>
+    </com.google.android.material.card.MaterialCardView>
 
-    </FrameLayout>
 </layout>

@@ -105,8 +105,10 @@ class ProfileFragment : Fragment() {
                 }
             }
 
-            if (isSelf)
-                binding.includePartialProfile.buttonFollowing.visibility = View.INVISIBLE
+            if (isSelf) {
+                binding.includePartialProfile.buttonFollowing.visibility = View.GONE
+                binding.includePartialProfile.buttonFollow.visibility = View.GONE
+            }
             else {
                 endpointData.microblog?.is_following.let {
                     when (it) {

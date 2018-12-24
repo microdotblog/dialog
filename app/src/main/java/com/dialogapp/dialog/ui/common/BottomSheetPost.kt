@@ -59,11 +59,11 @@ class BottomSheetPost : BottomSheetDialogFragment() {
                 MaterialDialog(this.requireContext())
                         .message(R.string.dialog_delete_post)
                         .show {
-                            positiveButton(android.R.string.yes) { dialog ->
+                            positiveButton(text = "YES") { dialog ->
                                 dialog.dismiss()
                                 deletePost()
                             }
-                            negativeButton(android.R.string.no)
+                            negativeButton(text = "NO")
                         }
                 this.dismiss()
             }
