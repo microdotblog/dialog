@@ -7,6 +7,7 @@ import androidx.work.WorkerParameters
 import com.dialogapp.dialog.api.MicroblogService
 import com.dialogapp.dialog.db.InMemoryDb
 import com.dialogapp.dialog.db.MicroBlogDb
+import com.dialogapp.dialog.vo.FAVORITES
 import com.dialogapp.dialog.vo.MENTIONS
 import com.dialogapp.dialog.vo.TIMELINE
 import okhttp3.ResponseBody
@@ -62,8 +63,35 @@ class FavoriteWorker(appContext: Context, workerParameters: WorkerParameters)
                         if (response.isSuccessful) {
                             if (validResponse(response.body())) {
                                 Timber.d("Unfavorite request successful")
-                                diskDb.posts().updateFavoriteState(postId, false)
-                                inMemDb.posts().updateFavoriteState(postId, false)
+                                val username: String
+                                val datePublished: String
+                                when (belongsTo) {
+                                    FAVORITES -> {
+                                        username = inMemDb.posts().getUsername(belongsTo, postId)
+                                        datePublished = inMemDb.posts().getDate(belongsTo, postId)
+
+                                        diskDb.posts().updateFavoriteStatesGiven(username = username,
+                                                datePublished = datePublished, state = false)
+                                        inMemDb.posts().updateAndRemoveGivenFavId(favId = postId,
+                                                state = false)
+                                    }
+                                    else -> {
+                                        when {
+                                            (belongsTo == TIMELINE || belongsTo == MENTIONS) -> {
+                                                username = diskDb.posts().getUsername(belongsTo, postId)
+                                                datePublished = diskDb.posts().getDate(belongsTo, postId)
+                                            }
+                                            else -> {
+                                                username = inMemDb.posts().getUsername(belongsTo, postId)
+                                                datePublished = inMemDb.posts().getDate(belongsTo, postId)
+                                            }
+                                        }
+
+                                        inMemDb.posts().updateAndRemoveFromFav(username = username,
+                                                datePublished = datePublished, postId = postId, state = false)
+                                        diskDb.posts().updateFavoriteState(postId = postId, state = false)
+                                    }
+                                }
                                 return Result.success()
                             }
                         } else {
