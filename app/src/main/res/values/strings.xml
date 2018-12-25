@@ -1,3 +1,32 @@
 <resources>
     <string name="app_name">Dialog</string>
+
+    <!-- Login Screen -->
+    <string name="login_message">Enter the Micro.blog app token on your Account page</string>
+    <string name="login_field">app token</string>
+    <string name="login_button">Sign In</string>
+    <string name="login_about">This app requires a Micro.blog account.\n<a href="https://micro.blog/">Learn More</a></string>
+    <string name="login_invalid_token">Invalid Token</string>
+    <string name="login_msg_verification">Verifying Token</string>
+    <string name="login_verification_failed">Could not verify token</string>
+
+    <string name="empty_list">It\'s quiet in here</string>
+    <string name="connection_error">Could not connect to Microblog.</string>
+
+    <string name="request_successful">Request successful</string>
+    <string name="request_unsuccessful">Request unsuccessful</string>
+    <string name="retry_reply">Retry</string>
+    <string name="label_reply">Reply</string>
+    <string name="location_permission_message">Location access is required for the accurate calculation of sunrise and sunset times. \n\nDefault sunrise time : 6AM \nDefault sunset time : 10PM</string>
+    <string name="dialog_allow">Allow</string>
+    <string name="dialog_dismiss">Dismiss</string>
+
+    <string name="post_username">\@%1$s</string>
+    <string name="post_time">\u2022 %1$s</string>
+
+    <string name="dialog_logout_message">Do you want to logout?</string>
+    <string name="dialog_delete_post">Are you sure you want to delete this post?</string>
+    <string name="hint_text_token">token</string>
+    <string name="hint_text_username">username</string>
+    <string name="login_info_token">1. Sign in to Micro.blog on desktop\n2. Go to Account > App Tokens > Edit Apps\n3. Generate a new token for Dialog\n4. Sign in using this token</string>
 </resources>

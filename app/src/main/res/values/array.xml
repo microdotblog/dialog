@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="modes">
+        <item>Auto</item>
+        <item>Light</item>
+        <item>Dark</item>
+    </string-array>
+
+    <string-array name="nightModes">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
+    <string-array name="preloadImages">
+        <item>Always</item>
+        <item>WiFi only</item>
+        <item>Never</item>
+    </string-array>
+
+    <string-array name="preloadImagesValues">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
+    <string-array name="login_type_array">
+        <item>App Token</item>
+    </string-array>
+</resources>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/timeline_dest"
+        android:icon="@drawable/ic_round_timeline_24px"
+        android:title="Timeline" />
+    <item
+        android:id="@+id/mentions_dest"
+        android:icon="@drawable/ic_round_announcement_24px"
+        android:title="Mentions" />
+    <item
+        android:id="@+id/discover_dest"
+        android:icon="@drawable/ic_round_explore_24px"
+        android:title="Discover" />
+    <item
+        android:id="@+id/more_dest"
+        android:icon="@drawable/ic_round_menu_24px"
+        android:title="More" />
+</menu>

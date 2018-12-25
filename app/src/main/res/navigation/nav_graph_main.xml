@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph_main"
+    app:startDestination="@id/home_dest">
+
+    <fragment
+        android:id="@+id/login_dest"
+        android:name="com.dialogapp.dialog.ui.login.LoginFragment">
+
+        <action
+            android:id="@+id/action_login_dest_to_home_dest"
+            app:destination="@id/home_dest"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popUpTo="@+id/login_dest"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/home_dest"
+        android:name="com.dialogapp.dialog.ui.home.HomeFragment">
+
+        <action
+            android:id="@+id/action_home_dest_to_login_dest"
+            app:destination="@id/login_dest"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right"
+            app:popUpTo="@+id/home_dest"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_home_dest_to_login_dest_no_transition"
+            app:destination="@id/login_dest"
+            app:popUpTo="@+id/home_dest"
+            app:popUpToInclusive="true" />
+    </fragment>
+</navigation>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="AppTheme.Light" parent="Theme.MaterialComponents.Light.NoActionBar" >
+        <item name="android:colorBackground">@color/grey300</item>
+        <item name="colorPrimaryDark">@color/design_default_color_primary_variant</item>
+        <item name="colorPrimaryVariant">@color/purple200</item>
+        <item name="colorSecondary">@color/amberA400</item>
+    </style>
+
+    <style name="AppTheme.Dark" parent="Theme.MaterialComponents.NoActionBar" >
+        <item name="colorPrimary">@color/design_default_color_primary</item>
+        <item name="colorSecondary">@color/amberA400</item>
+    </style>
+
+    <style name="Base.AppTheme.DayNight" parent="AppTheme.Light" />
+        <style name="AppTheme.DayNight" parent="Base.AppTheme.DayNight">
+    </style>
+
+    <style name="AppTheme.Light.Launcher">
+        <item name="android:windowBackground">@drawable/launch_screen</item>
+        <item name="colorPrimaryDark">@color/design_default_color_primary_variant</item>
+    </style>
+</resources>
