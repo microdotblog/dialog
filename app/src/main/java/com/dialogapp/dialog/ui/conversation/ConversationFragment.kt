@@ -28,7 +28,7 @@ class ConversationFragment : Fragment() {
         val appBarConfiguration = AppBarConfiguration(setOf(R.id.timeline_dest, R.id.mentions_dest,
                 R.id.discover_dest, R.id.profile_dest))
         binding.toolbarConv.setupWithNavController(findNavController(), appBarConfiguration)
-        val convId = ConversationFragmentArgs.fromBundle(arguments).convId
+        val convId = ConversationFragmentArgs.fromBundle(arguments!!).convId
 
         if (savedInstanceState == null) {
             val conversationListFragment = ConversationListFragment.newInstance(convId)

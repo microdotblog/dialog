@@ -32,7 +32,7 @@ class ImageViewerFragment : Fragment() {
             findNavController().navigateUp()
         }
 
-        val imageUrl = ImageViewerFragmentArgs.fromBundle(arguments).imageUrl
+        val imageUrl = ImageViewerFragmentArgs.fromBundle(arguments!!).imageUrl
         if (imageUrl == null) {
             Snackbar.make(binding.frameImageViewer, "Invalid image url", Snackbar.LENGTH_SHORT)
                     .show()

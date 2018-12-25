@@ -31,6 +31,7 @@ class ProfileFragment : Fragment() {
     private var binding by autoCleared<FragmentProfileBinding>()
     private lateinit var dialog: MaterialDialog
     private var isSelf: Boolean = false
+    private lateinit var username: String
 
     override fun onAttach(context: Context?) {
         sessionManager = Injector.get().sessionManager()
@@ -50,7 +51,7 @@ class ProfileFragment : Fragment() {
         val appBarConfiguration = AppBarConfiguration(setOf(R.id.timeline_dest, R.id.mentions_dest,
                 R.id.discover_dest, R.id.more_dest))
         binding.toolbarProfile.setupWithNavController(findNavController(), appBarConfiguration)
-        val username = ProfileFragmentArgs.fromBundle(arguments).username
+        username = ProfileFragmentArgs.fromBundle(arguments!!).username
         isSelf = username.equals(sessionManager.user?.username, ignoreCase = true)
         binding.toolbarProfile.title = username
         setupViewpager(username, isSelf)
@@ -133,7 +134,6 @@ class ProfileFragment : Fragment() {
     }
 
     private fun enqueueFollowWorker(isFollowing: Boolean) {
-        val username = ProfileFragmentArgs.fromBundle(arguments).username
         val tag = "FOL_$username"
         val followRequest = OneTimeWorkRequest.Builder(FollowWorker::class.java)
                 .setInputData(FollowWorker.createInputData(username, isFollowing))
