@@ -4,7 +4,7 @@
     <!-- Login Screen -->
     <string name="login_message">Enter the Micro.blog app token on your Account page</string>
     <string name="login_field">app token</string>
-    <string name="login_button">Continue</string>
+    <string name="login_button">Sign In</string>
     <string name="login_about">This app requires a Micro.blog account.\n<a href="https://micro.blog/">Learn More</a></string>
     <string name="login_invalid_token">Invalid Token</string>
     <string name="login_msg_verification">Verifying Token</string>
@@ -26,4 +26,7 @@
 
     <string name="dialog_logout_message">Do you want to logout?</string>
     <string name="dialog_delete_post">Are you sure you want to delete this post?</string>
+    <string name="hint_text_token">token</string>
+    <string name="hint_text_username">username</string>
+    <string name="login_info_token">1. Sign in to Micro.blog on desktop\n2. Go to Account > App Tokens > Edit Apps\n3. Generate a new token for Dialog\n4. Sign in using this token</string>
 </resources>

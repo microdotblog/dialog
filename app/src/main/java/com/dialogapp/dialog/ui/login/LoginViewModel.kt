@@ -32,7 +32,7 @@ class LoginViewModel @Inject constructor(private val sessionManager: SessionMana
     }
 
     fun login(input: String) {
-        if (loginJob?.isActive == true)
+        if (loginJob?.isActive == true || input.isBlank())
             return
         loginJob = launchPlainTokenLogin(input)
     }

@@ -18,7 +18,7 @@
     </style>
 
     <style name="AppTheme.Light.Launcher">
-        <item name="android:windowBackground">@color/design_default_color_primary</item>
+        <item name="android:windowBackground">@drawable/launch_screen</item>
         <item name="colorPrimaryDark">@color/design_default_color_primary_variant</item>
     </style>
 </resources>
