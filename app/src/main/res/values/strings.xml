@@ -29,4 +29,5 @@
     <string name="hint_text_token">token</string>
     <string name="hint_text_username">username</string>
     <string name="login_info_token">1. Sign in to Micro.blog on desktop\n2. Go to Account > App Tokens > Edit Apps\n3. Generate a new token for Dialog\n4. Sign in using this token</string>
+    <string name="yes">Yes</string>
 </resources>

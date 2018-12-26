@@ -42,31 +42,34 @@ class BottomSheetPost : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.buttonBrowser.setOnClickListener {
-            val webpage = Uri.parse(arguments?.getString(URL))
-            val intent = Intent(Intent.ACTION_VIEW, webpage)
-            val packMan = activity?.packageManager
-            if (packMan != null && intent.resolveActivity(packMan) != null) {
-                startActivity(intent)
-            }
-            this.dismiss()
-        }
+        if (!arguments?.getBoolean(DELETABLE)!!)
+            binding.bottomNavViewPost.menu.removeItem(R.id.post_option_delete)
 
-        if (arguments?.getBoolean(DELETABLE)!!) {
-            binding.buttonDelete.visibility = View.VISIBLE
-
-            binding.buttonDelete.setOnClickListener {
-                MaterialDialog(this.requireContext())
-                        .message(R.string.dialog_delete_post)
-                        .show {
-                            positiveButton(text = "YES") { dialog ->
-                                dialog.dismiss()
-                                deletePost()
+        binding.bottomNavViewPost.setNavigationItemSelectedListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.post_option_view_link -> {
+                    val webpage = Uri.parse(arguments?.getString(URL))
+                    val intent = Intent(Intent.ACTION_VIEW, webpage)
+                    val packMan = activity?.packageManager
+                    if (packMan != null && intent.resolveActivity(packMan) != null) {
+                        startActivity(intent)
+                    }
+                    dismiss()
+                }
+                R.id.post_option_delete -> {
+                    MaterialDialog(this.requireContext())
+                            .message(R.string.dialog_delete_post)
+                            .show {
+                                positiveButton(R.string.yes) { dialog ->
+                                    dialog.dismiss()
+                                    deletePost()
+                                }
+                                negativeButton(android.R.string.cancel)
                             }
-                            negativeButton(text = "NO")
-                        }
-                this.dismiss()
+                    dismiss()
+                }
             }
+            true
         }
     }
 

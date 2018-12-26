@@ -1,7 +1,6 @@
 package com.dialogapp.dialog.ui.common
 
 import android.os.Bundle
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +11,6 @@ import androidx.paging.PagedList
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dialogapp.dialog.GlideApp
-import com.dialogapp.dialog.R
 import com.dialogapp.dialog.databinding.FragmentListBinding
 import com.dialogapp.dialog.model.Post
 import com.dialogapp.dialog.repository.NetworkState
@@ -90,9 +88,6 @@ abstract class BasePagedListFragment : BaseFragment() {
     }
 
     private fun initSwipeToRefresh() {
-        val typedValue = TypedValue()
-        activity?.theme?.resolveAttribute(R.attr.colorSecondary, typedValue, true)
-        binding.swipeRefresh.setColorSchemeColors(typedValue.data)
         basePagedListViewModel.refreshState.observe(this, Observer {
             binding.swipeRefresh.isRefreshing = it == NetworkState.LOADING
         })

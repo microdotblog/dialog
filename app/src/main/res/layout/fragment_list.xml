@@ -7,7 +7,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        <com.dialogapp.dialog.ui.util.AccentedSwipeRefresh
             android:id="@+id/swipe_refresh"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -22,7 +22,7 @@
                 android:scrollbars="vertical"
                 app:layoutManager="LinearLayoutManager"
                 tools:listitem="@layout/post_item" />
-        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+        </com.dialogapp.dialog.ui.util.AccentedSwipeRefresh>
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_notification"

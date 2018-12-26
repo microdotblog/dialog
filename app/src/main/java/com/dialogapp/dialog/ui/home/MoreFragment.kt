@@ -30,6 +30,14 @@ class MoreFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         binding = FragmentMoreBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.textMoreUsername.text = String.format(view.resources.getString(R.string.post_username),
+                sessionManager.user?.username)
         GlideApp.with(this)
                 .load(sessionManager.user?.gravatarUrl)
                 .into(binding.imageAvatar)
@@ -51,7 +59,5 @@ class MoreFragment : Fragment() {
                 negativeButton(android.R.string.cancel)
             }
         }
-        return binding.root
     }
-
 }

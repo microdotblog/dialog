@@ -32,10 +32,10 @@ abstract class BaseFragment : Fragment(), PostClickedListener {
             .build()
 
     val imageNavOptions = NavOptions.Builder()
-            .setEnterAnim(R.anim.slide_in_bottom)
+            .setEnterAnim(R.anim.nav_default_enter_anim)
             .setExitAnim(R.anim.nav_default_exit_anim)
             .setPopEnterAnim(R.anim.nav_default_pop_enter_anim)
-            .setPopExitAnim(R.anim.slide_out_bottom)
+            .setPopExitAnim(R.anim.nav_default_pop_exit_anim)
             .build()
 
     override fun onProfileClicked(username: String) {
