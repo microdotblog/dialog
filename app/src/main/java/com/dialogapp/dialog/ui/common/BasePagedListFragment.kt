@@ -25,6 +25,7 @@ abstract class BasePagedListFragment : BaseFragment() {
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
     lateinit var basePagedListViewModel: BasePagedListViewModel
+    lateinit var layoutManager: LinearLayoutManager
 
     private var binding by autoCleared<FragmentListBinding>()
 
@@ -32,11 +33,15 @@ abstract class BasePagedListFragment : BaseFragment() {
         override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
             super.onScrolled(recyclerView, dx, dy)
 
-            val layoutManager = binding.recyclerPosts.layoutManager as LinearLayoutManager
-            if (layoutManager.findFirstVisibleItemPosition() > 0) {
+            if (dy != 0) {
+                if (dy < 0 && layoutManager.findFirstVisibleItemPosition() > 0) {
+                    binding.chipNotification.visibility = View.VISIBLE
+                } else {
+                    binding.chipNotification.visibility = View.INVISIBLE
+                }
+            } else if (layoutManager.findFirstVisibleItemPosition() > 0) {
+                Timber.i("Scrolled due to new posts")
                 binding.chipNotification.visibility = View.VISIBLE
-            } else {
-                binding.chipNotification.visibility = View.INVISIBLE
             }
         }
     }
@@ -101,6 +106,8 @@ abstract class BasePagedListFragment : BaseFragment() {
         val adapter = PagedPostsAdapter(glide, this) {
             basePagedListViewModel.retry()
         }
+        layoutManager = LinearLayoutManager(this.requireContext(), RecyclerView.VERTICAL, false)
+        binding.recyclerPosts.layoutManager = layoutManager
         binding.recyclerPosts.adapter = adapter
         basePagedListViewModel.posts.observe(viewLifecycleOwner, Observer<PagedList<Post>> {
             adapter.submitList(it)

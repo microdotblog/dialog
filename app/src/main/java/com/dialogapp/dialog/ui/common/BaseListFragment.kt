@@ -20,6 +20,7 @@ abstract class BaseListFragment : BaseFragment() {
 
     lateinit var viewModelFactory: ViewModelProvider.Factory
     lateinit var baseListViewModel: BaseListViewModel
+    lateinit var layoutManager: LinearLayoutManager
 
     var binding by autoCleared<FragmentListBinding>()
 
@@ -29,11 +30,15 @@ abstract class BaseListFragment : BaseFragment() {
         override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
             super.onScrolled(recyclerView, dx, dy)
 
-            val layoutManager = binding.recyclerPosts.layoutManager as LinearLayoutManager
-            if (layoutManager.findFirstVisibleItemPosition() > 0) {
+            if (dy != 0) {
+                if (dy < 0 && layoutManager.findFirstVisibleItemPosition() > 0) {
+                    binding.chipNotification.visibility = View.VISIBLE
+                } else {
+                    binding.chipNotification.visibility = View.INVISIBLE
+                }
+            } else if (layoutManager.findFirstVisibleItemPosition() > 0) {
+                Timber.i("Scrolled due to new posts")
                 binding.chipNotification.visibility = View.VISIBLE
-            } else {
-                binding.chipNotification.visibility = View.INVISIBLE
             }
         }
     }
@@ -78,6 +83,8 @@ abstract class BaseListFragment : BaseFragment() {
     open fun initRecyclerAdapter() {
         val glide = GlideApp.with(this)
         basePostsAdapter = PostsAdapter(glide, this)
+        layoutManager = LinearLayoutManager(this.requireContext(), RecyclerView.VERTICAL, false)
+        binding.recyclerPosts.layoutManager = layoutManager
         binding.recyclerPosts.adapter = basePostsAdapter
     }
 

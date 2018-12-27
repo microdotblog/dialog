@@ -6,6 +6,8 @@ import android.view.View
 import androidx.core.os.bundleOf
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.dialogapp.dialog.GlideApp
 import com.dialogapp.dialog.di.Injector
 import com.dialogapp.dialog.ui.common.BaseListFragment
@@ -75,6 +77,8 @@ class FollowingFragment : BaseListFragment() {
     override fun initRecyclerAdapter() {
         val glide = GlideApp.with(this)
         followingAdapter = FollowingAdapter(glide, this)
+        layoutManager = LinearLayoutManager(this.requireContext(), RecyclerView.VERTICAL, false)
+        binding.recyclerPosts.layoutManager = layoutManager
         binding.recyclerPosts.adapter = followingAdapter
     }
 }
