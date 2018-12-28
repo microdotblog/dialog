@@ -23,6 +23,10 @@ class PostViewHolder(private val view: View, val binding: PostItemBinding, priva
         HtmlTextHelper(glide, postClickedListener, post?.contentHtml).setHtmlContent(binding.textContent)
         glide.load(post?.author?.avatar).into(binding.imageThumbnail)
 
+        binding.buttonReply.setOnClickListener {
+            postClickedListener.onReplyClicked(post?.id, post?.author?.microblog?.username)
+        }
+
         binding.buttonConv.visibility = when (post?.microblog?.isConversation) {
             true -> {
                 binding.buttonConv.setOnClickListener {

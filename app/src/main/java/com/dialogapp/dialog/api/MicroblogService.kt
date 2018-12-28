@@ -7,7 +7,6 @@ import com.dialogapp.dialog.vo.MicroBlogResponse
 import com.dialogapp.dialog.vo.VerifiedAccount
 import kotlinx.coroutines.Deferred
 import okhttp3.ResponseBody
-import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -62,6 +61,11 @@ interface MicroblogService {
     @FormUrlEncoded
     @POST("users/unfollow")
     fun unfollowUser(@Field("username") user: String): Deferred<Response<ResponseBody>>
+
+    @FormUrlEncoded
+    @POST("posts/reply")
+    fun replyToPost(@Field("id") id: String, @Field("text") content: String)
+            : Deferred<Response<ResponseBody>>
 
     // DELETE
 

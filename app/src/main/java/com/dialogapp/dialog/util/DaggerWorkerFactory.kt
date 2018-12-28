@@ -11,6 +11,7 @@ import com.dialogapp.dialog.db.MicroBlogDb
 import com.dialogapp.dialog.workers.DeletePostWorker
 import com.dialogapp.dialog.workers.FavoriteWorker
 import com.dialogapp.dialog.workers.FollowWorker
+import com.dialogapp.dialog.workers.ReplyWorker
 
 class DaggerWorkerFactory(private val microblogService: MicroblogService,
                           private val diskDb: MicroBlogDb,
@@ -38,6 +39,9 @@ class DaggerWorkerFactory(private val microblogService: MicroblogService,
                 instance.microblogService = microblogService
                 instance.diskDb = diskDb
                 instance.inMemDb = inMemDb
+            }
+            is ReplyWorker -> {
+                instance.microblogService = microblogService
             }
         }
 

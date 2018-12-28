@@ -33,4 +33,19 @@
             app:popUpTo="@+id/home_dest"
             app:popUpToInclusive="true" />
     </fragment>
+    <fragment
+        android:id="@+id/new_post_dest"
+        android:name="com.dialogapp.dialog.ui.posting.NewPostFragment">
+        <argument
+            android:name="isReply"
+            app:argType="boolean" />
+        <argument
+            android:name="id"
+            android:defaultValue='""'
+            app:argType="string" />
+        <argument
+            android:name="username"
+            android:defaultValue='""'
+            app:argType="string" />
+    </fragment>
 </navigation>
