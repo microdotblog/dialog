@@ -5,7 +5,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.afollestad.materialdialogs.MaterialDialog
@@ -41,23 +43,35 @@ class MoreFragment : Fragment() {
         GlideApp.with(this)
                 .load(sessionManager.user?.gravatarUrl)
                 .into(binding.imageAvatar)
-        val action = MoreFragmentDirections.actionMoreDestToProfileDest(sessionManager.user?.username
-                ?: "")
+
         binding.buttonProfile.setOnClickListener {
+            val action = MoreFragmentDirections.actionMoreDestToProfileDest(sessionManager.user?.username
+                    ?: "")
             findNavController().navigate(action)
         }
-        val dialog = MaterialDialog(this.requireContext())
-                .message(R.string.dialog_logout_message)
+
         binding.buttonLogout.setOnClickListener {
-            dialog.show {
-                positiveButton(android.R.string.ok) { dialog ->
-                    dialog.dismiss()
-                    sessionManager.logout()
-                    val mainNavController = activity?.findNavController(R.id.nav_host_main)
-                    mainNavController?.navigate(R.id.action_home_dest_to_login_dest)
-                }
-                negativeButton(android.R.string.cancel)
-            }
+            MaterialDialog(this.requireContext())
+                    .message(R.string.dialog_logout_message).show {
+                        positiveButton(android.R.string.ok) { dialog ->
+                            dialog.dismiss()
+                            sessionManager.logout()
+                            val mainNavController = activity?.findNavController(R.id.nav_host_main)
+                            mainNavController?.navigate(R.id.action_home_dest_to_login_dest)
+                        }
+                        negativeButton(android.R.string.cancel)
+                    }
+        }
+
+        binding.fabNewPost.setOnClickListener {
+            val navOptions = NavOptions.Builder()
+                    .setEnterAnim(R.anim.slide_in_bottom)
+                    .setExitAnim(R.anim.fade_out)
+                    .setPopEnterAnim(R.anim.nav_default_pop_enter_anim)
+                    .setPopExitAnim(R.anim.slide_out_bottom)
+                    .build()
+            val mainNavController = activity?.findNavController(R.id.nav_host_main)
+            mainNavController?.navigate(R.id.new_post_dest, bundleOf("isReply" to false), navOptions)
         }
     }
 }

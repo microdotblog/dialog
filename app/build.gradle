@@ -50,6 +50,7 @@ private String generateVersionName() {
 
 repositories {
     mavenCentral()
+    maven { url "https://dl.bintray.com/drummer-aidan/maven/" }
 }
 
 allOpen {
@@ -115,7 +116,8 @@ dependencies {
 
     implementation 'de.hdodenhof:circleimageview:2.2.0'
 
-    implementation 'com.afollestad.material-dialogs:core:2.0.0-rc3'
+    implementation 'com.afollestad.material-dialogs:core:2.0.0-rc5'
+    implementation 'com.afollestad.material-dialogs:input:2.0.0-rc5'
 
     // Stetho
     debugImplementation 'com.facebook.stetho:stetho:1.5.0'

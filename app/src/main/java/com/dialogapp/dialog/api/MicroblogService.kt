@@ -67,6 +67,12 @@ interface MicroblogService {
     fun replyToPost(@Field("id") id: String, @Field("text") content: String)
             : Deferred<Response<ResponseBody>>
 
+    @FormUrlEncoded
+    @POST("micropub")
+    fun createNewPost(@Field("h") type: String = "entry",
+                      @Field("name") title: String?,
+                      @Field("content") content: String): Deferred<Response<ResponseBody>>
+
     // DELETE
 
     @DELETE("posts/favorites/{id}")
