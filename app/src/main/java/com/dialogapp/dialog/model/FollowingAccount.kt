@@ -5,7 +5,7 @@ import androidx.room.ForeignKey
 import androidx.room.Index
 import com.squareup.moshi.Json
 
-@Entity(tableName = "following", primaryKeys = ["username"], foreignKeys = [ForeignKey(
+@Entity(tableName = "following", primaryKeys = ["username", "belongsToEndpoint"], foreignKeys = [ForeignKey(
         entity = EndpointData::class,
         parentColumns = ["endpoint"],
         childColumns = ["belongsToEndpoint"])], indices = [Index(value = ["belongsToEndpoint"])]

@@ -196,7 +196,7 @@ class PostsRepository @Inject constructor(private val appExecutors: AppExecutors
     }
 
     fun loadFollowing(username: String, isSelf: Boolean, refresh: Boolean): LiveData<Resource<List<FollowingAccount>>> {
-        val endpoint = FOLLOWING + "_$username"
+        val endpoint = FOLLOWING.plus("_$username")
         return object : NetworkBoundResource<List<FollowingAccount>, List<FollowingAccount>>(appExecutors) {
             override fun shouldFetch(data: List<FollowingAccount>?): Boolean {
                 return data == null || data.isEmpty() ||
@@ -211,36 +211,31 @@ class PostsRepository @Inject constructor(private val appExecutors: AppExecutors
             }
 
             override fun saveCallResult(item: List<FollowingAccount>) {
-                item.let { response ->
-                    when {
-                        isSelf -> {
-                            db.runInTransaction {
-                                val endpointData = EndpointData(endpoint = endpoint,
-                                        microblog = null, author = null)
-                                db.endpointData().insertEndpointData(endpointData)
+                when {
+                    isSelf -> {
+                        db.runInTransaction {
+                            val endpointData = EndpointData(endpoint = endpoint,
+                                    microblog = null, author = null)
+                            db.endpointData().insertEndpointData(endpointData)
 
-                                response.map {
-                                    it.belongsToEndpoint = endpoint
-                                    it
-                                }
-                                db.followingData().insertFollowingAccounts(response)
+                            item.map {
+                                it.belongsToEndpoint = endpoint
                             }
-                        }
-                        else -> {
-                            inMemoryDb.runInTransaction {
-                                val endpointData = EndpointData(endpoint = endpoint,
-                                        microblog = null, author = null)
-                                inMemoryDb.endpointData().insertEndpointData(endpointData)
-
-                                response.map {
-                                    it.belongsToEndpoint = endpoint
-                                    it
-                                }
-                                inMemoryDb.followingData().insertFollowingAccounts(response)
-                            }
+                            db.followingData().insertFollowingAccounts(item)
                         }
                     }
+                    else -> {
+                        inMemoryDb.runInTransaction {
+                            val endpointData = EndpointData(endpoint = endpoint,
+                                    microblog = null, author = null)
+                            inMemoryDb.endpointData().insertEndpointData(endpointData)
 
+                            item.map {
+                                it.belongsToEndpoint = endpoint
+                            }
+                            inMemoryDb.followingData().insertFollowingAccounts(item)
+                        }
+                    }
                 }
             }
 

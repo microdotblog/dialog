@@ -12,7 +12,7 @@ abstract class FollowingDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract fun insertFollowingAccounts(listFollowing: List<FollowingAccount>)
 
-    @Query("SELECT * FROM following WHERE belongsToEndpoint = :endpoint")
+    @Query("SELECT * FROM following WHERE belongsToEndpoint = :endpoint ORDER BY name ASC")
     abstract fun loadFollowingAccounts(endpoint: String): LiveData<List<FollowingAccount>>
 
     @Query("DELETE FROM following")
