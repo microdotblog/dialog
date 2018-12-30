@@ -52,8 +52,9 @@ class MoreFragment : Fragment() {
 
         binding.buttonLogout.setOnClickListener {
             MaterialDialog(this.requireContext())
+                    .title(R.string.confirm)
                     .message(R.string.dialog_logout_message).show {
-                        positiveButton(android.R.string.ok) { dialog ->
+                        positiveButton(R.string.logout) { dialog ->
                             dialog.dismiss()
                             sessionManager.logout()
                             val mainNavController = activity?.findNavController(R.id.nav_host_main)
@@ -66,7 +67,7 @@ class MoreFragment : Fragment() {
         binding.fabNewPost.setOnClickListener {
             val navOptions = NavOptions.Builder()
                     .setEnterAnim(R.anim.slide_in_bottom)
-                    .setExitAnim(R.anim.fade_out)
+                    .setExitAnim(R.anim.nav_default_exit_anim)
                     .setPopEnterAnim(R.anim.nav_default_pop_enter_anim)
                     .setPopExitAnim(R.anim.slide_out_bottom)
                     .build()

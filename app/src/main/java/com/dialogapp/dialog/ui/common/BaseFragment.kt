@@ -19,14 +19,14 @@ import timber.log.Timber
 abstract class BaseFragment : Fragment(), PostClickedListener {
 
     val profileNavOptions = NavOptions.Builder()
-            .setEnterAnim(R.anim.slide_in_left)
+            .setEnterAnim(R.anim.nav_default_enter_anim)
             .setExitAnim(R.anim.nav_default_exit_anim)
             .setPopEnterAnim(R.anim.nav_default_pop_enter_anim)
             .setPopExitAnim(R.anim.nav_default_pop_exit_anim)
             .build()
 
     val convNavOptions = NavOptions.Builder()
-            .setEnterAnim(R.anim.slide_in_right)
+            .setEnterAnim(R.anim.nav_default_enter_anim)
             .setExitAnim(R.anim.nav_default_exit_anim)
             .setPopEnterAnim(R.anim.nav_default_pop_enter_anim)
             .setPopExitAnim(R.anim.nav_default_pop_exit_anim)
@@ -36,7 +36,7 @@ abstract class BaseFragment : Fragment(), PostClickedListener {
             .setEnterAnim(R.anim.nav_default_enter_anim)
             .setExitAnim(R.anim.nav_default_exit_anim)
             .setPopEnterAnim(R.anim.nav_default_pop_enter_anim)
-            .setPopExitAnim(R.anim.nav_default_pop_exit_anim)
+            .setPopExitAnim(R.anim.slide_out_bottom)
             .build()
 
     override fun onProfileClicked(username: String) {
@@ -67,7 +67,7 @@ abstract class BaseFragment : Fragment(), PostClickedListener {
         if (id != null) {
             val navOptions = NavOptions.Builder()
                     .setEnterAnim(R.anim.slide_in_bottom)
-                    .setExitAnim(R.anim.fade_out)
+                    .setExitAnim(R.anim.nav_default_exit_anim)
                     .setPopEnterAnim(R.anim.nav_default_pop_enter_anim)
                     .setPopExitAnim(R.anim.slide_out_bottom)
                     .build()

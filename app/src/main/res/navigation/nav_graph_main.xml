@@ -24,7 +24,6 @@
             android:id="@+id/action_home_dest_to_login_dest"
             app:destination="@id/login_dest"
             app:enterAnim="@anim/slide_in_left"
-            app:exitAnim="@anim/slide_out_right"
             app:popUpTo="@+id/home_dest"
             app:popUpToInclusive="true" />
         <action

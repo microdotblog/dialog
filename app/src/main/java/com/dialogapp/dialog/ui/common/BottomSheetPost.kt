@@ -58,9 +58,10 @@ class BottomSheetPost : BottomSheetDialogFragment() {
                 }
                 R.id.post_option_delete -> {
                     MaterialDialog(this.requireContext())
+                            .title(R.string.confirm)
                             .message(R.string.dialog_delete_post)
                             .show {
-                                positiveButton(R.string.yes) { dialog ->
+                                positiveButton(R.string.delete) { dialog ->
                                     dialog.dismiss()
                                     deletePost()
                                 }

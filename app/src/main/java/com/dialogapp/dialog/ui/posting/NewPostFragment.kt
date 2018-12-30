@@ -58,8 +58,9 @@ class NewPostFragment : Fragment(), OnBackPressedListener {
         binding.bottomBarNewPost.setupWithNavController(findNavController())
         binding.bottomBarNewPost.setNavigationOnClickListener {
             MaterialDialog(this.requireContext())
+                    .title(R.string.confirm)
                     .message(R.string.discard_post).show {
-                        positiveButton(android.R.string.ok) { dialog ->
+                        positiveButton(R.string.discard) { dialog ->
                             dialog.dismiss()
                             findNavController().navigateUp()
                         }
@@ -69,8 +70,9 @@ class NewPostFragment : Fragment(), OnBackPressedListener {
 
         binding.fab.setOnClickListener {
             MaterialDialog(this.requireContext())
-                    .message(R.string.send_post).show {
-                        positiveButton(R.string.yes) { dialog ->
+                    .title(R.string.confirm)
+                    .show {
+                        positiveButton(R.string.send) { dialog ->
                             if (isReply) {
                                 postingViewModel.sendReply(postId!!, binding.editTextPost.text.toString())
                             } else {
@@ -86,8 +88,9 @@ class NewPostFragment : Fragment(), OnBackPressedListener {
 
     override fun onBackPressed() {
         MaterialDialog(this.requireContext())
+                .title(R.string.confirm)
                 .message(R.string.discard_post).show {
-                    positiveButton(android.R.string.ok) { dialog ->
+                    positiveButton(R.string.discard) { dialog ->
                         dialog.dismiss()
                         findNavController().navigateUp()
                     }

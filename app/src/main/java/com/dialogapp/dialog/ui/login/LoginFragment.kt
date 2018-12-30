@@ -76,11 +76,7 @@ class LoginFragment : Fragment() {
                 .title(text = "Sign in using token")
                 .message(R.string.login_info_token)
         binding.buttonLoginInfo.setOnClickListener {
-            dialog.show {
-                positiveButton(android.R.string.ok) { dialog ->
-                    dialog.dismiss()
-                }
-            }
+            dialog.show()
         }
 
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(LoginViewModel::class.java)
