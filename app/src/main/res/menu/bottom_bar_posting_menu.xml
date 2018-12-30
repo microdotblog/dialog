@@ -8,4 +8,10 @@
         app:showAsAction="always"
         android:title="Post Title" />
 
+    <item
+        android:id="@+id/posting_parent_post"
+        android:icon="@drawable/ic_round_comment_24px"
+        app:showAsAction="always"
+        android:title="View parent post" />
+
 </menu>

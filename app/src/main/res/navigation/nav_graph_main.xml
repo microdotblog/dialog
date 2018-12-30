@@ -46,5 +46,9 @@
             android:name="username"
             android:defaultValue='""'
             app:argType="string" />
+        <argument
+            android:name="content"
+            android:defaultValue='""'
+            app:argType="string" />
     </fragment>
 </navigation>

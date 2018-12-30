@@ -63,7 +63,7 @@ abstract class BaseFragment : Fragment(), PostClickedListener {
         bottomSheetPost.show(fragmentManager, "bottom_sheet_post")
     }
 
-    override fun onReplyClicked(id: String?, username: String?) {
+    override fun onReplyClicked(id: String?, username: String?, content: String?) {
         if (id != null) {
             val navOptions = NavOptions.Builder()
                     .setEnterAnim(R.anim.slide_in_bottom)
@@ -73,7 +73,7 @@ abstract class BaseFragment : Fragment(), PostClickedListener {
                     .build()
             val mainNavController = activity?.findNavController(R.id.nav_host_main)
             mainNavController?.navigate(R.id.new_post_dest, bundleOf("isReply" to true,
-                    "id" to id, "username" to username), navOptions)
+                    "id" to id, "username" to username, "content" to content), navOptions)
         }
     }
 

@@ -24,7 +24,7 @@ class PostViewHolder(private val view: View, val binding: PostItemBinding, priva
         glide.load(post?.author?.avatar).into(binding.imageThumbnail)
 
         binding.buttonReply.setOnClickListener {
-            postClickedListener.onReplyClicked(post?.id, post?.author?.microblog?.username)
+            postClickedListener.onReplyClicked(post?.id, post?.author?.microblog?.username, post?.contentHtml)
         }
 
         binding.buttonConv.visibility = when (post?.microblog?.isConversation) {

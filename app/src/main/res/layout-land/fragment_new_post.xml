@@ -20,12 +20,16 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/text_input_layout"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
                     app:counterEnabled="true"
                     app:counterMaxLength="280"
                     app:counterOverflowTextColor="@null"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/divider_post"
+                    app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintHorizontal_weight="2"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
@@ -38,22 +42,23 @@
                         android:gravity="top"
                         android:imeOptions="actionDone"
                         android:inputType="textCapSentences|textMultiLine"
-                        android:maxLines="16"
-                        android:minLines="16"
+                        android:maxLines="10"
+                        android:minLines="10"
                         android:scrollbars="vertical"
                         android:textSize="14sp" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <View
                     android:id="@+id/divider_post"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="8dp"
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
                     android:background="?android:attr/listDivider"
-                    app:layout_constraintBottom_toTopOf="@+id/scrollView"
+                    app:layout_constraintEnd_toStartOf="@+id/scrollView"
+                    app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintHorizontal_weight="1"
-                    app:layout_constraintTop_toBottomOf="@id/text_input_layout" />
+                    app:layout_constraintStart_toEndOf="@+id/text_input_layout" />
 
                 <ScrollView
                     android:id="@+id/scrollView"
@@ -64,8 +69,8 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_weight="1"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/divider_post">
+                    app:layout_constraintStart_toStartOf="@+id/divider_post"
+                    app:layout_constraintTop_toTopOf="parent">
 
                     <ru.noties.markwon.view.MarkwonView
                         android:id="@+id/markwonView_preview"

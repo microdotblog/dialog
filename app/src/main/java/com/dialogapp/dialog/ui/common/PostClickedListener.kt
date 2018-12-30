@@ -9,7 +9,7 @@ interface PostClickedListener {
 
     fun onOverflowMenuClicked(postId: String, postUrl: String, isDeletable: Boolean)
 
-    fun onReplyClicked(id: String?, username: String?)
+    fun onReplyClicked(id: String?, username: String?, content: String?)
 
     fun onLinkClicked(text: String)
 
