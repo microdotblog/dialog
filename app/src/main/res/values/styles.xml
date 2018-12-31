@@ -19,4 +19,8 @@
     <style name="RippleStyle" parent="ThemeOverlay.MaterialComponents">
         <item name="colorControlHighlight">?attr/colorPrimaryVariant</item>
     </style>
+
+    <style name="ToolbarOverlayStyle" parent="ThemeOverlay.MaterialComponents">
+        <item name="iconTint">?attr/colorOnPrimary</item>
+    </style>
 </resources>

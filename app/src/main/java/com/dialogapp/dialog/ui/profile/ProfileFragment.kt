@@ -5,9 +5,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.NavOptions
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
@@ -21,6 +24,7 @@ import com.dialogapp.dialog.auth.SessionManager
 import com.dialogapp.dialog.databinding.FragmentProfileBinding
 import com.dialogapp.dialog.di.Injector
 import com.dialogapp.dialog.model.EndpointData
+import com.dialogapp.dialog.ui.common.BottomSheetProfile
 import com.dialogapp.dialog.ui.util.autoCleared
 import com.dialogapp.dialog.workers.FollowWorker
 
@@ -29,7 +33,6 @@ class ProfileFragment : Fragment() {
     lateinit var sessionManager: SessionManager
 
     private var binding by autoCleared<FragmentProfileBinding>()
-    private lateinit var dialog: MaterialDialog
     private var isSelf: Boolean = false
     private lateinit var username: String
 
@@ -47,12 +50,36 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        dialog = MaterialDialog(this.requireContext())
-        val appBarConfiguration = AppBarConfiguration(setOf(R.id.timeline_dest, R.id.mentions_dest,
-                R.id.discover_dest, R.id.more_dest))
-        binding.toolbarProfile.setupWithNavController(findNavController(), appBarConfiguration)
-        username = ProfileFragmentArgs.fromBundle(arguments!!).username
+        // TODO: Remove workaround after proper support by navigation component
+        if (arguments != null) {
+            // We came from a post
+            username = ProfileFragmentArgs.fromBundle(arguments!!).username
+        } else {
+            // We came from bottom nav
+            username = sessionManager.user?.username!!
+            binding.toolbarProfile.inflateMenu(R.menu.profile_toolbar_options_menu)
+            binding.toolbarProfile.menu.getItem(0).setOnMenuItemClickListener {
+                val navOptions = NavOptions.Builder()
+                        .setEnterAnim(R.anim.slide_in_bottom)
+                        .setExitAnim(R.anim.nav_default_exit_anim)
+                        .setPopEnterAnim(R.anim.nav_default_pop_enter_anim)
+                        .setPopExitAnim(R.anim.slide_out_bottom)
+                        .build()
+                val mainNavController = activity?.findNavController(R.id.nav_host_main)
+                mainNavController?.navigate(R.id.new_post_dest, bundleOf("isReply" to false), navOptions)
+                true
+            }
+            binding.toolbarProfile.menu.getItem(1).setOnMenuItemClickListener {
+                val bottomSheetProfile = BottomSheetProfile()
+                bottomSheetProfile.show(childFragmentManager, "bottom_sheet_profile")
+                true
+            }
+        }
         isSelf = username.equals(sessionManager.user?.username, ignoreCase = true)
+
+        val appBarConfiguration = AppBarConfiguration(setOf(R.id.timeline_dest, R.id.mentions_dest,
+                R.id.discover_dest, R.id.profile_self_dest))
+        binding.toolbarProfile.setupWithNavController(findNavController(), appBarConfiguration)
         binding.toolbarProfile.title = username
         setupViewpager(username, isSelf)
 
@@ -60,6 +87,14 @@ class ProfileFragment : Fragment() {
         profileSharedViewModel.currentProfile = username
         profileSharedViewModel.getEndpointData().observe(viewLifecycleOwner, Observer {
             setEndpointData(it)
+        })
+        profileSharedViewModel.getEndpointData().observe(viewLifecycleOwner, Observer {
+            setEndpointData(it)
+        })
+        profileSharedViewModel.getLogout().observe(viewLifecycleOwner, Observer {
+            if (it) {
+                sessionManager.logout()
+            }
         })
     }
 
@@ -97,7 +132,7 @@ class ProfileFragment : Fragment() {
                     binding.includePartialProfile.textProfileAbout.text = it
                     val text = it
                     binding.includePartialProfile.textProfileAbout.setOnClickListener {
-                        dialog.message(text = text).show {
+                        MaterialDialog(this.requireContext()).message(text = text).show {
                             positiveButton(text = "Dismiss")
                         }
                     }
@@ -109,8 +144,7 @@ class ProfileFragment : Fragment() {
             if (isSelf) {
                 binding.includePartialProfile.buttonFollowing.visibility = View.GONE
                 binding.includePartialProfile.buttonFollow.visibility = View.GONE
-            }
-            else {
+            } else {
                 endpointData.microblog?.is_following.let {
                     when (it) {
                         true -> {

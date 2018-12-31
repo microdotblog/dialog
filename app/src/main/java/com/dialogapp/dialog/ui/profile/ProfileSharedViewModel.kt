@@ -7,6 +7,7 @@ import com.dialogapp.dialog.model.EndpointData
 
 class ProfileSharedViewModel : ViewModel() {
     private val endpointData = MutableLiveData<EndpointData>()
+    private val logout = MutableLiveData<Boolean>()
     var currentProfile: String? = null
 
     fun setEndpointData(newEndpointData: EndpointData?) {
@@ -21,5 +22,13 @@ class ProfileSharedViewModel : ViewModel() {
 
     fun isProfileCurrentlyShown(username: String): Boolean {
         return username.equals(currentProfile, ignoreCase = true)
+    }
+
+    fun logout() {
+        logout.value = true
+    }
+
+    fun getLogout(): LiveData<Boolean> {
+        return logout
     }
 }

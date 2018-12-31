@@ -14,17 +14,6 @@
         android:id="@+id/discover_dest"
         android:name="com.dialogapp.dialog.ui.home.DiscoverFragment" />
     <fragment
-        android:id="@+id/more_dest"
-        android:name="com.dialogapp.dialog.ui.home.MoreFragment">
-        <action
-            android:id="@+id/action_more_dest_to_profile_dest"
-            app:destination="@id/profile_dest"
-            app:enterAnim="@anim/nav_default_enter_anim"
-            app:exitAnim="@anim/nav_default_exit_anim"
-            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
-    </fragment>
-    <fragment
         android:id="@+id/profile_dest"
         android:name="com.dialogapp.dialog.ui.profile.ProfileFragment">
         <argument
@@ -42,19 +31,20 @@
         android:id="@+id/conversation_dest"
         android:name="com.dialogapp.dialog.ui.conversation.ConversationFragment"
         android:label="Conversation">
-        <action
-            android:id="@+id/action_conversation_dest_self"
-            app:destination="@id/conversation_dest" />
         <argument
             android:name="convId"
             app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/image_viewer_dest"
-        android:name="com.dialogapp.dialog.ui.common.ImageViewerFragment" >
+        android:name="com.dialogapp.dialog.ui.common.ImageViewerFragment">
         <argument
             android:name="imageUrl"
-            app:nullable="true"
-            app:argType="string" />
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/profile_self_dest"
+        android:name="com.dialogapp.dialog.ui.profile.ProfileFragment">
     </fragment>
 </navigation>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/profile_create_post"
+        android:icon="@drawable/ic_baseline_add_circle_24px"
+        android:title="Create new post"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/profile_more"
+        android:icon="@drawable/ic_round_more_vert_24px"
+        android:title="More options"
+        app:showAsAction="always" />
+
+</menu>

@@ -14,7 +14,7 @@
         android:icon="@drawable/ic_round_explore_24px"
         android:title="Discover" />
     <item
-        android:id="@+id/more_dest"
-        android:icon="@drawable/ic_round_menu_24px"
-        android:title="More" />
+        android:id="@+id/profile_self_dest"
+        android:icon="@drawable/ic_round_account_circle_24px"
+        android:title="Profile" />
 </menu>
