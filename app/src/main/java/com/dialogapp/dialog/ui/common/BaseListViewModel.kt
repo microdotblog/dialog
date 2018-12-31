@@ -40,9 +40,9 @@ class BaseListViewModel @Inject constructor(private val postsRepository: PostsRe
     }
 
     fun refresh() {
-        _endpoint.value?.let {
+        _endpoint.value = _endpoint.value?.let {
             it.refresh = true
-            _endpoint.value = it
+            it
         }
     }
 }

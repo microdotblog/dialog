@@ -27,8 +27,8 @@ class PostsRepository @Inject constructor(private val appExecutors: AppExecutors
     fun loadDiscover(topic: String?, refresh: Boolean): LiveData<Resource<Listing<Post>>> {
         return object : NetworkBoundResource<Listing<Post>, MicroBlogResponse>(appExecutors) {
             override fun shouldFetch(data: Listing<Post>?): Boolean {
-                return data?.postData == null || data.postData.isEmpty() ||
-                        (endpointRateLimit.shouldFetch(topic ?: DISCOVER) && refresh)
+                return data?.postData.isNullOrEmpty() ||
+                        (refresh && endpointRateLimit.shouldFetch(topic ?: DISCOVER))
             }
 
             override fun createCall(): LiveData<ApiResponse<MicroBlogResponse>> {
@@ -39,19 +39,15 @@ class PostsRepository @Inject constructor(private val appExecutors: AppExecutors
             }
 
             override fun saveCallResult(item: MicroBlogResponse) {
-                item.let { response ->
-                    inMemoryDb.runInTransaction {
-                        val endpointData = EndpointData(endpoint = topic
-                                ?: DISCOVER, microblog = response.microblog, author = response.author)
-                        inMemoryDb.endpointData().insertEndpointData(endpointData)
+                inMemoryDb.runInTransaction {
+                    val endpointData = EndpointData(endpoint = topic
+                            ?: DISCOVER, microblog = item.microblog, author = item.author)
+                    inMemoryDb.endpointData().insertEndpointData(endpointData)
 
-                        val posts = response.posts
-                        posts.map {
-                            it.belongsToEndpoint = topic ?: DISCOVER
-                            it
-                        }
-                        inMemoryDb.posts().insertPosts(posts)
+                    item.posts.map {
+                        it.belongsToEndpoint = topic ?: DISCOVER
                     }
+                    inMemoryDb.posts().insertPosts(item.posts)
                 }
             }
 
@@ -72,8 +68,8 @@ class PostsRepository @Inject constructor(private val appExecutors: AppExecutors
     fun loadPostsByUsername(username: String, refresh: Boolean): LiveData<Resource<Listing<Post>>> {
         return object : NetworkBoundResource<Listing<Post>, MicroBlogResponse>(appExecutors) {
             override fun shouldFetch(data: Listing<Post>?): Boolean {
-                return data?.postData == null || data.postData.isEmpty() ||
-                        (endpointRateLimit.shouldFetch(username) && refresh)
+                return data?.postData.isNullOrEmpty() ||
+                        (refresh && endpointRateLimit.shouldFetch(username))
             }
 
             override fun createCall(): LiveData<ApiResponse<MicroBlogResponse>> {
@@ -81,19 +77,15 @@ class PostsRepository @Inject constructor(private val appExecutors: AppExecutors
             }
 
             override fun saveCallResult(item: MicroBlogResponse) {
-                item.let { response ->
-                    inMemoryDb.runInTransaction {
-                        val endpointData = EndpointData(endpoint = username,
-                                microblog = response.microblog, author = response.author)
-                        inMemoryDb.endpointData().insertEndpointData(endpointData)
+                inMemoryDb.runInTransaction {
+                    val endpointData = EndpointData(endpoint = username,
+                            microblog = item.microblog, author = item.author)
+                    inMemoryDb.endpointData().insertEndpointData(endpointData)
 
-                        val posts = response.posts
-                        posts.map {
-                            it.belongsToEndpoint = username
-                            it
-                        }
-                        inMemoryDb.posts().insertPosts(posts)
+                    item.posts.map {
+                        it.belongsToEndpoint = username
                     }
+                    inMemoryDb.posts().insertPosts(item.posts)
                 }
             }
 
@@ -114,8 +106,8 @@ class PostsRepository @Inject constructor(private val appExecutors: AppExecutors
     fun loadConversation(convId: String, refresh: Boolean): LiveData<Resource<Listing<Post>>> {
         return object : NetworkBoundResource<Listing<Post>, MicroBlogResponse>(appExecutors) {
             override fun shouldFetch(data: Listing<Post>?): Boolean {
-                return data?.postData == null || data.postData.isEmpty() ||
-                        (endpointRateLimit.shouldFetch(convId) && refresh)
+                return data?.postData.isNullOrEmpty() ||
+                        (refresh && endpointRateLimit.shouldFetch(convId))
             }
 
             override fun createCall(): LiveData<ApiResponse<MicroBlogResponse>> {
@@ -123,19 +115,15 @@ class PostsRepository @Inject constructor(private val appExecutors: AppExecutors
             }
 
             override fun saveCallResult(item: MicroBlogResponse) {
-                item.let { response ->
-                    inMemoryDb.runInTransaction {
-                        val endpointData = EndpointData(endpoint = convId,
-                                microblog = response.microblog, author = response.author)
-                        inMemoryDb.endpointData().insertEndpointData(endpointData)
+                inMemoryDb.runInTransaction {
+                    val endpointData = EndpointData(endpoint = convId,
+                            microblog = item.microblog, author = item.author)
+                    inMemoryDb.endpointData().insertEndpointData(endpointData)
 
-                        val posts = response.posts
-                        posts.map {
-                            it.belongsToEndpoint = convId
-                            it
-                        }
-                        inMemoryDb.posts().insertPosts(posts)
+                    item.posts.map {
+                        it.belongsToEndpoint = convId
                     }
+                    inMemoryDb.posts().insertPosts(item.posts)
                 }
             }
 
@@ -156,8 +144,8 @@ class PostsRepository @Inject constructor(private val appExecutors: AppExecutors
     fun loadFavorites(refresh: Boolean): LiveData<Resource<Listing<Post>>> {
         return object : NetworkBoundResource<Listing<Post>, MicroBlogResponse>(appExecutors) {
             override fun shouldFetch(data: Listing<Post>?): Boolean {
-                return data?.postData == null || data.postData.isEmpty() ||
-                        (endpointRateLimit.shouldFetch(FAVORITES) && refresh)
+                return data?.postData.isNullOrEmpty() ||
+                        (refresh && endpointRateLimit.shouldFetch(FAVORITES))
             }
 
             override fun createCall(): LiveData<ApiResponse<MicroBlogResponse>> {
@@ -165,19 +153,15 @@ class PostsRepository @Inject constructor(private val appExecutors: AppExecutors
             }
 
             override fun saveCallResult(item: MicroBlogResponse) {
-                item.let { response ->
-                    inMemoryDb.runInTransaction {
-                        val endpointData = EndpointData(endpoint = FAVORITES,
-                                microblog = response.microblog, author = response.author)
-                        inMemoryDb.endpointData().insertEndpointData(endpointData)
+                inMemoryDb.runInTransaction {
+                    val endpointData = EndpointData(endpoint = FAVORITES,
+                            microblog = item.microblog, author = item.author)
+                    inMemoryDb.endpointData().insertEndpointData(endpointData)
 
-                        val posts = response.posts
-                        posts.map {
-                            it.belongsToEndpoint = FAVORITES
-                            it
-                        }
-                        inMemoryDb.posts().insertPosts(posts)
+                    item.posts.map {
+                        it.belongsToEndpoint = FAVORITES
                     }
+                    inMemoryDb.posts().insertPosts(item.posts)
                 }
             }
 
@@ -200,7 +184,7 @@ class PostsRepository @Inject constructor(private val appExecutors: AppExecutors
         return object : NetworkBoundResource<List<FollowingAccount>, List<FollowingAccount>>(appExecutors) {
             override fun shouldFetch(data: List<FollowingAccount>?): Boolean {
                 return data == null || data.isEmpty() ||
-                        (endpointRateLimit.shouldFetch(endpoint) && refresh)
+                        (refresh && endpointRateLimit.shouldFetch(endpoint))
             }
 
             override fun createCall(): LiveData<ApiResponse<List<FollowingAccount>>> {

@@ -28,9 +28,9 @@ class FollowingViewModel @Inject constructor(private val postsRepository: PostsR
     }
 
     fun refresh() {
-        _endpoint.value?.let {
+        _endpoint.value = _endpoint.value?.let {
             it.refresh = true
-            _endpoint.value = it
+            it
         }
     }
 }
