@@ -76,16 +76,6 @@
                 app:layout_constraintTop_toBottomOf="@+id/text_username"
                 tools:text="@tools:sample/lorem" />
 
-            <View
-                android:id="@+id/divider"
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:layout_marginTop="16dp"
-                android:background="@color/grey300"
-                app:layout_constraintEnd_toEndOf="@+id/text_content"
-                app:layout_constraintStart_toStartOf="@+id/text_content"
-                app:layout_constraintTop_toBottomOf="@+id/text_content" />
-
             <ImageButton
                 android:id="@+id/button_reply"
                 style="?attr/actionButtonStyle"
@@ -95,8 +85,8 @@
                 android:theme="@style/RippleStyle"
                 android:tint="@android:color/darker_gray"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/divider"
-                app:layout_constraintTop_toBottomOf="@+id/divider" />
+                app:layout_constraintStart_toStartOf="@+id/text_content"
+                app:layout_constraintTop_toBottomOf="@+id/text_content" />
 
             <ImageButton
                 android:id="@+id/button_fav"
@@ -108,7 +98,7 @@
                 android:tint="@android:color/darker_gray"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/button_reply"
-                app:layout_constraintTop_toBottomOf="@+id/divider" />
+                app:layout_constraintTop_toBottomOf="@+id/text_content" />
 
             <ImageButton
                 android:id="@+id/button_conv"
@@ -124,7 +114,7 @@
                 app:layout_constraintEnd_toStartOf="@+id/button_overflow"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toEndOf="@+id/button_fav"
-                app:layout_constraintTop_toBottomOf="@+id/divider" />
+                app:layout_constraintTop_toBottomOf="@+id/text_content" />
 
             <ImageButton
                 android:id="@+id/button_overflow"
@@ -135,7 +125,7 @@
                 android:tint="@android:color/darker_gray"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/divider" />
+                app:layout_constraintTop_toBottomOf="@+id/text_content" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
 </layout>

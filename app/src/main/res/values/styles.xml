@@ -20,7 +20,7 @@
         <item name="colorControlHighlight">?attr/colorPrimaryVariant</item>
     </style>
 
-    <style name="ToolbarOverlayStyle" parent="ThemeOverlay.MaterialComponents">
+    <style name="ToolbarOverlayStyle" parent="ThemeOverlay.MaterialComponents.Toolbar.Primary">
         <item name="iconTint">?attr/colorOnPrimary</item>
     </style>
 </resources>

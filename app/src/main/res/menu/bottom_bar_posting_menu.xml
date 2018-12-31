@@ -10,7 +10,7 @@
 
     <item
         android:id="@+id/posting_parent_post"
-        android:icon="@drawable/ic_round_comment_24px"
+        android:icon="@drawable/ic_round_chat_bubble_24px"
         app:showAsAction="always"
         android:title="View parent post" />
 
