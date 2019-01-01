@@ -7,14 +7,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
-import androidx.work.ExistingWorkPolicy
-import androidx.work.OneTimeWorkRequest
-import androidx.work.WorkManager
+import androidx.lifecycle.ViewModelProviders
 import com.afollestad.materialdialogs.MaterialDialog
 import com.dialogapp.dialog.R
 import com.dialogapp.dialog.databinding.FragmentBottomSheetPostBinding
 import com.dialogapp.dialog.ui.util.autoCleared
-import com.dialogapp.dialog.workers.DeletePostWorker
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class BottomSheetPost : BottomSheetDialogFragment() {
@@ -61,13 +58,13 @@ class BottomSheetPost : BottomSheetDialogFragment() {
                             .title(R.string.confirm)
                             .message(R.string.dialog_delete_post)
                             .show {
-                                positiveButton(R.string.delete) { dialog ->
-                                    dialog.dismiss()
+                                positiveButton(R.string.delete) {
+                                    dismiss()
                                     deletePost()
+                                    this@BottomSheetPost.dismiss()
                                 }
                                 negativeButton(android.R.string.cancel)
                             }
-                    dismiss()
                 }
             }
             true
@@ -77,12 +74,10 @@ class BottomSheetPost : BottomSheetDialogFragment() {
     private fun deletePost() {
         val postId = arguments?.getString(ID)
         if (postId != null) {
-            val tag = "DEL_$postId"
-            val deletePostRequest = OneTimeWorkRequest.Builder(DeletePostWorker::class.java)
-                    .setInputData(DeletePostWorker.createInputData(postId))
-                    .addTag(tag)
-                    .build()
-            WorkManager.getInstance().enqueueUniqueWork(tag, ExistingWorkPolicy.KEEP, deletePostRequest)
+            val requestViewModel = activity?.run {
+                ViewModelProviders.of(this).get(RequestViewModel::class.java)
+            }
+            requestViewModel?.sendDeleteRequest(postId)
         }
     }
 }

@@ -14,9 +14,6 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
-import androidx.work.ExistingWorkPolicy
-import androidx.work.OneTimeWorkRequest
-import androidx.work.WorkManager
 import com.afollestad.materialdialogs.MaterialDialog
 import com.dialogapp.dialog.GlideApp
 import com.dialogapp.dialog.R
@@ -25,8 +22,8 @@ import com.dialogapp.dialog.databinding.FragmentProfileBinding
 import com.dialogapp.dialog.di.Injector
 import com.dialogapp.dialog.model.EndpointData
 import com.dialogapp.dialog.ui.common.BottomSheetProfile
+import com.dialogapp.dialog.ui.common.RequestViewModel
 import com.dialogapp.dialog.ui.util.autoCleared
-import com.dialogapp.dialog.workers.FollowWorker
 
 class ProfileFragment : Fragment() {
 
@@ -168,12 +165,10 @@ class ProfileFragment : Fragment() {
     }
 
     private fun enqueueFollowWorker(isFollowing: Boolean) {
-        val tag = "FOL_$username"
-        val followRequest = OneTimeWorkRequest.Builder(FollowWorker::class.java)
-                .setInputData(FollowWorker.createInputData(username, isFollowing))
-                .addTag(tag)
-                .build()
-        WorkManager.getInstance().enqueueUniqueWork(tag, ExistingWorkPolicy.KEEP, followRequest)
+        val requestViewModel = activity?.run {
+            ViewModelProviders.of(this).get(RequestViewModel::class.java)
+        }
+        requestViewModel?.sendFollowRequest(username, isFollowing)
     }
 
     private fun hideFollowButton() {

@@ -4,15 +4,11 @@ import android.content.Intent
 import android.net.Uri
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
-import androidx.work.ExistingWorkPolicy
-import androidx.work.OneTimeWorkRequest
-import androidx.work.WorkManager
 import com.dialogapp.dialog.R
-import com.dialogapp.dialog.workers.FavoriteWorker
-import com.dialogapp.dialog.workers.FavoriteWorker.Companion.createInputData
 import timber.log.Timber
 
 
@@ -45,12 +41,10 @@ abstract class BaseFragment : Fragment(), PostClickedListener {
     }
 
     override fun onFavoriteButtonClicked(postId: String?, belongsToEndpoint: String?) {
-        val tag = "FAV_$postId"
-        val favoriteRequest = OneTimeWorkRequest.Builder(FavoriteWorker::class.java)
-                .setInputData(createInputData(postId, belongsToEndpoint))
-                .addTag(tag)
-                .build()
-        WorkManager.getInstance().enqueueUniqueWork(tag, ExistingWorkPolicy.KEEP, favoriteRequest)
+        val requestViewModel = activity?.run {
+            ViewModelProviders.of(this).get(RequestViewModel::class.java)
+        }
+        requestViewModel?.sendFavoriteRequest(postId, belongsToEndpoint)
     }
 
     override fun onConversationButtonClicked(postId: String) {

@@ -17,12 +17,14 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.input.input
 import com.dialogapp.dialog.R
 import com.dialogapp.dialog.databinding.FragmentNewPostBinding
+import com.dialogapp.dialog.ui.common.RequestViewModel
 import com.dialogapp.dialog.ui.util.autoCleared
 import timber.log.Timber
 
 class NewPostFragment : Fragment(), OnBackPressedListener {
 
     private var binding by autoCleared<FragmentNewPostBinding>()
+    private lateinit var requestViewModel: RequestViewModel
 
     private val textListener = object : TextWatcher {
         override fun afterTextChanged(p0: Editable?) {
@@ -38,6 +40,14 @@ class NewPostFragment : Fragment(), OnBackPressedListener {
         }
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        requestViewModel = activity?.run {
+            ViewModelProviders.of(this).get(RequestViewModel::class.java)
+        }!!
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         binding = FragmentNewPostBinding.inflate(inflater, container, false)
@@ -47,7 +57,6 @@ class NewPostFragment : Fragment(), OnBackPressedListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val postingViewModel = ViewModelProviders.of(this).get(PostingViewModel::class.java)
         binding.bottomBarNewPost.inflateMenu(R.menu.bottom_bar_posting_menu)
 
         val isReply = NewPostFragmentArgs.fromBundle(arguments!!).isReply
@@ -72,12 +81,12 @@ class NewPostFragment : Fragment(), OnBackPressedListener {
             binding.bottomBarNewPost.menu.removeItem(R.id.posting_parent_post)
             binding.bottomBarNewPost.menu.findItem(R.id.posting_title).setOnMenuItemClickListener {
                 MaterialDialog(this.requireContext()).title(text = "Post Title").show {
-                    input(hint = "optional", prefill = postingViewModel.title) { dialog, text ->
-                        postingViewModel.title = text.toString()
+                    input(hint = "optional", prefill = requestViewModel.title) { dialog, text ->
+                        requestViewModel.title = text.toString()
                     }
                     positiveButton(R.string.set)
                     negativeButton(R.string.clear) {
-                        postingViewModel.title = null
+                        discardTitle()
                     }
                 }
                 true
@@ -86,15 +95,7 @@ class NewPostFragment : Fragment(), OnBackPressedListener {
 
         binding.bottomBarNewPost.setupWithNavController(findNavController())
         binding.bottomBarNewPost.setNavigationOnClickListener {
-            MaterialDialog(this.requireContext())
-                    .title(R.string.confirm)
-                    .message(R.string.discard_post).show {
-                        positiveButton(R.string.discard) { dialog ->
-                            dialog.dismiss()
-                            findNavController().navigateUp()
-                        }
-                        negativeButton(android.R.string.cancel)
-                    }
+            showDiscardDialog()
         }
 
         binding.fab.setOnClickListener {
@@ -103,28 +104,21 @@ class NewPostFragment : Fragment(), OnBackPressedListener {
                     .show {
                         positiveButton(R.string.send) { dialog ->
                             if (isReply) {
-                                postingViewModel.sendReply(postId!!, binding.editTextPost.text.toString())
+                                requestViewModel.sendReply(postId!!, binding.editTextPost.text.toString())
                             } else {
-                                postingViewModel.sendPost(binding.editTextPost.text.toString())
+                                requestViewModel.sendPost(binding.editTextPost.text.toString())
                             }
+                            discardTitle()
                             dialog.dismiss()
                             findNavController().navigateUp()
                         }
-                        negativeButton(android.R.string.cancel)
+                        negativeButton()
                     }
         }
     }
 
     override fun onBackPressed() {
-        MaterialDialog(this.requireContext())
-                .title(R.string.confirm)
-                .message(R.string.discard_post).show {
-                    positiveButton(R.string.discard) { dialog ->
-                        dialog.dismiss()
-                        findNavController().navigateUp()
-                    }
-                    negativeButton(android.R.string.cancel)
-                }
+        showDiscardDialog()
     }
 
     override fun onResume() {
@@ -138,6 +132,23 @@ class NewPostFragment : Fragment(), OnBackPressedListener {
         Timber.d("Removed Text Watcher")
         binding.editTextPost.removeTextChangedListener(textListener)
         super.onPause()
+    }
+
+    private fun discardTitle() {
+        requestViewModel.title = null
+    }
+
+    private fun showDiscardDialog() {
+        MaterialDialog(this.requireContext())
+                .title(R.string.confirm)
+                .message(R.string.discard_post).show {
+                    positiveButton(R.string.discard) { dialog ->
+                        dialog.dismiss()
+                        discardTitle()
+                        findNavController().navigateUp()
+                    }
+                    negativeButton()
+                }
     }
 
     private fun getHtmlString(html: String): SpannableString {
