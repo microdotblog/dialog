@@ -14,4 +14,24 @@
         app:showAsAction="always"
         android:title="View parent post" />
 
+    <item
+        android:id="@+id/posting_markdown_quote"
+        app:showAsAction="never"
+        android:title="Blockquote" />
+
+    <item
+        android:id="@+id/posting_markdown_link"
+        app:showAsAction="never"
+        android:title="Link" />
+
+    <item
+        android:id="@+id/posting_markdown_italic"
+        app:showAsAction="never"
+        android:title="Italic" />
+
+    <item
+        android:id="@+id/posting_markdown_bold"
+        app:showAsAction="never"
+        android:title="Bold" />
+
 </menu>
