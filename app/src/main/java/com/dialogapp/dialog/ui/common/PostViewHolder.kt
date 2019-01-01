@@ -58,16 +58,24 @@ class PostViewHolder(private val view: View, val binding: PostItemBinding, priva
         }
     }
 
-    fun updatePost(payloads: MutableList<Any>) {
+    fun updatePost(payloads: MutableList<Any>, post: Post?) {
         val diffBundle = payloads[0] as Bundle
 
         for (key in diffBundle.keySet()) {
             when (key) {
                 PK_CONVERSATION -> {
-                    binding.buttonConv.visibility = if (diffBundle.getBoolean(PK_CONVERSATION))
-                        View.VISIBLE
-                    else
-                        View.GONE
+                    when (diffBundle.getBoolean(PK_CONVERSATION)) {
+                        true -> {
+                            binding.buttonConv.visibility = View.VISIBLE
+                            binding.buttonConv.setOnClickListener {
+                                if (post?.id != null)
+                                    postClickedListener.onConversationButtonClicked(postId = post.id)
+                            }
+                        }
+                        false -> {
+                            binding.buttonConv.visibility = View.GONE
+                        }
+                    }
                 }
                 PK_FAVORITE -> {
                     when (diffBundle.getBoolean(PK_FAVORITE)) {

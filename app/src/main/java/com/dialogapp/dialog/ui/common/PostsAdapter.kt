@@ -29,7 +29,7 @@ class PostsAdapter(private val glide: GlideRequests, private val postClickedList
             position: Int,
             payloads: MutableList<Any>) {
         if (payloads.isNotEmpty()) {
-            (holder as PostViewHolder).updatePost(payloads)
+            (holder as PostViewHolder).updatePost(payloads, getItem(position))
         } else {
             onBindViewHolder(holder, position)
         }
