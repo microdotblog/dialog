@@ -1,20 +1,18 @@
 package com.dialogapp.dialog.ui.common
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.paging.PagedList
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.dialogapp.dialog.GlideApp
-import com.dialogapp.dialog.databinding.FragmentListBinding
 import com.dialogapp.dialog.model.Post
 import com.dialogapp.dialog.repository.NetworkState
-import com.dialogapp.dialog.ui.util.autoCleared
+import com.google.android.material.chip.Chip
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -27,21 +25,19 @@ abstract class BasePagedListFragment : BaseFragment() {
     lateinit var basePagedListViewModel: BasePagedListViewModel
     lateinit var layoutManager: LinearLayoutManager
 
-    private var binding by autoCleared<FragmentListBinding>()
-
     private val scrollListener = object : RecyclerView.OnScrollListener() {
         override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
             super.onScrolled(recyclerView, dx, dy)
 
             if (dy != 0) {
                 if (dy < 0 && layoutManager.findFirstVisibleItemPosition() > 0) {
-                    binding.chipNotification.visibility = View.VISIBLE
+                    getNotificationChip().visibility = View.VISIBLE
                 } else {
-                    binding.chipNotification.visibility = View.INVISIBLE
+                    getNotificationChip().visibility = View.INVISIBLE
                 }
             } else if (layoutManager.findFirstVisibleItemPosition() > 0) {
                 Timber.i("Scrolled due to new posts")
-                binding.chipNotification.visibility = View.VISIBLE
+                getNotificationChip().visibility = View.VISIBLE
             }
         }
     }
@@ -54,18 +50,11 @@ abstract class BasePagedListFragment : BaseFragment() {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        binding = FragmentListBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.setLifecycleOwner(viewLifecycleOwner)
-        binding.chipNotification.setOnClickListener {
-            binding.recyclerPosts.smoothScrollToPosition(0)
+        getNotificationChip().setOnClickListener {
+            getRecyclerView().smoothScrollToPosition(0)
         }
         basePagedListViewModel = ViewModelProviders.of(this, viewModelFactory).get(BasePagedListViewModel::class.java)
         basePagedListViewModel.endpointData.observe(viewLifecycleOwner, Observer {
@@ -84,19 +73,19 @@ abstract class BasePagedListFragment : BaseFragment() {
 
     override fun onResume() {
         super.onResume()
-        binding.recyclerPosts.addOnScrollListener(scrollListener)
+        getRecyclerView().addOnScrollListener(scrollListener)
     }
 
     override fun onStop() {
-        binding.recyclerPosts.removeOnScrollListener(scrollListener)
+        getRecyclerView().removeOnScrollListener(scrollListener)
         super.onStop()
     }
 
     private fun initSwipeToRefresh() {
         basePagedListViewModel.refreshState.observe(this, Observer {
-            binding.swipeRefresh.isRefreshing = it == NetworkState.LOADING
+            getSwipeRefreshLayout().isRefreshing = it == NetworkState.LOADING
         })
-        binding.swipeRefresh.setOnRefreshListener {
+        getSwipeRefreshLayout().setOnRefreshListener {
             basePagedListViewModel.refresh()
         }
     }
@@ -107,8 +96,8 @@ abstract class BasePagedListFragment : BaseFragment() {
             basePagedListViewModel.retry()
         }
         layoutManager = LinearLayoutManager(this.requireContext(), RecyclerView.VERTICAL, false)
-        binding.recyclerPosts.layoutManager = layoutManager
-        binding.recyclerPosts.adapter = adapter
+        getRecyclerView().layoutManager = layoutManager
+        getRecyclerView().adapter = adapter
         basePagedListViewModel.posts.observe(viewLifecycleOwner, Observer<PagedList<Post>> {
             adapter.submitList(it)
         })
@@ -116,4 +105,10 @@ abstract class BasePagedListFragment : BaseFragment() {
             adapter.setNetworkState(it)
         })
     }
+
+    abstract fun getRecyclerView(): RecyclerView
+
+    abstract fun getSwipeRefreshLayout(): SwipeRefreshLayout
+
+    abstract fun getNotificationChip(): Chip
 }

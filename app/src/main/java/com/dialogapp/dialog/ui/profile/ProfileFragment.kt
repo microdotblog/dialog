@@ -5,12 +5,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.navigation.NavOptions
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
@@ -56,17 +53,6 @@ class ProfileFragment : Fragment() {
             username = sessionManager.user?.username!!
             binding.toolbarProfile.inflateMenu(R.menu.profile_toolbar_options_menu)
             binding.toolbarProfile.menu.getItem(0).setOnMenuItemClickListener {
-                val navOptions = NavOptions.Builder()
-                        .setEnterAnim(R.anim.slide_in_bottom)
-                        .setExitAnim(R.anim.nav_default_exit_anim)
-                        .setPopEnterAnim(R.anim.nav_default_pop_enter_anim)
-                        .setPopExitAnim(R.anim.slide_out_bottom)
-                        .build()
-                val mainNavController = activity?.findNavController(R.id.nav_host_main)
-                mainNavController?.navigate(R.id.new_post_dest, bundleOf("isReply" to false), navOptions)
-                true
-            }
-            binding.toolbarProfile.menu.getItem(1).setOnMenuItemClickListener {
                 val bottomSheetProfile = BottomSheetProfile()
                 bottomSheetProfile.show(childFragmentManager, "bottom_sheet_profile")
                 true
