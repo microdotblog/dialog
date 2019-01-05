@@ -71,9 +71,6 @@ class ProfileFragment : Fragment() {
         profileSharedViewModel.getEndpointData().observe(viewLifecycleOwner, Observer {
             setEndpointData(it)
         })
-        profileSharedViewModel.getEndpointData().observe(viewLifecycleOwner, Observer {
-            setEndpointData(it)
-        })
         profileSharedViewModel.getLogout().observe(viewLifecycleOwner, Observer {
             if (it) {
                 sessionManager.logout()
@@ -94,33 +91,21 @@ class ProfileFragment : Fragment() {
     private fun setEndpointData(endpointData: EndpointData?) {
         if (endpointData != null) {
             binding.includePartialProfile.progressBar.visibility = View.GONE
-            binding.includePartialProfile.textProfileFullname.visibility = View.VISIBLE
 
             GlideApp.with(this)
                     .load(endpointData.author?.avatar)
                     .dontAnimate()
                     .into(binding.includePartialProfile.imageAvatar)
             binding.includePartialProfile.textProfileFullname.text = endpointData.author?.name
-            endpointData.author?.url.let {
-                if (it != null && !it.isEmpty()) {
-                    binding.includePartialProfile.textProfileWebsite.visibility = View.VISIBLE
-                    binding.includePartialProfile.textProfileWebsite.text = it
-                } else {
-                    binding.includePartialProfile.textProfileWebsite.visibility = View.GONE
-                }
-            }
-            endpointData.microblog?.bio.let {
-                if (it != null && !it.isEmpty()) {
-                    binding.includePartialProfile.textProfileAbout.visibility = View.VISIBLE
-                    binding.includePartialProfile.textProfileAbout.text = it
-                    val text = it
+            binding.includePartialProfile.textProfileWebsite.text = endpointData.author?.url
+            endpointData.microblog?.bio.let { text ->
+                if (text != null && !text.isEmpty()) {
+                    binding.includePartialProfile.textProfileAbout.text = text
                     binding.includePartialProfile.textProfileAbout.setOnClickListener {
                         MaterialDialog(this.requireContext()).message(text = text).show {
                             positiveButton(text = "Dismiss")
                         }
                     }
-                } else {
-                    binding.includePartialProfile.textProfileAbout.visibility = View.GONE
                 }
             }
 

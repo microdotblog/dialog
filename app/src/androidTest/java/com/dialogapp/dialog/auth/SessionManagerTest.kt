@@ -5,7 +5,7 @@ import android.content.SharedPreferences
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.runner.AndroidJUnit4
 import com.dialogapp.dialog.api.ServiceInterceptor
-import com.dialogapp.dialog.model.LoggedInUser
+import com.dialogapp.dialog.vo.LoggedInUser
 import org.junit.After
 import org.junit.Assert.*
 import org.junit.Before

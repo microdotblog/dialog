@@ -9,7 +9,7 @@ import com.dialogapp.dialog.model.FollowingAccount
 import com.dialogapp.dialog.model.Post
 
 @Database(entities = [Post::class, EndpointData::class, FollowingAccount::class],
-        version = 1, exportSchema = false)
+        version = 2, exportSchema = false)
 abstract class InMemoryDb : RoomDatabase() {
 
     companion object {

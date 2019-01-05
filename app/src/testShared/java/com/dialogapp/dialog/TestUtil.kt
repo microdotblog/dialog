@@ -1,6 +1,6 @@
 package com.dialogapp.dialog
 
-import com.dialogapp.dialog.model.MicroBlogResponse
+import com.dialogapp.dialog.vo.MicroBlogResponse
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
 import okio.Okio

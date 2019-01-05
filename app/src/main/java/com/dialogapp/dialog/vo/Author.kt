@@ -1,4 +1,4 @@
-package com.dialogapp.dialog.model
+package com.dialogapp.dialog.vo
 
 import androidx.room.Embedded
 import com.squareup.moshi.Json
@@ -17,7 +17,7 @@ data class Author(@field:Json(name = "name")
                   @field:Embedded(prefix = "author_info_")
                   val microblog: AuthorInfo?) {
 
-    data class AuthorInfo(@field:Json(name = "username")
+    class AuthorInfo(@field:Json(name = "username")
                           @Json(name = "username")
                           val username: String)
 }

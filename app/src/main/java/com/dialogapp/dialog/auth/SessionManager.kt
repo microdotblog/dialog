@@ -6,7 +6,7 @@ import com.dialogapp.dialog.CoroutinesDispatcherProvider
 import com.dialogapp.dialog.api.ServiceInterceptor
 import com.dialogapp.dialog.db.InMemoryDb
 import com.dialogapp.dialog.db.MicroBlogDb
-import com.dialogapp.dialog.model.LoggedInUser
+import com.dialogapp.dialog.vo.LoggedInUser
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject

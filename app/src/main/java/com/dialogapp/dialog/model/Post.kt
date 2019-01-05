@@ -4,6 +4,7 @@ import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
+import com.dialogapp.dialog.vo.Author
 import com.squareup.moshi.Json
 
 @Entity(tableName = "posts", primaryKeys = ["id", "belongsToEndpoint"], foreignKeys = [ForeignKey(
