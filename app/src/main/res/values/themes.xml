@@ -7,11 +7,13 @@
         <item name="colorPrimaryVariant">@color/purple200</item>
         <item name="colorSecondary">@color/amberA400</item>
         <item name="bottomAppBarStyle">@style/Widget.MaterialComponents.BottomAppBar.Colored</item>
+        <item name="preferenceTheme">@style/PrefsTheme</item>
     </style>
 
     <style name="AppTheme.Dark" parent="Theme.MaterialComponents.NoActionBar" >
         <item name="colorPrimary">@color/design_default_color_primary</item>
         <item name="colorSecondary">@color/amberA400</item>
+        <item name="preferenceTheme">@style/PrefsTheme</item>
     </style>
 
     <style name="Base.AppTheme.DayNight" parent="AppTheme.Light" />

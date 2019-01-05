@@ -32,7 +32,8 @@ class BottomSheetProfile : BottomSheetDialogFragment() {
         binding.bottomNavViewProfile.setNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.profile_sheet_settings -> {
-                    Toast.makeText(this.requireContext(), "Work in progress", Toast.LENGTH_SHORT).show()
+                    dismiss()
+                    mainNavController?.navigate(R.id.action_home_dest_to_settings_dest)
                 }
                 R.id.profile_sheet_logout -> {
                     MaterialDialog(this.requireContext())

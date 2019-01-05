@@ -1,0 +1,64 @@
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory
+        app:key="feedback_category"
+        app:title="Feedback">
+
+        <Preference
+            app:key="feedback"
+            app:summary="Report issues or suggest new features"
+            app:title="Slack Channel">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="https://dialogappgroup.slack.com/messages/C8CEWS45P/#" />
+        </Preference>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:key="about_category"
+        app:title="About">
+
+        <Preference
+            app:key="about_app"
+            app:persistent="false"
+            app:selectable="false"
+            app:title="Dialog for Micro.Blog" />
+
+        <Preference
+            app:key="about_1"
+            app:persistent="false"
+            app:selectable="false"
+            app:summary="Original icon, design and idea"
+            app:title="Mike Haynes" />
+
+        <Preference
+            app:key="about_2"
+            app:persistent="false"
+            app:selectable="false"
+            app:summary="Developer"
+            app:title="Rupak Das" />
+
+        <Preference
+            app:key="about_licenses"
+            app:persistent="false"
+            app:title="Licenses">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="https://dialog.micro.blog/licenses" />
+        </Preference>
+
+        <Preference
+            app:key="about_policy"
+            app:persistent="false"
+            app:title="Privacy policy">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="https://dialog.micro.blog/privacy-policy" />
+        </Preference>
+
+    </PreferenceCategory>
+
+
+</androidx.preference.PreferenceScreen>

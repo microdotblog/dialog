@@ -31,6 +31,13 @@
             app:destination="@id/login_dest"
             app:popUpTo="@+id/home_dest"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_home_dest_to_settings_dest"
+            app:destination="@id/settings_dest"
+            app:enterAnim="@anim/slide_in_bottom"
+            app:exitAnim="@anim/nav_default_pop_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/slide_out_bottom" />
     </fragment>
     <fragment
         android:id="@+id/new_post_dest"
@@ -51,4 +58,8 @@
             android:defaultValue='""'
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/settings_dest"
+        android:name="com.dialogapp.dialog.ui.settings.SettingsFragment"
+        android:label="Settings" />
 </navigation>
