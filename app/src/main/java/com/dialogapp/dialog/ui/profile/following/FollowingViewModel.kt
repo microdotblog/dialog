@@ -1,4 +1,4 @@
-package com.dialogapp.dialog.ui.profile
+package com.dialogapp.dialog.ui.profile.following
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

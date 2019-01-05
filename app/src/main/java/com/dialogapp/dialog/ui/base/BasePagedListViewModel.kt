@@ -1,4 +1,4 @@
-package com.dialogapp.dialog.ui.common
+package com.dialogapp.dialog.ui.base
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations.map

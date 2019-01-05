@@ -1,4 +1,4 @@
-package com.dialogapp.dialog.ui.common
+package com.dialogapp.dialog.ui.base
 
 import android.os.Bundle
 import android.view.View
@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.dialogapp.dialog.GlideApp
+import com.dialogapp.dialog.ui.common.PostsAdapter
 import com.dialogapp.dialog.vo.Status
 import com.google.android.material.chip.Chip
 import timber.log.Timber
@@ -84,8 +85,6 @@ abstract class BaseListFragment : BaseFragment() {
             val result = it ?: return@Observer
 
             getSwipeRefreshLayout().isRefreshing = result.status == Status.LOADING
-            Timber.d("Status=%s Endpoint=%s PostsEmptyOrNull=%s", result.status,
-                    result.data?.endpointData?.endpoint, result.data?.postData.isNullOrEmpty())
             if (result.data?.postData != null) {
                 basePostsAdapter.submitList(result.data.postData)
             } else if (result.status == Status.ERROR) {

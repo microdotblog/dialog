@@ -1,4 +1,4 @@
-package com.dialogapp.dialog.ui.conversation
+package com.dialogapp.dialog.ui.common
 
 import android.content.Context
 import android.os.Bundle
@@ -13,13 +13,13 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.dialogapp.dialog.R
 import com.dialogapp.dialog.databinding.FragmentListToolbarBinding
 import com.dialogapp.dialog.di.Injector
-import com.dialogapp.dialog.ui.common.BaseListFragment
-import com.dialogapp.dialog.ui.common.EndpointArgs
+import com.dialogapp.dialog.ui.base.BaseListFragment
+import com.dialogapp.dialog.ui.base.EndpointArgs
 import com.dialogapp.dialog.ui.util.autoCleared
 import com.dialogapp.dialog.vo.CONVERSATION
 import com.google.android.material.chip.Chip
 
-class ConversationListFragment : BaseListFragment() {
+class ConversationFragment : BaseListFragment() {
 
     private var binding by autoCleared<FragmentListToolbarBinding>()
 
@@ -41,7 +41,7 @@ class ConversationListFragment : BaseListFragment() {
                 R.id.discover_dest, R.id.profile_dest))
         binding.toolbarConv.setupWithNavController(findNavController(), appBarConfiguration)
 
-        val convId = ConversationListFragmentArgs.fromBundle(arguments!!).convId
+        val convId = ConversationFragmentArgs.fromBundle(arguments!!).convId
         baseListViewModel.showEndpoint(EndpointArgs(CONVERSATION, convId))
     }
 

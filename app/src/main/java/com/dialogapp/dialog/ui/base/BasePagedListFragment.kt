@@ -1,4 +1,4 @@
-package com.dialogapp.dialog.ui.common
+package com.dialogapp.dialog.ui.base
 
 import android.os.Bundle
 import android.view.View
@@ -12,6 +12,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.dialogapp.dialog.GlideApp
 import com.dialogapp.dialog.model.Post
 import com.dialogapp.dialog.repository.NetworkState
+import com.dialogapp.dialog.ui.common.PagedPostsAdapter
 import com.google.android.material.chip.Chip
 import timber.log.Timber
 import java.util.concurrent.TimeUnit

@@ -29,7 +29,7 @@
     </fragment>
     <fragment
         android:id="@+id/conversation_dest"
-        android:name="com.dialogapp.dialog.ui.conversation.ConversationListFragment"
+        android:name="com.dialogapp.dialog.ui.common.ConversationFragment"
         android:label="Conversation">
         <argument
             android:name="convId"

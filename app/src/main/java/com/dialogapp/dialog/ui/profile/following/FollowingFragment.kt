@@ -1,4 +1,4 @@
-package com.dialogapp.dialog.ui.profile
+package com.dialogapp.dialog.ui.profile.following
 
 import android.content.Context
 import android.os.Bundle
@@ -14,7 +14,8 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.dialogapp.dialog.GlideApp
 import com.dialogapp.dialog.databinding.FragmentListBinding
 import com.dialogapp.dialog.di.Injector
-import com.dialogapp.dialog.ui.common.BaseListFragment
+import com.dialogapp.dialog.ui.base.BaseListFragment
+import com.dialogapp.dialog.ui.profile.ProfileSharedViewModel
 import com.dialogapp.dialog.ui.util.autoCleared
 import com.dialogapp.dialog.vo.Status
 import com.google.android.material.chip.Chip

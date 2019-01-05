@@ -13,7 +13,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.dialogapp.dialog.R
 import com.dialogapp.dialog.databinding.FragmentListFabBinding
 import com.dialogapp.dialog.di.Injector
-import com.dialogapp.dialog.ui.common.BasePagedListFragment
+import com.dialogapp.dialog.ui.base.BasePagedListFragment
 import com.dialogapp.dialog.ui.util.autoCleared
 import com.dialogapp.dialog.vo.TIMELINE
 import com.google.android.material.chip.Chip

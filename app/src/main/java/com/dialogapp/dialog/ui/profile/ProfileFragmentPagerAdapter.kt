@@ -3,6 +3,7 @@ package com.dialogapp.dialog.ui.profile
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
+import com.dialogapp.dialog.ui.profile.following.FollowingFragment
 
 class ProfileFragmentPagerAdapter(fm: FragmentManager, private val username: String)
     : FragmentPagerAdapter(fm) {

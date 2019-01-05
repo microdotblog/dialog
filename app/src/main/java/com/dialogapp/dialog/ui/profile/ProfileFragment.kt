@@ -18,7 +18,6 @@ import com.dialogapp.dialog.auth.SessionManager
 import com.dialogapp.dialog.databinding.FragmentProfileBinding
 import com.dialogapp.dialog.di.Injector
 import com.dialogapp.dialog.model.EndpointData
-import com.dialogapp.dialog.ui.common.BottomSheetProfile
 import com.dialogapp.dialog.ui.common.RequestViewModel
 import com.dialogapp.dialog.ui.util.autoCleared
 

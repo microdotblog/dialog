@@ -1,4 +1,4 @@
-package com.dialogapp.dialog.ui.common
+package com.dialogapp.dialog.ui.base
 
 import android.content.Intent
 import android.net.Uri
@@ -9,6 +9,9 @@ import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.dialogapp.dialog.R
+import com.dialogapp.dialog.ui.common.BottomSheetPost
+import com.dialogapp.dialog.ui.common.PostClickedListener
+import com.dialogapp.dialog.ui.common.RequestViewModel
 import timber.log.Timber
 
 

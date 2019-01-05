@@ -1,4 +1,4 @@
-package com.dialogapp.dialog.ui.profile
+package com.dialogapp.dialog.ui.profile.following
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

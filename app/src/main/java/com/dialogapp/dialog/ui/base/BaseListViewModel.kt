@@ -1,4 +1,4 @@
-package com.dialogapp.dialog.ui.common
+package com.dialogapp.dialog.ui.base
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -6,7 +6,6 @@ import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import com.dialogapp.dialog.model.Post
 import com.dialogapp.dialog.repository.PostsRepository
-import com.dialogapp.dialog.util.AbsentLiveData
 import com.dialogapp.dialog.vo.CONVERSATION
 import com.dialogapp.dialog.vo.DISCOVER
 import com.dialogapp.dialog.vo.FAVORITES

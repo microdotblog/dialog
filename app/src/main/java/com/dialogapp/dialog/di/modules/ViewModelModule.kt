@@ -3,10 +3,10 @@ package com.dialogapp.dialog.di.modules
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.dialogapp.dialog.di.ViewModelKey
-import com.dialogapp.dialog.ui.common.BaseListViewModel
-import com.dialogapp.dialog.ui.common.BasePagedListViewModel
+import com.dialogapp.dialog.ui.base.BaseListViewModel
+import com.dialogapp.dialog.ui.base.BasePagedListViewModel
 import com.dialogapp.dialog.ui.login.LoginViewModel
-import com.dialogapp.dialog.ui.profile.FollowingViewModel
+import com.dialogapp.dialog.ui.profile.following.FollowingViewModel
 import com.dialogapp.dialog.ui.util.MicroblogViewModelFactory
 import dagger.Binds
 import dagger.Module

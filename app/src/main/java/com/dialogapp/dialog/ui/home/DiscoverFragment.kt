@@ -9,8 +9,8 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.dialogapp.dialog.databinding.FragmentListBinding
 import com.dialogapp.dialog.di.Injector
-import com.dialogapp.dialog.ui.common.BaseListFragment
-import com.dialogapp.dialog.ui.common.EndpointArgs
+import com.dialogapp.dialog.ui.base.BaseListFragment
+import com.dialogapp.dialog.ui.base.EndpointArgs
 import com.dialogapp.dialog.ui.util.autoCleared
 import com.dialogapp.dialog.vo.DISCOVER
 import com.google.android.material.chip.Chip
