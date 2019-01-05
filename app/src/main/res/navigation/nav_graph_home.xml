@@ -29,7 +29,7 @@
     </fragment>
     <fragment
         android:id="@+id/conversation_dest"
-        android:name="com.dialogapp.dialog.ui.conversation.ConversationFragment"
+        android:name="com.dialogapp.dialog.ui.conversation.ConversationListFragment"
         android:label="Conversation">
         <argument
             android:name="convId"
@@ -45,6 +45,5 @@
     </fragment>
     <fragment
         android:id="@+id/profile_self_dest"
-        android:name="com.dialogapp.dialog.ui.profile.ProfileFragment">
-    </fragment>
+        android:name="com.dialogapp.dialog.ui.profile.ProfileFragment"/>
 </navigation>

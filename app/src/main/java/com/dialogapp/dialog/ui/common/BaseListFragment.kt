@@ -1,18 +1,16 @@
 package com.dialogapp.dialog.ui.common
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.dialogapp.dialog.GlideApp
-import com.dialogapp.dialog.databinding.FragmentListBinding
-import com.dialogapp.dialog.ui.util.autoCleared
 import com.dialogapp.dialog.vo.Status
+import com.google.android.material.chip.Chip
 import timber.log.Timber
 
 
@@ -22,8 +20,6 @@ abstract class BaseListFragment : BaseFragment() {
     lateinit var baseListViewModel: BaseListViewModel
     lateinit var layoutManager: LinearLayoutManager
 
-    var binding by autoCleared<FragmentListBinding>()
-
     private lateinit var basePostsAdapter: PostsAdapter
 
     private val scrollListener = object : RecyclerView.OnScrollListener() {
@@ -32,28 +28,23 @@ abstract class BaseListFragment : BaseFragment() {
 
             if (dy != 0) {
                 if (dy < 0 && layoutManager.findFirstVisibleItemPosition() > 0) {
-                    binding.chipNotification.visibility = View.VISIBLE
+                    getNotificationChip().visibility = View.VISIBLE
                 } else {
-                    binding.chipNotification.visibility = View.INVISIBLE
+                    getNotificationChip().visibility = View.INVISIBLE
                 }
             } else if (layoutManager.findFirstVisibleItemPosition() > 0) {
                 Timber.i("Scrolled due to new posts")
-                binding.chipNotification.visibility = View.VISIBLE
+                getNotificationChip().visibility = View.VISIBLE
             }
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        binding = FragmentListBinding.inflate(inflater, container, false)
-        return binding.root
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.chipNotification.setOnClickListener {
-            binding.recyclerPosts.smoothScrollToPosition(0)
+        getNotificationChip().setOnClickListener {
+            getRecyclerView().smoothScrollToPosition(0)
         }
 
         initViewModel()
@@ -64,11 +55,11 @@ abstract class BaseListFragment : BaseFragment() {
 
     override fun onResume() {
         super.onResume()
-        binding.recyclerPosts.addOnScrollListener(scrollListener)
+        getRecyclerView().addOnScrollListener(scrollListener)
     }
 
     override fun onStop() {
-        binding.recyclerPosts.removeOnScrollListener(scrollListener)
+        getRecyclerView().removeOnScrollListener(scrollListener)
         super.onStop()
     }
 
@@ -84,15 +75,15 @@ abstract class BaseListFragment : BaseFragment() {
         val glide = GlideApp.with(this)
         basePostsAdapter = PostsAdapter(glide, this)
         layoutManager = LinearLayoutManager(this.requireContext(), RecyclerView.VERTICAL, false)
-        binding.recyclerPosts.layoutManager = layoutManager
-        binding.recyclerPosts.adapter = basePostsAdapter
+        getRecyclerView().layoutManager = layoutManager
+        getRecyclerView().adapter = basePostsAdapter
     }
 
     open fun observe() {
         baseListViewModel.endpointResult.observe(viewLifecycleOwner, Observer {
             val result = it ?: return@Observer
 
-            binding.swipeRefresh.isRefreshing = result.status == Status.LOADING
+            getSwipeRefreshLayout().isRefreshing = result.status == Status.LOADING
             Timber.d("Status=%s Endpoint=%s PostsEmptyOrNull=%s", result.status,
                     result.data?.endpointData?.endpoint, result.data?.postData.isNullOrEmpty())
             if (result.data?.postData != null) {
@@ -104,8 +95,14 @@ abstract class BaseListFragment : BaseFragment() {
     }
 
     private fun initSwipeToRefresh() {
-        binding.swipeRefresh.setOnRefreshListener {
+        getSwipeRefreshLayout().setOnRefreshListener {
             onSwipeRefresh()
         }
     }
+
+    abstract fun getRecyclerView(): RecyclerView
+
+    abstract fun getSwipeRefreshLayout(): SwipeRefreshLayout
+
+    abstract fun getNotificationChip(): Chip
 }

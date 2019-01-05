@@ -2,19 +2,27 @@ package com.dialogapp.dialog.ui.profile
 
 import android.content.Context
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.dialogapp.dialog.GlideApp
+import com.dialogapp.dialog.databinding.FragmentListBinding
 import com.dialogapp.dialog.di.Injector
 import com.dialogapp.dialog.ui.common.BaseListFragment
+import com.dialogapp.dialog.ui.util.autoCleared
 import com.dialogapp.dialog.vo.Status
+import com.google.android.material.chip.Chip
 import timber.log.Timber
 
 class FollowingFragment : BaseListFragment() {
+
+    private var binding by autoCleared<FragmentListBinding>()
 
     private lateinit var viewModel: FollowingViewModel
     private lateinit var profileSharedViewModel: ProfileSharedViewModel
@@ -34,6 +42,12 @@ class FollowingFragment : BaseListFragment() {
     override fun onAttach(context: Context?) {
         viewModelFactory = Injector.get().viewModelFactory()
         super.onAttach(context)
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+                              savedInstanceState: Bundle?): View? {
+        binding = FragmentListBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -81,4 +95,10 @@ class FollowingFragment : BaseListFragment() {
         binding.recyclerPosts.layoutManager = layoutManager
         binding.recyclerPosts.adapter = followingAdapter
     }
+
+    override fun getRecyclerView(): RecyclerView = binding.recyclerPosts
+
+    override fun getSwipeRefreshLayout(): SwipeRefreshLayout = binding.swipeRefresh
+
+    override fun getNotificationChip(): Chip = binding.chipNotification
 }
