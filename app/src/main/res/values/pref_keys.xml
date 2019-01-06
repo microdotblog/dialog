@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pref_theme" translatable="false">pref_theme</string>
+    <string name="pref_dark_mode_control" translatable="false">pref_dark_mode_control</string>
+    <string name="pref_dark_mode" translatable="false">pref_dark_mode</string>
+    <string name="pref_about_app" translatable="false">about_app</string>
+
+    <string name="pref_value_dark_mode_auto" translatable="false">0</string>
+    <string name="pref_value_dark_mode_always" translatable="false">1</string>
+    <string name="pref_value_dark_mode_disabled" translatable="false">2</string>
+
+    <string name="pref_value_theme_white" translatable="false">0</string>
+    <string name="pref_value_theme_purple" translatable="false">1</string>
+    <string name="pref_value_theme_indigo" translatable="false">2</string>
+    <string name="pref_value_theme_teal" translatable="false">3</string>
+    <string name="pref_value_theme_reply" translatable="false">4</string>
+</resources>

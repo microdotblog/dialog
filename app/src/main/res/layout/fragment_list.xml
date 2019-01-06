@@ -33,7 +33,6 @@
             android:elevation="2dp"
             android:text="Scroll to top"
             android:visibility="invisible"
-            app:chipBackgroundColor="?attr/colorAccent"
             app:chipEndPadding="8dp"
             app:chipStartPadding="8dp" />
     </FrameLayout>

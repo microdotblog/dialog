@@ -1,27 +1,40 @@
 <resources>
 
-    <!-- Empty Text style -->
-    <style name="textEmptyStyle">
-        <item name="android:textAppearance">@style/TextAppearance.Empty</item>
-        <item name="android:padding">@dimen/activity_vertical_margin</item>
-        <item name="android:drawablePadding">@dimen/padding</item>
-        <item name="android:layout_marginLeft">@dimen/activity_horizontal_margin</item>
-        <item name="android:layout_marginRight">@dimen/activity_horizontal_margin</item>
-        <item name="android:gravity">center_horizontal</item>
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
+    <style name="ToolbarOverlayStyle.White" parent="ThemeOverlay.MaterialComponents.Toolbar.Primary">
+        <item name="iconTint">@android:color/black</item>
+        <item name="colorControlNormal">@android:color/black</item>
     </style>
 
-    <style name="TextAppearance.Empty" parent="TextAppearance.AppCompat.Headline">
-        <item name="android:textColor">?android:attr/textColorSecondary</item>
+    <style name="ToolbarStyle.White" parent="Widget.MaterialComponents.Toolbar.Primary">
+        <item name="android:background">@android:color/white</item>
+        <item name="titleTextColor">@android:color/black</item>
+        <item name="android:theme">@style/ToolbarOverlayStyle.White</item>
     </style>
 
-    <style name="RippleStyle" parent="ThemeOverlay.MaterialComponents">
-        <item name="colorControlHighlight">?attr/colorPrimaryVariant</item>
+    <style name="BottomAppBarOverlayStyle.White" parent="ThemeOverlay.MaterialComponents.BottomAppBar.Primary">
+        <item name="iconTint">@android:color/black</item>
+        <item name="colorControlNormal">@android:color/black</item>
     </style>
 
-    <style name="ToolbarOverlayStyle" parent="ThemeOverlay.MaterialComponents.Toolbar.Primary">
+    <style name="BottomAppBarStyle.White" parent="Widget.MaterialComponents.BottomAppBar">
+        <item name="android:background">@android:color/white</item>
+        <item name="android:theme">@style/BottomAppBarOverlayStyle.White</item>
+    </style>
+
+    <style name="ToolbarOverlayStyle.Colored" parent="ThemeOverlay.MaterialComponents.Toolbar.Primary">
         <item name="iconTint">?attr/colorOnPrimary</item>
+    </style>
+
+    <style name="ToolbarStyle.Colored" parent="Widget.MaterialComponents.Toolbar.Primary">
+        <item name="android:theme">@style/ToolbarOverlayStyle.Colored</item>
+    </style>
+
+    <style name="BottomAppBarOverlayStyle.Colored" parent="ThemeOverlay.MaterialComponents.BottomAppBar.Primary">
+        <item name="iconTint">?attr/colorOnPrimary</item>
+    </style>
+
+    <style name="BottomAppBarStyle.Colored" parent="Widget.MaterialComponents.BottomAppBar.Colored">
+        <item name="android:theme">@style/BottomAppBarOverlayStyle.Colored</item>
     </style>
 
     <style name="PrefsTheme" parent="PreferenceThemeOverlay">

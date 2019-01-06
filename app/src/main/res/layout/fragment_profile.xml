@@ -17,6 +17,7 @@
                 android:id="@+id/collapsing_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="?attr/colorCollapsingToolbar"
                 app:contentScrim="?attr/colorPrimaryDark"
                 app:layout_scrollFlags="scroll|enterAlwaysCollapsed"
                 app:titleEnabled="false">
@@ -35,16 +36,14 @@
 
                 <androidx.appcompat.widget.Toolbar
                     android:id="@+id/toolbar_profile"
-                    style="@style/Widget.MaterialComponents.Toolbar.Primary"
+                    style="?attr/toolbarStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:theme="@style/ToolbarOverlayStyle"
                     app:layout_collapseMode="pin" />
             </com.google.android.material.appbar.CollapsingToolbarLayout>
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tab_layout_profile"
-                style="@style/Widget.MaterialComponents.TabLayout.Colored"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"

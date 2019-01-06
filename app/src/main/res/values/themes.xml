@@ -1,27 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="AppTheme.Light" parent="Theme.MaterialComponents.Light.NoActionBar" >
-        <item name="android:colorBackground">@color/grey300</item>
-        <item name="colorPrimaryDark">@color/design_default_color_primary_variant</item>
-        <item name="colorPrimaryVariant">@color/purple200</item>
-        <item name="colorSecondary">@color/amberA400</item>
-        <item name="bottomAppBarStyle">@style/Widget.MaterialComponents.BottomAppBar.Colored</item>
-        <item name="preferenceTheme">@style/PrefsTheme</item>
-    </style>
-
-    <style name="AppTheme.Dark" parent="Theme.MaterialComponents.NoActionBar" >
-        <item name="colorPrimary">@color/design_default_color_primary</item>
-        <item name="colorSecondary">@color/amberA400</item>
-        <item name="preferenceTheme">@style/PrefsTheme</item>
-    </style>
-
-    <style name="Base.AppTheme.DayNight" parent="AppTheme.Light" />
-        <style name="AppTheme.DayNight" parent="Base.AppTheme.DayNight">
-    </style>
-
-    <style name="AppTheme.Light.Launcher">
+    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="android:windowBackground">@drawable/launch_screen</item>
-        <item name="colorPrimaryDark">@color/design_default_color_primary_variant</item>
+        <item name="colorPrimary">@android:color/transparent</item>
+        <item name="colorPrimaryDark">@android:color/transparent</item>
+        <item name="preferenceTheme">@style/PrefsTheme</item>
+    </style>
+
+    <style name="AppTheme.Light" parent="AppTheme">
+        <item name="android:colorBackground">@color/grey300</item>
+        <item name="android:windowBackground">@color/grey300</item>
+        <item name="colorError">@color/design_default_color_error</item>
+        <item name="colorOnError">@android:color/white</item>
+        <item name="colorCollapsingToolbar">?colorPrimary</item>
+        <item name="colorSurface">@color/design_default_color_surface</item>
+        <item name="colorOnPrimary">@color/design_default_color_on_primary</item>
+        <item name="colorOnSecondary">@android:color/white</item>
+        <item name="colorOnBackground">@android:color/black</item>
+        <item name="colorOnSurface">@android:color/black</item>
+
+        <item name="toolbarStyle">@style/ToolbarStyle.Colored</item>
+        <item name="tabStyle">@style/Widget.MaterialComponents.TabLayout.Colored</item>
+        <item name="bottomAppBarStyle">@style/BottomAppBarStyle.Colored</item>
+        <item name="bottomNavigationStyle">@style/Widget.MaterialComponents.BottomNavigationView.Colored</item>
+    </style>
+
+    <style name="AppTheme.White" parent="AppTheme.Light">
+        <item name="colorPrimary">@color/purpleA400</item>
+        <item name="colorPrimaryDark">@android:color/black</item>
+        <item name="colorPrimaryVariant">@color/purple200</item>
+        <item name="colorSecondary">@color/purpleA400</item>
+        <item name="android:colorBackground">@color/grey100</item>
+        <item name="colorCollapsingToolbar">@android:color/white</item>
+        <item name="android:windowBackground">@color/grey100</item>
+        <item name="colorControlHighlight">@color/ripple_purple</item>
+
+        <item name="toolbarStyle">@style/ToolbarStyle.White</item>
+        <item name="tabStyle">@style/Widget.MaterialComponents.TabLayout</item>
+        <item name="bottomAppBarStyle">@style/BottomAppBarStyle.White</item>
+        <item name="bottomNavigationStyle">@style/Widget.MaterialComponents.BottomNavigationView
+        </item>
+    </style>
+
+    <style name="AppTheme.Purple" parent="AppTheme.Light">
+        <item name="colorPrimary">@color/design_default_color_primary</item>
+        <item name="colorPrimaryDark">@color/design_default_color_primary_dark</item>
+        <item name="colorPrimaryVariant">@color/purple200</item>
+        <item name="colorSecondary">@color/replyorange</item>
+        <item name="colorControlHighlight">@color/ripple_purple</item>
+    </style>
+
+    <style name="AppTheme.Indigo" parent="AppTheme.Light">
+        <item name="colorPrimary">@color/indigo500</item>
+        <item name="colorPrimaryDark">@color/indigo700</item>
+        <item name="colorPrimaryVariant">@color/lightblue</item>
+        <item name="colorSecondary">@color/redA200</item>
+        <item name="colorControlHighlight">@color/ripple_indigo</item>
+    </style>
+
+    <style name="AppTheme.Teal" parent="AppTheme.Light">
+        <item name="colorPrimary">@color/teal500</item>
+        <item name="colorPrimaryDark">@color/teal700</item>
+        <item name="colorPrimaryVariant">@color/teal100</item>
+        <item name="colorSecondary">@color/blueA200</item>
+        <item name="colorControlHighlight">@color/ripple_teal</item>
+    </style>
+
+    <style name="AppTheme.Reply" parent="AppTheme.Light">
+        <item name="colorPrimary">@color/replyblue700</item>
+        <item name="colorPrimaryDark">@color/replyblue800</item>
+        <item name="colorPrimaryVariant">@color/replyblue600</item>
+        <item name="colorSecondary">@color/replyorange</item>
+        <item name="colorControlHighlight">@color/ripple_reply</item>
     </style>
 </resources>

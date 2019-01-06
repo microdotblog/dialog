@@ -37,4 +37,7 @@
     <string name="confirm">Confirm</string>
     <string name="discard">Discard</string>
     <string name="logout">Logout</string>
+    <string name="open_app_settings">Open App Settings</string>
+    <string name="pref_dark_mode_control_summary_system">Use system setting</string>
+    <string name="pref_dark_mode_control_summary_manual">Manual</string>
 </resources>

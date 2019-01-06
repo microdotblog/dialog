@@ -1,12 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="modes">
-        <item>Auto</item>
-        <item>Light</item>
-        <item>Dark</item>
+    <string-array name="theme">
+        <item>White</item>
+        <item>Purple</item>
+        <item>Indigo</item>
+        <item>Teal</item>
+        <item>Reply</item>
     </string-array>
 
-    <string-array name="nightModes">
+    <string-array name="themeValues">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+    </string-array>
+
+    <string-array name="darkMode">
+        <item>Auto</item>
+        <item>Always</item>
+        <item>Disabled</item>
+    </string-array>
+
+    <string-array name="darkModeValues">
         <item>0</item>
         <item>1</item>
         <item>2</item>

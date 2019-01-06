@@ -1,6 +1,29 @@
 <androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <PreferenceCategory app:title="Appearance">
+        <ListPreference
+            app:defaultValue="0"
+            app:entries="@array/theme"
+            app:entryValues="@array/themeValues"
+            app:key="@string/pref_theme"
+            app:summary="%s"
+            app:title="Light Theme" />
+
+        <SwitchPreferenceCompat
+            app:key="@string/pref_dark_mode_control"
+            app:title="Dark Mode Control" />
+
+        <ListPreference
+            app:defaultValue="0"
+            app:dependency="@string/pref_dark_mode_control"
+            app:entries="@array/darkMode"
+            app:entryValues="@array/darkModeValues"
+            app:key="@string/pref_dark_mode"
+            app:summary="%s"
+            app:title="Dark Mode" />
+    </PreferenceCategory>
+
     <PreferenceCategory
         app:key="feedback_category"
         app:title="Feedback">
@@ -21,7 +44,7 @@
         app:title="About">
 
         <Preference
-            app:key="about_app"
+            app:key="@string/pref_about_app"
             app:persistent="false"
             app:selectable="false"
             app:title="Dialog for Micro.Blog" />

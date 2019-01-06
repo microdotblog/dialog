@@ -140,7 +140,6 @@ class GlideImageGetter(private val glide: GlideRequests,
          */
         private val nullObject = ColorDrawable(Color.TRANSPARENT)
         private val progressDrawable = CircularProgressDrawable(context)
-        private val placeholderDrawable = ColorDrawable(ContextCompat.getColor(context, R.color.grey300))
         private val wrapper = DrawableWrapper(null/* temporarily null until a setDrawable call*/)
         private val layerDrawable: LayerDrawable
 
@@ -152,11 +151,13 @@ class GlideImageGetter(private val glide: GlideRequests,
             // set wrapper bounds to fix the height of the view, TextViews don't like ImageSpans changing dimensions
             wrapper.setBounds(0, 0, width, height)
 
+            val typedValue = TypedValue()
+            targetView.context?.theme?.resolveAttribute(android.R.attr.colorBackground, typedValue, true)
+            val placeholderDrawable = ColorDrawable(typedValue.data)
             val drawables = arrayOf(placeholderDrawable, progressDrawable)
             layerDrawable = LayerDrawable(drawables)
             wrapper.wrappedDrawable = layerDrawable
             progressDrawable.setStyle(CircularProgressDrawable.DEFAULT)
-            val typedValue = TypedValue()
             targetView.context?.theme?.resolveAttribute(R.attr.colorSecondary, typedValue, true)
             progressDrawable.setColorSchemeColors(typedValue.data)
         }
