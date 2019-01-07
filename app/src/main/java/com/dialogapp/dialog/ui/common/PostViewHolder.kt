@@ -9,9 +9,10 @@ import com.dialogapp.dialog.databinding.PostItemBinding
 import com.dialogapp.dialog.model.Post
 import com.dialogapp.dialog.ui.util.GlideImageGetter
 import com.dialogapp.dialog.ui.util.HtmlTextHelper
+import com.dialogapp.dialog.ui.util.ImageGetterOptions
 
 class PostViewHolder(private val view: View, val binding: PostItemBinding, private val glide: GlideRequests,
-                     private val postClickedListener: PostClickedListener)
+                     private val postClickedListener: PostClickedListener, private val imageGetterOptions: ImageGetterOptions)
     : RecyclerView.ViewHolder(view) {
 
     fun bind(post: Post?) {
@@ -20,7 +21,8 @@ class PostViewHolder(private val view: View, val binding: PostItemBinding, priva
                 post?.author?.microblog?.username)
         binding.textTime.text = String.format(view.resources.getString(R.string.post_time),
                 post?.microblog?.dateRelative)
-        HtmlTextHelper(glide, postClickedListener, post?.contentHtml).setHtmlContent(binding.textContent)
+        HtmlTextHelper(glide, postClickedListener, imageGetterOptions, post?.contentHtml)
+                .setHtmlContent(binding.textContent)
         glide.load(post?.author?.avatar).into(binding.imageThumbnail)
 
         binding.buttonReply.setOnClickListener {
@@ -94,7 +96,7 @@ class PostViewHolder(private val view: View, val binding: PostItemBinding, priva
                     binding.textUsername.text = diffBundle.getString(PK_USERNAME)
                 }
                 PK_CONTENT -> {
-                    HtmlTextHelper(glide, postClickedListener, diffBundle.getString(PK_CONTENT))
+                    HtmlTextHelper(glide, postClickedListener, imageGetterOptions, diffBundle.getString(PK_CONTENT))
                             .setHtmlContent(binding.textContent)
                 }
             }

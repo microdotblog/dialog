@@ -24,6 +24,7 @@ import java.util.*
 
 class HtmlTextHelper(private val glide: GlideRequests,
                      private val postClickedListener: PostClickedListener,
+                     private val imageGetterOptions: ImageGetterOptions,
                      private val contentHtml: String?) {
 
     fun setHtmlContent(textView: TextView) {
@@ -34,7 +35,7 @@ class HtmlTextHelper(private val glide: GlideRequests,
             val imageGetter: GlideImageGetter?
             val spannedText: SpannableString
             if (!images.isEmpty()) {
-                imageGetter = GlideImageGetter(glide, textView, ImageSize.LARGE, parseImages(images))
+                imageGetter = GlideImageGetter(glide, textView, imageGetterOptions, parseImages(images))
                 spannedText = getHtmlString(document.html(), imageGetter)
             } else {
                 spannedText = getHtmlString(document.html(), null)

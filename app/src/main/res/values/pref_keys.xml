@@ -4,6 +4,9 @@
     <string name="pref_dark_mode_control" translatable="false">pref_dark_mode_control</string>
     <string name="pref_dark_mode" translatable="false">pref_dark_mode</string>
     <string name="pref_about_app" translatable="false">about_app</string>
+    <string name="pref_load_images" translatable="false">pref_load_images</string>
+    <string name="pref_image_size" translatable="false">pref_image_size</string>
+    <string name="pref_auto_refresh" translatable="false">pref_auto_refresh</string>
 
     <string name="pref_value_dark_mode_auto" translatable="false">0</string>
     <string name="pref_value_dark_mode_always" translatable="false">1</string>
@@ -14,4 +17,17 @@
     <string name="pref_value_theme_indigo" translatable="false">2</string>
     <string name="pref_value_theme_teal" translatable="false">3</string>
     <string name="pref_value_theme_reply" translatable="false">4</string>
+
+    <string name="pref_value_load_images_always" translatable="false">0</string>
+    <string name="pref_value_load_images_wifi" translatable="false">1</string>
+    <string name="pref_value_load_images_never" translatable="false">2</string>
+
+    <string name="pref_value_image_size_large" translatable="false">0</string>
+    <string name="pref_value_image_size_medium" translatable="false">1</string>
+    <string name="pref_value_image_size_small" translatable="false">2</string>
+
+    <string name="pref_value_auto_refresh_15" translatable="false">0</string>
+    <string name="pref_value_auto_refresh_30" translatable="false">1</string>
+    <string name="pref_value_auto_refresh_60" translatable="false">2</string>
+    <string name="pref_value_auto_refresh_120" translatable="false">2</string>
 </resources>

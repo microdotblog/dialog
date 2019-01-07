@@ -28,16 +28,42 @@
         <item>2</item>
     </string-array>
 
-    <string-array name="preloadImages">
+    <string-array name="loadImages">
         <item>Always</item>
         <item>WiFi only</item>
         <item>Never</item>
     </string-array>
 
-    <string-array name="preloadImagesValues">
+    <string-array name="loadImagesValues">
         <item>0</item>
         <item>1</item>
         <item>2</item>
+    </string-array>
+
+    <string-array name="imageSize">
+        <item>Large</item>
+        <item>Medium</item>
+        <item>Small</item>
+    </string-array>
+
+    <string-array name="imageSizeValues">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
+    <string-array name="autoRefresh">
+        <item>15 minutes</item>
+        <item>30 minutes</item>
+        <item>60 minutes</item>
+        <item>2 hours</item>
+    </string-array>
+
+    <string-array name="autoRefreshValues">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
     </string-array>
 
     <string-array name="login_type_array">

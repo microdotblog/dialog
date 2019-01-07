@@ -1,11 +1,41 @@
 <androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <PreferenceCategory app:title="Content">
+        <ListPreference
+            app:defaultValue="0"
+            app:entries="@array/loadImages"
+            app:entryValues="@array/loadImagesValues"
+            app:icon="@drawable/ic_progress_download"
+            app:key="@string/pref_load_images"
+            app:summary="%s"
+            app:title="Load Images" />
+
+        <ListPreference
+            app:defaultValue="1"
+            app:entries="@array/imageSize"
+            app:entryValues="@array/imageSizeValues"
+            app:icon="@drawable/ic_round_photo_size_select_large_24px"
+            app:key="@string/pref_image_size"
+            app:summary="%s"
+            app:title="Preview Image Size" />
+
+        <ListPreference
+            app:defaultValue="1"
+            app:entries="@array/autoRefresh"
+            app:entryValues="@array/autoRefreshValues"
+            app:icon="@drawable/ic_round_update_24px"
+            app:key="@string/pref_auto_refresh"
+            app:summary="%s"
+            app:title="Auto Refresh" />
+    </PreferenceCategory>
+
     <PreferenceCategory app:title="Appearance">
         <ListPreference
             app:defaultValue="0"
             app:entries="@array/theme"
             app:entryValues="@array/themeValues"
+            app:icon="@drawable/ic_round_color_lens_24px"
             app:key="@string/pref_theme"
             app:summary="%s"
             app:title="Light Theme" />
@@ -19,6 +49,7 @@
             app:dependency="@string/pref_dark_mode_control"
             app:entries="@array/darkMode"
             app:entryValues="@array/darkModeValues"
+            app:icon="@drawable/ic_night"
             app:key="@string/pref_dark_mode"
             app:summary="%s"
             app:title="Dark Mode" />

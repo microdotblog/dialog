@@ -1,6 +1,7 @@
 package com.dialogapp.dialog.ui.base
 
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -10,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.dialogapp.dialog.GlideApp
+import com.dialogapp.dialog.R
 import com.dialogapp.dialog.model.Post
 import com.dialogapp.dialog.repository.NetworkState
 import com.dialogapp.dialog.ui.common.PagedPostsAdapter
@@ -44,10 +46,27 @@ abstract class BasePagedListFragment : BaseFragment() {
     }
 
     companion object {
-        private val TIMEOUT: Long = TimeUnit.MINUTES.toMillis(15L)
+        private var TIMEOUT: Long = TimeUnit.MINUTES.toMillis(30L)
 
         fun shouldRefresh(lastTimestamp: Long): Boolean {
             return (System.currentTimeMillis() - lastTimestamp > TIMEOUT)
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        val prefs = PreferenceManager.getDefaultSharedPreferences(this.requireContext())
+        val autoRefreshPref = prefs.getString(getString(R.string.pref_auto_refresh),
+                getString(R.string.pref_value_auto_refresh_30))
+        TIMEOUT = when (autoRefreshPref) {
+            getString(R.string.pref_value_auto_refresh_15) -> TimeUnit.MINUTES.toMillis(15L)
+            getString(R.string.pref_value_auto_refresh_30) -> TimeUnit.MINUTES.toMillis(30L)
+            getString(R.string.pref_value_auto_refresh_60) -> TimeUnit.MINUTES.toMillis(60L)
+            getString(R.string.pref_value_auto_refresh_120) -> TimeUnit.MINUTES.toMillis(120L)
+            else -> {
+                TimeUnit.MINUTES.toMillis(30L)
+            }
         }
     }
 
@@ -93,7 +112,7 @@ abstract class BasePagedListFragment : BaseFragment() {
 
     private fun initAdapter() {
         val glide = GlideApp.with(this)
-        val adapter = PagedPostsAdapter(glide, this) {
+        val adapter = PagedPostsAdapter(glide, this, getImageGetterOptions()) {
             basePagedListViewModel.retry()
         }
         layoutManager = LinearLayoutManager(this.requireContext(), RecyclerView.VERTICAL, false)

@@ -11,10 +11,12 @@ import com.dialogapp.dialog.databinding.NetworkStateItemBinding
 import com.dialogapp.dialog.databinding.PostItemBinding
 import com.dialogapp.dialog.model.Post
 import com.dialogapp.dialog.repository.NetworkState
+import com.dialogapp.dialog.ui.util.ImageGetterOptions
 
 class PagedPostsAdapter(
         private val glide: GlideRequests,
         private val postClickedListener: PostClickedListener,
+        private val imageGetterOptions: ImageGetterOptions,
         private val retryCallback: () -> Unit)
     : PagedListAdapter<Post, RecyclerView.ViewHolder>(POST_COMPARATOR) {
 
@@ -25,7 +27,7 @@ class PagedPostsAdapter(
             R.layout.post_item -> {
                 val binding = DataBindingUtil.inflate<PostItemBinding>(LayoutInflater.from(parent.context),
                         R.layout.post_item, parent, false)
-                PostViewHolder(binding.root, binding, glide, postClickedListener)
+                PostViewHolder(binding.root, binding, glide, postClickedListener, imageGetterOptions)
             }
             R.layout.network_state_item -> {
                 val binding = DataBindingUtil.inflate<NetworkStateItemBinding>(LayoutInflater.from(parent.context),

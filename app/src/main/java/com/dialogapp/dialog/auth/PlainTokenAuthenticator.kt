@@ -1,8 +1,8 @@
 package com.dialogapp.dialog.auth
 
 import com.dialogapp.dialog.api.MicroblogService
+import com.dialogapp.dialog.util.NetworkUtil.Companion.safeApiCall
 import com.dialogapp.dialog.vo.LoggedInUser
-import com.dialogapp.dialog.util.safeApiCall
 import com.dialogapp.dialog.vo.Resource
 import javax.inject.Inject
 import javax.inject.Singleton

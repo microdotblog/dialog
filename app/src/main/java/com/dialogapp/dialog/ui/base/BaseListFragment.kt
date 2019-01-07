@@ -74,7 +74,7 @@ abstract class BaseListFragment : BaseFragment() {
 
     open fun initRecyclerAdapter() {
         val glide = GlideApp.with(this)
-        basePostsAdapter = PostsAdapter(glide, this)
+        basePostsAdapter = PostsAdapter(glide, this, getImageGetterOptions())
         layoutManager = LinearLayoutManager(this.requireContext(), RecyclerView.VERTICAL, false)
         getRecyclerView().layoutManager = layoutManager
         getRecyclerView().adapter = basePostsAdapter

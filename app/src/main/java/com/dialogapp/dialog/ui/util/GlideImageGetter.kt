@@ -17,6 +17,7 @@ import androidx.core.content.ContextCompat
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.RequestBuilder
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.target.Target
 import com.bumptech.glide.request.transition.Transition
@@ -33,7 +34,7 @@ import java.util.*
  */
 class GlideImageGetter(private val glide: GlideRequests,
                        private val targetView: TextView,
-                       private val imageSize: ImageSize,
+                       private val imageGetterOptions: ImageGetterOptions,
                        private val imageTypes: Queue<ImageType>) : Html.ImageGetter, Drawable.Callback {
     private var request: RequestBuilder<Drawable>
     private val context = targetView.context.applicationContext
@@ -77,7 +78,7 @@ class GlideImageGetter(private val glide: GlideRequests,
                 drawableWidth = DEFAULT_WIDTH_PX
                 drawableHeight = DEFAULT_HEIGHT_PX
             }
-            else -> when (imageSize) {
+            else -> when (imageGetterOptions.imageSize) {
                 ImageSize.SMALL -> {
                     drawableWidth = dpToPx(IMAGE_SMALL_WIDTH_DP)
                     drawableHeight = dpToPx(IMAGE_SMALL_HEIGHT_DP)
@@ -99,7 +100,14 @@ class GlideImageGetter(private val glide: GlideRequests,
         asyncWrapper.callback = this
 
         // start Glide's async load
-        request.load(url).into(imageTarget)
+        if (type == ImageType.EMOJI || imageGetterOptions.preloadImages == 0 ||
+                imageGetterOptions.shouldLoadOnWifi()) {
+            request.load(url).into(imageTarget)
+        } else {
+            request.load(url)
+                    .apply(RequestOptions().onlyRetrieveFromCache(true))
+                    .into(imageTarget)
+        }
         // save target for clearing it later
         imageTargets.add(imageTarget)
         return asyncWrapper

@@ -2,6 +2,7 @@ package com.dialogapp.dialog.ui.base
 
 import android.content.Intent
 import android.net.Uri
+import android.preference.PreferenceManager
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
@@ -12,6 +13,8 @@ import com.dialogapp.dialog.R
 import com.dialogapp.dialog.ui.common.BottomSheetPost
 import com.dialogapp.dialog.ui.common.PostClickedListener
 import com.dialogapp.dialog.ui.common.RequestViewModel
+import com.dialogapp.dialog.ui.util.ImageGetterOptions
+import com.dialogapp.dialog.ui.util.ImageSize
 import timber.log.Timber
 
 
@@ -86,5 +89,23 @@ abstract class BaseFragment : Fragment(), PostClickedListener {
         Timber.i(imageUrl)
         findNavController().navigate(R.id.image_viewer_dest, bundleOf("imageUrl" to imageUrl),
                 imageNavOptions)
+    }
+
+    fun getImageGetterOptions(): ImageGetterOptions {
+        val prefs = PreferenceManager.getDefaultSharedPreferences(this.requireContext())
+        val imageSizePref = prefs.getString(getString(R.string.pref_image_size),
+                getString(R.string.pref_value_image_size_medium))
+        val loadImagesPref = prefs.getString(getString(R.string.pref_load_images),
+                getString(R.string.pref_value_load_images_always))
+
+        val imageSizeOption: ImageSize = when (imageSizePref) {
+            getString(R.string.pref_value_image_size_large) -> ImageSize.LARGE
+            getString(R.string.pref_value_image_size_medium) -> ImageSize.MEDIUM
+            getString(R.string.pref_value_image_size_small) -> ImageSize.SMALL
+            else -> {
+                ImageSize.MEDIUM
+            }
+        }
+        return ImageGetterOptions(this.requireContext(), imageSizeOption, loadImagesPref!!.toInt())
     }
 }
