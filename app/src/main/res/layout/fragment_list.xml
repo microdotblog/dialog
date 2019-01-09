@@ -32,6 +32,7 @@
             android:layout_marginBottom="16dp"
             android:elevation="3dp"
             android:text="Scroll to top"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
             android:visibility="invisible"
             app:chipEndPadding="8dp"
             app:chipStartPadding="8dp" />

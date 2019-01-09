@@ -47,7 +47,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                app:tabGravity="center"
+                app:tabTextAppearance="@style/TextAppearance.MaterialComponents.Caption"
+                app:tabGravity="fill"
                 app:tabMode="fixed" />
         </com.google.android.material.appbar.AppBarLayout>
 
