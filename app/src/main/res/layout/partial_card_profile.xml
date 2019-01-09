@@ -11,8 +11,7 @@
         android:layout_marginTop="32dp"
         android:layout_marginEnd="16dp"
         app:cardUseCompatPadding="true"
-        app:contentPadding="4dp"
-        app:elevation="5dp">
+        app:contentPadding="4dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraint_layout_profile"

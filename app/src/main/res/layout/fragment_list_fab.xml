@@ -20,6 +20,7 @@
             android:layout_gravity="end|bottom"
             android:layout_margin="16dp"
             android:clickable="true"
+            app:elevation="6dp"
             android:focusable="true"
             app:srcCompat="@drawable/ic_round_add_24px" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
