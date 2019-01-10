@@ -6,12 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.dialogapp.dialog.databinding.FragmentListBinding
 import com.dialogapp.dialog.di.Injector
+import com.dialogapp.dialog.model.EndpointData
 import com.dialogapp.dialog.ui.base.BaseListFragment
 import com.dialogapp.dialog.ui.base.EndpointArgs
 import com.dialogapp.dialog.ui.util.autoCleared
@@ -54,9 +54,6 @@ class ProfilePostsFragment : BaseListFragment() {
         }
 
         profileSharedViewModel = ViewModelProviders.of(parentFragment!!).get(ProfileSharedViewModel::class.java)
-        baseListViewModel.endpointResult.observe(viewLifecycleOwner, Observer {
-            profileSharedViewModel.setEndpointData(it?.data?.endpointData)
-        })
     }
 
     override fun onProfileClicked(username: String) {
@@ -72,4 +69,8 @@ class ProfilePostsFragment : BaseListFragment() {
     override fun getSwipeRefreshLayout(): SwipeRefreshLayout = binding.swipeRefresh
 
     override fun getNotificationChip(): Chip = binding.chipNotification
+
+    override fun setEndpointData(endpointData: EndpointData?) {
+        profileSharedViewModel.setEndpointData(endpointData)
+    }
 }

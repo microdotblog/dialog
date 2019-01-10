@@ -8,6 +8,7 @@ import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
+import com.dialogapp.dialog.util.Event
 import com.dialogapp.dialog.workers.*
 
 class RequestViewModel : ViewModel() {
@@ -37,6 +38,14 @@ class RequestViewModel : ViewModel() {
             .switchMap(_deleteTag) { tag ->
                 workManager.getWorkInfosByTagLiveData(tag)
             }
+    private lateinit var draftReply: Pair<String, String>
+    private lateinit var draftPost: Pair<String?, String>
+    lateinit var replyEvent: Event<Boolean>
+        private set
+    lateinit var postEvent: Event<Boolean>
+        private set
+    lateinit var deleteEvent: Event<Boolean>
+        private set
 
     fun sendFavoriteRequest(postId: String?, belongsToEndpoint: String?) {
         val tag = "FAV_$postId"
@@ -54,6 +63,8 @@ class RequestViewModel : ViewModel() {
                 .addTag(tag)
                 .build()
         workManager.enqueueUniqueWork(tag, ExistingWorkPolicy.KEEP, deletePostRequest)
+        _deleteTag.value = tag
+        deleteEvent = Event(true)
     }
 
     fun sendFollowRequest(username: String, isFollowing: Boolean) {
@@ -66,6 +77,7 @@ class RequestViewModel : ViewModel() {
     }
 
     fun sendReply(postId: String, content: String) {
+        draftReply = Pair(postId, content)
         val tag = "REP_$postId"
         val replyRequest = OneTimeWorkRequest.Builder(ReplyWorker::class.java)
                 .setInputData(ReplyWorker.createInputData(postId, content))
@@ -73,9 +85,11 @@ class RequestViewModel : ViewModel() {
                 .build()
         workManager.enqueueUniqueWork(tag, ExistingWorkPolicy.KEEP, replyRequest)
         _replyTag.value = tag
+        replyEvent = Event(true)
     }
 
-    fun sendPost(content: String) {
+    fun sendPost(title: String? = this.title, content: String) {
+        draftPost = Pair(title, content)
         val tag = "NEW"
         val newPostRequest = OneTimeWorkRequest.Builder(NewPostWorker::class.java)
                 .setInputData(NewPostWorker.createInputData(title, content))
@@ -83,6 +97,7 @@ class RequestViewModel : ViewModel() {
                 .build()
         workManager.enqueueUniqueWork(tag, ExistingWorkPolicy.KEEP, newPostRequest)
         _newPostTag.value = tag
+        postEvent = Event(true)
     }
 
     fun getReplyWorkInfo(): LiveData<List<WorkInfo>>? {
@@ -95,5 +110,13 @@ class RequestViewModel : ViewModel() {
 
     fun getDeleteWorkInfo(): LiveData<List<WorkInfo>>? {
         return deleteWorkInfo
+    }
+
+    fun retryReply() {
+        sendReply(draftReply.first, draftReply.second)
+    }
+
+    fun retryPost() {
+        sendPost(draftPost.first, draftPost.second)
     }
 }

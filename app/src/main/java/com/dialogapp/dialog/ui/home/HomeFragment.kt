@@ -19,6 +19,7 @@ import com.dialogapp.dialog.databinding.FragmentHomeBinding
 import com.dialogapp.dialog.di.Injector
 import com.dialogapp.dialog.ui.common.RequestViewModel
 import com.dialogapp.dialog.ui.util.autoCleared
+import com.google.android.material.snackbar.Snackbar
 import timber.log.Timber
 
 class HomeFragment : Fragment() {
@@ -54,12 +55,17 @@ class HomeFragment : Fragment() {
                 Toast.makeText(this.requireContext(), "Sending", Toast.LENGTH_SHORT).show()
             }
 
-            if (workInfo.state.isFinished) {
+            if (!requestViewModel.replyEvent.consumed && workInfo.state.isFinished) {
+                requestViewModel.replyEvent.consume()
                 Timber.i("Task Reply complete, Tags: %s State: %s", workInfo.tags, workInfo.state)
                 if (workInfo.state == WorkInfo.State.SUCCEEDED) {
-                    Toast.makeText(this.requireContext(), "Replied", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this.requireContext(), "Successful", Toast.LENGTH_SHORT).show()
                 } else if (workInfo.state == WorkInfo.State.FAILED) {
-                    Toast.makeText(this.requireContext(), "Failed", Toast.LENGTH_SHORT).show()
+                    Snackbar.make(binding.coordinatorLayoutHome, "Could not send reply", Snackbar.LENGTH_INDEFINITE)
+                            .setAction("Retry") {
+                                requestViewModel.retryReply()
+                            }
+                            .show()
                 }
             }
         })
@@ -75,12 +81,17 @@ class HomeFragment : Fragment() {
                 Toast.makeText(this.requireContext(), "Sending", Toast.LENGTH_SHORT).show()
             }
 
-            if (workInfo.state.isFinished) {
+            if (!requestViewModel.postEvent.consumed && workInfo.state.isFinished) {
+                requestViewModel.postEvent.consume()
                 Timber.i("Task NewPost complete, Tags: %s State: %s", workInfo.tags, workInfo.state)
                 if (workInfo.state == WorkInfo.State.SUCCEEDED) {
-                    Toast.makeText(this.requireContext(), "Posted", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this.requireContext(), "Successful", Toast.LENGTH_SHORT).show()
                 } else if (workInfo.state == WorkInfo.State.FAILED) {
-                    Toast.makeText(this.requireContext(), "Failed", Toast.LENGTH_SHORT).show()
+                    Snackbar.make(binding.coordinatorLayoutHome, "Could not send post", Snackbar.LENGTH_INDEFINITE)
+                            .setAction("Retry") {
+                                requestViewModel.retryPost()
+                            }
+                            .show()
                 }
             }
         })
@@ -96,12 +107,13 @@ class HomeFragment : Fragment() {
                 Toast.makeText(this.requireContext(), "Requesting", Toast.LENGTH_SHORT).show()
             }
 
-            if (workInfo.state.isFinished) {
+            if (!requestViewModel.deleteEvent.consumed && workInfo.state.isFinished) {
+                requestViewModel.deleteEvent.consume()
                 Timber.i("Task Deletion complete, Tags: %s State: %s", workInfo.tags, workInfo.state)
                 if (workInfo.state == WorkInfo.State.SUCCEEDED) {
-                    Toast.makeText(this.requireContext(), "Delete request successful", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this.requireContext(), "Request successful", Toast.LENGTH_SHORT).show()
                 } else if (workInfo.state == WorkInfo.State.FAILED) {
-                    Toast.makeText(this.requireContext(), "Delete request failed", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this.requireContext(), "Request unsuccessful", Toast.LENGTH_SHORT).show()
                 }
             }
         })

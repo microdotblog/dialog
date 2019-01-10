@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.dialogapp.dialog.databinding.FragmentListBinding
 import com.dialogapp.dialog.di.Injector
+import com.dialogapp.dialog.model.EndpointData
 import com.dialogapp.dialog.ui.base.BaseListFragment
 import com.dialogapp.dialog.ui.base.EndpointArgs
 import com.dialogapp.dialog.ui.util.autoCleared
@@ -40,4 +41,8 @@ class DiscoverFragment : BaseListFragment() {
     override fun getSwipeRefreshLayout(): SwipeRefreshLayout = binding.swipeRefresh
 
     override fun getNotificationChip(): Chip = binding.chipNotification
+
+    override fun setEndpointData(endpointData: EndpointData?) {
+
+    }
 }

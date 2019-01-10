@@ -109,7 +109,7 @@ class NewPostFragment : Fragment(), OnBackPressedListener {
                             if (isReply) {
                                 requestViewModel.sendReply(postId!!, binding.editTextPost.text.toString())
                             } else {
-                                requestViewModel.sendPost(binding.editTextPost.text.toString())
+                                requestViewModel.sendPost(content = binding.editTextPost.text.toString())
                             }
                             discardTitle()
                             dialog.dismiss()

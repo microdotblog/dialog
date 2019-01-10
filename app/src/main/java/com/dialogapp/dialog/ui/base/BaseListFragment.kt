@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.dialogapp.dialog.GlideApp
+import com.dialogapp.dialog.model.EndpointData
 import com.dialogapp.dialog.ui.common.PostsAdapter
 import com.dialogapp.dialog.vo.Status
 import com.google.android.material.chip.Chip
@@ -90,6 +91,7 @@ abstract class BaseListFragment : BaseFragment() {
             } else if (result.status == Status.ERROR) {
                 basePostsAdapter.submitList(emptyList())
             }
+            setEndpointData(it.data?.endpointData)
         })
     }
 
@@ -104,4 +106,6 @@ abstract class BaseListFragment : BaseFragment() {
     abstract fun getSwipeRefreshLayout(): SwipeRefreshLayout
 
     abstract fun getNotificationChip(): Chip
+
+    abstract fun setEndpointData(endpointData: EndpointData?)
 }

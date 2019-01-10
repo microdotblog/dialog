@@ -13,6 +13,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.dialogapp.dialog.R
 import com.dialogapp.dialog.databinding.FragmentListToolbarBinding
 import com.dialogapp.dialog.di.Injector
+import com.dialogapp.dialog.model.EndpointData
 import com.dialogapp.dialog.ui.base.BaseListFragment
 import com.dialogapp.dialog.ui.base.EndpointArgs
 import com.dialogapp.dialog.ui.util.autoCleared
@@ -50,4 +51,8 @@ class ConversationFragment : BaseListFragment() {
     override fun getSwipeRefreshLayout(): SwipeRefreshLayout = binding.list.swipeRefresh
 
     override fun getNotificationChip(): Chip = binding.list.chipNotification
+
+    override fun setEndpointData(endpointData: EndpointData?) {
+
+    }
 }
