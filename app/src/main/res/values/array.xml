@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="theme">
-        <item>White</item>
-        <item>Purple</item>
-        <item>Indigo</item>
-        <item>Teal</item>
+        <item>Default</item>
+        <item>Micro</item>
+        <item>Mint</item>
+        <item>Classic</item>
         <item>Reply</item>
     </string-array>
 

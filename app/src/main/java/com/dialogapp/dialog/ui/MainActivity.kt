@@ -39,9 +39,9 @@ class MainActivity : AppCompatActivity() {
 
         when (theme) {
             getString(R.string.pref_value_theme_white) -> setTheme(R.style.AppTheme_White)
-            getString(R.string.pref_value_theme_indigo) -> setTheme(R.style.AppTheme_Indigo)
-            getString(R.string.pref_value_theme_purple) -> setTheme(R.style.AppTheme_Purple)
-            getString(R.string.pref_value_theme_teal) -> setTheme(R.style.AppTheme_Teal)
+            getString(R.string.pref_value_theme_micro) -> setTheme(R.style.AppTheme_Micro)
+            getString(R.string.pref_value_theme_mint) -> setTheme(R.style.AppTheme_Mint)
+            getString(R.string.pref_value_theme_classic) -> setTheme(R.style.AppTheme_Classic)
             getString(R.string.pref_value_theme_reply) -> setTheme(R.style.AppTheme_Reply)
         }
 

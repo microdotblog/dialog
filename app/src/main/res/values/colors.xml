@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="amberA400">#ffc400</color>
-    <color name="amberA700">#ffab00</color>
     <color name="darkgrey">#303030</color>
     <color name="grey900">#212121</color>
     <color name="grey800">#424242</color>
@@ -11,11 +9,12 @@
     <color name="grey400">#BDBDBD</color>
     <color name="grey300">#e0e0e0</color>
     <color name="grey100">#F5F5F5</color>
-    <color name="purple200">#BB96FC</color>
+
     <color name="indigo500">#3F51B5</color>
     <color name="indigo700">#303F9F</color>
+
     <color name="redA200">#FF5252</color>
-    <color name="purpleA400">#651fff</color>
+
     <color name="blueA200">#448AFF</color>
     <color name="lightblue">#C5CAE9</color>
 
@@ -24,15 +23,19 @@
     <color name="replyblue800">#232F34</color>
     <color name="replyorange">#F9AA33</color>
 
+    <color name="micro_orange">#eeaa00</color>
+    <color name="micro_yellow">#f7ff7a</color>
+    <color name="micro_blue">#2B3E55</color>
+    <color name="micro_light_blue">#486990</color>
+
     <color name="teal500">#009688</color>
     <color name="teal700">#00796B</color>
     <color name="teal100">#BBDEFB</color>
 
     <color name="rallygreen">#1EB980</color>
 
-    <color name="ripple_purple">#42651fff</color>
     <color name="ripple_teal">#42009688</color>
-    <color name="ripple_indigo">#423F51B5</color>
-    <color name="ripple_reply">#42344955</color>
-    <color name="ripple_grey">#42212121</color>
+
+    <color name="inactive_black">#99000000</color>
+    <color name="color_text_medium">#99000000</color>
 </resources>

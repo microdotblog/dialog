@@ -5,7 +5,6 @@
         <item name="colorPrimary">@color/grey900</item>
         <item name="colorPrimaryDark">@android:color/black</item>
         <item name="colorPrimaryVariant">@color/grey700</item>
-        <item name="colorSecondary">@color/rallygreen</item>
         <item name="android:colorBackground">@color/darkgrey</item>
         <item name="colorSurface">@color/grey800</item>
         <item name="colorError">@color/design_default_color_error</item>
@@ -15,23 +14,36 @@
         <item name="colorOnSurface">@android:color/white</item>
         <item name="colorOnError">@android:color/white</item>
         <item name="colorCollapsingToolbar">?colorPrimary</item>
-        <item name="colorControlHighlight">@color/ripple_grey</item>
 
         <item name="android:windowBackground">@color/darkgrey</item>
 
         <item name="toolbarStyle">@style/ToolbarStyle.Colored</item>
         <item name="tabStyle">@style/Widget.MaterialComponents.TabLayout.Colored</item>
         <item name="bottomAppBarStyle">@style/BottomAppBarStyle.Colored</item>
-        <item name="bottomNavigationStyle">@style/Widget.MaterialComponents.BottomNavigationView.Colored</item>
+        <item name="bottomNavigationStyle">
+            @style/Widget.MaterialComponents.BottomNavigationView.Colored
+        </item>
+        <item name="outlinedButtonStyle">@style/OutlinedButtonStyle.Dark
+        </item>
     </style>
 
-    <style name="AppTheme.White" parent="AppTheme.Dark" />
+    <style name="AppTheme.White" parent="AppTheme.Dark">
+        <item name="colorSecondary">@color/rallygreen</item>
+    </style>
 
-    <style name="AppTheme.Indigo" parent="AppTheme.Dark" />
+    <style name="AppTheme.Classic" parent="AppTheme.Dark">
+        <item name="colorSecondary">@color/redA200</item>
+    </style>
 
-    <style name="AppTheme.Purple" parent="AppTheme.Dark" />
+    <style name="AppTheme.Micro" parent="AppTheme.Dark">
+        <item name="colorSecondary">@color/micro_orange</item>
+    </style>
 
-    <style name="AppTheme.Teal" parent="AppTheme.Dark" />
+    <style name="AppTheme.Mint" parent="AppTheme.Dark">
+        <item name="colorSecondary">@color/blueA200</item>
+    </style>
 
-    <style name="AppTheme.Reply" parent="AppTheme.Dark" />
+    <style name="AppTheme.Reply" parent="AppTheme.Dark">
+        <item name="colorSecondary">@color/replyorange</item>
+    </style>
 </resources>

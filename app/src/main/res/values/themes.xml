@@ -29,17 +29,19 @@
         <item name="tabStyle">@style/Widget.MaterialComponents.TabLayout.Colored</item>
         <item name="bottomAppBarStyle">@style/BottomAppBarStyle.Colored</item>
         <item name="bottomNavigationStyle">@style/Widget.MaterialComponents.BottomNavigationView.Colored</item>
+        <item name="outlinedButtonStyle">@style/Widget.MaterialComponents.Button.OutlinedButton</item>
     </style>
 
     <style name="AppTheme.White" parent="AppTheme.Light">
-        <item name="colorPrimary">@color/purpleA400</item>
+        <item name="colorPrimary">@color/rallygreen</item>
         <item name="colorPrimaryDark">@android:color/black</item>
-        <item name="colorPrimaryVariant">@color/purple200</item>
-        <item name="colorSecondary">@color/purpleA400</item>
+        <item name="colorPrimaryVariant">@color/rallygreen</item>
+        <item name="colorSecondary">@color/rallygreen</item>
         <item name="android:colorBackground">@color/grey100</item>
         <item name="colorCollapsingToolbar">@android:color/white</item>
         <item name="android:windowBackground">@color/grey100</item>
-        <item name="colorControlHighlight">@color/ripple_purple</item>
+        <item name="colorControlHighlight">@color/ripple_teal</item>
+        <item name="colorOnPrimaryEmphasisMedium">@color/color_text_medium</item>
 
         <item name="toolbarStyle">@style/ToolbarStyle.White</item>
         <item name="tabStyle">@style/Widget.MaterialComponents.TabLayout</item>
@@ -48,28 +50,25 @@
         </item>
     </style>
 
-    <style name="AppTheme.Purple" parent="AppTheme.Light">
-        <item name="colorPrimary">@color/design_default_color_primary</item>
-        <item name="colorPrimaryDark">@color/design_default_color_primary_dark</item>
-        <item name="colorPrimaryVariant">@color/purple200</item>
-        <item name="colorSecondary">@color/replyorange</item>
-        <item name="colorControlHighlight">@color/ripple_purple</item>
+    <style name="AppTheme.Micro" parent="AppTheme.Light">
+        <item name="colorPrimary">@color/micro_light_blue</item>
+        <item name="colorPrimaryDark">@color/micro_blue</item>
+        <item name="colorPrimaryVariant">@color/micro_light_blue</item>
+        <item name="colorSecondary">@color/micro_orange</item>
     </style>
 
-    <style name="AppTheme.Indigo" parent="AppTheme.Light">
+    <style name="AppTheme.Classic" parent="AppTheme.Light">
         <item name="colorPrimary">@color/indigo500</item>
         <item name="colorPrimaryDark">@color/indigo700</item>
         <item name="colorPrimaryVariant">@color/lightblue</item>
         <item name="colorSecondary">@color/redA200</item>
-        <item name="colorControlHighlight">@color/ripple_indigo</item>
     </style>
 
-    <style name="AppTheme.Teal" parent="AppTheme.Light">
+    <style name="AppTheme.Mint" parent="AppTheme.Light">
         <item name="colorPrimary">@color/teal500</item>
         <item name="colorPrimaryDark">@color/teal700</item>
         <item name="colorPrimaryVariant">@color/teal100</item>
         <item name="colorSecondary">@color/blueA200</item>
-        <item name="colorControlHighlight">@color/ripple_teal</item>
     </style>
 
     <style name="AppTheme.Reply" parent="AppTheme.Light">
@@ -77,6 +76,5 @@
         <item name="colorPrimaryDark">@color/replyblue800</item>
         <item name="colorPrimaryVariant">@color/replyblue600</item>
         <item name="colorSecondary">@color/replyorange</item>
-        <item name="colorControlHighlight">@color/ripple_reply</item>
     </style>
 </resources>

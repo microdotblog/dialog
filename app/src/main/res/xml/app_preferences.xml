@@ -38,7 +38,7 @@
             app:icon="@drawable/ic_round_color_lens_24px"
             app:key="@string/pref_theme"
             app:summary="%s"
-            app:title="Light Theme" />
+            app:title="Theme" />
 
         <SwitchPreferenceCompat
             app:key="@string/pref_dark_mode_control"

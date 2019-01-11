@@ -1,5 +1,6 @@
 <resources>
 
+    <!--White Theme Styles-->
     <style name="ToolbarOverlayStyle.White" parent="ThemeOverlay.MaterialComponents.Toolbar.Primary">
         <item name="iconTint">@android:color/black</item>
         <item name="colorControlNormal">@android:color/black</item>
@@ -21,6 +22,7 @@
         <item name="android:theme">@style/BottomAppBarOverlayStyle.White</item>
     </style>
 
+    <!--Colored Theme Styles-->
     <style name="ToolbarOverlayStyle.Colored" parent="ThemeOverlay.MaterialComponents.Toolbar.Primary">
         <item name="iconTint">?attr/colorOnPrimary</item>
     </style>
@@ -37,6 +39,11 @@
         <item name="android:theme">@style/BottomAppBarOverlayStyle.Colored</item>
     </style>
 
+    <style name="OutlinedButtonStyle.Dark" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <!--Preference Theme-->
     <style name="PrefsTheme" parent="PreferenceThemeOverlay">
         <item name="android:layout">@layout/fragment_settings</item>
     </style>
