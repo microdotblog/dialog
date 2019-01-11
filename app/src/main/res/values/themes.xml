@@ -7,10 +7,10 @@
         <item name="colorPrimaryDark">@android:color/transparent</item>
         <item name="preferenceTheme">@style/PrefsTheme</item>
 
-        <item name="android:fontFamily">@font/work_sans</item>
-        <item name="md_font_title">@font/work_sans</item>
-        <item name="md_font_body">@font/work_sans</item>
-        <item name="md_font_button">@font/work_sans</item>
+        <item name="android:fontFamily">@font/karla</item>
+        <item name="md_font_title">@font/karla_bold</item>
+        <item name="md_font_body">@font/karla</item>
+        <item name="md_font_button">@font/karla</item>
     </style>
 
     <style name="AppTheme.Light" parent="AppTheme">

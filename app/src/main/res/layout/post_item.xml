@@ -33,6 +33,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="8dp"
                 android:ellipsize="end"
+                android:fontFamily="@font/karla_bold"
                 android:maxLines="1"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
                 app:layout_constraintEnd_toStartOf="@+id/text_time"
