@@ -55,7 +55,8 @@ class PostViewHolder(private val view: View, val binding: PostItemBinding, priva
 
         binding.buttonOverflow.setOnClickListener {
             if (post != null) {
-                postClickedListener.onOverflowMenuClicked(post.id, post.url, post.microblog.isDeletable)
+                postClickedListener.onOverflowMenuClicked(post.id, post.url,
+                        post.author.microblog?.username!!, post.microblog.isDeletable)
             }
         }
     }

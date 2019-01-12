@@ -58,9 +58,10 @@ abstract class BaseFragment : Fragment(), PostClickedListener {
         findNavController().navigate(R.id.conversation_dest, argBundle, convNavOptions)
     }
 
-    override fun onOverflowMenuClicked(postId: String, postUrl: String, isDeletable: Boolean) {
-        val bottomSheetPost = BottomSheetPost.newInstance(postId, postUrl, isDeletable)
-        bottomSheetPost.show(fragmentManager, "bottom_sheet_post")
+    override fun onOverflowMenuClicked(postId: String, postUrl: String, username: String,
+                                       isDeletable: Boolean) {
+        val bottomSheetPost = BottomSheetPost.newInstance(postId, postUrl, username, isDeletable)
+        bottomSheetPost.show(childFragmentManager, "bottom_sheet_post")
     }
 
     override fun onReplyClicked(id: String?, username: String?, content: String?) {

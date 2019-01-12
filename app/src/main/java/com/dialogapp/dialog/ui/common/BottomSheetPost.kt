@@ -8,9 +8,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.findNavController
 import com.afollestad.materialdialogs.MaterialDialog
 import com.dialogapp.dialog.R
 import com.dialogapp.dialog.databinding.FragmentBottomSheetPostBinding
+import com.dialogapp.dialog.ui.base.BaseFragment
 import com.dialogapp.dialog.ui.util.autoCleared
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
@@ -21,12 +23,14 @@ class BottomSheetPost : BottomSheetDialogFragment() {
     companion object {
         private const val ID = "id"
         private const val URL = "url"
+        private const val USERNAME = "username"
         private const val DELETABLE = "deletable"
 
-        fun newInstance(postId: String, postUrl: String, deletable: Boolean): BottomSheetPost {
+        fun newInstance(postId: String, postUrl: String, username: String?, deletable: Boolean)
+                : BottomSheetPost {
             val bottomSheetPost = BottomSheetPost()
             bottomSheetPost.arguments = bundleOf(ID to postId, URL to postUrl,
-                    DELETABLE to deletable)
+                    USERNAME to username, DELETABLE to deletable)
             return bottomSheetPost
         }
     }
@@ -44,6 +48,10 @@ class BottomSheetPost : BottomSheetDialogFragment() {
 
         binding.bottomNavViewPost.setNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
+                R.id.post_option_view_profile -> {
+                    (parentFragment as BaseFragment).onProfileClicked(arguments?.getString(USERNAME)!!)
+                    dismiss()
+                }
                 R.id.post_option_view_link -> {
                     val webpage = Uri.parse(arguments?.getString(URL))
                     val intent = Intent(Intent.ACTION_VIEW, webpage)

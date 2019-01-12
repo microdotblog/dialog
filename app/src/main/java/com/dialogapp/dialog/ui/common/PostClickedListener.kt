@@ -7,7 +7,7 @@ interface PostClickedListener {
 
     fun onConversationButtonClicked(postId: String)
 
-    fun onOverflowMenuClicked(postId: String, postUrl: String, isDeletable: Boolean)
+    fun onOverflowMenuClicked(postId: String, postUrl: String, username: String, isDeletable: Boolean)
 
     fun onReplyClicked(id: String?, username: String?, content: String?)
 
