@@ -31,7 +31,10 @@ class NetworkStateItemViewHolder(view: View,
         binding.progressBar.visibility = toVisibility(networkState?.status == PagingStatus.RUNNING)
         binding.retryButton.visibility = toVisibility(networkState?.status == PagingStatus.FAILED)
         binding.errorMsg.visibility = toVisibility(networkState?.msg != null)
-        binding.errorMsg.text = networkState?.msg
+        binding.errorMsg.text = binding.root.context.getString(R.string.msg_error_paging)
+        binding.errorMsg.setOnClickListener {
+            binding.errorMsg.text = networkState?.msg
+        }
     }
 
     companion object {

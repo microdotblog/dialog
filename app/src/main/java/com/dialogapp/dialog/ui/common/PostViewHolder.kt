@@ -75,7 +75,7 @@ class PostViewHolder(private val view: View, val binding: PostItemBinding, priva
                             }
                         }
                         false -> {
-                            binding.buttonConv.visibility = View.GONE
+                            binding.buttonConv.visibility = View.INVISIBLE
                         }
                     }
                 }

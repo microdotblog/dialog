@@ -128,10 +128,10 @@ class HtmlTextHelper(private val glide: GlideRequests,
                 imageTypes.add(ImageType.EMOJI)
             else {
                 imageTypes.add(ImageType.IMAGE)
-            }
 
-            // Add para tags to ensure that there is a gap between each image span
-            img.wrap("<p></p>")
+                // Add para tags to ensure that there is a gap between each image span
+                img.wrap("<p></p>")
+            }
         }
         return imageTypes
     }

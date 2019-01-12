@@ -1,7 +1,10 @@
 package com.dialogapp.dialog.ui.profile
 
 import android.content.Context
+import android.os.Build
 import android.os.Bundle
+import android.text.Html
+import android.text.Spanned
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -99,9 +102,9 @@ class ProfileFragment : Fragment() {
             binding.includePartialProfile.textProfileWebsite.text = endpointData.author?.url
             endpointData.microblog?.bio.let { text ->
                 if (text != null && !text.isEmpty()) {
-                    binding.includePartialProfile.textProfileAbout.text = text
+                    binding.includePartialProfile.textProfileAbout.text = getHtmlString(text)
                     binding.includePartialProfile.textProfileAbout.setOnClickListener {
-                        MaterialDialog(this.requireContext()).message(text = text).show {
+                        MaterialDialog(this.requireContext()).message(text = getHtmlString(text)).show {
                             positiveButton(text = "Dismiss")
                         }
                     }
@@ -149,5 +152,13 @@ class ProfileFragment : Fragment() {
     private fun hideFollowingButton() {
         binding.includePartialProfile.buttonFollowing.visibility = View.INVISIBLE
         binding.includePartialProfile.buttonFollow.visibility = View.VISIBLE
+    }
+
+    private fun getHtmlString(html: String): Spanned {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            Html.fromHtml(html, Html.FROM_HTML_MODE_LEGACY)
+        } else {
+            Html.fromHtml(html)
+        }
     }
 }

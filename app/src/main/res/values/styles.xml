@@ -2,8 +2,8 @@
 
     <!--White Theme Styles-->
     <style name="ToolbarOverlayStyle.White" parent="ThemeOverlay.MaterialComponents.Toolbar.Primary">
-        <item name="iconTint">@android:color/black</item>
-        <item name="colorControlNormal">@android:color/black</item>
+        <item name="iconTint">@color/inactive_black</item>
+        <item name="colorControlNormal">@color/inactive_black</item>
     </style>
 
     <style name="ToolbarStyle.White" parent="Widget.MaterialComponents.Toolbar.Primary">
@@ -13,8 +13,8 @@
     </style>
 
     <style name="BottomAppBarOverlayStyle.White" parent="ThemeOverlay.MaterialComponents.BottomAppBar.Primary">
-        <item name="iconTint">@android:color/black</item>
-        <item name="colorControlNormal">@android:color/black</item>
+        <item name="iconTint">@color/inactive_black</item>
+        <item name="colorControlNormal">@color/inactive_black</item>
     </style>
 
     <style name="BottomAppBarStyle.White" parent="Widget.MaterialComponents.BottomAppBar">

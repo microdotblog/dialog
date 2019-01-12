@@ -59,7 +59,8 @@
                         android:layout_gravity="center"
                         android:layout_marginEnd="8dp"
                         android:background="?attr/selectableItemBackgroundBorderless"
-                        android:src="@drawable/ic_outline_info_24px" />
+                        android:src="@drawable/ic_outline_info_24px"
+                        android:tint="@android:color/darker_gray" />
                 </LinearLayout>
 
                 <com.google.android.material.textfield.TextInputLayout

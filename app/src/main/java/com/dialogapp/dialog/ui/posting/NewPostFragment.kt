@@ -74,6 +74,7 @@ class NewPostFragment : Fragment(), OnBackPressedListener {
             binding.bottomBarNewPost.menu.removeItem(R.id.posting_title)
             binding.bottomBarNewPost.menu.findItem(R.id.posting_parent_post).setOnMenuItemClickListener {
                 MaterialDialog(this.requireContext())
+                        .title(text = "@$username wrote")
                         .message(text = getHtmlString(content))
                         .show {
                             positiveButton(R.string.dialog_dismiss)
