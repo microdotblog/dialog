@@ -17,7 +17,7 @@
     <string name="request_unsuccessful">Request unsuccessful</string>
     <string name="retry_reply">Retry</string>
     <string name="label_reply">Reply</string>
-    <string name="location_permission_message">Location access is required for the accurate calculation of sunrise and sunset times. \n\nDefault sunrise time : 6AM \nDefault sunset time : 10PM</string>
+    <string name="location_permission_message">Location access is required to calculate sunrise and sunset times accurately. \n\nDefault sunrise time : 6AM \nDefault sunset time : 10PM</string>
     <string name="dialog_allow">Allow</string>
     <string name="dialog_dismiss">Dismiss</string>
 
@@ -37,7 +37,6 @@
     <string name="confirm">Confirm</string>
     <string name="discard">Discard</string>
     <string name="logout">Logout</string>
-    <string name="open_app_settings">Open App Settings</string>
     <string name="pref_dark_mode_control_summary_system">Use system setting</string>
     <string name="pref_dark_mode_control_summary_manual">Manual</string>
     <string name="msg_error_paging">Error loading posts</string>

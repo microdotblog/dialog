@@ -45,7 +45,7 @@
             app:title="Dark Mode Control" />
 
         <ListPreference
-            app:defaultValue="0"
+            app:defaultValue="2"
             app:dependency="@string/pref_dark_mode_control"
             app:entries="@array/darkMode"
             app:entryValues="@array/darkModeValues"

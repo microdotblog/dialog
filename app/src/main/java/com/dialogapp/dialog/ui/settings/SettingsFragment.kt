@@ -1,17 +1,15 @@
 package com.dialogapp.dialog.ui.settings
 
 import android.Manifest
-import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -22,6 +20,7 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.callbacks.onDismiss
 import com.dialogapp.dialog.BuildConfig
 import com.dialogapp.dialog.R
+import com.dialogapp.dialog.ui.MainActivity
 
 
 class SettingsFragment : PreferenceFragmentCompat(),
@@ -75,20 +74,10 @@ class SettingsFragment : PreferenceFragmentCompat(),
                     recreate()
                 }
                 getString(R.string.pref_dark_mode) -> {
-                    val value = sharedPreferences.getString(key, getString(R.string.pref_value_dark_mode_auto))
+                    val value = sharedPreferences.getString(key, getString(R.string.pref_value_dark_mode_disabled))
                     if (value == getString(R.string.pref_value_dark_mode_auto)
                             && Build.VERSION.SDK_INT >= 23 && !isLocationPermissionGranted()) {
-                        MaterialDialog(this)
-                                .message(R.string.location_permission_message)
-                                .onDismiss {
-                                    recreate()
-                                }
-                                .show {
-                                    positiveButton(R.string.open_app_settings) {
-                                        openAppSettings()
-                                    }
-                                    negativeButton()
-                                }
+                        showMessageAndRequest()
                     } else {
                         recreate()
                     }
@@ -99,18 +88,34 @@ class SettingsFragment : PreferenceFragmentCompat(),
         }
     }
 
-    private fun openAppSettings() {
-        val intent = Intent()
-        intent.action = ACTION_APPLICATION_DETAILS_SETTINGS
-        val uri = Uri.fromParts("package", activity?.packageName, null)
-        intent.data = uri
-        context?.startActivity(intent)
-    }
-
     private fun isLocationPermissionGranted(): Boolean {
         activity?.run {
-            return ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) ==
+            return ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) ==
+                    PackageManager.PERMISSION_GRANTED &&
+                    ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) ==
                     PackageManager.PERMISSION_GRANTED
+        }
+    }
+
+    private fun showMessageAndRequest() {
+        activity?.run {
+            MaterialDialog(this)
+                    .message(R.string.location_permission_message)
+                    .onDismiss {
+                        requestPermissionForLocation()
+                    }
+                    .show {
+                        positiveButton()
+                    }
+        }
+    }
+
+    private fun requestPermissionForLocation() {
+        activity?.run {
+            ActivityCompat.requestPermissions(this,
+                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION,
+                            Manifest.permission.ACCESS_COARSE_LOCATION),
+                    MainActivity.LOCATION_PERMISSION_REQUEST_CODE)
         }
     }
 }
