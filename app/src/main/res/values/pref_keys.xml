@@ -4,6 +4,7 @@
     <string name="pref_dark_mode_control" translatable="false">pref_dark_mode_control</string>
     <string name="pref_dark_mode" translatable="false">pref_dark_mode</string>
     <string name="pref_about_app" translatable="false">about_app</string>
+    <string name="pref_rate_app" translatable="false">rate_app</string>
     <string name="pref_load_images" translatable="false">pref_load_images</string>
     <string name="pref_image_size" translatable="false">pref_image_size</string>
     <string name="pref_auto_refresh" translatable="false">pref_auto_refresh</string>

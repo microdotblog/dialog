@@ -1,8 +1,11 @@
 package com.dialogapp.dialog.ui.settings
 
 import android.Manifest
+import android.content.ActivityNotFoundException
+import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -40,6 +43,11 @@ class SettingsFragment : PreferenceFragmentCompat(),
             pref.isChecked = true
             pref.summary = getString(R.string.pref_dark_mode_control_summary_manual)
             pref.isVisible = false
+        }
+
+        findPreference(getString(R.string.pref_rate_app)).setOnPreferenceClickListener {
+            launchMarket()
+            true
         }
     }
 
@@ -116,6 +124,17 @@ class SettingsFragment : PreferenceFragmentCompat(),
                     arrayOf(Manifest.permission.ACCESS_FINE_LOCATION,
                             Manifest.permission.ACCESS_COARSE_LOCATION),
                     MainActivity.LOCATION_PERMISSION_REQUEST_CODE)
+        }
+    }
+
+    private fun launchMarket() {
+        val packageName = requireContext().packageName
+        try {
+            startActivity(Intent(Intent.ACTION_VIEW,
+                    Uri.parse("market://details?id=$packageName")))
+        } catch (e: ActivityNotFoundException) {
+            startActivity(Intent(Intent.ACTION_VIEW,
+                    Uri.parse("http://play.google.com/store/apps/details?id=$packageName")))
         }
     }
 }

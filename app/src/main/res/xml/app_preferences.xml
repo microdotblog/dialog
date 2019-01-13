@@ -60,12 +60,32 @@
         app:title="Feedback">
 
         <Preference
-            app:key="feedback"
+            app:key="@string/pref_rate_app"
+            app:persistent="false"
+            app:title="Rate app">
+        </Preference>
+
+        <Preference
+            app:key="feedback_email"
+            app:persistent="false"
+            app:title="Email">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="mailto:dev@dialogapp.net">
+                <extra
+                    android:name="android.intent.extra.SUBJECT"
+                    android:value="Feedback for Dialog" />
+            </intent>
+        </Preference>
+
+        <Preference
+            app:key="feedback_slack"
+            app:persistent="false"
             app:summary="Report issues or suggest new features"
             app:title="Slack Channel">
             <intent
                 android:action="android.intent.action.VIEW"
-                android:data="https://dialogappgroup.slack.com/messages/C8CEWS45P/#" />
+                android:data="https://join.slack.com/t/dialogappgroup/shared_invite/enQtMzYzNzQyMjcxNTY5LTIzZDI0NmE1MDZjNGIxZTA0MzgyMGQwZTg5MGUzNjQ4ZDBmYmE3Mzc3MjNkMzg0ZjFmMDVmNGYwOWYxMjcyODg" />
         </Preference>
 
     </PreferenceCategory>
@@ -77,8 +97,11 @@
         <Preference
             app:key="@string/pref_about_app"
             app:persistent="false"
-            app:selectable="false"
-            app:title="Dialog for Micro.Blog" />
+            app:title="Dialog for Micro.Blog">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="https://dialogapp.net/" />
+        </Preference>
 
         <Preference
             app:key="about_1"
@@ -100,7 +123,7 @@
             app:title="Licenses">
             <intent
                 android:action="android.intent.action.VIEW"
-                android:data="https://dialog.micro.blog/licenses" />
+                android:data="https://dialogapp.net/licenses" />
         </Preference>
 
         <Preference
@@ -109,7 +132,7 @@
             app:title="Privacy policy">
             <intent
                 android:action="android.intent.action.VIEW"
-                android:data="https://dialog.micro.blog/privacy-policy" />
+                android:data="https://dialogapp.net/policy" />
         </Preference>
 
     </PreferenceCategory>

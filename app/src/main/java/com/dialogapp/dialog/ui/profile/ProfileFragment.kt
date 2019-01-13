@@ -1,12 +1,9 @@
 package com.dialogapp.dialog.ui.profile
 
 import android.content.Context
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.SystemClock
-import android.text.Html
-import android.text.Spanned
 import android.text.format.DateUtils
 import android.view.LayoutInflater
 import android.view.View
@@ -19,6 +16,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.customview.customView
+import com.afollestad.materialdialogs.customview.getCustomView
 import com.dialogapp.dialog.GlideApp
 import com.dialogapp.dialog.R
 import com.dialogapp.dialog.auth.SessionManager
@@ -27,6 +26,7 @@ import com.dialogapp.dialog.di.Injector
 import com.dialogapp.dialog.model.EndpointData
 import com.dialogapp.dialog.ui.common.RequestViewModel
 import com.dialogapp.dialog.ui.util.autoCleared
+import ru.noties.markwon.view.MarkwonView
 
 class ProfileFragment : Fragment() {
 
@@ -137,9 +137,13 @@ class ProfileFragment : Fragment() {
             binding.includePartialProfile.textProfileWebsite.text = endpointData.author?.url
             endpointData.microblog?.bio.let { text ->
                 if (text != null && !text.isEmpty()) {
-                    binding.includePartialProfile.textProfileAbout.text = getHtmlString(text)
+                    binding.includePartialProfile.textProfileAbout.text = text
                     binding.includePartialProfile.textProfileAbout.setOnClickListener {
-                        MaterialDialog(this.requireContext()).message(text = getHtmlString(text)).show {
+                        val dialog = MaterialDialog(this.requireContext())
+                                .customView(R.layout.dialog_bio, scrollable = true)
+                        dialog.getCustomView()
+                                ?.findViewById<MarkwonView>(R.id.markwon_view_bio)?.markdown = text
+                        dialog.show {
                             positiveButton(text = "Dismiss")
                         }
                     }
@@ -187,14 +191,6 @@ class ProfileFragment : Fragment() {
     private fun hideFollowingButton() {
         binding.includePartialProfile.buttonFollowing.visibility = View.INVISIBLE
         binding.includePartialProfile.buttonFollow.visibility = View.VISIBLE
-    }
-
-    private fun getHtmlString(html: String): Spanned {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            Html.fromHtml(html, Html.FROM_HTML_MODE_LEGACY)
-        } else {
-            Html.fromHtml(html)
-        }
     }
 
     private fun getToolbar(): Toolbar {
