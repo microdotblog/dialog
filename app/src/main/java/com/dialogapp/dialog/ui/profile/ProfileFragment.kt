@@ -96,7 +96,6 @@ class ProfileFragment : Fragment() {
 
             GlideApp.with(this)
                     .load(endpointData.author?.avatar)
-                    .dontAnimate()
                     .into(binding.includePartialProfile.imageAvatar)
             binding.includePartialProfile.textProfileFullname.text = endpointData.author?.name
             binding.includePartialProfile.textProfileWebsite.text = endpointData.author?.url

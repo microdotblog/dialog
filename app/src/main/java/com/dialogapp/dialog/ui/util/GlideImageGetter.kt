@@ -8,15 +8,17 @@ import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.LayerDrawable
 import android.text.Html
+import android.util.DisplayMetrics
 import android.util.TypedValue
 import android.view.Gravity
 import android.widget.TextView
 import androidx.annotation.NonNull
 import androidx.annotation.Nullable
-import androidx.core.content.ContextCompat
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.RequestBuilder
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.target.Target
@@ -102,9 +104,12 @@ class GlideImageGetter(private val glide: GlideRequests,
         // start Glide's async load
         if (type == ImageType.EMOJI || imageGetterOptions.preloadImages == 0 ||
                 imageGetterOptions.shouldLoadOnWifi()) {
-            request.load(url).into(imageTarget)
+            request.load(url)
+                    .apply(RequestOptions().transforms(CenterCrop(), RoundedCorners(dpToPx(8))))
+                    .into(imageTarget)
         } else {
             request.load(url)
+                    .apply(RequestOptions().transforms(CenterCrop(), RoundedCorners(dpToPx(8))))
                     .apply(RequestOptions().onlyRetrieveFromCache(true))
                     .into(imageTarget)
         }
@@ -138,7 +143,7 @@ class GlideImageGetter(private val glide: GlideRequests,
     }
 
     private fun dpToPx(dp: Int): Int {
-        return (dp * Resources.getSystem().displayMetrics.density).toInt()
+        return (dp * (Resources.getSystem().displayMetrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT))
     }
 
     private inner class WrapperTarget(width: Int, height: Int) : SimpleTarget<Drawable>(width, height) {

@@ -7,5 +7,5 @@
     <dimen name="padding">8dp</dimen>
 
     <!-- Post item -->
-    <dimen name="post_image_profile">42dp</dimen>
+    <dimen name="post_image_profile">48dp</dimen>
 </resources>

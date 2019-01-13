@@ -18,13 +18,14 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <de.hdodenhof.circleimageview.CircleImageView
+            <com.dialogapp.dialog.ui.util.RoundedImageView
                 android:id="@+id/image_thumbnail"
                 android:layout_width="@dimen/post_image_profile"
                 android:layout_height="@dimen/post_image_profile"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="16dp"
+                android:src="?android:colorBackground"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"

@@ -21,12 +21,12 @@
             android:paddingEnd="16dp"
             android:paddingBottom="16dp">
 
-            <de.hdodenhof.circleimageview.CircleImageView
+            <com.dialogapp.dialog.ui.util.RoundedImageView
                 android:id="@+id/image_avatar"
                 android:layout_width="64dp"
                 android:layout_height="64dp"
                 android:layout_marginTop="8dp"
-                android:src="?android:attr/colorBackground"
+                android:src="?android:colorBackground"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:src="@tools:sample/avatars" />
@@ -35,9 +35,10 @@
                 android:id="@+id/text_profile_fullname"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:ellipsize="end"
+                android:fontFamily="@font/karla_bold"
                 android:maxLines="1"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -89,7 +90,7 @@
                 android:id="@+id/text_profile_website"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
                 android:autoLink="web"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
