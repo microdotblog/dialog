@@ -80,6 +80,7 @@ class PostsRepository @Inject constructor(private val appExecutors: AppExecutors
                 inMemoryDb.runInTransaction {
                     val endpointData = EndpointData(endpoint = username,
                             microblog = item.microblog, author = item.author)
+                    endpointData.lastFetched = System.currentTimeMillis()
                     inMemoryDb.endpointData().insertEndpointData(endpointData)
 
                     item.posts.map {
@@ -118,6 +119,7 @@ class PostsRepository @Inject constructor(private val appExecutors: AppExecutors
                 inMemoryDb.runInTransaction {
                     val endpointData = EndpointData(endpoint = convId,
                             microblog = item.microblog, author = item.author)
+                    endpointData.lastFetched = System.currentTimeMillis()
                     inMemoryDb.endpointData().insertEndpointData(endpointData)
 
                     item.posts.map {

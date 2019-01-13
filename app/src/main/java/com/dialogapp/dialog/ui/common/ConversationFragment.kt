@@ -2,9 +2,13 @@ package com.dialogapp.dialog.ui.common
 
 import android.content.Context
 import android.os.Bundle
+import android.os.Handler
+import android.os.SystemClock
+import android.text.format.DateUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.Toolbar
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
@@ -23,6 +27,22 @@ import com.google.android.material.chip.Chip
 class ConversationFragment : BaseListFragment() {
 
     private var binding by autoCleared<FragmentListToolbarBinding>()
+    private var lastUpdated: Long = -1L
+    private val handler = Handler()
+    private val lastUpdateTask = object : Runnable {
+        override fun run() {
+            if (lastUpdated == -1L) {
+                return
+            }
+
+            getToolbar().subtitle = getString(R.string.last_updated,
+                    DateUtils.getRelativeTimeSpanString(lastUpdated,
+                            System.currentTimeMillis(),
+                            DateUtils.MINUTE_IN_MILLIS,
+                            DateUtils.FORMAT_ABBREV_ALL))
+            handler.postAtTime(this, SystemClock.uptimeMillis() + DateUtils.MINUTE_IN_MILLIS)
+        }
+    }
 
     override fun onAttach(context: Context?) {
         viewModelFactory = Injector.get().viewModelFactory()
@@ -46,6 +66,17 @@ class ConversationFragment : BaseListFragment() {
         baseListViewModel.showEndpoint(EndpointArgs(CONVERSATION, convId))
     }
 
+    override fun onResume() {
+        super.onResume()
+        handler.removeCallbacks(lastUpdateTask)
+        handler.post(lastUpdateTask)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        handler.removeCallbacks(lastUpdateTask)
+    }
+
     override fun getRecyclerView(): RecyclerView = binding.list.recyclerPosts
 
     override fun getSwipeRefreshLayout(): SwipeRefreshLayout = binding.list.swipeRefresh
@@ -53,6 +84,12 @@ class ConversationFragment : BaseListFragment() {
     override fun getNotificationChip(): Chip = binding.list.chipNotification
 
     override fun setEndpointData(endpointData: EndpointData?) {
+        lastUpdated = endpointData?.lastFetched ?: -1L
+        handler.removeCallbacks(lastUpdateTask)
+        handler.post(lastUpdateTask)
+    }
 
+    private fun getToolbar(): Toolbar {
+        return binding.toolbarConv
     }
 }

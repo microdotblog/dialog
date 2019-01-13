@@ -3,11 +3,15 @@ package com.dialogapp.dialog.ui.profile
 import android.content.Context
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.SystemClock
 import android.text.Html
 import android.text.Spanned
+import android.text.format.DateUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -31,6 +35,22 @@ class ProfileFragment : Fragment() {
     private var binding by autoCleared<FragmentProfileBinding>()
     private var isSelf: Boolean = false
     private lateinit var username: String
+    private var lastUpdated: Long = -1L
+    private val handler = Handler()
+    private val lastUpdateTask = object : Runnable {
+        override fun run() {
+            if (lastUpdated == -1L) {
+                return
+            }
+
+            getToolbar().subtitle = getString(R.string.last_updated,
+                    DateUtils.getRelativeTimeSpanString(lastUpdated,
+                            System.currentTimeMillis(),
+                            DateUtils.MINUTE_IN_MILLIS,
+                            DateUtils.FORMAT_ABBREV_ALL))
+            handler.postAtTime(this, SystemClock.uptimeMillis() + DateUtils.MINUTE_IN_MILLIS)
+        }
+    }
 
     override fun onAttach(context: Context?) {
         sessionManager = Injector.get().sessionManager()
@@ -80,6 +100,18 @@ class ProfileFragment : Fragment() {
         })
     }
 
+
+    override fun onResume() {
+        super.onResume()
+        handler.removeCallbacks(lastUpdateTask)
+        handler.post(lastUpdateTask)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        handler.removeCallbacks(lastUpdateTask)
+    }
+
     private fun setupViewpager(username: String, isSelf: Boolean) {
         val adapter = if (isSelf) {
             ProfileSelfFragmentPagerAdapter(childFragmentManager, username)
@@ -93,6 +125,10 @@ class ProfileFragment : Fragment() {
     private fun setEndpointData(endpointData: EndpointData?) {
         if (endpointData != null) {
             binding.includePartialProfile.progressBar.visibility = View.GONE
+
+            lastUpdated = endpointData.lastFetched
+            handler.removeCallbacks(lastUpdateTask)
+            handler.post(lastUpdateTask)
 
             GlideApp.with(this)
                     .load(endpointData.author?.avatar)
@@ -159,5 +195,9 @@ class ProfileFragment : Fragment() {
         } else {
             Html.fromHtml(html)
         }
+    }
+
+    private fun getToolbar(): Toolbar {
+        return binding.toolbarProfile
     }
 }

@@ -40,4 +40,5 @@
     <string name="pref_dark_mode_control_summary_system">Use system setting</string>
     <string name="pref_dark_mode_control_summary_manual">Manual</string>
     <string name="msg_error_paging">Error loading posts</string>
+    <string name="last_updated">Last updated %1$s</string>
 </resources>
