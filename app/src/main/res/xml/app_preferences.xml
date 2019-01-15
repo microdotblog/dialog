@@ -1,45 +1,141 @@
-<?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <android.support.v7.preference.PreferenceCategory android:title="Appearance">
-        <android.support.v7.preference.ListPreference
-            android:entries="@array/modes"
-            android:entryValues="@array/nightModes"
-            android:key="@string/pref_nightMode"
-            android:defaultValue="1"
-            android:summary="%s"
-            android:title="Theme mode" />
+    <PreferenceCategory app:title="Content">
+        <ListPreference
+            app:defaultValue="0"
+            app:entries="@array/loadImages"
+            app:entryValues="@array/loadImagesValues"
+            app:icon="@drawable/ic_progress_download"
+            app:key="@string/pref_load_images"
+            app:summary="%s"
+            app:title="Load Images" />
 
-        <android.support.v7.preference.CheckBoxPreference
-            android:defaultValue="false"
-            android:key="@string/pref_color_username_links"
-            android:summary="Color username links with Accent color"
-            android:title="Colored username links" />
-    </android.support.v7.preference.PreferenceCategory>
+        <ListPreference
+            app:defaultValue="1"
+            app:entries="@array/imageSize"
+            app:entryValues="@array/imageSizeValues"
+            app:icon="@drawable/ic_round_photo_size_select_large_24px"
+            app:key="@string/pref_image_size"
+            app:summary="%s"
+            app:title="Preview Image Size" />
 
-    <android.support.v7.preference.PreferenceCategory android:title="General">
+        <ListPreference
+            app:defaultValue="1"
+            app:entries="@array/autoRefresh"
+            app:entryValues="@array/autoRefreshValues"
+            app:icon="@drawable/ic_round_update_24px"
+            app:key="@string/pref_auto_refresh"
+            app:summary="%s"
+            app:title="Auto Refresh" />
+    </PreferenceCategory>
 
-        <android.support.v7.preference.ListPreference
-            android:entries="@array/preloadImages"
-            android:entryValues="@array/preloadImagesValues"
-            android:key="@string/pref_preloadImages"
-            android:defaultValue="0"
-            android:summary="%s"
-            android:title="Preload large images" />
+    <PreferenceCategory app:title="Appearance">
+        <ListPreference
+            app:defaultValue="0"
+            app:entries="@array/theme"
+            app:entryValues="@array/themeValues"
+            app:icon="@drawable/ic_round_color_lens_24px"
+            app:key="@string/pref_theme"
+            app:summary="%s"
+            app:title="Theme" />
 
-    </android.support.v7.preference.PreferenceCategory>
+        <SwitchPreferenceCompat
+            app:key="@string/pref_dark_mode_control"
+            app:title="Dark Mode Control" />
 
-    <android.support.v7.preference.PreferenceCategory android:title="Other">
+        <ListPreference
+            app:defaultValue="2"
+            app:dependency="@string/pref_dark_mode_control"
+            app:entries="@array/darkMode"
+            app:entryValues="@array/darkModeValues"
+            app:icon="@drawable/ic_night"
+            app:key="@string/pref_dark_mode"
+            app:summary="%s"
+            app:title="Dark Mode" />
+    </PreferenceCategory>
 
-        <android.support.v7.preference.PreferenceScreen
-            android:key="button_voicemail_setting_key"
-            android:persistent="false"
-            android:title="About">
+    <PreferenceCategory
+        app:key="feedback_category"
+        app:title="Feedback">
+
+        <Preference
+            app:key="@string/pref_rate_app"
+            app:persistent="false"
+            app:title="Rate app">
+        </Preference>
+
+        <Preference
+            app:key="feedback_email"
+            app:persistent="false"
+            app:title="Email">
             <intent
-                android:targetClass="com.dialogapp.dialog.ui.settings.AboutActivity"
-                android:targetPackage="com.dialogapp.dialog" />
-        </android.support.v7.preference.PreferenceScreen>
+                android:action="android.intent.action.VIEW"
+                android:data="mailto:dev@dialogapp.net">
+                <extra
+                    android:name="android.intent.extra.SUBJECT"
+                    android:value="Feedback for Dialog" />
+            </intent>
+        </Preference>
 
-    </android.support.v7.preference.PreferenceCategory>
+        <Preference
+            app:key="feedback_slack"
+            app:persistent="false"
+            app:summary="Report issues or suggest new features"
+            app:title="Slack Channel">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="https://join.slack.com/t/dialogappgroup/shared_invite/enQtMzYzNzQyMjcxNTY5LTIzZDI0NmE1MDZjNGIxZTA0MzgyMGQwZTg5MGUzNjQ4ZDBmYmE3Mzc3MjNkMzg0ZjFmMDVmNGYwOWYxMjcyODg" />
+        </Preference>
 
-</android.support.v7.preference.PreferenceScreen>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:key="about_category"
+        app:title="About">
+
+        <Preference
+            app:key="@string/pref_about_app"
+            app:persistent="false"
+            app:title="Dialog for Micro.Blog">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="https://dialogapp.net/" />
+        </Preference>
+
+        <Preference
+            app:key="about_1"
+            app:persistent="false"
+            app:selectable="false"
+            app:summary="Original icon, design and idea"
+            app:title="Mike Haynes" />
+
+        <Preference
+            app:key="about_2"
+            app:persistent="false"
+            app:selectable="false"
+            app:summary="Developer"
+            app:title="Rupak Das" />
+
+        <Preference
+            app:key="about_licenses"
+            app:persistent="false"
+            app:title="Licenses">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="https://dialogapp.net/licenses" />
+        </Preference>
+
+        <Preference
+            app:key="about_policy"
+            app:persistent="false"
+            app:title="Privacy policy">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="https://dialogapp.net/policy" />
+        </Preference>
+
+    </PreferenceCategory>
+
+
+</androidx.preference.PreferenceScreen>

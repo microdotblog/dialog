@@ -1,81 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/coord_layout_main"
+    android:id="@+id/frame_layout_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.dialogapp.dialog.ui.MainActivity">
 
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/appbar_main"
+    <fragment
+        android:id="@+id/nav_host_main"
+        android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:elevation="4dp"
-        android:theme="@style/AppTheme.AppBarOverlay">
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?android:attr/actionBarSize"
-            android:background="?attr/colorPrimaryDark"
-            app:contentInsetStart="0dp"
-            app:layout_scrollFlags="scroll|enterAlwaysCollapsed"
-            app:popupTheme="?android:spinnerItemStyle">
-
-            <RelativeLayout
-                android:id="@+id/profile"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="start"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:clickable="true"
-                android:focusable="true">
-
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/image_main_avatar"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_centerVertical="true"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginStart="16dp"
-                    tools:src="@tools:sample/avatars" />
-
-                <TextView
-                    android:id="@+id/title"
-                    style="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_toEndOf="@id/image_main_avatar" />
-            </RelativeLayout>
-
-            <Spinner
-                android:id="@+id/spinner_discover"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:popupTheme="?android:spinnerItemStyle"
-                android:visibility="gone" />
-
-        </android.support.v7.widget.Toolbar>
-
-        <android.support.design.widget.TabLayout
-            android:id="@+id/tabLayout"
-            style="@style/TabLayoutStyle"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/tab_height"
-            android:background="?attr/colorPrimaryDark"
-            app:layout_scrollFlags="scroll|snap|enterAlways"
-            app:tabGravity="fill"
-            app:tabMode="fixed" />
-
-    </android.support.design.widget.AppBarLayout>
-
-    <android.support.v4.view.ViewPager
-        android:id="@+id/viewpager_main"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-
-</android.support.design.widget.CoordinatorLayout>
+        android:layout_height="match_parent"
+        app:defaultNavHost="true"
+        app:navGraph="@navigation/nav_graph_main" />
+</FrameLayout>

@@ -1,9 +1,12 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlin-allopen'
+apply plugin: 'androidx.navigation.safeargs'
 
 android {
-    compileSdkVersion 27
+    compileSdkVersion 28
     defaultConfig {
         applicationId "com.dialogapp.dialog"
         minSdkVersion minimumSdkVersion
@@ -12,8 +15,12 @@ android {
         versionName generateVersionName()
         testInstrumentationRunner "com.dialogapp.dialog.util.CustomTestRunner"
     }
+    dataBinding {
+        enabled true
+    }
     buildTypes {
         debug {
+            applicationIdSuffix ".dev"
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules-debug.pro'
         }
@@ -43,36 +50,50 @@ private String generateVersionName() {
 
 repositories {
     mavenCentral()
+    maven { url "https://dl.bintray.com/drummer-aidan/maven/" }
+}
+
+allOpen {
+    // allows mocking for classes w/o directly opening them for release builds
+    annotation 'com.dialogapp.dialog.testing.OpenClass'
 }
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation fileTree(include: ['*.jar'], dir: 'libs')
+
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.0.1'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.0.1'
+
     // Support libraries
-    implementation "com.android.support:appcompat-v7:$supportLibsVersion"
-    implementation "com.android.support:support-v4:$supportLibsVersion"
-    implementation "com.android.support:cardview-v7:$supportLibsVersion"
-    implementation "com.android.support:design:$supportLibsVersion"
-    implementation "com.android.support:recyclerview-v7:$supportLibsVersion"
-    implementation "com.android.support:support-annotations:$supportLibsVersion"
-    implementation 'com.android.support.constraint:constraint-layout:1.1.2'
+    implementation 'androidx.appcompat:appcompat:1.0.2'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'com.google.android.material:material:1.1.0-alpha02'
+    implementation 'androidx.recyclerview:recyclerview:1.0.0'
+    implementation 'androidx.annotation:annotation:1.0.1'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation 'androidx.core:core-ktx:1.0.1'
+    implementation 'androidx.preference:preference-ktx:1.0.0'
 
     // Architecture components
     // ViewModel and LiveData
-    implementation "android.arch.lifecycle:extensions:$lifecycle_version"
-    // Java8 support for Lifecycles
-    implementation "android.arch.lifecycle:common-java8:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
+    kapt "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
     // Room
-    implementation "android.arch.persistence.room:runtime:$room"
-    annotationProcessor "android.arch.persistence.room:compiler:$room"
+    implementation "androidx.room:room-runtime:$room"
+    kapt "androidx.room:room-compiler:$room"
+    // Navigation
+    implementation "android.arch.navigation:navigation-fragment-ktx:$nav_version"
+    implementation "android.arch.navigation:navigation-ui-ktx:$nav_version"
+    //Paging
+    implementation "androidx.paging:paging-runtime-ktx:$paging_version"
+    // Work Manager
+    implementation "android.arch.work:work-runtime-ktx:$work_version"
 
     // Retrofit
     implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
     implementation "com.squareup.retrofit2:converter-moshi:$retrofitVersion"
-
-    // ButterKnife
-    implementation 'com.jakewharton:butterknife:8.8.1'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+    implementation 'com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:0.9.2'
 
     // LeakCanary
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.5.4'
@@ -80,26 +101,23 @@ dependencies {
 
     // Glide
     implementation "com.github.bumptech.glide:glide:$glide"
-    annotationProcessor "com.github.bumptech.glide:compiler:$glide"
+    kapt "com.github.bumptech.glide:compiler:$glide"
 
     // Dagger
     implementation "com.google.dagger:dagger:$dagger"
-    annotationProcessor "com.google.dagger:dagger-compiler:$dagger"
-    implementation "com.google.dagger:dagger-android:$dagger"
-    implementation "com.google.dagger:dagger-android-support:$dagger"
-    annotationProcessor "com.google.dagger:dagger-android-processor:$dagger"
+    kapt "com.google.dagger:dagger-compiler:$dagger"
 
-    implementation 'com.jakewharton.timber:timber:4.7.0'
+    implementation 'com.jakewharton.timber:timber:4.7.1'
 
     implementation 'org.jsoup:jsoup:1.11.3'
 
-    implementation 'com.github.chrisbanes:PhotoView:2.1.3'
+    implementation 'com.github.chrisbanes:PhotoView:2.3.0'
 
-    implementation 'com.takisoft.fix:preference-v7:27.1.1.0'
+    implementation 'com.afollestad.material-dialogs:core:2.0.0-rc5'
+    implementation 'com.afollestad.material-dialogs:input:2.0.0-rc5'
 
-    implementation 'de.hdodenhof:circleimageview:2.2.0'
-
-    implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
+    implementation "ru.noties:markwon:2.0.1"
+    implementation "ru.noties:markwon-view:2.0.1"
 
     // Stetho
     debugImplementation 'com.facebook.stetho:stetho:1.5.0'
@@ -107,17 +125,19 @@ dependencies {
 
     testImplementation 'junit:junit:4.12'
     testImplementation "org.mockito:mockito-core:$mockito"
-    testImplementation 'com.squareup.okhttp3:mockwebserver:3.9.1'
-    testImplementation "android.arch.core:core-testing:$lifecycle_version"
-    testImplementation "android.arch.persistence.room:testing:$room"
+    testImplementation "org.mockito:mockito-inline:$mockito"
+    testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:2.0.0"
+    testImplementation "com.squareup.retrofit2:retrofit-mock:$retrofitVersion"
+    testImplementation "androidx.room:room-testing:$room"
 
-    androidTestImplementation "com.android.support:support-annotations:$supportLibsVersion"
-    androidTestImplementation "com.android.support.test:runner:$android_testing"
-    androidTestImplementation "com.android.support.test:rules:$android_testing"
-    androidTestImplementation('com.android.support.test.espresso:espresso-core:$espresso', {
+    androidTestImplementation "androidx.arch.core:core-testing:$lifecycle_version"
+    androidTestImplementation 'androidx.annotation:annotation:1.0.0'
+    androidTestImplementation 'androidx.test:runner:1.1.0'
+    androidTestImplementation 'androidx.test:rules:1.1.0'
+    androidTestImplementation('androidx.test.espresso:espresso-core:3.1.0-alpha3', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    androidTestImplementation "com.android.support.test.espresso:espresso-intents:$espresso"
+    androidTestImplementation 'androidx.test.espresso:espresso-intents:3.1.0'
     androidTestImplementation 'org.hamcrest:hamcrest-library:1.3'
     androidTestImplementation "org.mockito:mockito-android:$mockito"
 }

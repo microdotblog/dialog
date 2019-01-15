@@ -1,38 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="AppTheme" parent="Theme.AppCompat.DayNight" />
+    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:windowBackground">@drawable/launch_screen</item>
+        <item name="colorPrimary">@android:color/transparent</item>
+        <item name="colorPrimaryDark">@android:color/transparent</item>
+        <item name="preferenceTheme">@style/PrefsTheme</item>
 
-    <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <item name="android:fontFamily">@font/karla</item>
+        <item name="md_font_title">@font/karla_bold</item>
+        <item name="md_font_body">@font/karla</item>
+        <item name="md_font_button">@font/karla</item>
+    </style>
+
+    <style name="AppTheme.Light" parent="AppTheme">
+        <item name="android:colorBackground">@color/grey300</item>
+        <item name="android:windowBackground">@color/grey300</item>
+        <item name="colorError">@color/design_default_color_error</item>
+        <item name="colorOnError">@android:color/white</item>
+        <item name="colorCollapsingToolbar">?colorPrimary</item>
+        <item name="colorSurface">@color/design_default_color_surface</item>
+        <item name="colorOnPrimary">@color/design_default_color_on_primary</item>
+        <item name="colorOnSecondary">@android:color/white</item>
+        <item name="colorOnBackground">@android:color/black</item>
+        <item name="colorOnSurface">@android:color/black</item>
+
+        <item name="toolbarStyle">@style/ToolbarStyle.Colored</item>
+        <item name="tabStyle">@style/Widget.MaterialComponents.TabLayout.Colored</item>
+        <item name="bottomAppBarStyle">@style/BottomAppBarStyle.Colored</item>
+        <item name="bottomNavigationStyle">@style/Widget.MaterialComponents.BottomNavigationView.Colored</item>
+        <item name="outlinedButtonStyle">@style/Widget.MaterialComponents.Button.OutlinedButton</item>
+    </style>
+
+    <style name="AppTheme.White" parent="AppTheme.Light">
+        <item name="colorPrimary">@color/rallygreen</item>
+        <item name="colorPrimaryDark">@android:color/black</item>
+        <item name="colorPrimaryVariant">@color/rallygreen</item>
+        <item name="colorSecondary">@color/rallygreen</item>
+        <item name="android:colorBackground">@color/grey100</item>
+        <item name="colorCollapsingToolbar">@android:color/white</item>
+        <item name="android:windowBackground">@color/grey100</item>
+        <item name="colorControlHighlight">@color/ripple_teal</item>
+        <item name="colorOnPrimaryEmphasisMedium">@color/color_text_medium</item>
+
+        <item name="toolbarStyle">@style/ToolbarStyle.White</item>
+        <item name="tabStyle">@style/Widget.MaterialComponents.TabLayout</item>
+        <item name="bottomAppBarStyle">@style/BottomAppBarStyle.White</item>
+        <item name="bottomNavigationStyle">@style/Widget.MaterialComponents.BottomNavigationView
+        </item>
+    </style>
+
+    <style name="AppTheme.Micro" parent="AppTheme.Light">
+        <item name="colorPrimary">@color/micro_light_blue</item>
+        <item name="colorPrimaryDark">@color/micro_blue</item>
+        <item name="colorPrimaryVariant">@color/micro_light_blue</item>
+        <item name="colorSecondary">@color/micro_orange</item>
+    </style>
+
+    <style name="AppTheme.Classic" parent="AppTheme.Light">
         <item name="colorPrimary">@color/indigo500</item>
         <item name="colorPrimaryDark">@color/indigo700</item>
-        <item name="colorAccent">@color/reda200</item>
-        <item name="bottomSheetDialogTheme">@style/Theme.Design.Light.BottomSheetDialog</item>
-        <item name="android:statusBarColor">@color/indigo800</item>
-        <item name="android:textColorPrimary">@color/blacka87</item>
-        <item name="android:textColorSecondary">@color/blacka54</item>
-        <item name="android:textColorHint">@color/blacka38</item>
-        <item name="android:windowBackground">@color/grey50</item>
-        <item name="android:spinnerItemStyle">@style/ThemeOverlay.AppCompat.Light</item>
+        <item name="colorPrimaryVariant">@color/lightblue</item>
+        <item name="colorSecondary">@color/redA200</item>
     </style>
 
-    <style name="AppTheme.Settings" parent="@style/PreferenceFixTheme.DayNight.NoActionBar">
-        <item name="colorPrimary">@color/indigo500</item>
-        <item name="colorPrimaryDark">@color/indigo700</item>
-        <item name="colorAccent">@color/reda200</item>
-        <item name="android:statusBarColor">@color/indigo800</item>
-        <item name="android:textColorPrimary">@color/blacka87</item>
-        <item name="android:textColorSecondary">@color/blacka54</item>
-        <item name="android:textColorHint">@color/blacka38</item>
-        <item name="android:windowBackground">@color/grey50</item>
+    <style name="AppTheme.Mint" parent="AppTheme.Light">
+        <item name="colorPrimary">@color/teal500</item>
+        <item name="colorPrimaryDark">@color/teal700</item>
+        <item name="colorPrimaryVariant">@color/teal100</item>
+        <item name="colorSecondary">@color/blueA200</item>
     </style>
 
-    <style name="AppTheme.Translucent" parent="AppTheme.NoActionBar">
-        <item name="android:homeAsUpIndicator">@drawable/ic_clear_white_24dp</item>
-        <item name="android:windowIsTranslucent">true</item>
-        <item name="android:windowBackground">@android:color/transparent</item>
-        <item name="android:backgroundDimEnabled">true</item>
+    <style name="AppTheme.Reply" parent="AppTheme.Light">
+        <item name="colorPrimary">@color/replyblue700</item>
+        <item name="colorPrimaryDark">@color/replyblue800</item>
+        <item name="colorPrimaryVariant">@color/replyblue600</item>
+        <item name="colorSecondary">@color/replyorange</item>
     </style>
-
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 </resources>

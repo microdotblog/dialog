@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.dialogapp.dialog">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
@@ -12,42 +14,27 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
-        android:supportsRtl="true"
-        android:theme="@style/AppTheme.NoActionBar">
+        android:supportsRtl="true">
         <activity
-            android:name=".LauncherActivity"
-            android:theme="@android:style/Theme.NoDisplay">
+            android:name=".ui.MainActivity"
+            android:theme="@style/AppTheme"
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".ui.loginscreen.LoginActivity"
-            android:screenOrientation="portrait" />
-        <activity android:name=".ui.MainActivity" />
-        <activity android:name=".ui.profilescreen.ProfileActivity" />
-        <activity
-            android:name=".ui.imageviewer.ImageViewerActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".ui.conversation.ConversationActivity"
-            android:label="Conversation" />
-        <activity
-            android:name=".ui.settings.SettingsActivity"
-            android:label="Settings"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.Settings" />
-        <activity
-            android:name=".ui.settings.AboutActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.Settings" />
-        <activity
-            android:name=".ui.common.ReplyActivity"
-            android:label="Reply"
-            android:theme="@style/AppTheme.Translucent"
-            android:windowSoftInputMode="adjustResize|stateVisible" />
+
+        <provider
+            android:name="androidx.work.impl.WorkManagerInitializer"
+            android:authorities="${applicationId}.workmanager-init"
+            android:enabled="false"
+            android:exported="false"
+            tools:replace="android:authorities" />
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>

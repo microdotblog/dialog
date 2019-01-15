@@ -3,19 +3,22 @@
 buildscript {
 
     ext {
-        versionMajor = 1
-        versionMinor = 2
+        versionMajor = 2
+        versionMinor = 1
         versionPatch = 0
 
         minimumSdkVersion = 21
 
         kotlin_version = '1.3.0'
 
-        supportLibsVersion = '27.1.1'
-        lifecycle_version = '1.1.1'
+        lifecycle_version = '2.0.0'
+        room = '2.1.0-alpha03'
+        nav_version = "1.0.0-alpha09"
+        paging_version = "2.1.0-rc01"
+        work_version = "1.0.0-beta01"
+
         retrofitVersion = '2.4.0'
-        room = '1.1.1'
-        glide = '4.7.1'
+        glide = '4.8.0'
         dagger = '2.16'
 
         mockito = '2.18.3'
@@ -30,6 +33,8 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:3.2.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "org.jetbrains.kotlin:kotlin-allopen:$kotlin_version"
+        classpath "android.arch.navigation:navigation-safe-args-gradle-plugin:$nav_version"
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files

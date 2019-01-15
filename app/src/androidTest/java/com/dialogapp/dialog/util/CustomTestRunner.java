@@ -18,7 +18,7 @@ package com.dialogapp.dialog.util;
 
 import android.app.Application;
 import android.content.Context;
-import android.support.test.runner.AndroidJUnitRunner;
+import androidx.test.runner.AndroidJUnitRunner;
 
 import com.dialogapp.dialog.TestApp;
 
