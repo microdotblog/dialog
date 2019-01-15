@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="none">
+        <item
+            android:id="@+id/post_option_view_profile"
+            android:icon="@drawable/ic_round_account_circle_24px"
+            android:title="View profile" />
+        <item
+            android:id="@+id/post_option_view_link"
+            android:icon="@drawable/ic_round_open_in_browser_24px"
+            android:title="View post in browser" />
+        <item
+            android:id="@+id/post_option_delete"
+            android:icon="@drawable/ic_round_delete_outline_24px"
+            android:title="Delete post" />
+    </group>
+</menu>

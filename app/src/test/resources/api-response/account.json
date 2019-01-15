@@ -1,0 +1,28 @@
+{
+  "full_name": "Dialog",
+  "email": "getdialogapp@gmail.com",
+  "username": "dialog",
+  "web_site": "http://getdialogapp.com",
+  "about_me": "A Micro.blog app for Android, currently in development.",
+  "rss_feeds": [
+    {
+      "id": 6684,
+      "url": "http://getdialogapp.com/feed/json"
+    }
+  ],
+  "app_tokens": [
+  ],
+  "paid_sites": [
+    {
+      "id": 2069,
+      "guid": "dialog",
+      "hostname": "dialog.micro.blog",
+      "url": "http://dialog.micro.blog/",
+      "created_at": "2017-12-12T15:56:28+00:00",
+      "posts_summary": "0 posts"
+    }
+  ],
+  "paid_bots": [],
+  "has_site": true,
+  "has_bot": false
+}
