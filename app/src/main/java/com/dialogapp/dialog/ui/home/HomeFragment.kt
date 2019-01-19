@@ -50,22 +50,33 @@ class HomeFragment : Fragment() {
             }
 
             val workInfo = it[0]
-            if (workInfo.state == WorkInfo.State.RUNNING) {
-                Timber.i("Sending reply, Tags: %s", workInfo.tags)
-                Toast.makeText(this.requireContext(), "Sending", Toast.LENGTH_SHORT).show()
-            }
-
-            if (!requestViewModel.replyEvent.consumed && workInfo.state.isFinished) {
-                requestViewModel.replyEvent.consume()
-                Timber.i("Task Reply complete, Tags: %s State: %s", workInfo.tags, workInfo.state)
-                if (workInfo.state == WorkInfo.State.SUCCEEDED) {
-                    Toast.makeText(this.requireContext(), "Successful", Toast.LENGTH_SHORT).show()
-                } else if (workInfo.state == WorkInfo.State.FAILED) {
-                    Snackbar.make(binding.coordinatorLayoutHome, "Could not send reply", Snackbar.LENGTH_INDEFINITE)
-                            .setAction("Retry") {
-                                requestViewModel.retryReply()
+            when (workInfo.state) {
+                WorkInfo.State.RUNNING -> {
+                    Timber.i("Sending reply, Tags: %s", workInfo.tags)
+                    Toast.makeText(this.requireContext(), "Sending", Toast.LENGTH_SHORT).show()
+                }
+                else -> {
+                    if (!requestViewModel.replyEvent.consumed && workInfo.state.isFinished) {
+                        requestViewModel.replyEvent.consume()
+                        Timber.i("Task Reply complete, Tags: %s State: %s", workInfo.tags,
+                                workInfo.state)
+                        when (workInfo.state) {
+                            WorkInfo.State.SUCCEEDED -> {
+                                Toast.makeText(this.requireContext(), "Successful",
+                                        Toast.LENGTH_SHORT).show()
                             }
-                            .show()
+                            WorkInfo.State.FAILED -> {
+                                Snackbar.make(binding.coordinatorLayoutHome,
+                                        "Could not send reply", Snackbar.LENGTH_INDEFINITE)
+                                        .setAction("Retry") {
+                                            requestViewModel.retryReply()
+                                        }
+                                        .show()
+                            }
+                            else -> {
+                            }
+                        }
+                    }
                 }
             }
         })
@@ -76,22 +87,33 @@ class HomeFragment : Fragment() {
             }
 
             val workInfo = it[0]
-            if (workInfo.state == WorkInfo.State.RUNNING) {
-                Timber.i("Sending post, Tags: %s", workInfo.tags)
-                Toast.makeText(this.requireContext(), "Sending", Toast.LENGTH_SHORT).show()
-            }
-
-            if (!requestViewModel.postEvent.consumed && workInfo.state.isFinished) {
-                requestViewModel.postEvent.consume()
-                Timber.i("Task NewPost complete, Tags: %s State: %s", workInfo.tags, workInfo.state)
-                if (workInfo.state == WorkInfo.State.SUCCEEDED) {
-                    Toast.makeText(this.requireContext(), "Successful", Toast.LENGTH_SHORT).show()
-                } else if (workInfo.state == WorkInfo.State.FAILED) {
-                    Snackbar.make(binding.coordinatorLayoutHome, "Could not send post", Snackbar.LENGTH_INDEFINITE)
-                            .setAction("Retry") {
-                                requestViewModel.retryPost()
+            when (workInfo.state) {
+                WorkInfo.State.RUNNING -> {
+                    Timber.i("Sending post, Tags: %s", workInfo.tags)
+                    Toast.makeText(this.requireContext(), "Sending", Toast.LENGTH_SHORT).show()
+                }
+                else -> {
+                    if (!requestViewModel.postEvent.consumed && workInfo.state.isFinished) {
+                        requestViewModel.postEvent.consume()
+                        Timber.i("Task NewPost complete, Tags: %s State: %s", workInfo.tags,
+                                workInfo.state)
+                        when (workInfo.state) {
+                            WorkInfo.State.SUCCEEDED -> {
+                                Toast.makeText(this.requireContext(), "Successful",
+                                        Toast.LENGTH_SHORT).show()
                             }
-                            .show()
+                            WorkInfo.State.FAILED -> {
+                                Snackbar.make(binding.coordinatorLayoutHome,
+                                        "Could not send post", Snackbar.LENGTH_INDEFINITE)
+                                        .setAction("Retry") {
+                                            requestViewModel.retryPost()
+                                        }
+                                        .show()
+                            }
+                            else -> {
+                            }
+                        }
+                    }
                 }
             }
         })
@@ -102,18 +124,29 @@ class HomeFragment : Fragment() {
             }
 
             val workInfo = it[0]
-            if (workInfo.state == WorkInfo.State.RUNNING) {
-                Timber.i("Requesting deletion, Tags: %s", workInfo.tags)
-                Toast.makeText(this.requireContext(), "Requesting", Toast.LENGTH_SHORT).show()
-            }
-
-            if (!requestViewModel.deleteEvent.consumed && workInfo.state.isFinished) {
-                requestViewModel.deleteEvent.consume()
-                Timber.i("Task Deletion complete, Tags: %s State: %s", workInfo.tags, workInfo.state)
-                if (workInfo.state == WorkInfo.State.SUCCEEDED) {
-                    Toast.makeText(this.requireContext(), "Request successful", Toast.LENGTH_SHORT).show()
-                } else if (workInfo.state == WorkInfo.State.FAILED) {
-                    Toast.makeText(this.requireContext(), "Request unsuccessful", Toast.LENGTH_SHORT).show()
+            when (workInfo.state) {
+                WorkInfo.State.RUNNING -> {
+                    Timber.i("Requesting deletion, Tags: %s", workInfo.tags)
+                    Toast.makeText(this.requireContext(), "Requesting", Toast.LENGTH_SHORT).show()
+                }
+                else -> {
+                    if (!requestViewModel.deleteEvent.consumed && workInfo.state.isFinished) {
+                        requestViewModel.deleteEvent.consume()
+                        Timber.i("Task Deletion complete, Tags: %s State: %s", workInfo.tags,
+                                workInfo.state)
+                        when (workInfo.state) {
+                            WorkInfo.State.SUCCEEDED -> {
+                                Toast.makeText(this.requireContext(), "Request successful",
+                                        Toast.LENGTH_SHORT).show()
+                            }
+                            WorkInfo.State.FAILED -> {
+                                Toast.makeText(this.requireContext(), "Request unsuccessful",
+                                        Toast.LENGTH_SHORT).show()
+                            }
+                            else -> {
+                            }
+                        }
+                    }
                 }
             }
         })

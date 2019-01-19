@@ -19,13 +19,6 @@
         <argument
             android:name="username"
             app:argType="string" />
-        <action
-            android:id="@+id/action_profile_dest_self"
-            app:destination="@id/profile_dest"
-            app:enterAnim="@anim/nav_default_enter_anim"
-            app:exitAnim="@anim/nav_default_exit_anim"
-            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
     <fragment
         android:id="@+id/conversation_dest"
@@ -45,5 +38,20 @@
     </fragment>
     <fragment
         android:id="@+id/profile_self_dest"
-        android:name="com.dialogapp.dialog.ui.profile.ProfileFragment"/>
+        android:name="com.dialogapp.dialog.ui.profile.ProfileFragment" />
+    <action
+        android:id="@+id/action_global_image_viewer_dest"
+        app:destination="@id/image_viewer_dest"
+        app:enterAnim="@anim/slide_in_bottom"
+        app:popExitAnim="@anim/slide_out_bottom" />
+    <action
+        android:id="@+id/action_global_conversation_dest"
+        app:destination="@id/conversation_dest"
+        app:enterAnim="@anim/nav_default_enter_anim"
+        app:exitAnim="@anim/nav_default_exit_anim"
+        app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+        app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+    <action
+        android:id="@+id/action_global_profile_dest"
+        app:destination="@id/profile_dest" />
 </navigation>

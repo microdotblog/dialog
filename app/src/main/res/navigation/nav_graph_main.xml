@@ -44,22 +44,41 @@
         android:name="com.dialogapp.dialog.ui.posting.NewPostFragment">
         <argument
             android:name="isReply"
-            app:argType="boolean" />
+            app:argType="boolean"
+            android:defaultValue="false" />
         <argument
             android:name="id"
-            android:defaultValue='""'
-            app:argType="string" />
+            app:argType="string"
+            app:nullable="true" />
         <argument
             android:name="username"
-            android:defaultValue='""'
-            app:argType="string" />
+            app:argType="string"
+            app:nullable="true" />
         <argument
-            android:name="content"
-            android:defaultValue='""'
-            app:argType="string" />
+            android:name="parentPostContent"
+            app:argType="string"
+            app:nullable="true" />
     </fragment>
     <fragment
         android:id="@+id/settings_dest"
         android:name="com.dialogapp.dialog.ui.settings.SettingsFragment"
         android:label="Settings" />
+    <action
+        android:id="@+id/action_global_new_post_dest"
+        app:destination="@id/new_post_dest"
+        app:enterAnim="@anim/slide_in_bottom"
+        app:popExitAnim="@anim/slide_out_bottom">
+        <argument
+            android:name="isReply"
+            android:defaultValue="false" />
+        <argument
+            android:name="id"
+            app:nullable="true" />
+        <argument
+            android:name="username"
+            app:nullable="true" />
+        <argument
+            android:name="parentPostContent"
+            app:nullable="true" />
+    </action>
 </navigation>

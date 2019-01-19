@@ -73,8 +73,8 @@ class ConversationFragment : BaseListFragment() {
     }
 
     override fun onPause() {
-        super.onPause()
         handler.removeCallbacks(lastUpdateTask)
+        super.onPause()
     }
 
     override fun getRecyclerView(): RecyclerView = binding.list.recyclerPosts

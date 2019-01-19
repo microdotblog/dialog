@@ -108,8 +108,8 @@ class ProfileFragment : Fragment() {
     }
 
     override fun onPause() {
-        super.onPause()
         handler.removeCallbacks(lastUpdateTask)
+        super.onPause()
     }
 
     private fun setupViewpager(username: String, isSelf: Boolean) {

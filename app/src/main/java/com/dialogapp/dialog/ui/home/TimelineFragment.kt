@@ -5,8 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
-import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -14,6 +12,7 @@ import com.dialogapp.dialog.R
 import com.dialogapp.dialog.databinding.FragmentListFabBinding
 import com.dialogapp.dialog.di.Injector
 import com.dialogapp.dialog.ui.base.BasePagedListFragment
+import com.dialogapp.dialog.ui.posting.NewPostFragmentDirections
 import com.dialogapp.dialog.ui.util.autoCleared
 import com.dialogapp.dialog.vo.TIMELINE
 import com.google.android.material.chip.Chip
@@ -37,15 +36,10 @@ class TimelineFragment : BasePagedListFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.fabNewPost.setOnClickListener {
-            val navOptions = NavOptions.Builder()
-                    .setEnterAnim(R.anim.slide_in_bottom)
-                    .setExitAnim(R.anim.nav_default_exit_anim)
-                    .setPopEnterAnim(R.anim.nav_default_pop_enter_anim)
-                    .setPopExitAnim(R.anim.slide_out_bottom)
-                    .build()
             activity?.run {
-                findNavController(R.id.nav_host_main)
-                        .navigate(R.id.new_post_dest, bundleOf("isReply" to false), navOptions)
+                val action = NewPostFragmentDirections.actionGlobalNewPostDest(null,
+                        null, null)
+                findNavController(R.id.nav_host_main).navigate(action)
             }
         }
         basePagedListViewModel.showEndpoint(TIMELINE)

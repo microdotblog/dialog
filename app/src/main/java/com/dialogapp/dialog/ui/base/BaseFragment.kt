@@ -3,16 +3,14 @@ package com.dialogapp.dialog.ui.base
 import android.content.Intent
 import android.net.Uri
 import android.preference.PreferenceManager
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
-import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.dialogapp.dialog.R
-import com.dialogapp.dialog.ui.common.BottomSheetPost
-import com.dialogapp.dialog.ui.common.PostClickedListener
-import com.dialogapp.dialog.ui.common.RequestViewModel
+import com.dialogapp.dialog.ui.common.*
+import com.dialogapp.dialog.ui.posting.NewPostFragmentDirections
+import com.dialogapp.dialog.ui.profile.ProfileFragmentDirections
 import com.dialogapp.dialog.ui.util.ImageGetterOptions
 import com.dialogapp.dialog.ui.util.ImageSize
 import timber.log.Timber
@@ -20,30 +18,9 @@ import timber.log.Timber
 
 abstract class BaseFragment : Fragment(), PostClickedListener {
 
-    val profileNavOptions = NavOptions.Builder()
-            .setEnterAnim(R.anim.nav_default_enter_anim)
-            .setExitAnim(R.anim.nav_default_exit_anim)
-            .setPopEnterAnim(R.anim.nav_default_pop_enter_anim)
-            .setPopExitAnim(R.anim.nav_default_pop_exit_anim)
-            .build()
-
-    val convNavOptions = NavOptions.Builder()
-            .setEnterAnim(R.anim.nav_default_enter_anim)
-            .setExitAnim(R.anim.nav_default_exit_anim)
-            .setPopEnterAnim(R.anim.nav_default_pop_enter_anim)
-            .setPopExitAnim(R.anim.nav_default_pop_exit_anim)
-            .build()
-
-    val imageNavOptions = NavOptions.Builder()
-            .setEnterAnim(R.anim.nav_default_enter_anim)
-            .setExitAnim(R.anim.nav_default_exit_anim)
-            .setPopEnterAnim(R.anim.nav_default_pop_enter_anim)
-            .setPopExitAnim(R.anim.slide_out_bottom)
-            .build()
-
     override fun onProfileClicked(username: String) {
-        val argBundle = bundleOf("username" to username)
-        findNavController().navigate(R.id.profile_dest, argBundle, profileNavOptions)
+        val action = ProfileFragmentDirections.actionGlobalProfileDest(username)
+        findNavController().navigate(action)
     }
 
     override fun onFavoriteButtonClicked(postId: String?, belongsToEndpoint: String?) {
@@ -54,8 +31,8 @@ abstract class BaseFragment : Fragment(), PostClickedListener {
     }
 
     override fun onConversationButtonClicked(postId: String) {
-        val argBundle = bundleOf("convId" to postId)
-        findNavController().navigate(R.id.conversation_dest, argBundle, convNavOptions)
+        val action = ConversationFragmentDirections.actionGlobalConversationDest(postId)
+        findNavController().navigate(action)
     }
 
     override fun onOverflowMenuClicked(postId: String, postUrl: String, username: String,
@@ -66,15 +43,10 @@ abstract class BaseFragment : Fragment(), PostClickedListener {
 
     override fun onReplyClicked(id: String?, username: String?, content: String?) {
         if (id != null) {
-            val navOptions = NavOptions.Builder()
-                    .setEnterAnim(R.anim.slide_in_bottom)
-                    .setExitAnim(R.anim.nav_default_exit_anim)
-                    .setPopEnterAnim(R.anim.nav_default_pop_enter_anim)
-                    .setPopExitAnim(R.anim.slide_out_bottom)
-                    .build()
             val mainNavController = activity?.findNavController(R.id.nav_host_main)
-            mainNavController?.navigate(R.id.new_post_dest, bundleOf("isReply" to true,
-                    "id" to id, "username" to username, "content" to content), navOptions)
+            val action = NewPostFragmentDirections.actionGlobalNewPostDest(id, username, content)
+                    .setIsReply(true)
+            mainNavController?.navigate(action)
         }
     }
 
@@ -88,8 +60,8 @@ abstract class BaseFragment : Fragment(), PostClickedListener {
 
     override fun onImageClicked(imageUrl: String?) {
         Timber.i(imageUrl)
-        findNavController().navigate(R.id.image_viewer_dest, bundleOf("imageUrl" to imageUrl),
-                imageNavOptions)
+        val action = ImageViewerFragmentDirections.actionGlobalImageViewerDest(imageUrl)
+        findNavController().navigate(action)
     }
 
     fun getImageGetterOptions(): ImageGetterOptions {

@@ -63,13 +63,9 @@ class NewPostFragment : Fragment(), OnBackPressedListener {
         setMenuItemOnClickListeners()
 
         val isReply = NewPostFragmentArgs.fromBundle(arguments!!).isReply
-        val username: String
-        val content: String
-        var postId: String? = null
         if (isReply) {
-            postId = NewPostFragmentArgs.fromBundle(arguments!!).id
-            username = NewPostFragmentArgs.fromBundle(arguments!!).username
-            content = NewPostFragmentArgs.fromBundle(arguments!!).content
+            val username = NewPostFragmentArgs.fromBundle(arguments!!).username
+            val content = NewPostFragmentArgs.fromBundle(arguments!!).parentPostContent
             binding.editTextPost.append("@$username ")
             binding.bottomBarNewPost.menu.removeItem(R.id.posting_title)
             binding.bottomBarNewPost.menu.findItem(R.id.posting_parent_post).setOnMenuItemClickListener {
@@ -108,7 +104,8 @@ class NewPostFragment : Fragment(), OnBackPressedListener {
                     .show {
                         positiveButton(R.string.send) { dialog ->
                             if (isReply) {
-                                requestViewModel.sendReply(postId!!, binding.editTextPost.text.toString())
+                                val postId = NewPostFragmentArgs.fromBundle(arguments!!).id!!
+                                requestViewModel.sendReply(postId, binding.editTextPost.text.toString())
                             } else {
                                 requestViewModel.sendPost(content = binding.editTextPost.text.toString())
                             }
@@ -155,7 +152,7 @@ class NewPostFragment : Fragment(), OnBackPressedListener {
                 }
     }
 
-    private fun getHtmlString(html: String): SpannableString {
+    private fun getHtmlString(html: String?): SpannableString {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             SpannableString(Html.fromHtml(html, Html.FROM_HTML_MODE_LEGACY))
         } else {
