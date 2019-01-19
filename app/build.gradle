@@ -10,7 +10,7 @@ android {
     defaultConfig {
         applicationId "com.dialogapp.dialog"
         minSdkVersion minimumSdkVersion
-        targetSdkVersion 26
+        targetSdkVersion 28
         versionCode generateVersionCode()
         versionName generateVersionName()
         testInstrumentationRunner "com.dialogapp.dialog.util.CustomTestRunner"
