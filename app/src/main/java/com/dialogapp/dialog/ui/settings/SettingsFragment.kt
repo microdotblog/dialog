@@ -103,6 +103,7 @@ class SettingsFragment : PreferenceFragmentCompat(),
                     ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) ==
                     PackageManager.PERMISSION_GRANTED
         }
+        return false
     }
 
     private fun showMessageAndRequest() {
