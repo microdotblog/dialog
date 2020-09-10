@@ -18,9 +18,6 @@ data class LoggedInUser(
         @Json(name = "has_site")
         val hasSite: Boolean,
 
-        @Json(name = "is_fullaccess")
-        val isFullaccess: Boolean,
-
         @Json(name = "default_site")
         val defaultSite: String
 )

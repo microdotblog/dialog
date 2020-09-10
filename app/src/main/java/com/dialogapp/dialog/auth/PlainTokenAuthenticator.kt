@@ -24,7 +24,7 @@ class PlainTokenAuthenticator @Inject constructor(private val microblogService: 
                 return if (verifiedAccount.error == null) {
                     val user = LoggedInUser(verifiedAccount.token!!, verifiedAccount.fullName!!,
                             verifiedAccount.username!!, verifiedAccount.gravatarUrl!!,
-                            verifiedAccount.hasSite!!, verifiedAccount.isFullaccess!!, verifiedAccount.defaultSite!!)
+                            verifiedAccount.hasSite!!, verifiedAccount.defaultSite!!)
                     Resource.success(user)
                 } else {
                     Resource.error("Invalid token", null)

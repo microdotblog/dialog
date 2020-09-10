@@ -35,7 +35,7 @@ class SessionManager @Inject constructor(private val prefs: SharedPreferences,
         if (token != null) {
             user = LoggedInUser(token, prefs.getString(KEY_USER_FULLNAME, "")!!,
                     prefs.getString(KEY_USER_USERNAME, "")!!, prefs.getString(KEY_USER_AVATAR, "")!!,
-                    prefs.getBoolean(KEY_USER_HASSITE, false), prefs.getBoolean(KEY_USER_FULLACCESS, false),
+                    prefs.getBoolean(KEY_USER_HASSITE, false),
                     prefs.getString(KEY_USER_DEFAULTSITE, "")!!)
         }
     }
@@ -48,7 +48,6 @@ class SessionManager @Inject constructor(private val prefs: SharedPreferences,
             putString(KEY_USER_USERNAME, user.username)
             putString(KEY_USER_AVATAR, user.gravatarUrl)
             putBoolean(KEY_USER_HASSITE, user.hasSite)
-            putBoolean(KEY_USER_FULLACCESS, user.isFullaccess)
             putString(KEY_USER_DEFAULTSITE, user.defaultSite)
         }
     }
@@ -76,7 +75,6 @@ class SessionManager @Inject constructor(private val prefs: SharedPreferences,
         private const val KEY_USER_USERNAME = "KEY_USER_USERNAME"
         private const val KEY_USER_AVATAR = "KEY_USER_AVATAR"
         private const val KEY_USER_HASSITE = "KEY_USER_HASSITE"
-        private const val KEY_USER_FULLACCESS = "KEY_USER_FULLACCESS"
         private const val KEY_USER_DEFAULTSITE = "KEY_USER_DEFAULTSITE"
     }
 }
